@@ -52,6 +52,7 @@ macro_rules! proc_macro_attributes {
 proc_macro_attributes! {
     requires
     ensures
+    may_panic
     invariant
     variant
     check

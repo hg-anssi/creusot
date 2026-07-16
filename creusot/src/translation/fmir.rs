@@ -165,6 +165,10 @@ pub enum Terminator<'tcx> {
     Switch(self::Operand<'tcx>, Span, Branches<'tcx>),
     Return,
     Abort(Span),
+    /// Exit through the "panic" outcome of the function: the panic condition
+    /// of the enclosing function must be proved, and the function does not
+    /// return. Only emitted in functions that are allowed to panic.
+    Panic(Span),
 }
 
 #[derive(Clone, Debug, TypeFoldable, TypeVisitable)]
@@ -209,6 +213,7 @@ impl Terminator<'_> {
             },
             Terminator::Return => Box::new(empty()),
             Terminator::Abort(_) => Box::new(empty()),
+            Terminator::Panic(_) => Box::new(empty()),
         }
     }
 
@@ -230,6 +235,7 @@ impl Terminator<'_> {
             },
             Terminator::Return => Box::new(empty()),
             Terminator::Abort(_) => Box::new(empty()),
+            Terminator::Panic(_) => Box::new(empty()),
         }
     }
 }
@@ -559,6 +565,7 @@ pub(crate) fn super_visit_terminator<'tcx, V: FmirVisitor<'tcx>>(
         Terminator::Switch(op, _, _) => visitor.visit_operand(op),
         Terminator::Return => (),
         Terminator::Abort(_) => (),
+        Terminator::Panic(_) => (),
     }
 }
 
@@ -693,6 +700,7 @@ pub(crate) fn super_visit_mut_terminator<'tcx, V: FmirVisitorMut<'tcx>>(
         Terminator::Switch(op, _, _) => visitor.visit_mut_operand(op),
         Terminator::Return => (),
         Terminator::Abort(_) => (),
+        Terminator::Panic(_) => (),
     }
 }
 

@@ -382,6 +382,7 @@ impl<'a, 'ctx, 'tcx> Expander<'a, 'ctx, 'tcx> {
                 Some(subst),
                 &[],
                 name::return_(),
+                None,
                 &mut Default::default(),
             );
 

@@ -579,6 +579,20 @@ impl<'tcx> Term<'tcx> {
         }
     }
 
+    pub(crate) fn disj(self, rhs: Self) -> Self {
+        if self.is_true() || rhs.is_false() {
+            self
+        } else if rhs.is_true() || self.is_false() {
+            rhs
+        } else {
+            Term {
+                ty: self.ty,
+                span: self.span,
+                kind: TermKind::Binary { op: BinOp::Or, lhs: Box::new(self), rhs: Box::new(rhs) },
+            }
+        }
+    }
+
     pub(crate) fn bin_op(self, ty: Ty<'tcx>, op: BinOp, rhs: Self) -> Self {
         Term {
             ty,

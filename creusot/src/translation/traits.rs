@@ -158,9 +158,17 @@ fn logic_refinement_term<'tcx>(
     let post_refn =
         impl_postcond.implies(trait_postcond).forall((name::result().into(), retty)).span(span);
 
+    // The impl may panic only if the trait declaration allows it: the panic
+    // condition of the impl must imply the one of the trait (which is `false`
+    // if the trait method is not allowed to panic).
+    let mut impl_panics = impl_sig.contract.panics_disj(ctx.tcx);
+    impl_panics.subst(&subst);
+    let trait_panics = trait_sig.contract.panics_disj(ctx.tcx);
+    let panics_refn = impl_panics.implies(trait_panics).span(span);
+
     // refn = args.into_iter().rfold(refn, |acc, r| acc.forall(r).span(span));
 
-    Refn { args, pre: trait_precond, post: impl_precond.conj(post_refn) }
+    Refn { args, pre: trait_precond, post: impl_precond.conj(post_refn).conj(panics_refn) }
 }
 
 pub(crate) fn evaluate_additional_predicates<'tcx>(

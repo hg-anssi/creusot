@@ -8,6 +8,7 @@ use crate::{
         ty::translate_ty,
     },
     contracts_items::why3_attrs,
+    naming::name,
     translation::specification::{PreContract, PreSignature},
 };
 use rustc_hir::def_id::DefId;
@@ -22,6 +23,10 @@ use why3::{
 pub(crate) struct Contract {
     pub(crate) requires: Box<[Condition]>,
     pub(crate) ensures: Box<[(Box<[Trigger]>, Condition)]>,
+    /// Panic conditions: non-empty iff the function is allowed to panic,
+    /// in which case its Coma handler has an extra `panic` continuation
+    /// parameter whose precondition is their conjunction.
+    pub(crate) panics: Box<[Condition]>,
 }
 
 impl Contract {
@@ -54,6 +59,23 @@ impl Contract {
         Contract::add_stop_split(postcond, name, "requires")
     }
 
+    /// Whether the function is allowed to panic. In that case its Coma handler
+    /// has an extra `panic` continuation parameter.
+    pub fn may_panic(&self) -> bool {
+        !self.panics.is_empty()
+    }
+
+    /// Disjunction of the panic conditions (each `#[may_panic(...)]` clause adds a
+    /// case where panicking is permitted). `false` — cannot panic — when empty,
+    /// which is the neutral of the disjunction. Only meaningful if [`Self::may_panic`].
+    pub fn panics_disj(&self, name: &str) -> Exp {
+        let mut panics = self.panics.iter().cloned().map(Condition::labelled_exp);
+        let Some(mut cond) = panics.next() else { return Exp::mk_false() };
+        cond = panics.fold(cond, Exp::log_or);
+        cond.reassociate();
+        Contract::add_stop_split(cond, name, "may_panic")
+    }
+
     pub fn requires_implies(&self, conclusion: Exp) -> Exp {
         self.requires.iter().rfold(conclusion, |acc, arg| arg.exp.clone().implies(acc))
     }
@@ -68,6 +90,10 @@ impl Contract {
             for t in ens.0.iter_mut().flat_map(|t| &mut t.0) {
                 t.subst(subst);
             }
+        }
+
+        for pan in self.panics.iter_mut() {
+            pan.exp.subst(subst);
         }
     }
 }
@@ -98,10 +124,15 @@ pub(crate) fn lower_program_sig<'tcx>(
 ) -> ProgramSignature {
     let span = ctx.tcx.def_span(def_id);
     let return_ty = translate_ty(ctx, names, span, pre_sig.output);
+    // Functions that are allowed to panic take an extra zero-argument `panic`
+    // continuation, placed before the `return` continuation.
+    let panic_cont =
+        pre_sig.contract.may_panic().then(|| Param::Cont(name::panic_(), [].into(), [].into()));
     let params: Box<[Param]> = pre_sig
         .inputs
         .iter()
         .map(|(id, span, ty)| Param::Term(id.0, translate_ty(ctx, names, *span, *ty)))
+        .chain(panic_cont)
         .chain([Param::Cont(
             return_ident,
             [].into(),
@@ -193,5 +224,7 @@ pub(crate) fn lower_contract<'tcx>(
             )
         })
         .collect();
-    Contract { requires, ensures }
+    let panics =
+        contract.panics.into_iter().map(|cond| lower_condition(ctx, names, cond)).collect();
+    Contract { requires, ensures, panics }
 }

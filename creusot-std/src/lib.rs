@@ -116,6 +116,29 @@ pub mod macros {
     /// ```
     pub use base_macros::ensures;
 
+    /// Declares that a function is allowed to panic, and only in states where the
+    /// given condition holds.
+    ///
+    /// The condition is a predicate over the function's inputs — `result` is not
+    /// in scope, since it does not exist in the panic outcome. A function with no
+    /// `#[may_panic(...)]` clause cannot panic at all (the default). Multiple
+    /// `#[may_panic(...)]` clauses are *disjoined*: each clause adds a case in which
+    /// the function is permitted to panic (the panic condition is their union), so
+    /// no clause means the empty union, `false`, i.e. cannot panic.
+    ///
+    /// The inside of a `may_panic` clause may look like Rust code, but it is in fact
+    /// [pearlite](https://guide.creusot.rs/pearlite).
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use creusot_std::prelude::*;
+    /// #[may_panic(i@ >= s@.len())] // may panic exactly when `i` is out of bounds
+    /// #[ensures(result == s@[i@])]
+    /// fn get(s: &[u8], i: usize) -> u8 { s[i] }
+    /// ```
+    pub use base_macros::may_panic;
+
     /// Create a new [`Snapshot`](crate::snapshot::Snapshot) object.
     ///
     /// The inside of `snapshot` may look like Rust code, but it is in fact
