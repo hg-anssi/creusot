@@ -1,0 +1,28 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_apply_propagate": {
+      "vc_apply_propagate_F": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_call_F": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_apply_total": {
+      "vc_apply_total_F": { "prover": "alt-ergo", "time": 0.032 },
+      "vc_call_F": { "prover": "alt-ergo", "time": 0.015 }
+    },
+    "M_direct_discharge": {
+      "vc_closure1": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_direct_discharge": { "prover": "alt-ergo", "time": 0.022 },
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.022 }
+    },
+    "M_direct_panics_sugar": {
+      "vc_closure2": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_direct_panics_sugar": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.022 }
+    },
+    "M_direct_propagate": {
+      "vc_closure1": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_direct_propagate": { "prover": "alt-ergo", "time": 0.01 },
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.022 }
+    }
+  }
+}

@@ -450,7 +450,7 @@ fn escape_self_in_contracts(
 ) -> Result<()> {
     for attr in attrs {
         if let Some(id) = attr.path().get_ident()
-            && (id == "ensures" || id == "requires")
+            && (id == "ensures" || id == "requires" || id == "may_panic" || id == "panics")
             && let Meta::List(l) = &mut attr.meta
         {
             let tokens = std::mem::take(&mut l.tokens);

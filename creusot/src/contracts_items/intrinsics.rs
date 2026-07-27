@@ -116,6 +116,7 @@ impl Intrinsic {
                 | Intrinsic::PostconditionOnce
                 | Intrinsic::HistInv
                 | Intrinsic::Precondition
+                | Intrinsic::PanicCondition
                 | Intrinsic::MetadataMatches
         )
     }
@@ -151,6 +152,7 @@ contracts_items! {
     "namespace"                 Namespace
     "neq"                       Neq
     "old"                       Old
+    "panic_condition"           PanicCondition
     "postcondition"             Postcondition
     "postcondition_mut"         PostconditionMut
     "postcondition_once"        PostconditionOnce
