@@ -13,3 +13,16 @@ pub fn in_closure() {
 pub fn panics_mentions_result() -> u8 {
     panic!("boom")
 }
+
+// The `#[panics(...)]` sugar surfaces the same errors as its `#[may_panic(...)]`
+// half: `result` is not in scope in the panic condition.
+#[panics(result@ == 0)]
+pub fn panics_sugar_mentions_result() -> u8 {
+    panic!("boom")
+}
+
+// ... and closures cannot be specified to panic through the sugar either.
+pub fn panics_sugar_in_closure() {
+    let _ = #[panics(true)]
+    || ();
+}

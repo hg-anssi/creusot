@@ -179,7 +179,8 @@ pub fn ensures(attr: TS1, tokens: TS1) -> TS1 {
 /// of the contract instead of the precondition.
 pub fn may_panic(attr: TS1, tokens: TS1) -> TS1 {
     const MAY_PANIC_LEN: usize = "#[may_panic(".len();
-    let documentation = document_spec("may_panic", doc::LogicBody::term(MAY_PANIC_LEN, attr.clone()));
+    let documentation =
+        document_spec("may_panic", doc::LogicBody::term(MAY_PANIC_LEN, attr.clone()));
 
     let mut item = parse_macro_input!(tokens as ContractSubject);
     let pan_body = pretyping::encode_term(&parse_macro_input!(attr as Term));
@@ -234,6 +235,28 @@ pub fn may_panic(attr: TS1, tokens: TS1) -> TS1 {
         .into_compile_error()
         .into(),
     }
+}
+
+/// The `#[panics(cond)]` clause: the function panics *exactly* when `cond` holds
+/// (a bi-conditional over the inputs). It is sugar for `#[may_panic(cond)]` (panic
+/// `⟹` cond) together with `#[ensures(!cond)]` (normal return `⟹` !cond, i.e.
+/// cond `⟹` panic), which combine to `panic ⟺ cond`.
+///
+/// Contrast with `#[may_panic(cond)]`, which only *bounds* panics (panic `⟹` cond)
+/// without forcing a panic when `cond` holds. `cond` is a predicate over the
+/// function inputs — `result` is not in scope (rejected by the `may_panic` half).
+pub fn panics(attr: TS1, tokens: TS1) -> TS1 {
+    let attr: TokenStream = attr.into();
+    let body: TokenStream = tokens.into();
+    // Desugar to the `may_panic`/`ensures` pair (same pattern as `maintains`).
+    // `may_panic(cond)` gives `panic ⟹ cond`; `ensures(!cond)` gives its converse
+    // `cond ⟹ panic`; together `panic ⟺ cond`.
+    quote! {
+        #[::creusot_std::macros::may_panic(#attr)]
+        #[::creusot_std::macros::ensures(!(#attr))]
+        #body
+    }
+    .into()
 }
 
 pub fn maintains(attr: TS1, body: TS1) -> TS1 {

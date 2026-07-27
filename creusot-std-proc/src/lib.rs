@@ -53,6 +53,7 @@ proc_macro_attributes! {
     requires
     ensures
     may_panic
+    panics
     invariant
     variant
     check

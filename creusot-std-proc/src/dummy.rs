@@ -64,6 +64,12 @@ pub fn may_panic(_: TS1, tokens: TS1) -> TS1 {
     TS1::from(item.into_token_stream())
 }
 
+pub fn panics(_: TS1, tokens: TS1) -> TS1 {
+    let mut item = syn::parse_macro_input!(tokens as ContractSubject);
+    delete_invariants(&mut item);
+    TS1::from(item.into_token_stream())
+}
+
 pub fn variant(_: TS1, tokens: TS1) -> TS1 {
     tokens
 }

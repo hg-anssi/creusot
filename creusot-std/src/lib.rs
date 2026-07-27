@@ -133,11 +133,44 @@ pub mod macros {
     ///
     /// ```
     /// # use creusot_std::prelude::*;
-    /// #[may_panic(i@ >= s@.len())] // may panic exactly when `i` is out of bounds
+    /// #[may_panic(i@ >= s@.len())] // may panic (at most) when `i` is out of bounds
     /// #[ensures(result == s@[i@])]
     /// fn get(s: &[u8], i: usize) -> u8 { s[i] }
     /// ```
+    ///
+    /// For the *exact* panic behaviour (panics **if and only if** the condition
+    /// holds), see [`panics`].
     pub use base_macros::may_panic;
+
+    /// Declares that a function panics *exactly* when the given condition holds:
+    /// a bi-conditional `panic ⟺ cond` over the function's inputs.
+    ///
+    /// This is sugar for `#[may_panic(cond)]` (panic `⟹` cond) together with
+    /// `#[ensures(!cond)]` (normal return `⟹` !cond, i.e. cond `⟹` panic). Contrast
+    /// with [`may_panic`], which only *bounds* panics without forcing a panic when
+    /// the condition holds. As with `may_panic`, `cond` is a predicate over the
+    /// inputs (`result` is not in scope), and multiple `#[panics(...)]` clauses
+    /// combine disjunctively: the function panics iff *any* of the conditions holds.
+    ///
+    /// In particular `#[panics(true)]` means "always panics" and `#[panics(false)]`
+    /// means "faillible but never actually panics".
+    ///
+    /// The inside of a `panics` clause may look like Rust code, but it is in fact
+    /// [pearlite](https://guide.creusot.rs/pearlite).
+    ///
+    /// Note: for a function taking `&mut` arguments, prefer conditions over the
+    /// *initial* state — the desugared `#[ensures(!cond)]` reads `cond` in the
+    /// post-state, which may differ from the pre-state `may_panic` reads.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// # use creusot_std::prelude::*;
+    /// #[panics(i@ >= s@.len())] // panics exactly when `i` is out of bounds
+    /// #[ensures(result == s@[i@])]
+    /// fn get(s: &[u8], i: usize) -> u8 { s[i] }
+    /// ```
+    pub use base_macros::panics;
 
     /// Create a new [`Snapshot`](crate::snapshot::Snapshot) object.
     ///
