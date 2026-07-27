@@ -228,12 +228,17 @@ pub fn may_panic(attr: TS1, tokens: TS1) -> TS1 {
                 #fn_or_meth
             })
         }
-        ContractSubject::Closure(clos) => syn::Error::new(
-            clos.span(),
-            "closures cannot be specified to panic (`#[may_panic(...)]`)",
-        )
-        .into_compile_error()
-        .into(),
+        ContractSubject::Closure(mut clos) => {
+            // The panic condition is a predicate over the closure's inputs (env +
+            // args), not its result — so it is attached like `requires`, with the
+            // spec item spliced into the closure body for name resolution.
+            let body = &clos.body;
+            *clos.body = parse_quote!({let res = #body; #panics_tokens res});
+            TS1::from(quote! {
+              #[creusot::clause::may_panic=#name_tag]
+              #clos
+            })
+        }
     }
 }
 

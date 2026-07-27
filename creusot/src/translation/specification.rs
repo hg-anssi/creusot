@@ -429,9 +429,10 @@ pub(crate) fn contract_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pr
     pre_sig
 }
 
-/// `#[may_panic(...)]` clauses are only meaningful on program functions with a
-/// runtime body. Reject them on closures and logic functions (they have no
-/// operational panic outcome).
+/// `#[may_panic(...)]` clauses are only meaningful on functions with an
+/// operational panic outcome. Closures are allowed (their panic threads through
+/// their own contract, or through `Fn::call`'s `panic_condition` for generic
+/// bounds); logic functions have no panic outcome and are rejected.
 fn check_panics_allowed<'tcx>(
     ctx: &TranslationCtx<'tcx>,
     def_id: DefId,
@@ -439,13 +440,6 @@ fn check_panics_allowed<'tcx>(
 ) {
     if !pre_sig.contract.may_panic() {
         return;
-    }
-    if ctx.is_closure_like(def_id) {
-        ctx.error(
-            ctx.def_span(def_id),
-            "closures cannot be specified to panic (`#[may_panic(...)]`)",
-        )
-        .emit();
     }
     if matches!(ctx.item_type(def_id), ItemType::Logic { .. }) {
         ctx.error(ctx.def_span(def_id), "logic functions cannot be specified to panic").emit();
@@ -518,6 +512,11 @@ pub(crate) fn pre_sig_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pre
         let pre_subst = ClosSubst::pre_or_cur(ctx.tcx, def_id.expect_local(), self_pre);
         for pre in &mut presig.contract.requires {
             pre_subst.subst(ctx.tcx, &mut pre.term);
+        }
+        // The panic condition, like `requires`, is a predicate over the closure's
+        // pre-state (env + args), so it uses the same substitution.
+        for pan in &mut presig.contract.panics {
+            pre_subst.subst(ctx.tcx, &mut pan.term);
         }
 
         let post_subst = match kind {

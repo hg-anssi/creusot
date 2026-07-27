@@ -143,6 +143,34 @@ pub(crate) fn closure_pre<'tcx>(
     normalize(ctx, typing_env, pre)
 }
 
+/// The panic condition of a closure: the states (over env + args) in which it is
+/// permitted to panic. Unlike `closure_pre`, there is no inferred default — a
+/// closure with no `#[may_panic]`/`#[panics]` clause has the empty disjunction
+/// `false` (cannot panic).
+pub(crate) fn closure_panics<'tcx>(
+    ctx: &TranslationCtx<'tcx>,
+    def_id: LocalDefId,
+    self_: Term<'tcx>,
+    args: Term<'tcx>,
+) -> Term<'tcx> {
+    let typing_env = ctx.typing_env(def_id.into());
+    let PreSignature { contract, inputs, output: _ } = contract_of(ctx, def_id.into());
+
+    // Pre-state predicate over the closure inputs (like `requires`).
+    let mut panics = contract.panics_disj(ctx.tcx);
+    ClosSubst::pre_or_cur(ctx.tcx, def_id, self_).subst(ctx.tcx, &mut panics);
+
+    if inputs.len() > 1 {
+        let pattern = Pattern::tuple(
+            inputs[1..].iter().map(|&(nm, span, ty)| Pattern::binder_sp(nm, span, ty)),
+            args.ty,
+        );
+        panics = Term::let_(pattern, args, panics).span(ctx.def_span(def_id));
+    }
+
+    normalize(ctx, typing_env, panics)
+}
+
 pub(crate) fn closure_post<'tcx>(
     ctx: &TranslationCtx<'tcx>,
     target_kind: ClosureKind,

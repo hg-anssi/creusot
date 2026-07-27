@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.15.3" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC5" version="1.3.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="coma">
+<path name=".."/><path name="panics_condition.with_panics.coma"/>
+<theory name="M_apply_propagate">
+ <goal name="vc_apply_propagate_F">
+ <proof prover="0"><result status="unknown" time="0.011815" steps="2114"/></proof>
+ <proof prover="1" timelimit="1"><result status="unknown" time="0.016327" steps="23"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="39588978"/></proof>
+ <proof prover="3"><result status="unknown" time="0.011581" steps="6858"/></proof>
+ <transf name="compute_specified" >
+  <goal name="vc_apply_propagate_F.0">
+  <proof prover="0"><result status="unknown" time="0.006844" steps="2114"/></proof>
+  <proof prover="1" timelimit="1"><result status="unknown" time="0.007944" steps="23"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="38672848"/></proof>
+  <proof prover="3"><result status="unknown" time="0.014101" steps="6858"/></proof>
+  <transf name="split_vc" >
+   <goal name="vc_apply_propagate_F.0.0" expl="call_F requires" proved="true">
+   <proof prover="1"><result status="valid" time="0.009846" steps="6"/></proof>
+   </goal>
+   <goal name="vc_apply_propagate_F.0.1" expl="apply_propagate_F ensures">
+   <proof prover="0"><result status="unknown" time="0.009207" steps="1918"/></proof>
+   <proof prover="1" timelimit="1"><result status="unknown" time="0.015863" steps="19"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="7489692"/></proof>
+   <proof prover="3"><result status="unknown" time="0.014517" steps="6673"/></proof>
+   <transf name="split_vc" >
+    <goal name="vc_apply_propagate_F.0.1.0" expl="apply_propagate ensures #0 (apply_propagate_F ensures)">
+    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.010380" steps="1900"/></proof>
+    <proof prover="1" timelimit="2" memlimit="4000"><result status="unknown" time="0.008196" steps="19"/></proof>
+    <proof prover="2" timelimit="2" memlimit="4000"><result status="unknown" time="0.048608" steps="216283"/></proof>
+    <proof prover="3" timelimit="2" memlimit="4000"><result status="unknown" time="0.016760" steps="6668"/></proof>
+    </goal>
+    <goal name="vc_apply_propagate_F.0.1.1" expl="apply_propagate ensures #1 (apply_propagate_F ensures)" proved="true">
+    <proof prover="1"><result status="valid" time="0.008458" steps="8"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="vc_apply_propagate_F.0.2" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.007854" steps="4"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_testlk" proved="true">
+ <goal name="vc_testlk" proved="true">
+ <proof prover="1"><result status="valid" time="0.004185" steps="13"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>
