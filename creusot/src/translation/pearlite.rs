@@ -593,6 +593,20 @@ impl<'tcx> Term<'tcx> {
         }
     }
 
+    pub(crate) fn not(self, tcx: TyCtxt<'tcx>) -> Self {
+        if self.is_true() {
+            Term::false_(tcx)
+        } else if self.is_false() {
+            Term::true_(tcx)
+        } else {
+            Term {
+                ty: tcx.types.bool,
+                span: self.span,
+                kind: TermKind::Unary { op: UnOp::Not, arg: Box::new(self) },
+            }
+        }
+    }
+
     pub(crate) fn bin_op(self, ty: Ty<'tcx>, op: BinOp, rhs: Self) -> Self {
         Term {
             ty,

@@ -39,6 +39,15 @@ pub struct CreusotArgs {
     #[clap(long = "creusot-extern", value_parser= parse_key_val::<String, PathBuf>, required=false)]
     pub extern_paths: Vec<(String, PathBuf)>,
 
+    /// Enable first-class panic reasoning: `#[may_panic(P)]` / `#[panics(P)]` clauses are
+    /// interpreted with their full semantics (the function may panic where `P` holds, and the
+    /// panic propagates through `Fn` bounds via `panic_condition`). When absent (the default),
+    /// each `#[may_panic(P)]` clause is reinterpreted as `#[requires(!P)]`, so panicking becomes
+    /// a caller obligation — the historical "verified ⇒ no panic" semantics, backward compatible
+    /// with existing Creusot code.
+    #[clap(long, default_value_t = false, action = clap::ArgAction::SetTrue)]
+    pub enable_panics: bool,
+
     /// Enable `#[erasure]` checking across crates.
     #[clap(long, num_args = 0..=1, default_value_t = ErasureCheck::Warn, default_missing_value = "error")]
     pub erasure_check: ErasureCheck,
@@ -128,6 +137,7 @@ pub struct Options {
     pub prefix: Vec<String>,
     pub in_cargo: bool,
     pub span_mode: SpanMode,
+    pub enable_panics: bool,
     pub erasure_check: ErasureCheck,
     pub erasure_check_dir: Option<PathBuf>,
 }
@@ -181,6 +191,7 @@ impl CreusotArgs {
             span_mode,
             monolithic: self.monolithic,
             prefix: Vec::new(), // to be set in callbacks::ToWhy::set_output_dir
+            enable_panics: self.enable_panics,
             erasure_check: self.erasure_check,
             erasure_check_dir: self.erasure_check_dir,
         })

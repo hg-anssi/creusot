@@ -95,8 +95,14 @@ fn main() {
             }
         }
 
-        let rs_file = File::open(&file.with_extension("rs"))
-            .unwrap_or_else(|_| panic!("no rust file for {:?}", file));
+        // Enable-panics goldens are named `foo.with_panics.coma`; their source is `foo.rs` (the
+        // `.coma` is self-contained, so why3 proves it directly — no re-translation / flag needed).
+        let rs_path = match file.to_string_lossy().strip_suffix(".with_panics.coma") {
+            Some(base) => PathBuf::from(format!("{base}.rs")),
+            None => file.with_extension("rs"),
+        };
+        let rs_file =
+            File::open(&rs_path).unwrap_or_else(|_| panic!("no rust file for {:?}", file));
         let header_line = BufReader::new(rs_file).lines().next().unwrap().unwrap();
 
         // Default (not `quiet`): print "Testing tests/current/test ... " and flush before running the test
@@ -321,7 +327,7 @@ fn main() {
     });
     for file in proof_files {
         let file = file.unwrap();
-        let coma = file.parent().unwrap().with_extension("coma");
+        let coma = file.parent().unwrap().with_added_extension("coma");
         if !coma.is_file() {
             out.set_color(ColorSpec::new().set_fg(Some(Color::Red))).unwrap();
             writeln!(&mut out, "unused {file:?}").unwrap();
