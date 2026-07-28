@@ -145,6 +145,19 @@ impl<'tcx> PreContract<'tcx> {
         })
     }
 
+    /// Reinterpret every `#[may_panic(P)]` clause as `#[requires(!P)]` (used when the
+    /// `--enable-panics` flag is absent). Panicking then becomes a caller obligation rather than
+    /// a first-class effect: each panic case `P` is negated and pushed as a precondition, and the
+    /// `panics` list is cleared so `may_panic()` becomes `false` and no `panic` continuation is
+    /// threaded downstream — the function is seen exactly like classic (panic-free) Creusot.
+    pub(crate) fn fold_panics_into_requires(mut self, tcx: TyCtxt<'tcx>) -> Self {
+        for cond in std::mem::take(&mut self.panics) {
+            let expl = cond.expl.replacen("may_panic", "requires (no panic)", 1);
+            self.requires.push(Condition { term: cond.term.not(tcx), expl });
+        }
+        self
+    }
+
     pub(crate) fn ensures_conj(&self, tcx: TyCtxt<'tcx>) -> Term<'tcx> {
         self.ensures.iter().fold(Term::true_(tcx), |postcond, (_, cond)| {
             Term::conj(postcond, cond.term.clone().spanned_nontrivial())
@@ -574,6 +587,15 @@ pub(crate) fn pre_sig_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pre
         };
 
         assert!(presig.contract.variant.is_none());
+    }
+
+    // Without `--enable-panics`, `#[may_panic(P)]` is reinterpreted as `#[requires(!P)]`: panicking
+    // becomes a caller obligation and the function is seen as classic (panic-free) Creusot. Done
+    // here, the single point feeding both the backend threading (`func_call_to_why3` tests
+    // `contract.may_panic()`) and the backend signature, after closure env substitution so the
+    // negation commutes with it.
+    if !ctx.opts.enable_panics {
+        presig.contract = presig.contract.fold_panics_into_requires(ctx.tcx);
     }
 
     if !presig.contract.extern_no_spec {

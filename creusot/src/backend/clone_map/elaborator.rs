@@ -229,7 +229,16 @@ impl<'a, 'ctx, 'tcx> Expander<'a, 'ctx, 'tcx> {
             Some(_) if sig.why_sig.args.is_empty() => DeclKind::Constant,
             _ => DeclKind::Function,
         };
-        let mut decls = if !opaque && let Some(term) = term(ctx, &names, &bound, def_id, subst) {
+        // Without `--enable-panics`, `panic_condition` is defined as `false` everywhere. Off-mode
+        // assumes no closure panics (the historical Creusot assumption); a concrete closure's real
+        // "may only be called where !P" constraint rides its `precondition` (via the driver fold of
+        // `may_panic` into `requires`) instead. Defining it `false` even for an opaque generic `F`
+        // makes the folded `requires(!panic_condition)` on `Fn::call`/HOFs trivial, preserving
+        // backward compatibility.
+        let force_false = !ctx.opts.enable_panics && Intrinsic::PanicCondition.is(ctx, def_id);
+        let mut decls = if force_false {
+            lower_logical_defn(ctx, &names, sig, kind, Term::false_(ctx.tcx), def_id)
+        } else if !opaque && let Some(term) = term(ctx, &names, &bound, def_id, subst) {
             lower_logical_defn(ctx, &names, sig, kind, term, def_id)
         } else {
             let mut decls = val(sig, kind);

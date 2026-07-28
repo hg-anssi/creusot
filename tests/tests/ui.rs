@@ -96,12 +96,12 @@ fn main() {
 
     let (mut failed, mut total) =
         (if contracts_success { 0 } else { 1 }, if test_creusot_std { 1 } else { 0 });
-    let (fail1, total1) = should_fail(&["tests/should_fail/**/*.rs"], &args, |p| {
-        run_creusot(p, &paths, args.with_spans)
+    let (fail1, total1) = should_fail(&["tests/should_fail/**/*.rs"], &args, |p, mode| {
+        run_creusot(p, &paths, args.with_spans, mode)
     });
     let (fail2, total2) =
-        should_succeed(&["examples/**/*.rs", "tests/should_succeed/**/*.rs"], &args, |p| {
-            run_creusot(p, &paths, args.with_spans)
+        should_succeed(&["examples/**/*.rs", "tests/should_succeed/**/*.rs"], &args, |p, mode| {
+            run_creusot(p, &paths, args.with_spans, mode)
         });
 
     total += total1 + total2;
@@ -239,6 +239,10 @@ fn build_creusot_std(
 ) -> Result<Output, io::Error> {
     let mut build = Command::new(CARGO_CREUSOT);
     build.arg("creusot"); // cargo creusot
+    // creusot-std is checked against its `enable-panics` golden (`creusot-std.coma`, unchanged).
+    // The emitted cmeta stores raw `#[may_panic]` clauses and is mode-independent, so this single
+    // build serves tests in both modes.
+    build.arg("--enable-panics");
     build.arg(match erasure_check {
         ErasureCheck::No => "--erasure-check=no",
         ErasureCheck::Warn => "--erasure-check=warn",
@@ -272,10 +276,95 @@ fn build_creusot_std(
     build.output()
 }
 
+/// Whether the panic feature is on (`--enable-panics`) or off (default, backward-compatible).
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum Mode {
+    EnablePanics,
+    NoPanics,
+}
+
+impl Mode {
+    fn flag(self) -> Option<&'static str> {
+        match self {
+            Mode::EnablePanics => Some("--enable-panics"),
+            Mode::NoPanics => None,
+        }
+    }
+
+    fn label(self) -> &'static str {
+        match self {
+            Mode::EnablePanics => "enable-panics",
+            Mode::NoPanics => "no-panics",
+        }
+    }
+}
+
+/// The golden files to diff against for `entry` in `mode`. The `no-panics` (default) golden is the
+/// canonical one (`foo.coma` / `foo.stderr`) — what plain `creusot` produces without the flag. The
+/// `enable-panics` golden lives in `foo.with_panics.{coma,stderr}` when the `--enable-panics` output
+/// differs, and otherwise falls back to the canonical golden (asserting the two modes are identical).
+fn golden_paths(entry: &Path, mode: Mode) -> (PathBuf, PathBuf) {
+    let coma = entry.with_extension("coma");
+    let stderr = entry.with_extension("stderr");
+    match mode {
+        Mode::NoPanics => (coma, stderr),
+        Mode::EnablePanics => {
+            let wp_coma = entry.with_extension("with_panics.coma");
+            let wp_stderr = entry.with_extension("with_panics.stderr");
+            (
+                if wp_coma.exists() { wp_coma } else { coma },
+                if wp_stderr.exists() { wp_stderr } else { stderr },
+            )
+        }
+    }
+}
+
+fn bless_file(path: &Path, content: &[u8]) {
+    if content.is_empty() {
+        let _ = std::fs::remove_file(path);
+    } else {
+        std::fs::write(path, content).unwrap();
+    }
+}
+
+fn bless_file_dedicated(dedicated: &Path, content: &[u8], base: &Path) {
+    let base_bytes = std::fs::read(base).unwrap_or_default();
+    if content == base_bytes.as_slice() {
+        let _ = std::fs::remove_file(dedicated);
+    } else {
+        bless_file(dedicated, content);
+    }
+}
+
+/// Bless the golden for `entry` in `mode` from the freshly produced `output`. For `enable-panics`,
+/// the dedicated `foo.with_panics.*` file is written only when the output differs from the canonical
+/// (no-panics) golden; otherwise it is removed so the fallback asserts mode-equality.
+fn bless(entry: &Path, mode: Mode, output: &Output) {
+    match mode {
+        Mode::NoPanics => {
+            bless_file(&entry.with_extension("coma"), &output.stdout);
+            bless_file(&entry.with_extension("stderr"), &output.stderr);
+        }
+        Mode::EnablePanics => {
+            bless_file_dedicated(
+                &entry.with_extension("with_panics.coma"),
+                &output.stdout,
+                &entry.with_extension("coma"),
+            );
+            bless_file_dedicated(
+                &entry.with_extension("with_panics.stderr"),
+                &output.stderr,
+                &entry.with_extension("stderr"),
+            );
+        }
+    }
+}
+
 fn run_creusot(
     file: &Path,
     paths: &CreusotPaths,
     with_spans: bool,
+    mode: Mode,
 ) -> Option<std::process::Command> {
     // Magic comment with instructions for creusot
     let header_line = BufReader::new(File::open(file).unwrap()).lines().next().unwrap().unwrap();
@@ -318,7 +407,13 @@ fn run_creusot(
             cmd.arg("--span-mode=off");
         }
     }
+    if let Some(flag) = mode.flag() {
+        cmd.arg(flag);
+    }
     cmd.args(args);
+    // The creusot-std cmeta is mode-independent (it stores the raw `#[may_panic]` clauses; the
+    // reinterpretation happens when the current crate is translated), so the same cmeta serves
+    // both modes.
     cmd.args(["--creusot-extern", &format!("creusot_std={}", paths.cmeta.display())]);
 
     Some(cmd)
@@ -326,14 +421,14 @@ fn run_creusot(
 
 fn should_succeed<B>(s: &[&str], args: &Args, b: B) -> (usize, usize)
 where
-    B: Fn(&Path) -> Option<std::process::Command> + Send + Sync,
+    B: Fn(&Path, Mode) -> Option<std::process::Command> + Send + Sync,
 {
     glob_runner(s, args, b, true)
 }
 
 fn should_fail<B>(s: &[&str], args: &Args, b: B) -> (usize, usize)
 where
-    B: Fn(&Path) -> Option<std::process::Command> + Send + Sync,
+    B: Fn(&Path, Mode) -> Option<std::process::Command> + Send + Sync,
 {
     glob_runner(s, args, b, false)
 }
@@ -359,7 +454,7 @@ fn glob_runner<B>(
     should_succeed: bool,
 ) -> (usize, usize)
 where
-    B: Fn(&Path) -> Option<std::process::Command> + Send + Sync,
+    B: Fn(&Path, Mode) -> Option<std::process::Command> + Send + Sync,
 {
     let out = args.stream();
     let test_count = AtomicUsize::new(0);
@@ -407,7 +502,6 @@ where
                 let Some(entry) = entries.lock().unwrap().next() else {
                     return;
                 };
-                test_count.fetch_add(1, SeqCst);
                 let entry = entry.unwrap();
 
                 if let Some(filter) = &args.filter
@@ -419,85 +513,89 @@ where
 
                 let entry_name = entry.file_stem().unwrap().to_str().unwrap();
 
-                let output = match command_builder(&entry) {
-                    None => continue,
-                    Some(mut c) => {
-                        if !args.quiet {
-                            let mut out = out.lock().unwrap();
-                            let (in_flight, out) = &mut *out;
-                            in_flight.push(entry_name.to_string());
-                            erase_in_flight(out);
-                            write_in_flight(in_flight, out);
-                        }
-                        let mut o = c.output().unwrap();
-                        // Replace global paths in stderr with (a simulacrum of) local paths
-                        erase_global_paths(&mut o.stderr);
-                        o
-                    }
+                // Every file runs in both modes, except those marked `ENABLE_PANICS_ONLY` (which
+                // are specific to first-class panics and only make sense with `--enable-panics`).
+                let header_line =
+                    BufReader::new(File::open(&entry).unwrap()).lines().next().unwrap().unwrap();
+                // `NoPanics` first: it blesses the canonical `foo.coma`, which the `EnablePanics`
+                // pass then compares against to decide whether a dedicated `foo.with_panics.coma`
+                // is needed.
+                let modes: &[Mode] = if header_line.contains("ENABLE_PANICS_ONLY") {
+                    &[Mode::EnablePanics]
+                } else {
+                    &[Mode::NoPanics, Mode::EnablePanics]
                 };
 
-                let stderr = entry.with_extension("stderr");
-                let stdout = entry.with_extension("coma");
-
-                let (success, buf) = differ(
-                    output.clone(),
-                    &stdout,
-                    Some(&stderr),
-                    should_succeed,
-                    args.force_color,
-                )
-                .unwrap();
-
-                let mut out = out.lock().unwrap();
-                let (in_flight, out) = &mut *out;
-
-                if !args.quiet
-                    && let Some(i) = in_flight.iter().position(|n| n == entry_name)
-                {
-                    in_flight.remove(i);
-                }
-
-                if args.bless && !(should_succeed && !output.status.success()) {
-                    if output.stdout.is_empty() {
-                        let _ = std::fs::remove_file(stdout);
-                    } else {
-                        std::fs::write(stdout, &output.stdout).unwrap();
-                    }
-
-                    let no_warn = output.stderr.is_empty();
-                    if no_warn {
-                        let _ = std::fs::remove_file(stderr);
-                    } else {
-                        std::fs::write(stderr, &output.stderr).unwrap();
-                    }
-
-                    if !success {
-                        erase_in_flight(out);
-                        write!(out, "{}: ", entry.display()).unwrap();
-                        if args.with_spans {
-                            writeln_color!(out, Color::Blue, "blessed with spans");
-                        } else if no_warn {
-                            writeln_color!(out, Color::Blue, "blessed");
-                        } else {
-                            writeln_color!(out, Color::Magenta, "blessed (with warnings)");
+                for &mode in modes {
+                    let test_name = format!("{entry_name}_{}", mode.label());
+                    test_count.fetch_add(1, SeqCst);
+                    let output = match command_builder(&entry, mode) {
+                        None => continue,
+                        Some(mut c) => {
+                            if !args.quiet {
+                                let mut out = out.lock().unwrap();
+                                let (in_flight, out) = &mut *out;
+                                in_flight.push(test_name.to_string());
+                                erase_in_flight(out);
+                                write_in_flight(in_flight, out);
+                            }
+                            let mut o = c.output().unwrap();
+                            // Replace global paths in stderr with (a simulacrum of) local paths
+                            erase_global_paths(&mut o.stderr);
+                            o
                         }
-                    }
-                } else {
-                    if !success {
-                        erase_in_flight(out);
-                        write!(out, "{}: ", entry.display()).unwrap();
-                        writeln_color!(out, Color::Red, "failure");
-                        test_failures.fetch_add(1, SeqCst);
                     };
-                    out.flush().unwrap();
 
-                    let wrt = BufferWriter::stdout(ColorChoice::Always);
-                    wrt.print(&buf).unwrap();
-                }
-                if !args.quiet {
-                    erase_in_flight(out);
-                    if !in_flight.is_empty() {
-                        write_in_flight(in_flight, out);
+                    let (stdout, stderr) = golden_paths(&entry, mode);
+
+                    let (success, buf) = differ(
+                        output.clone(),
+                        &stdout,
+                        Some(&stderr),
+                        should_succeed,
+                        args.force_color,
+                    )
+                    .unwrap();
+
+                    let mut out = out.lock().unwrap();
+                    let (in_flight, out) = &mut *out;
+
+                    if !args.quiet
+                        && let Some(i) = in_flight.iter().position(|n| n == &test_name)
+                    {
+                        in_flight.remove(i);
+                    }
+                    if args.bless && !(should_succeed && !output.status.success()) {
+                        bless(&entry, mode, &output);
+
+                        if !success {
+                            erase_in_flight(out);
+                            write!(out, "{} [{}]: ", entry.display(), mode.label()).unwrap();
+                            if args.with_spans {
+                                writeln_color!(out, Color::Blue, "blessed with spans");
+                            } else if output.stderr.is_empty() {
+                                writeln_color!(out, Color::Blue, "blessed");
+                            } else {
+                                writeln_color!(out, Color::Magenta, "blessed (with warnings)");
+                            }
+                        }
+                    } else {
+                        if !success {
+                            erase_in_flight(out);
+                            write!(out, "{} [{}]: ", entry.display(), mode.label()).unwrap();
+                            writeln_color!(out, Color::Red, "failure");
+                            test_failures.fetch_add(1, SeqCst);
+                        };
+                        out.flush().unwrap();
+
+                        let wrt = BufferWriter::stdout(ColorChoice::Always);
+                        wrt.print(&buf).unwrap();
+                    }
+                    if !args.quiet {
+                        erase_in_flight(out);
+                        if !in_flight.is_empty() {
+                            write_in_flight(in_flight, out);
+                        }
                     }
                 }
             }
