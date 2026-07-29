@@ -183,12 +183,12 @@
   <goal name="vc_update_R.3" expl="split_off requires" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="vc_update_R.3.0" expl="split_off requires" proved="true">
-   <proof prover="2" timelimit="3" memlimit="2000"><result status="valid" time="0.455551" steps="17717"/></proof>
+   <proof prover="2" timelimit="3" memlimit="2000"><result status="valid" time="0.208793" steps="17717"/></proof>
    </goal>
   </transf>
   </goal>
   <goal name="vc_update_R.4" expl="update_R ensures" proved="true">
-  <proof prover="0"><result status="valid" time="1.180004" steps="2239544"/></proof>
+  <proof prover="0"><result status="valid" time="0.762227" steps="2239544"/></proof>
   </goal>
   <goal name="vc_update_R.5" expl="type invariant" proved="true">
   <proof prover="2"><result status="valid" time="0.063261" steps="9891"/></proof>
@@ -217,7 +217,7 @@
   <goal name="vc_new_unit_R.0" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="vc_new_unit_R.0.0" expl="new_unit ensures" proved="true">
-   <proof prover="0" timelimit="0.2"><result status="valid" time="0.634856" steps="880565"/></proof>
+   <proof prover="0" timelimit="0.2"><result status="valid" time="0.319187" steps="880565"/></proof>
    </goal>
   </transf>
   </goal>
@@ -271,7 +271,7 @@
    <proof prover="2" timelimit="0.2"><result status="valid" time="0.108913" steps="4220"/></proof>
    </goal>
    <goal name="vc_update_R.0.2" expl="update_raw requires" proved="true">
-   <proof prover="0"><result status="valid" time="0.559719" steps="1022663"/></proof>
+   <proof prover="0"><result status="valid" time="0.360192" steps="1022663"/></proof>
    </goal>
    <goal name="vc_update_R.0.3" expl="update_R ensures" proved="true">
    <proof prover="3"><result status="valid" time="0.043083" steps="64"/></proof>
@@ -447,7 +447,7 @@
 </theory>
 <theory name="M_logic__fset__impl_FSet_T__concat" proved="true">
  <goal name="vc_concat_T" proved="true">
- <proof prover="3" timelimit="5"><result status="valid" time="3.528504" steps="21083"/></proof>
+ <proof prover="3" timelimit="5"><result status="valid" time="2.349164" steps="21083"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__fset__impl_FSet_T__concat_empty" proved="true">
@@ -462,10 +462,10 @@
   <goal name="vc_concat_empty_T.2" expl="concat_empty_T ensures" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="vc_concat_empty_T.2.0" expl="concat_empty ensures #0 (concat_empty_T ensures)" proved="true">
-   <proof prover="3"><result status="valid" time="0.244851" steps="1626"/></proof>
+   <proof prover="3"><result status="valid" time="0.108427" steps="1626"/></proof>
    </goal>
    <goal name="vc_concat_empty_T.2.1" expl="concat_empty ensures #1 (concat_empty_T ensures)" proved="true">
-   <proof prover="2" timelimit="1"><result status="valid" time="0.589215" steps="34545"/></proof>
+   <proof prover="2" timelimit="1"><result status="valid" time="0.377225" steps="34545"/></proof>
    </goal>
   </transf>
   </goal>
@@ -474,7 +474,7 @@
 </theory>
 <theory name="M_logic__fset__impl_FSet_T__concat_replicate" proved="true">
  <goal name="vc_concat_replicate_T" proved="true">
- <proof prover="2" timelimit="1"><result status="valid" time="0.220444" steps="18295"/></proof>
+ <proof prover="2" timelimit="1"><result status="valid" time="0.088899" steps="18295"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__fset__impl_FSet_T__concat_replicate_up_to" proved="true">
@@ -488,7 +488,7 @@
   <goal name="vc_concat_union_T.0" expl="concat_union_T ensures" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="vc_concat_union_T.0.0" expl="concat_union ensures #0" proved="true">
-   <proof prover="3" timelimit="1"><result status="valid" time="0.420206" steps="1529"/></proof>
+   <proof prover="3" timelimit="1"><result status="valid" time="0.211826" steps="1529"/></proof>
    </goal>
    <goal name="vc_concat_union_T.0.1" expl="concat_union ensures #1" proved="true">
    <proof prover="3"><result status="valid" time="0.176048" steps="976"/></proof>
@@ -512,10 +512,10 @@
    <goal name="vc_cons_T.2.0" expl="cons ensures" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="vc_cons_T.2.0.0" expl="cons ensures" proved="true">
-    <proof prover="3" timelimit="1"><result status="valid" time="0.700847" steps="3744"/></proof>
+    <proof prover="3" timelimit="1"><result status="valid" time="0.471899" steps="3744"/></proof>
     </goal>
     <goal name="vc_cons_T.2.0.1" expl="cons ensures" proved="true">
-    <proof prover="3"><result status="valid" time="0.367339" steps="1826"/></proof>
+    <proof prover="3"><result status="valid" time="0.222607" steps="1826"/></proof>
     </goal>
     <goal name="vc_cons_T.2.0.2" expl="cons ensures" proved="true">
     <proof prover="3"><result status="valid" time="0.347039" steps="1611"/></proof>
@@ -545,10 +545,10 @@
    <proof prover="3"><result status="valid" time="0.024144" steps="107"/></proof>
    </goal>
    <goal name="vc_cons_concat_T.0.3" proved="true">
-   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="2.974481" steps="13953"/></proof>
+   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.935993" steps="13953"/></proof>
    </goal>
    <goal name="vc_cons_concat_T.0.4" proved="true">
-   <proof prover="3" timelimit="1"><result status="valid" time="2.262290" steps="9504"/></proof>
+   <proof prover="3" timelimit="1"><result status="valid" time="1.823387" steps="9504"/></proof>
    </goal>
    <goal name="vc_cons_concat_T.0.5" expl="cons_concat ensures" proved="true">
    <proof prover="3"><result status="valid" time="0.019514" steps="16"/></proof>
@@ -587,7 +587,7 @@
   <proof prover="3" timelimit="5"><result status="valid" time="0.025738" steps="4"/></proof>
   </goal>
   <goal name="vc_replicate_T.5" expl="replicate ensures" proved="true">
-  <proof prover="3" timelimit="5"><result status="valid" time="2.328210" steps="15173"/></proof>
+  <proof prover="3" timelimit="5"><result status="valid" time="1.594742" steps="15173"/></proof>
   </goal>
  </transf>
  </goal>
@@ -613,10 +613,10 @@
   <goal name="vc_unions_union_T.0" expl="unions_union_T ensures" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="vc_unions_union_T.0.0" expl="unions_union ensures #0" proved="true">
-   <proof prover="3" timelimit="1"><result status="valid" time="0.857008" steps="3617"/></proof>
+   <proof prover="3" timelimit="1"><result status="valid" time="0.535105" steps="3617"/></proof>
    </goal>
    <goal name="vc_unions_union_T.0.1" expl="unions_union ensures #1" proved="true">
-   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="2.883039" steps="13555"/></proof>
+   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="2.021602" steps="13555"/></proof>
    </goal>
   </transf>
   </goal>
@@ -2620,7 +2620,7 @@
 </theory>
 <theory name="M_logic__ra__auth__impl_Update_for_AuthUpdate_U__frame_preserving" proved="true">
  <goal name="vc_frame_preserving_AuthUpdate_U" proved="true">
- <proof prover="2" timelimit="1"><result status="valid" time="0.570563" steps="28054"/></proof>
+ <proof prover="2" timelimit="1"><result status="valid" time="0.558785" steps="28054"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__ra__auth__impl_Update_for_AuthUpdate_U__frame_preserving__refines" proved="true">
@@ -2787,7 +2787,7 @@
  <goal name="vc_associative_FMap_K_V" proved="true">
  <transf name="split_vc" proved="true" >
   <goal name="vc_associative_FMap_K_V.0" proved="true">
-  <proof prover="2" timelimit="0.2"><result status="valid" time="0.331842" steps="24452"/></proof>
+  <proof prover="2" timelimit="0.2"><result status="valid" time="0.331842" steps="24461"/></proof>
   </goal>
   <goal name="vc_associative_FMap_K_V.1" expl="associative ensures" proved="true">
   <proof prover="3"><result status="valid" time="0.028062" steps="92"/></proof>
@@ -2799,7 +2799,7 @@
   <proof prover="2" timelimit="0.2"><result status="valid" time="0.148350" steps="10761"/></proof>
   </goal>
   <goal name="vc_associative_FMap_K_V.4" expl="associative ensures" proved="true">
-  <proof prover="0" timelimit="0.2"><result status="valid" time="1.012715" steps="2544720"/></proof>
+  <proof prover="0" timelimit="0.2"><result status="valid" time="0.543478" steps="2544720"/></proof>
   </goal>
   <goal name="vc_associative_FMap_K_V.5" expl="associative ensures" proved="true">
   <proof prover="2" timelimit="0.2"><result status="valid" time="0.170011" steps="8562"/></proof>
@@ -2828,7 +2828,7 @@
   <proof prover="3"><result status="valid" time="0.347723" steps="1337"/></proof>
   </goal>
   <goal name="vc_cancelable_FMap_K_V.4" expl="unwrap_logic requires" proved="true">
-  <proof prover="3"><result status="valid" time="0.371043" steps="1438"/></proof>
+  <proof prover="3"><result status="valid" time="0.232157" steps="1438"/></proof>
   </goal>
   <goal name="vc_cancelable_FMap_K_V.5" expl="unwrap_logic requires" proved="true">
   <proof prover="3"><result status="valid" time="0.363142" steps="1391"/></proof>
@@ -2844,14 +2844,14 @@
    <goal name="vc_cancelable_FMap_K_V.8.0" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="vc_cancelable_FMap_K_V.8.0.0" proved="true">
-    <proof prover="3" timelimit="1"><result status="valid" time="0.550729" steps="3988"/></proof>
+    <proof prover="3" timelimit="1"><result status="valid" time="0.351670" steps="3988"/></proof>
     </goal>
    </transf>
    </goal>
   </transf>
   </goal>
   <goal name="vc_cancelable_FMap_K_V.9" proved="true">
-  <proof prover="0" timelimit="0.2"><result status="valid" time="0.536016" steps="1002820"/></proof>
+  <proof prover="0" timelimit="0.2"><result status="valid" time="0.423042" steps="1002820"/></proof>
   <proof prover="2" timelimit="0.2"><result status="valid" time="0.191019" steps="11934"/></proof>
   </goal>
   <goal name="vc_cancelable_FMap_K_V.10" proved="true">
@@ -2972,10 +2972,10 @@
    <proof prover="0" timelimit="0.2"><result status="valid" time="0.037728" steps="50806"/></proof>
    </goal>
    <goal name="vc_core_total_idemp_FMap_K_V.0.3" proved="true">
-   <proof prover="0" timelimit="0.2"><result status="valid" time="0.396724" steps="776717"/></proof>
+   <proof prover="0" timelimit="0.2"><result status="valid" time="0.182279" steps="776717"/></proof>
    </goal>
    <goal name="vc_core_total_idemp_FMap_K_V.0.4" expl="core_total_idemp_FMap_K_V ensures" proved="true">
-   <proof prover="0"><result status="valid" time="2.489665" steps="4930201"/></proof>
+   <proof prover="0"><result status="valid" time="1.356848" steps="4930201"/></proof>
    </goal>
   </transf>
   </goal>
@@ -3281,7 +3281,7 @@
   <proof prover="0" timelimit="0.2"><result status="valid" time="0.008708" steps="16136"/></proof>
   </goal>
   <goal name="vc_cancelable_Option_T.11" expl="cancelable ensures" proved="true">
-  <proof prover="3"><result status="valid" time="0.242950" steps="839"/></proof>
+  <proof prover="3"><result status="valid" time="0.111097" steps="839"/></proof>
   </goal>
   <goal name="vc_cancelable_Option_T.12" expl="cancelable ensures" proved="true">
   <proof prover="0" timelimit="0.2"><result status="valid" time="0.008812" steps="21507"/></proof>
@@ -3293,13 +3293,13 @@
   <proof prover="0" timelimit="0.2"><result status="valid" time="0.007591" steps="12917"/></proof>
   </goal>
   <goal name="vc_cancelable_Option_T.15" proved="true">
-  <proof prover="3"><result status="valid" time="0.478998" steps="1809"/></proof>
+  <proof prover="3"><result status="valid" time="0.242341" steps="1809"/></proof>
   </goal>
   <goal name="vc_cancelable_Option_T.16" proved="true">
-  <proof prover="3"><result status="valid" time="0.458030" steps="1864"/></proof>
+  <proof prover="3"><result status="valid" time="0.242468" steps="1864"/></proof>
   </goal>
   <goal name="vc_cancelable_Option_T.17" expl="cancelable ensures" proved="true">
-  <proof prover="2"><result status="valid" time="4.884955" steps="163791"/></proof>
+  <proof prover="2"><result status="valid" time="4.359711" steps="163791"/></proof>
   </goal>
   <goal name="vc_cancelable_Option_T.18" expl="cancelable ensures" proved="true">
   <proof prover="3"><result status="valid" time="0.024801" steps="20"/></proof>
@@ -3502,7 +3502,7 @@
 </theory>
 <theory name="M_logic__ra__positive_real__impl_RA_for_PositiveReal__associative" proved="true">
  <goal name="vc_associative_PositiveReal" proved="true">
- <proof prover="0" timelimit="0.2"><result status="valid" time="0.579703" steps="718665"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.251575" steps="718665"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__ra__positive_real__impl_RA_for_PositiveReal__associative__refines" proved="true">
@@ -3582,7 +3582,7 @@
 </theory>
 <theory name="M_logic__ra__prod__impl_LocalUpdate_for_tup3_T1_T2_T3__frame_preserving" proved="true">
  <goal name="vc_frame_preserving_tup3_T1_T2_T3" proved="true">
- <proof prover="0" timelimit="0.2"><result status="valid" time="0.610120" steps="864123"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.300077" steps="864123"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__ra__prod__impl_LocalUpdate_for_tup3_T1_T2_T3__frame_preserving__refines" proved="true">
@@ -3592,7 +3592,7 @@
 </theory>
 <theory name="M_logic__ra__prod__impl_LocalUpdate_for_tup4_T1_T2_T3_T4__frame_preserving" proved="true">
  <goal name="vc_frame_preserving_tup4_T1_T2_T3_T4" proved="true">
- <proof prover="0" timelimit="0.2"><result status="valid" time="0.454163" steps="949239"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.245418" steps="949239"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__ra__prod__impl_LocalUpdate_for_tup4_T1_T2_T3_T4__frame_preserving__refines" proved="true">
@@ -3712,10 +3712,10 @@
   <proof prover="3"><result status="valid" time="0.057954" steps="179"/></proof>
   </goal>
   <goal name="vc_cancelable_tup3_T1_T2_T3.4" expl="cancelable ensures" proved="true">
-  <proof prover="3" timelimit="1"><result status="valid" time="1.386303" steps="3947"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="1.061802" steps="3947"/></proof>
   </goal>
   <goal name="vc_cancelable_tup3_T1_T2_T3.5" expl="cancelable ensures" proved="true">
-  <proof prover="3"><result status="valid" time="0.616629" steps="1798"/></proof>
+  <proof prover="3"><result status="valid" time="0.355911" steps="1798"/></proof>
   </goal>
   <goal name="vc_cancelable_tup3_T1_T2_T3.6" expl="cancelable ensures" proved="true">
   <proof prover="3"><result status="valid" time="0.203914" steps="449"/></proof>
@@ -3770,7 +3770,7 @@
 </theory>
 <theory name="M_logic__ra__prod__impl_RA_for_tup3_T1_T2_T3__factor" proved="true">
  <goal name="vc_factor_tup3_T1_T2_T3" proved="true">
- <proof prover="3"><result status="valid" time="0.588474" steps="1584"/></proof>
+ <proof prover="3"><result status="valid" time="0.397889" steps="1584"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__ra__prod__impl_RA_for_tup3_T1_T2_T3__factor__refines" proved="true">
@@ -3807,16 +3807,16 @@
   <proof prover="3"><result status="valid" time="0.185672" steps="252"/></proof>
   </goal>
   <goal name="vc_cancelable_tup4_T1_T2_T3_T4.5" expl="cancelable ensures" proved="true">
-  <proof prover="3" timelimit="1"><result status="valid" time="2.815147" steps="6704"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="2.370478" steps="6704"/></proof>
   </goal>
   <goal name="vc_cancelable_tup4_T1_T2_T3_T4.6" expl="cancelable ensures" proved="true">
-  <proof prover="3" timelimit="1"><result status="valid" time="1.005688" steps="2910"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="0.759485" steps="2910"/></proof>
   </goal>
   <goal name="vc_cancelable_tup4_T1_T2_T3_T4.7" expl="cancelable ensures" proved="true">
-  <proof prover="3" timelimit="1"><result status="valid" time="1.015037" steps="2779"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="0.582653" steps="2779"/></proof>
   </goal>
   <goal name="vc_cancelable_tup4_T1_T2_T3_T4.8" expl="cancelable ensures" proved="true">
-  <proof prover="3"><result status="valid" time="0.265482" steps="536"/></proof>
+  <proof prover="3"><result status="valid" time="0.137829" steps="536"/></proof>
   </goal>
  </transf>
  </goal>
@@ -4065,7 +4065,7 @@
    <proof prover="0" timelimit="0.2"><result status="valid" time="0.015630" steps="14125"/></proof>
    </goal>
    <goal name="vc_cancelable_Sum_R1_R2.0.1" expl="cancelable ensures" proved="true">
-   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="2.244909" steps="7903"/></proof>
+   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.868286" steps="7903"/></proof>
    </goal>
   </transf>
   </goal>
@@ -4081,7 +4081,7 @@
    <goal name="vc_cancelable_Sum_R1_R2.1.1" expl="cancelable ensures" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="vc_cancelable_Sum_R1_R2.1.1.0" expl="cancelable ensures" proved="true">
-    <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="2.279147" steps="8243"/></proof>
+    <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.605847" steps="8243"/></proof>
     </goal>
    </transf>
    </goal>
@@ -4325,19 +4325,19 @@
   <proof prover="2" timelimit="1"><result status="valid" time="0.013554" steps="1305"/></proof>
   </goal>
   <goal name="vc_associative_View_R.1" expl="associative ensures" proved="true">
-  <proof prover="3" timelimit="1"><result status="valid" time="2.443315" steps="6145"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="1.975583" steps="6145"/></proof>
   </goal>
   <goal name="vc_associative_View_R.2" expl="associative ensures" proved="true">
-  <proof prover="3" timelimit="5" memlimit="2000"><result status="valid" time="2.574644" steps="7148"/></proof>
+  <proof prover="3" timelimit="5" memlimit="2000"><result status="valid" time="2.374144" steps="7148"/></proof>
   </goal>
   <goal name="vc_associative_View_R.3" expl="associative ensures" proved="true">
-  <proof prover="3" timelimit="5" memlimit="2000"><result status="valid" time="2.782148" steps="7785"/></proof>
+  <proof prover="3" timelimit="5" memlimit="2000"><result status="valid" time="2.328066" steps="7785"/></proof>
   </goal>
   <goal name="vc_associative_View_R.4" expl="associative ensures" proved="true">
   <proof prover="2" timelimit="1"><result status="valid" time="0.025815" steps="7034"/></proof>
   </goal>
   <goal name="vc_associative_View_R.5" expl="associative ensures" proved="true">
-  <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.903020" steps="5486"/></proof>
+  <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.760802" steps="5486"/></proof>
   </goal>
   <goal name="vc_associative_View_R.6" expl="associative ensures" proved="true">
   <proof prover="2" timelimit="1"><result status="valid" time="0.043479" steps="7969"/></proof>
@@ -5060,7 +5060,7 @@
   <proof prover="1"><result status="valid" time="0.022568" steps="6505"/></proof>
   </goal>
   <goal name="vc_extract_T.4" expl="extract_T ensures" proved="true">
-  <proof prover="3" timelimit="5"><result status="valid" time="2.111500" steps="23296"/></proof>
+  <proof prover="3" timelimit="5"><result status="valid" time="1.193052" steps="23296"/></proof>
   </goal>
   <goal name="vc_extract_T.5" expl="type invariant" proved="true">
   <proof prover="0"><result status="valid" time="0.012944" steps="1743"/></proof>
@@ -5101,7 +5101,7 @@
  <goal name="vc_lexico_lt_log_tail_T" proved="true">
  <transf name="compute_specified" proved="true" >
   <goal name="vc_lexico_lt_log_tail_T.0" proved="true">
-  <proof prover="3" timelimit="1"><result status="valid" time="1.219680" steps="8683"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="0.642453" steps="8683"/></proof>
   </goal>
  </transf>
  </goal>
@@ -5777,7 +5777,7 @@
 </theory>
 <theory name="M_std__bool__extern_spec_bool_then_body" proved="true">
  <goal name="vc_extern_spec_bool_then_body_T" proved="true">
- <proof prover="0" timelimit="0.2"><result status="valid" time="0.002576" steps="2177"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.002576" steps="2477"/></proof>
  </goal>
 </theory>
 <theory name="M_std__bool__extern_spec_bool_then_some_body" proved="true">
@@ -6309,7 +6309,7 @@
     <proof prover="0"><result status="valid" time="0.003987" steps="26493"/></proof>
     </goal>
     <goal name="vc_produces_trans_IterMut_K_V.0.1.5" expl="produces_trans ensures" proved="true">
-    <proof prover="3" timelimit="5"><result status="valid" time="0.223424" steps="1190"/></proof>
+    <proof prover="3" timelimit="5"><result status="valid" time="0.087537" steps="1190"/></proof>
     </goal>
     <goal name="vc_produces_trans_IterMut_K_V.0.1.6" expl="produces_trans ensures" proved="true">
     <proof prover="0"><result status="valid" time="0.017169" steps="31121"/></proof>
@@ -6770,7 +6770,7 @@
 </theory>
 <theory name="M_std__iter__enumerate__impl_IteratorSpec_for_Enumerate_I__produces_trans" proved="true">
  <goal name="vc_produces_trans_Enumerate_I" proved="true">
- <proof prover="2" timelimit="1"><result status="valid" time="0.260464" steps="46000"/></proof>
+ <proof prover="2" timelimit="1"><result status="valid" time="0.095706" steps="46000"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__enumerate__impl_IteratorSpec_for_Enumerate_I__produces_trans__refines" proved="true">
@@ -6810,7 +6810,7 @@
 </theory>
 <theory name="M_std__iter__filter__impl_IteratorSpec_for_Filter_I_F__produces_refl" proved="true">
  <goal name="vc_produces_refl_Filter_I_F" proved="true">
- <proof prover="0"><result status="valid" time="0.015057" steps="39482"/></proof>
+ <proof prover="0"><result status="valid" time="0.015057" steps="39835"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__filter__impl_IteratorSpec_for_Filter_I_F__produces_refl__refines" proved="true">
@@ -6826,24 +6826,24 @@
    <goal name="vc_produces_trans_Filter_I_F.0.0" expl="produces_trans ensures" proved="true">
    <transf name="destruct_rec" proved="true" arg1="H3">
     <goal name="vc_produces_trans_Filter_I_F.0.0.0" expl="destruct premise" proved="true">
-    <proof prover="0"><result status="valid" time="0.000001" steps="2013"/></proof>
+    <proof prover="0"><result status="valid" time="0.000001" steps="2062"/></proof>
     </goal>
     <goal name="vc_produces_trans_Filter_I_F.0.0.1" expl="produces_trans ensures" proved="true">
     <transf name="split_vc" proved="true" >
      <goal name="vc_produces_trans_Filter_I_F.0.0.1.0" expl="produces_trans ensures" proved="true">
-     <proof prover="0"><result status="valid" time="0.004017" steps="26955"/></proof>
+     <proof prover="0"><result status="valid" time="0.004017" steps="27952"/></proof>
      </goal>
      <goal name="vc_produces_trans_Filter_I_F.0.0.1.1" expl="produces_trans ensures" proved="true">
      <transf name="destruct_rec" proved="true" arg1="H1">
       <goal name="vc_produces_trans_Filter_I_F.0.0.1.1.0" expl="destruct premise" proved="true">
-      <proof prover="3" timelimit="5"><result status="valid" time="0.016640" steps="31"/></proof>
+      <proof prover="3" timelimit="5"><result status="valid" time="0.016640" steps="43"/></proof>
       </goal>
       <goal name="vc_produces_trans_Filter_I_F.0.0.1.1.1" expl="produces_trans ensures" proved="true">
       <transf name="exists" proved="true" arg1="(s1++s)">
        <goal name="vc_produces_trans_Filter_I_F.0.0.1.1.1.0" proved="true">
        <transf name="exists" proved="true" arg1="(fun i -&gt; if i &lt; length ab then f1 i else (f (i - length ab) + length s1))">
         <goal name="vc_produces_trans_Filter_I_F.0.0.1.1.1.0.0" proved="true">
-        <proof prover="3" timelimit="5"><result status="valid" time="0.058371" steps="787"/></proof>
+        <proof prover="3" timelimit="5"><result status="valid" time="0.058371" steps="828"/></proof>
         </goal>
        </transf>
        </goal>
@@ -6862,12 +6862,12 @@
 </theory>
 <theory name="M_std__iter__filter__impl_IteratorSpec_for_Filter_I_F__produces_trans__refines" proved="true">
  <goal name="refines" proved="true">
- <proof prover="1"><result status="valid" time="0.024813" steps="5400"/></proof>
+ <proof prover="1"><result status="valid" time="0.024813" steps="5509"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__filter_map__impl_IteratorSpec_for_FilterMap_I_F__produces_refl" proved="true">
  <goal name="vc_produces_refl_FilterMap_I_F" proved="true">
- <proof prover="0"><result status="valid" time="0.031295" steps="48768"/></proof>
+ <proof prover="0"><result status="valid" time="0.031295" steps="49650"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__filter_map__impl_IteratorSpec_for_FilterMap_I_F__produces_refl__refines" proved="true">
@@ -6883,24 +6883,24 @@
    <goal name="vc_produces_trans_FilterMap_I_F.0.0" expl="produces_trans ensures" proved="true">
    <transf name="destruct_rec" proved="true" arg1="H3">
     <goal name="vc_produces_trans_FilterMap_I_F.0.0.0" expl="destruct premise" proved="true">
-    <proof prover="0"><result status="valid" time="0.010611" steps="2655"/></proof>
+    <proof prover="0"><result status="valid" time="0.010611" steps="2696"/></proof>
     </goal>
     <goal name="vc_produces_trans_FilterMap_I_F.0.0.1" expl="produces_trans ensures" proved="true">
     <transf name="split_vc" proved="true" >
      <goal name="vc_produces_trans_FilterMap_I_F.0.0.1.0" expl="produces_trans ensures" proved="true">
-     <proof prover="1"><result status="valid" time="0.019239" steps="8476"/></proof>
+     <proof prover="1"><result status="valid" time="0.019239" steps="8579"/></proof>
      </goal>
      <goal name="vc_produces_trans_FilterMap_I_F.0.0.1.1" expl="produces_trans ensures" proved="true">
      <transf name="destruct_rec" proved="true" arg1="H1">
       <goal name="vc_produces_trans_FilterMap_I_F.0.0.1.1.0" expl="destruct premise" proved="true">
-      <proof prover="3" timelimit="5"><result status="valid" time="0.007937" steps="45"/></proof>
+      <proof prover="3" timelimit="5"><result status="valid" time="0.007937" steps="67"/></proof>
       </goal>
       <goal name="vc_produces_trans_FilterMap_I_F.0.0.1.1.1" expl="produces_trans ensures" proved="true">
       <transf name="exists" proved="true" arg1="(s1++s)">
        <goal name="vc_produces_trans_FilterMap_I_F.0.0.1.1.1.0" proved="true">
        <transf name="exists" proved="true" arg1="(fun i -&gt; if i &lt; length ab then f1 i else (f (i - length ab) + length s1))">
         <goal name="vc_produces_trans_FilterMap_I_F.0.0.1.1.1.0.0" proved="true">
-        <proof prover="3" timelimit="5"><result status="valid" time="0.170585" steps="725"/></proof>
+        <proof prover="3" timelimit="5"><result status="valid" time="0.170585" steps="772"/></proof>
         </goal>
        </transf>
        </goal>
@@ -6919,7 +6919,7 @@
 </theory>
 <theory name="M_std__iter__filter_map__impl_IteratorSpec_for_FilterMap_I_F__produces_trans__refines" proved="true">
  <goal name="refines" proved="true">
- <proof prover="0"><result status="valid" time="0.006033" steps="33103"/></proof>
+ <proof prover="0"><result status="valid" time="0.006033" steps="33871"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__fuse__impl_ExactSizeIteratorSpec_for_Fuse_I__size_hint_exact" proved="true">
@@ -7008,7 +7008,7 @@
 </theory>
 <theory name="M_std__iter__map__impl_Invariant_for_Map_I_F__invariant" proved="true">
  <goal name="vc_invariant_Map_I_F" proved="true">
- <proof prover="2"><result status="valid" time="0.014304" steps="3103"/></proof>
+ <proof prover="2"><result status="valid" time="0.014304" steps="3133"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__map__impl_IteratorSpec_for_Map_I_F__produces_refl" proved="true">
@@ -7051,7 +7051,7 @@
    <proof prover="3"><result status="valid" time="0.083096" steps="680"/></proof>
    </goal>
    <goal name="vc_produces_trans_Map_I_F.0.8" expl="produces_trans ensures" proved="true">
-   <proof prover="1" timelimit="0.2"><result status="valid" time="0.653750" steps="71294"/></proof>
+   <proof prover="1" timelimit="0.2"><result status="valid" time="0.462734" steps="71294"/></proof>
    </goal>
    <goal name="vc_produces_trans_Map_I_F.0.9" proved="true">
    <proof prover="3"><result status="valid" time="0.044332" steps="187"/></proof>
@@ -7079,7 +7079,7 @@
 </theory>
 <theory name="M_std__iter__map__produces_instantiate_existential" proved="true">
  <goal name="vc_produces_instantiate_existential_I" proved="true">
- <proof prover="1" timelimit="1"><result status="valid" time="0.316231" steps="43088"/></proof>
+ <proof prover="1" timelimit="1"><result status="valid" time="0.173684" steps="43088"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__map_inv__impl_ExactSizeIteratorSpec_for_MapInv_I_F__size_hint_exact" proved="true">
@@ -7159,7 +7159,7 @@
         <proof prover="2" timelimit="1"><result status="valid" time="0.173229" steps="19345"/></proof>
         </goal>
         <goal name="vc_produces_trans_MapInv_I_F.0.0.1.0.1.0.7" proved="true">
-        <proof prover="2" timelimit="1"><result status="valid" time="0.351404" steps="42859"/></proof>
+        <proof prover="2" timelimit="1"><result status="valid" time="0.215030" steps="42859"/></proof>
         </goal>
         <goal name="vc_produces_trans_MapInv_I_F.0.0.1.0.1.0.8" proved="true">
         <transf name="instantiate" proved="true" arg1="H10" arg2="i">
@@ -7168,7 +7168,7 @@
           <goal name="vc_produces_trans_MapInv_I_F.0.0.1.0.1.0.8.0.0" proved="true">
           <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
            <goal name="vc_produces_trans_MapInv_I_F.0.0.1.0.1.0.8.0.0.0" proved="true">
-           <proof prover="3" timelimit="5"><result status="valid" time="0.537097" steps="3175"/></proof>
+           <proof prover="3" timelimit="5"><result status="valid" time="0.313401" steps="3175"/></proof>
            </goal>
           </transf>
           </goal>
@@ -7208,22 +7208,58 @@
    <proof prover="3"><result status="valid" time="0.049314" steps="33"/></proof>
    </goal>
    <goal name="vc_next_MapInv_I_F.0.2" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.089559" steps="505"/></proof>
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_next_MapInv_I_F.0.2.0" expl="type invariant" proved="true">
+    <transf name="inline_goal" proved="true" >
+     <goal name="vc_next_MapInv_I_F.0.2.0.0" expl="type invariant" proved="true">
+     <transf name="split_all_full" proved="true" >
+      <goal name="vc_next_MapInv_I_F.0.2.0.0.0" proved="true">
+      <proof prover="3" timelimit="1"><result status="valid" time="0.044772" steps="365"/></proof>
+      </goal>
+      <goal name="vc_next_MapInv_I_F.0.2.0.0.1" proved="true">
+      <proof prover="3" timelimit="1"><result status="valid" time="0.063088" steps="584"/></proof>
+      </goal>
+      <goal name="vc_next_MapInv_I_F.0.2.0.0.2" proved="true">
+      <proof prover="1" timelimit="1"><result status="valid" time="0.227857" steps="39437"/></proof>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_next_MapInv_I_F.0.2.1" expl="type invariant" proved="true">
+    <proof prover="3"><result status="valid" time="0.028382" steps="22"/></proof>
+    </goal>
+    <goal name="vc_next_MapInv_I_F.0.2.2" expl="type invariant" proved="true">
+    <proof prover="3"><result status="valid" time="0.032022" steps="22"/></proof>
+    </goal>
+    <goal name="vc_next_MapInv_I_F.0.2.3" expl="type invariant" proved="true">
+    <proof prover="3"><result status="valid" time="0.025159" steps="22"/></proof>
+    </goal>
+    <goal name="vc_next_MapInv_I_F.0.2.4" expl="type invariant" proved="true">
+    <proof prover="3"><result status="valid" time="0.022060" steps="22"/></proof>
+    </goal>
+    <goal name="vc_next_MapInv_I_F.0.2.5" expl="type invariant" proved="true">
+    <proof prover="3"><result status="valid" time="0.034675" steps="22"/></proof>
+    </goal>
+   </transf>
    </goal>
    <goal name="vc_next_MapInv_I_F.0.3" expl="assertion" proved="true">
-   <proof prover="3"><result status="valid" time="0.037039" steps="148"/></proof>
+   <proof prover="3"><result status="valid" time="0.037039" steps="150"/></proof>
    </goal>
-   <goal name="vc_next_MapInv_I_F.0.4" expl="call_mut_F requires" proved="true">
-   <proof prover="3"><result status="valid" time="0.037237" steps="151"/></proof>
+   <goal name="vc_next_MapInv_I_F.0.4" expl="assertion" proved="true">
+   <proof prover="3"><result status="valid" time="0.031268" steps="150"/></proof>
    </goal>
-   <goal name="vc_next_MapInv_I_F.0.5" expl="assertion" proved="true">
+   <goal name="vc_next_MapInv_I_F.0.5" expl="call_mut_F requires" proved="true">
+   <proof prover="3"><result status="valid" time="0.037237" steps="153"/></proof>
+   </goal>
+   <goal name="vc_next_MapInv_I_F.0.6" expl="assertion" proved="true">
    <transf name="split_vc" proved="true" >
-    <goal name="vc_next_MapInv_I_F.0.5.0" expl="assertion" proved="true">
+    <goal name="vc_next_MapInv_I_F.0.6.0" expl="assertion" proved="true">
     <transf name="inline_goal" proved="true" >
-     <goal name="vc_next_MapInv_I_F.0.5.0.0" expl="assertion" proved="true">
+     <goal name="vc_next_MapInv_I_F.0.6.0.0" expl="assertion" proved="true">
      <transf name="split_all_full" proved="true" >
-      <goal name="vc_next_MapInv_I_F.0.5.0.0.0" expl="assertion" proved="true">
-      <proof prover="2" timelimit="1"><result status="valid" time="0.125781" steps="19649"/></proof>
+      <goal name="vc_next_MapInv_I_F.0.6.0.0.0" expl="assertion" proved="true">
+      <proof prover="2" timelimit="0.2"><result status="valid" time="0.125781" steps="19889"/></proof>
       </goal>
      </transf>
      </goal>
@@ -7231,19 +7267,22 @@
     </goal>
    </transf>
    </goal>
-   <goal name="vc_next_MapInv_I_F.0.6" expl="next_MapInv_I_F ensures" proved="true">
-   <proof prover="3"><result status="valid" time="0.036239" steps="36"/></proof>
-   </goal>
-   <goal name="vc_next_MapInv_I_F.0.7" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.107887" steps="506"/></proof>
+   <goal name="vc_next_MapInv_I_F.0.7" expl="next_MapInv_I_F ensures" proved="true">
+   <proof prover="3"><result status="valid" time="0.036239" steps="38"/></proof>
    </goal>
    <goal name="vc_next_MapInv_I_F.0.8" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.038711" steps="26"/></proof>
+   <proof prover="3"><result status="valid" time="0.107887" steps="556"/></proof>
    </goal>
-   <goal name="vc_next_MapInv_I_F.0.9" expl="elim Some" proved="true">
-   <proof prover="3"><result status="valid" time="0.041103" steps="24"/></proof>
+   <goal name="vc_next_MapInv_I_F.0.9" expl="the callee cannot panic here" proved="true">
+   <proof prover="3"><result status="valid" time="0.017509" steps="30"/></proof>
    </goal>
    <goal name="vc_next_MapInv_I_F.0.10" expl="type invariant" proved="true">
+   <proof prover="3"><result status="valid" time="0.038711" steps="28"/></proof>
+   </goal>
+   <goal name="vc_next_MapInv_I_F.0.11" expl="elim Some" proved="true">
+   <proof prover="3"><result status="valid" time="0.041103" steps="24"/></proof>
+   </goal>
+   <goal name="vc_next_MapInv_I_F.0.12" expl="type invariant" proved="true">
    <proof prover="3"><result status="valid" time="0.032009" steps="16"/></proof>
    </goal>
   </transf>
@@ -7253,7 +7292,8 @@
 </theory>
 <theory name="M_std__iter__map_inv__impl_Iterator_for_MapInv_I_F__next__refines" proved="true">
  <goal name="refines" proved="true">
- <proof prover="2"><result status="valid" time="0.044360" steps="15577"/></proof>
+ <proof prover="2"><result status="valid" time="0.044360" steps="15677"/></proof>
+ <proof prover="3"><result status="valid" time="0.131453" steps="884"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__map_inv__impl_Iterator_for_MapInv_I_F__size_hint" proved="true">
@@ -7263,14 +7303,14 @@
 </theory>
 <theory name="M_std__iter__map_inv__impl_Iterator_for_MapInv_I_F__size_hint__refines" proved="true">
  <goal name="refines" proved="true">
- <proof prover="3"><result status="valid" time="0.099283" steps="311"/></proof>
+ <proof prover="3"><result status="valid" time="0.099283" steps="313"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__map_inv__impl_MapInv_I_F__preservation_inv" proved="true">
  <goal name="vc_preservation_inv_I" proved="true">
  <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
   <goal name="vc_preservation_inv_I.0" proved="true">
-  <proof prover="2"><result status="valid" time="0.377058" steps="55470"/></proof>
+  <proof prover="2" timelimit="0.2"><result status="valid" time="0.356506" steps="56043"/></proof>
   </goal>
  </transf>
  </goal>
@@ -7283,7 +7323,7 @@
    <goal name="vc_produces_one_I.0.0" expl="produces_one ensures" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="vc_produces_one_I.0.0.0" proved="true">
-    <proof prover="2"><result status="valid" time="0.784403" steps="70837"/></proof>
+    <proof prover="2"><result status="valid" time="0.481023" steps="70837"/></proof>
     </goal>
     <goal name="vc_produces_one_I.0.0.1" proved="true">
     <proof prover="0"><result status="valid" time="0.077326" steps="263394"/></proof>
@@ -7301,15 +7341,31 @@
   <goal name="vc_produces_one_invariant_I.0" proved="true">
   <transf name="split_vc" proved="true" >
    <goal name="vc_produces_one_invariant_I.0.0" proved="true">
-   <proof prover="0"><result status="valid" time="0.038076" steps="134494"/></proof>
+   <proof prover="0"><result status="valid" time="0.038076" steps="135969"/></proof>
+   <proof prover="3"><result status="valid" time="0.164412" steps="1892"/></proof>
    </goal>
    <goal name="vc_produces_one_invariant_I.0.1" expl="produces_one_invariant_I ensures" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="vc_produces_one_invariant_I.0.1.0" expl="produces_one_invariant ensures #0 (produces_one_invariant_I ensures)" proved="true">
-    <proof prover="3" timelimit="5"><result status="valid" time="1.477889" steps="14628"/></proof>
+    <transf name="compute_specified" proved="true" >
+     <goal name="vc_produces_one_invariant_I.0.1.0.0" expl="produces_one_invariant ensures #0 (produces_one_invariant_I ensures)" proved="true">
+     <proof prover="1" timelimit="2" memlimit="4000"><result status="valid" time="1.691385" steps="210088"/></proof>
+     </goal>
+    </transf>
     </goal>
     <goal name="vc_produces_one_invariant_I.0.1.1" expl="produces_one_invariant ensures #1 (produces_one_invariant_I ensures)" proved="true">
-    <proof prover="2"><result status="valid" time="0.973938" steps="121565"/></proof>
+    <transf name="compute_specified" proved="true" >
+     <goal name="vc_produces_one_invariant_I.0.1.1.0" expl="produces_one_invariant ensures #1 (produces_one_invariant_I ensures)" proved="true">
+     <transf name="split_vc" proved="true" >
+      <goal name="vc_produces_one_invariant_I.0.1.1.0.0" expl="produces_one_invariant ensures #1 (produces_one_invariant_I ensures)" proved="true">
+      <proof prover="2" timelimit="2" memlimit="4000"><result status="valid" time="0.953958" steps="121960"/></proof>
+      </goal>
+      <goal name="vc_produces_one_invariant_I.0.1.1.0.1" expl="produces_one_invariant ensures #1 (produces_one_invariant_I ensures)" proved="true">
+      <proof prover="2" timelimit="2" memlimit="4000"><result status="valid" time="1.037432" steps="121957"/></proof>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
     </goal>
    </transf>
    </goal>
@@ -7752,7 +7808,8 @@
 </theory>
 <theory name="M_std__iter__trait_IteratorSpec__map_inv" proved="true">
  <goal name="vc_map_inv_Self" proved="true">
- <proof prover="2"><result status="valid" time="0.054891" steps="4167"/></proof>
+ <proof prover="2"><result status="valid" time="0.054891" steps="4327"/></proof>
+ <proof prover="3"><result status="valid" time="0.050856" steps="321"/></proof>
  </goal>
 </theory>
 <theory name="M_std__iter__zip__impl_ExactSizeIteratorSpec_for_Zip_A_B__size_hint_exact" proved="true">
@@ -9772,7 +9829,8 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_and_then_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_and_then_body_T" proved="true">
- <proof prover="0"><result status="valid" time="0.004423" steps="3065"/></proof>
+ <proof prover="0"><result status="valid" time="0.004423" steps="3375"/></proof>
+ <proof prover="3"><result status="valid" time="0.036605" steps="117"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_as_deref_body" proved="true">
@@ -9812,7 +9870,7 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_filter_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_filter_body_T" proved="true">
- <proof prover="3" timelimit="5"><result status="valid" time="0.016847" steps="121"/></proof>
+ <proof prover="3"><result status="valid" time="0.016847" steps="144"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_get_or_insert_body" proved="true">
@@ -9827,7 +9885,8 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_get_or_insert_with_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_get_or_insert_with_body_T" proved="true">
- <proof prover="2"><result status="valid" time="0.029599" steps="9627"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.009563" steps="17197"/></proof>
+ <proof prover="2"><result status="valid" time="0.029599" steps="9943"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_insert_body" proved="true">
@@ -9837,7 +9896,8 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_inspect_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_inspect_body_T" proved="true">
- <proof prover="0"><result status="valid" time="0.000001" steps="2600"/></proof>
+ <proof prover="0"><result status="valid" time="0.000001" steps="2963"/></proof>
+ <proof prover="3"><result status="valid" time="0.030179" steps="108"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_is_none_body" proved="true">
@@ -9847,7 +9907,7 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_is_some_and_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_is_some_and_body_T" proved="true">
- <proof prover="3" timelimit="5"><result status="valid" time="0.023500" steps="85"/></proof>
+ <proof prover="3"><result status="valid" time="0.023500" steps="108"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_is_some_body" proved="true">
@@ -9857,17 +9917,19 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_map_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_map_body_T" proved="true">
- <proof prover="0"><result status="valid" time="0.000001" steps="3077"/></proof>
+ <proof prover="0"><result status="valid" time="0.000001" steps="3360"/></proof>
+ <proof prover="3"><result status="valid" time="0.023110" steps="137"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_map_or_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_map_or_body_T" proved="true">
- <proof prover="3" timelimit="5"><result status="valid" time="0.025138" steps="90"/></proof>
+ <proof prover="3"><result status="valid" time="0.025138" steps="111"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_map_or_else_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_map_or_else_body_T" proved="true">
- <proof prover="1"><result status="valid" time="0.019552" steps="2610"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.009403" steps="4238"/></proof>
+ <proof prover="1"><result status="valid" time="0.019552" steps="3110"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_ok_or_body" proved="true">
@@ -9877,7 +9939,7 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_ok_or_else_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_ok_or_else_body_T" proved="true">
- <proof prover="0"><result status="valid" time="0.003485" steps="3479"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.003485" steps="3877"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_or_body" proved="true">
@@ -9887,7 +9949,8 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_or_else_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_or_else_body_T" proved="true">
- <proof prover="2"><result status="valid" time="0.021212" steps="1272"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.007565" steps="3339"/></proof>
+ <proof prover="2"><result status="valid" time="0.021212" steps="1374"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_replace_body" proved="true">
@@ -9902,7 +9965,8 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_take_if_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_take_if_body_T" proved="true">
- <proof prover="0"><result status="valid" time="0.000001" steps="10194"/></proof>
+ <proof prover="0"><result status="valid" time="0.000001" steps="11155"/></proof>
+ <proof prover="3"><result status="valid" time="0.055995" steps="316"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_unwrap_body" proved="true">
@@ -9922,7 +9986,8 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_unwrap_or_else_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_unwrap_or_else_body_T" proved="true">
- <proof prover="2"><result status="valid" time="0.022909" steps="1253"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.009873" steps="3310"/></proof>
+ <proof prover="2"><result status="valid" time="0.022909" steps="1349"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_unwrap_unchecked_body" proved="true">
