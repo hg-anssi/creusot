@@ -70,6 +70,7 @@ impl<I: IteratorSpec, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> Iterato
         match self.iter.next() {
             Some(v) => {
                 proof_assert! { self.func.precondition((v, self.produced)) };
+                proof_assert! { !self.func.panic_condition((v, self.produced)) };
                 let produced = snapshot! { self.produced.push_back(v) };
                 let r = (self.func)(v, self.produced);
                 self.produced = produced;
@@ -98,7 +99,7 @@ impl<I: IteratorSpec, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> MapInv<
         pearlite! {
             forall<e: I::Item, i: I>
                 inv(e) && iter.produces(Seq::singleton(e), i) ==>
-                func.precondition((e, Snapshot::new(produced)))
+                func.precondition((e, Snapshot::new(produced))) && !func.panic_condition((e, Snapshot::new(produced)))
         }
     }
 
@@ -111,7 +112,7 @@ impl<I: IteratorSpec, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> MapInv<
                 inv(s) && inv(e1) && inv(e2) && inv(f) ==>
                 iter.produces(s.push_back(e1).push_back(e2), i) ==>
                 (*f).postcondition_mut((e1, Snapshot::new(produced.concat(s))), ^f, b) ==>
-                (^f).precondition((e2, Snapshot::new(produced.concat(s).push_back(e1))))
+                (^f).precondition((e2, Snapshot::new(produced.concat(s).push_back(e1)))) && !(^f).panic_condition((e2, Snapshot::new(produced.concat(s).push_back(e1))))
         }
     }
 
@@ -123,7 +124,7 @@ impl<I: IteratorSpec, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> MapInv<
                 inv(s) && inv(e1) && inv(e2) && inv(f) ==>
                 iter.produces(s.push_back(e1).push_back(e2), i) ==>
                 (*f).postcondition_mut((e1, Snapshot::new(s)), ^f, b) ==>
-                (^f).precondition((e2, Snapshot::new(s.push_back(e1))))
+                (^f).precondition((e2, Snapshot::new(s.push_back(e1)))) && !(^f).panic_condition((e2, Snapshot::new(s.push_back(e1))))
         }
     }
 

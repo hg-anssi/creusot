@@ -1,0 +1,41 @@
+module M_always_panic
+  use creusot.prelude.Any
+  use creusot.int.UInt8
+  
+  type t_Arguments
+  
+  predicate inv_Arguments (_1: t_Arguments)
+  
+  let from_str (s: string) (return (x: t_Arguments)) = any
+    [ return (result: t_Arguments) -> {[@stop_split] [@expl:from_str result type invariant] inv_Arguments result}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let always_panic (panic) (return (x: UInt8.t)) = (! bb0
+    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_5 <- _x ] s1) | s1 = panic ] ]
+    [ & _5: t_Arguments = Any.any_l () ])
+    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic ensures] false} (! return {result})
+    | panic -> (! panic) ]
+end
+module M_may_panic
+  use creusot.int.UInt8
+  use creusot.prelude.Any
+  
+  let always_panic (panic) (return (x: UInt8.t)) = any
+    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic ensures] false} (! return {result})
+    | panic -> (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let may_panic (return (x: UInt8.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = always_panic
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1)
+      | s1 = return {_ret} ] ] [ & _ret: UInt8.t = Any.any_l () ]) [ return (result: UInt8.t) -> (! return {result}) ]
+end

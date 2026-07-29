@@ -33,7 +33,14 @@ impl<I: Iterator, F: FnMut(&I::Item) -> bool> Invariant for Filter<I, F> {
 
 #[logic(prophetic)]
 pub fn private_invariant<I: Iterator, F: FnMut(&I::Item) -> bool>(f: Filter<I, F>) -> bool {
-    no_precondition(f.func()) && immutable(f.func()) && precise(f.func())
+    no_precondition(f.func()) && no_panic(f.func()) && immutable(f.func()) && precise(f.func())
+}
+
+/// Asserts that `f` never panics: any closure state can be called with any input value without panicking
+/// In a future release this restriction may be lifted or weakened
+#[logic(open, prophetic)]
+pub fn no_panic<A, F: FnMut(A) -> bool>(_: F) -> bool {
+    pearlite! { forall<f: F, i: A> inv(f) && inv(i) ==> !f.panic_condition((i,)) }
 }
 
 /// Asserts that `f` has no precondition: any closure state can be called with any input value

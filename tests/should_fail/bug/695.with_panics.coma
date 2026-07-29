@@ -17,10 +17,6 @@ module M_inversed_if
   
   predicate precondition_C (self: t_C) (args: ())
   
-  predicate panic_condition_C (self: t_C) (args: ()) = false
-  
-  meta "rewrite_def" predicate panic_condition_C
-  
   predicate postcondition_once_C (self: t_C) (args: ()) (result: bool)
   
   predicate postcondition_mut_C (self: t_C) (args: ()) (result_state: t_C) (result: bool)
@@ -68,13 +64,14 @@ module M_inversed_if
     forall self: t_C, args: (), res_state: t_C, res: bool [postcondition_mut_C self args res_state res]. postcondition_mut_C self args res_state res
       = (postcondition_C self args res /\ self = res_state)
   
-  let call_C (self_: t_C) (arg: ()) (return (x: bool)) =
+  predicate panic_condition_C (self: t_C) (args: ())
+  
+  let call_C (self_: t_C) (arg: ()) (panic) (return (x: bool)) =
   {[@stop_split] [@expl:call_C requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_C self_)
-    /\ ([@stop_split] [@expl:call requires] precondition_C self_ arg)
-    /\ ([@stop_split] [@expl:call requires (no panic)] not panic_condition_C self_ arg)}
+    /\ ([@stop_split] [@expl:call requires] precondition_C self_ arg)}
     any
-    [ return (result: bool) -> {[@stop_split] [@expl:call ensures] postcondition_C self_ arg result}
-      (! return {result}) ]
+    [ return (result: bool) -> {[@stop_split] [@expl:call ensures] postcondition_C self_ arg result} (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_C self_ arg} (! panic) ]
   
   type t_B
   
@@ -82,44 +79,39 @@ module M_inversed_if
   
   predicate precondition_B (self: t_B) (args: bool)
   
-  predicate panic_condition_B (self: t_B) (args: bool) = false
-  
-  meta "rewrite_def" predicate panic_condition_B
-  
   predicate postcondition_once_B (self: t_B) (args: bool) (result: ())
   
-  let call_once_B (self_: t_B) (arg: bool) (return (x: ())) =
+  predicate panic_condition_B (self: t_B) (args: bool)
+  
+  let call_once_B (self_: t_B) (arg: bool) (panic) (return (x: ())) =
   {[@stop_split] [@expl:call_once_B requires] ([@stop_split] [@expl:call_once 'self_' type invariant] inv_B self_)
-    /\ ([@stop_split] [@expl:call_once requires] precondition_B self_ arg)
-    /\ ([@stop_split] [@expl:call_once requires (no panic)] not panic_condition_B self_ arg)}
+    /\ ([@stop_split] [@expl:call_once requires] precondition_B self_ arg)}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:call_once ensures] postcondition_once_B self_ arg result}
-      (! return {result}) ]
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call_once may_panic] panic_condition_B self_ arg} (! panic) ]
   
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
   
-  let inversed_if_C (cond: t_C) (branch: t_B) (return (x: ())) =
+  let inversed_if_C (cond: t_C) (branch: t_B) (panic) (return (x: ())) =
   {[@stop_split] [@expl:inversed_if_C requires] ([@stop_split] [@expl:inversed_if 'cond' type invariant] inv_C cond)
     /\ ([@stop_split] [@expl:inversed_if 'branch' type invariant] inv_B branch)
-    /\ ([@stop_split] [@expl:inversed_if requires] precondition_C cond () /\ (forall b: bool. precondition_B branch b))
-    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #0] not panic_condition_C cond ())
-    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #1] not panic_condition_B branch true)
-    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #2] not panic_condition_B branch false)}
+    /\ ([@stop_split] [@expl:inversed_if requires] precondition_C cond () /\ (forall b: bool. precondition_B branch b))}
     (! bb0
     [ bb0 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_C cond} any) ]
       | s1 = -{resolve_C cond}- s2
-      | s2 = call_C {cond} {_17} (fun (_x: bool) -> [ &_15 <- _x ] s3)
+      | s2 = call_C {cond} {_17} (panic) (fun (_x: bool) -> [ &_15 <- _x ] s3)
       | s3 = any [ br0 -> {_15 = false} (! bb3) | br1 -> {_15} (! bb2) ] ]
     | bb2 = s0
       [ s0 = [ &_21 <- false ] s1
-      | s1 = call_once_B {branch} {_21} (fun (_x: ()) -> [ &_ret <- _x ] s2)
+      | s1 = call_once_B {branch} {_21} (panic) (fun (_x: ()) -> [ &_ret <- _x ] s2)
       | s2 = return {_ret} ]
     | bb3 = s0
       [ s0 = [ &_19 <- true ] s1
-      | s1 = call_once_B {branch} {_19} (fun (_x: ()) -> [ &_ret <- _x ] s2)
+      | s1 = call_once_B {branch} {_19} (panic) (fun (_x: ()) -> [ &_ret <- _x ] s2)
       | s2 = return {_ret} ] ]
     [ & _ret: () = Any.any_l ()
     | & cond: t_C = cond
@@ -130,7 +122,12 @@ module M_inversed_if
     | & _21: bool = Any.any_l () ])
     [ return (result: ()) -> {[@stop_split] [@expl:inversed_if ensures] exists b: bool. postcondition_C cond () b
         /\ postcondition_once_B branch (not b) ()}
-      (! return {result}) ]
+      (! return {result})
+    | panic ->
+    {[@stop_split] [@expl:inversed_if_C may_panic] ([@stop_split] [@expl:inversed_if may_panic #0] panic_condition_C cond ())
+      \/ ([@stop_split] [@expl:inversed_if may_panic #1] panic_condition_B branch true)
+      \/ ([@stop_split] [@expl:inversed_if may_panic #2] panic_condition_B branch false)}
+      (! panic) ]
 end
 module M_valid
   use creusot.int.UInt32
@@ -263,14 +260,6 @@ module M_valid
   
   meta "rewrite_def" predicate precondition_closure2
   
-  predicate panic_condition_closure1 (self: closure1) (args: ()) = false
-  
-  meta "rewrite_def" predicate panic_condition_closure1
-  
-  predicate panic_condition_closure2 (self: closure2) (args: bool) = false
-  
-  meta "rewrite_def" predicate panic_condition_closure2
-  
   predicate postcondition_once_closure1 (self: closure1) (args: ()) (result: bool) =
     result = UInt32.gt self.c0 (7: UInt32.t)
   
@@ -331,16 +320,26 @@ module M_valid
     forall self: closure1, args: (), res_state: closure1, res: bool [postcondition_mut_closure1 self args res_state res]. postcondition_mut_closure1 self args res_state res
       = (postcondition_closure1 self args res /\ self = res_state)
   
-  let inversed_if_closure1 (cond: closure1) (branch: closure2) (return (x: ())) =
-  {[@stop_split] [@expl:inversed_if_closure1 requires] ([@stop_split] [@expl:inversed_if requires] precondition_closure1 cond ()
-      /\ (forall b: bool. precondition_closure2 branch b))
-    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #0] not panic_condition_closure1 cond ())
-    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #1] not panic_condition_closure2 branch true)
-    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #2] not panic_condition_closure2 branch false)}
+  predicate panic_condition_closure1 (self: closure1) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure1
+  
+  predicate panic_condition_closure2 (self: closure2) (args: bool) = let b = args in false
+  
+  meta "rewrite_def" predicate panic_condition_closure2
+  
+  let inversed_if_closure1 (cond: closure1) (branch: closure2) (panic) (return (x: ())) =
+  {[@stop_split] [@expl:inversed_if requires] precondition_closure1 cond ()
+    /\ (forall b: bool. precondition_closure2 branch b)}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:inversed_if ensures] exists b: bool. postcondition_closure1 cond () b
         /\ postcondition_once_closure2 branch (not b) ()}
-      (! return {result}) ]
+      (! return {result})
+    | panic ->
+    {[@stop_split] [@expl:inversed_if_closure1 may_panic] ([@stop_split] [@expl:inversed_if may_panic #0] panic_condition_closure1 cond ())
+      \/ ([@stop_split] [@expl:inversed_if may_panic #1] panic_condition_closure2 branch true)
+      \/ ([@stop_split] [@expl:inversed_if may_panic #2] panic_condition_closure2 branch false)}
+      (! panic) ]
   
   meta "compute_max_steps" 1000000
   
@@ -353,7 +352,9 @@ module M_valid
       | s2 = MutBorrow.borrow_mut <UInt32.t> {r}
           (fun (_bor: MutBorrow.t UInt32.t) -> [ &_8 <- _bor ] [ &r <- _bor.final ] s3)
       | s3 = [ &branch <- { c0'0 = _8 } ] s4
-      | s4 = inversed_if_closure1 {cond} {branch} (fun (_x: ()) -> [ &_9 <- _x ] s5)
+      | s4 = inversed_if_closure1 {cond} {branch}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: ()) -> [ &_9 <- _x ] s5)
       | s5 = {[@expl:assertion] false} s6
       | s6 = [ &_ret <- r ] s7
       | s7 = return {_ret} ] ]

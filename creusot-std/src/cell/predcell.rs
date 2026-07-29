@@ -71,6 +71,7 @@ impl<T: Copy> PredCell<T> {
     #[trusted]
     #[requires(forall<x: T> self@[x] ==> f.precondition((x,)))]
     #[requires(forall<x: T, res: T> self@[x] && f.postcondition_once((x,), res) ==> self@[res])]
+    #[may_panic(exists<x: T> self@[x] && f.panic_condition((x,)))]
     #[ensures(exists<x: T, res: T> self@[x] && f.postcondition_once((x,), res))]
     pub fn update(&self, f: impl FnOnce(T) -> T) {
         self.0.update(f);
