@@ -249,7 +249,7 @@ impl<'tcx> TranslationCtx<'tcx> {
             .collect();
 
         let mut externs = Metadata::default();
-        externs.load(tcx, &opts.extern_paths);
+        externs.load(tcx, &opts.extern_paths, opts.enable_panics);
 
         let (raw_intrinsics, intrinsic2did, did2intrinsic) = gather_intrinsics(tcx, &externs);
 
@@ -505,6 +505,7 @@ impl<'tcx> TranslationCtx<'tcx> {
             self.params_open_inv,
             erased_thir,
             self.erased_local_defid,
+            self.opts.enable_panics,
         )
     }
 
