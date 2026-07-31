@@ -432,7 +432,15 @@ pub(crate) fn contract_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pr
 /// `#[may_panic(...)]` clauses are only meaningful on functions with an
 /// operational panic outcome. Closures are allowed (their panic threads through
 /// their own contract, or through `Fn::call`'s `panic_condition` for generic
-/// bounds); logic functions have no panic outcome and are rejected.
+/// bounds). Two kinds of functions are rejected because they have no such
+/// outcome:
+///  - logic functions, which are erased and purely mathematical;
+///  - ghost functions (`ProgramPurity::Ghost`), whose bodies are erased at
+///    runtime and must terminate successfully — they cannot panic, and allowing
+///    the clause would also open a breach: a ghost function *is* callable from a
+///    ghost context, so a `may_panic` ghost function would let a panic outcome
+///    leak into the erased world. Enforcing this here keeps the structural
+///    invariant `may_panic ==> purity <= Terminates`.
 fn check_panics_allowed<'tcx>(
     ctx: &TranslationCtx<'tcx>,
     def_id: DefId,
@@ -443,6 +451,8 @@ fn check_panics_allowed<'tcx>(
     }
     if matches!(ctx.item_type(def_id), ItemType::Logic { .. }) {
         ctx.error(ctx.def_span(def_id), "logic functions cannot be specified to panic").emit();
+    } else if pre_sig.contract.purity == ProgramPurity::Ghost {
+        ctx.error(ctx.def_span(def_id), "ghost functions cannot be specified to panic").emit();
     }
 }
 

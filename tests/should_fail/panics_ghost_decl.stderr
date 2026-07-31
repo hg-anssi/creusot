@@ -1,0 +1,8 @@
+error: ghost functions cannot be specified to panic
+  --> panics_ghost_decl.rs:12:1
+   |
+12 | pub fn ghost_may_panic() {}
+   | ^^^^^^^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 1 previous error
+
