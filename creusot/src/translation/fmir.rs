@@ -98,7 +98,11 @@ pub enum StatementKind<'tcx> {
         check: bool,  // Whether we generate a VC for this assertion
         assume: bool, // Whether this assertion stays in context
     },
-    Call(Place<'tcx>, DefId, GenericArgsRef<'tcx>, Box<[Operand<'tcx>]>, Span),
+    /// The trailing `bool` is `true` when the call originates from a `ghost!`
+    /// block: ghost code is erased and cannot panic operationally, so a `may_panic`
+    /// callee's panic must be discharged as `!P` at this site rather than routed to
+    /// the enclosing function's panic exit (even when that function may panic).
+    Call(Place<'tcx>, DefId, GenericArgsRef<'tcx>, Box<[Operand<'tcx>]>, Span, bool),
 }
 
 #[derive(Clone, Debug, TypeFoldable, TypeVisitable)]
@@ -533,7 +537,7 @@ pub(crate) fn super_visit_stmt<'tcx, V: FmirVisitor<'tcx>>(
             visitor.visit_place(rhs);
         }
         StatementKind::Assertion { cond, .. } => visitor.visit_term(cond),
-        StatementKind::Call(place, _, _, operands, _) => {
+        StatementKind::Call(place, _, _, operands, _, _) => {
             visitor.visit_place(place);
             for operand in operands {
                 visitor.visit_operand(operand);
@@ -667,7 +671,7 @@ pub(crate) fn super_visit_mut_stmt<'tcx, V: FmirVisitorMut<'tcx>>(
             visitor.visit_mut_place(rhs);
         }
         StatementKind::Assertion { cond, .. } => visitor.visit_mut_term(cond),
-        StatementKind::Call(place, _, _, operands, _) => {
+        StatementKind::Call(place, _, _, operands, _, _) => {
             visitor.visit_mut_place(place);
             for operand in operands {
                 visitor.visit_mut_operand(operand);

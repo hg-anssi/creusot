@@ -429,10 +429,26 @@ pub(crate) fn contract_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pr
     pre_sig
 }
 
-/// `#[may_panic(...)]` clauses are only meaningful on functions with an
-/// operational panic outcome. Closures are allowed (their panic threads through
-/// their own contract, or through `Fn::call`'s `panic_condition` for generic
-/// bounds); logic functions have no panic outcome and are rejected.
+/// `#[may_panic(...)]` clauses are only meaningful on items with an operational
+/// panic outcome. Only **logic functions** are rejected: they are erased and
+/// purely mathematical, so a panic outcome is meaningless.
+///
+/// Ghost items (`ProgramPurity::Ghost`) *are* allowed to carry a panic clause,
+/// but its meaning is context-sensitive — a ghost context is a local "panics
+/// OFF" context, so `may_panic(P)` behaves there exactly like `requires(!P)`.
+/// Both kinds of ghost item keep their `may_panic` clause faithfully; the fold
+/// happens at the point of *use*, differently for each:
+///  - A **named** ghost function folds per call site. A ghost caller has no
+///    `panic` continuation (`panic_ident == None`), so calling it already threads
+///    the `assert false` ("the callee cannot panic here") obligation in
+///    `func_call_to_why3`, i.e. discharges `!P` at the call site. In program
+///    contexts the panic propagates.
+///  - A **ghost closure** — the sole implementor of `FnGhost`, whose law fixes
+///    `panic_condition ≡ false` — is consumed *generically* (via the `FnGhost`
+///    bound), where the call context is invisible. Its `FnGhostWrapper`
+///    precondition is therefore strengthened with `!P` in `precondition_term`,
+///    which makes the `FnGhost` law a theorem (paid for by that precondition)
+///    rather than an assertion protected by a syntactic ban.
 fn check_panics_allowed<'tcx>(
     ctx: &TranslationCtx<'tcx>,
     def_id: DefId,

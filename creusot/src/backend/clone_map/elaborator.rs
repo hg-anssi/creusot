@@ -1046,7 +1046,14 @@ fn panic_condition_term<'tcx>(
             }
             panics_fndef(ctx, names, did, subst, args)
         }
-        // Handle `FnGhostWrapper` (ghost closures cannot panic, so this yields `false`).
+        // Handle `FnGhostWrapper`: it is a transparent forwarder, so its panic condition
+        // is the wrapped closure's (just like its `precondition`/`postcondition` delegate).
+        // A `#[check(ghost)]` closure may carry `#[may_panic(P)]`, and `FnGhostWrapper::call`
+        // propagates it via `#[may_panic(self.panic_condition(args))]`. There is thus no
+        // `FnGhost ⟹ panic_condition ≡ false` law: a ghost closure is dual-use exactly like a
+        // named ghost function — its panic propagates in a `may_panic` program context and folds
+        // to `requires(!P)` in a total (or ghost) context, through the standard `may_panic`
+        // machinery. A non-panicking closure still yields `panic_condition ≡ false` by delegation.
         TyKind::Adt(def, subst_inner) if Intrinsic::FnGhostWrapper.is(ctx, def.did()) => {
             let mut subst_pan = subst.to_vec();
             let closure_ty = def.all_fields().next().unwrap().ty(ctx.tcx, subst_inner);

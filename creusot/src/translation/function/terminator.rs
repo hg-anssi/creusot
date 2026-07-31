@@ -59,6 +59,18 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
         self.body_id.promoted.is_none() && self.ctx.sig(self.body_id.def_id).contract.may_panic()
     }
 
+    /// Whether the program point `loc` lies inside a `ghost!` block
+    /// (`#[creusot::ghost_block]`). Ghost code is erased and has no operational
+    /// panic outcome, so panic-producing points there must be discharged as proof
+    /// obligations ("prove this cannot panic") rather than routed to the enclosing
+    /// function's panic exit — *even when that function itself may panic*. In other
+    /// words, a ghost context is always a local "cannot panic" context, so
+    /// `may_panic(P)` behaves there exactly like `requires(!P)`.
+    fn in_ghost_block(&self, loc: Location) -> bool {
+        let span = self.body.source_info(loc).span;
+        self.ghost_spans.iter().any(|g| g.contains(span))
+    }
+
     pub fn translate_terminator(&mut self, terminator: &mir::Terminator<'tcx>, loc: Location) {
         let span = terminator.source_info.span;
         self.resolve_at(loc, span);
@@ -130,7 +142,10 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                         let (fun_def_id, subst) =
                             tr_res.to_opt(fun_def_id, subst).expect("could not find instance");
                         let sig = self.ctx.sig(fun_def_id);
-                        if self.may_panic() && is_panic_entry_point(self.tcx(), fun_def_id) {
+                        if self.may_panic()
+                            && !self.in_ghost_block(loc)
+                            && is_panic_entry_point(self.tcx(), fun_def_id)
+                        {
                             // In a function that is allowed to panic, an explicit
                             // `panic!`-like call jumps to the panic exit (which
                             // requires proving the panic condition) instead of
@@ -167,6 +182,7 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                                     subst,
                                     func_args,
                                     span,
+                                    self.in_ghost_block(loc),
                                 ),
                                 span: span.source_callsite(),
                             });
@@ -184,7 +200,7 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                 }
             }
             Assert { cond, expected, msg, target, unwind: _ } => {
-                if self.may_panic() {
+                if self.may_panic() && !self.in_ghost_block(loc) {
                     // The function is allowed to panic: instead of requiring the
                     // runtime check to always succeed, branch to the panic exit
                     // (which requires proving the panic condition) when it fails.

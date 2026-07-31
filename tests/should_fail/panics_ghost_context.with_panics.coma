@@ -1,0 +1,63 @@
+module M_checked_id
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  type t_Arguments
+  
+  predicate inv_Arguments (_1: t_Arguments)
+  
+  let from_str (s: string) (return (x: t_Arguments)) = any
+    [ return (result: t_Arguments) -> {[@stop_split] [@expl:from_str result type invariant] inv_Arguments result}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let checked_id (x: UInt32.t) (panic) (return (x'0: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_8 <- x = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_8 = false} (! bb3) | br1 -> {_8} (! bb1) ] ]
+    | bb1 = s0 [ s0 = from_str {"zero"} (fun (_x: t_Arguments) -> [ &_12 <- _x ] s1) | s1 = panic ]
+    | bb3 = s0 [ s0 = [ &_ret <- x ] s1 | s1 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & x: UInt32.t = x
+    | & _8: bool = Any.any_l ()
+    | & _12: t_Arguments = Any.any_l () ])
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:checked_id ensures] ([@stop_split] [@expl:checked_id ensures #0] not UInt32.t'int x = 0)
+      /\ ([@stop_split] [@expl:checked_id ensures #1] UInt32.t'int result = UInt32.t'int x)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:checked_id may_panic] UInt32.t'int x = 0} (! panic) ]
+end
+module M_ghost_use
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let checked_id (x: UInt32.t) (panic) (return (x'0: UInt32.t)) = any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:checked_id ensures] ([@stop_split] [@expl:checked_id ensures #0] not UInt32.t'int x = 0)
+      /\ ([@stop_split] [@expl:checked_id ensures #1] UInt32.t'int result = UInt32.t'int x)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:checked_id may_panic] UInt32.t'int x = 0} (! panic) ]
+  
+  let new_unit (x: ()) (return (x'0: ())) = any
+    [ return (result: ()) -> {[@stop_split] [@expl:new ensures] result = x} (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let ghost_use (n: UInt32.t) (panic) (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = checked_id {n}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_6 <- _x ] s1)
+      | s1 = new_unit {_5} (fun (_x: ()) -> [ &_4 <- _x ] s2)
+      | s2 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & n: UInt32.t = n
+    | & _4: () = Any.any_l ()
+    | & _5: () = Any.any_l ()
+    | & _6: UInt32.t = Any.any_l () ])
+    [ return (result: ()) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:ghost_use may_panic] UInt32.t'int n = 0} (! panic) ]
+end

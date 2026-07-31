@@ -1,0 +1,101 @@
+module M_checked_id
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  type t_Arguments
+  
+  predicate inv_Arguments (_1: t_Arguments)
+  
+  let from_str (s: string) (return (x: t_Arguments)) = any
+    [ return (result: t_Arguments) -> {[@stop_split] [@expl:from_str result type invariant] inv_Arguments result}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let checked_id (x: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:checked_id requires (no panic)] not UInt32.t'int x = 0}
+    (! bb0
+    [ bb0 = s0 [ s0 = [ &_6 <- x = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_6 = false} (! bb3) | br1 -> {_6} (! bb1) ] ]
+    | bb1 = s0 [ s0 = from_str {"zero"} (fun (_x: t_Arguments) -> [ &_10 <- _x ] s1) | s1 = {false} any ]
+    | bb3 = s0 [ s0 = [ &_ret <- x ] s1 | s1 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & x: UInt32.t = x
+    | & _6: bool = Any.any_l ()
+    | & _10: t_Arguments = Any.any_l () ])
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:checked_id ensures] UInt32.t'int result = UInt32.t'int x}
+      (! return {result}) ]
+end
+module M_ghost_use
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let checked_id (x: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:checked_id requires (no panic)] not UInt32.t'int x = 0}
+    any
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:checked_id ensures] UInt32.t'int result = UInt32.t'int x}
+      (! return {result}) ]
+  
+  let new_unit (x: ()) (return (x'0: ())) = any
+    [ return (result: ()) -> {[@stop_split] [@expl:new ensures] result = x} (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let ghost_use (n: UInt32.t) (return (x: ())) = {[@stop_split] [@expl:ghost_use requires] UInt32.t'int n <> 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = checked_id {n} (fun (_x: UInt32.t) -> [ &_6 <- _x ] s1)
+      | s1 = new_unit {_5} (fun (_x: ()) -> [ &_4 <- _x ] s2)
+      | s2 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & n: UInt32.t = n
+    | & _4: () = Any.any_l ()
+    | & _5: () = Any.any_l ()
+    | & _6: UInt32.t = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end
+module M_program_discharge
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let checked_id (x: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:checked_id requires (no panic)] not UInt32.t'int x = 0}
+    any
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:checked_id ensures] UInt32.t'int result = UInt32.t'int x}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let program_discharge (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = checked_id {(5: UInt32.t)} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l () ])
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:program_discharge ensures] UInt32.t'int result = 5}
+      (! return {result}) ]
+end
+module M_program_propagate
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let checked_id (x: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:checked_id requires (no panic)] not UInt32.t'int x = 0}
+    any
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:checked_id ensures] UInt32.t'int result = UInt32.t'int x}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let program_propagate (n: UInt32.t) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:program_propagate requires (no panic)] not UInt32.t'int n = 0}
+    (! bb0
+    [ bb0 = s0 [ s0 = checked_id {n} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l () | & n: UInt32.t = n ])
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:program_propagate ensures] UInt32.t'int result
+      = UInt32.t'int n}
+      (! return {result}) ]
+end

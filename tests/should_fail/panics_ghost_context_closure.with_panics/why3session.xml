@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.15.3" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC5" version="1.3.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="coma">
+<path name=".."/><path name="panics_ghost_context_closure.with_panics.coma"/>
+<theory name="M_use_closure_in_ghost_requires">
+ <goal name="vc_closure1" proved="true">
+ <proof prover="1" timelimit="0.2"><result status="valid" time="0.017173" steps="2"/></proof>
+ </goal>
+ <goal name="vc_use_closure_in_ghost_requires">
+ <proof prover="0"><result status="unknown" time="0.010538" steps="2289"/></proof>
+ <proof prover="1"><result status="unknown" time="0.006477" steps="27"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="10403023"/></proof>
+ <proof prover="3"><result status="unknown" time="0.014329" steps="7154"/></proof>
+ <transf name="compute_specified" >
+  <goal name="vc_use_closure_in_ghost_requires.0">
+  <proof prover="0"><result status="unknown" time="0.003429" steps="2271"/></proof>
+  <proof prover="1"><result status="unknown" time="0.011721" steps="9"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="13009665"/></proof>
+  <proof prover="3"><result status="unknown" time="0.011413" steps="7072"/></proof>
+  <transf name="split_vc" >
+   <goal name="vc_use_closure_in_ghost_requires.0.0" expl="the callee cannot panic here">
+   <proof prover="0"><result status="unknown" time="0.006755" steps="2254"/></proof>
+   <proof prover="1"><result status="unknown" time="0.007077" steps="8"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="19389099"/></proof>
+   <proof prover="3"><result status="unknown" time="0.016830" steps="7054"/></proof>
+   <transf name="split_vc" >
+    <goal name="vc_use_closure_in_ghost_requires.0.0.0" expl="the callee cannot panic here">
+    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.003425" steps="2254"/></proof>
+    <proof prover="1" timelimit="2" memlimit="4000"><result status="unknown" time="0.008261" steps="8"/></proof>
+    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="58139267"/></proof>
+    <proof prover="3" timelimit="2" memlimit="4000"><result status="unknown" time="0.015237" steps="7054"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>
