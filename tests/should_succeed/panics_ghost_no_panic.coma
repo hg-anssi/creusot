@@ -1,0 +1,63 @@
+module M_concrete_ghost_no_panic
+  use creusot.int.Int32
+  use creusot.prelude.Any
+  
+  let closure0 [@coma:extspec] (self: ()) (x: Int32.t) (return (x'0: Int32.t)) = bb0
+    [ bb0 = s0 [ s0 = Int32.add {x} {(1: Int32.t)} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x ] [ return (result: Int32.t) -> return {result} ]
+  
+  meta "rewrite_def" predicate closure0'pre
+  
+  meta "rewrite_def" predicate closure0'post'return
+  
+  type t_FnGhostWrapper_closure0 = { f0: () }
+  
+  let __new_closure0 (f: ()) (return (x: t_FnGhostWrapper_closure0)) = any
+    [ return (result: t_FnGhostWrapper_closure0) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+      (! return {result}) ]
+  
+  predicate panic_condition_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_closure0
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let concrete_ghost_no_panic (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_2 <- () ] s1
+      | s1 = __new_closure0 {_2} (fun (_x: t_FnGhostWrapper_closure0) -> [ &f <- _x ] s2)
+      | s2 = {[@expl:assertion] forall n: Int32.t. not panic_condition_FnGhostWrapper_closure0 f n} s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l () | & f: t_FnGhostWrapper_closure0 = Any.any_l () | & _2: () = Any.any_l () ])
+    [ return (result: ()) -> (! return {result}) ]
+end
+module M_generic_ghost_no_panic
+  use creusot.int.Int32
+  use creusot.prelude.Any
+  
+  type t_F
+  
+  predicate inv_F (_1: t_F)
+  
+  predicate resolve_F (_1: t_F)
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let generic_ghost_no_panic_F (f: t_F) (return (x: ())) =
+  {[@stop_split] [@expl:generic_ghost_no_panic 'f' type invariant] inv_F f}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
+      | s1 = -{resolve_F f}- s2
+      | s2 = {[@expl:assertion] forall n: Int32.t. not panic_condition_F f n} s3
+      | s3 = return {_ret} ] ] [ & _ret: () = Any.any_l () | & f: t_F = f ])
+    [ return (result: ()) -> (! return {result}) ]
+end

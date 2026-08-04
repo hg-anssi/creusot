@@ -25,10 +25,12 @@ use crate::{
 };
 use rustc_ast::Mutability;
 use rustc_hir::{def::DefKind, def_id::DefId};
+use rustc_infer::infer::TyCtxtInferExt;
 use rustc_middle::ty::{
     self, AliasTyKind, Const, GenericArg, GenericArgsRef, TraitRef, Ty, TyCtxt, TyKind, TypingEnv,
 };
 use rustc_span::{DUMMY_SP, Span, Symbol};
+use rustc_trait_selection::infer::InferCtxtExt;
 use rustc_type_ir::{AliasTy, ClosureKind, ConstKind, EarlyBinder};
 use std::{assert_matches, cell::RefCell, collections::HashMap};
 use why3::{
@@ -1003,6 +1005,19 @@ fn pre_fndef<'tcx>(
     Some(Term::let_(pattern, args, pre).span(ctx.def_span(did)))
 }
 
+/// Whether `ty` implements the `FnGhost` marker trait in `typing_env` — true both for
+/// the concrete `FnGhostWrapper<G>` and for a generic parameter bounded by `FnGhost`.
+fn type_implements_fn_ghost<'tcx>(
+    ctx: &Why3Generator<'tcx>,
+    typing_env: TypingEnv<'tcx>,
+    ty: Ty<'tcx>,
+) -> bool {
+    let (infcx, param_env) = ctx.tcx.infer_ctxt().build_with_typing_env(typing_env);
+    infcx
+        .type_implements_trait(Intrinsic::FnGhost.get(ctx), [ty], param_env)
+        .must_apply_considering_regions()
+}
+
 /// Generate the body of `panic_condition` (twin of [`precondition_term`]): the
 /// panic condition of a closure / `Fn`-implementor, dispatched on the self type.
 fn panic_condition_term<'tcx>(
@@ -1018,6 +1033,15 @@ fn panic_condition_term<'tcx>(
     let ty_self = subst.type_at(1);
     let self_ = Term::var(self_, ty_self);
     let args = Term::var(args, subst.type_at(0));
+
+    // A `FnGhost` function cannot panic: its panic condition is `false`. This holds
+    // for the concrete wrapper `FnGhostWrapper<G>` *and* — crucially — for a generic
+    // `F: FnGhost`, whose panic condition is otherwise opaque. `FnGhost` is only
+    // implemented for `#[check(ghost)]` closures, which are forbidden from carrying
+    // `#[may_panic]` (see `check_panics_allowed`), so `false` is sound.
+    if type_implements_fn_ghost(ctx, typing_env, ty_self) {
+        return Some(Term::false_(ctx.tcx));
+    }
 
     match ty_self.kind() {
         TyKind::Closure(did, _) => Some(closure_panics(ctx, did.expect_local(), self_, args)),
@@ -1045,16 +1069,6 @@ fn panic_condition_term<'tcx>(
                 TraitResolved::NoInstance(..) => unreachable!(),
             }
             panics_fndef(ctx, names, did, subst, args)
-        }
-        // Handle `FnGhostWrapper` (ghost closures cannot panic, so this yields `false`).
-        TyKind::Adt(def, subst_inner) if Intrinsic::FnGhostWrapper.is(ctx, def.did()) => {
-            let mut subst_pan = subst.to_vec();
-            let closure_ty = def.all_fields().next().unwrap().ty(ctx.tcx, subst_inner);
-            subst_pan[1] = GenericArg::from(closure_ty);
-            let subst_pan = ctx.mk_args(&subst_pan);
-            let pan_fn = Intrinsic::PanicCondition.get(ctx);
-            let pan_args = [self_.proj(0usize.into(), closure_ty), args];
-            Some(Term::call(ctx.tcx, typing_env, pan_fn, subst_pan, pan_args))
         }
         _ => None,
     }
