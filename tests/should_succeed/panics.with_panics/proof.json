@@ -15,25 +15,28 @@
     },
     "M_check_limit": {
       "vc_check_limit": { "prover": "alt-ergo", "time": 0.012 },
-      "vc_from_str": { "prover": "alt-ergo", "time": 0.022 }
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.011 }
     },
     "M_clamp_or_panic": {
       "vc_clamp_or_panic": { "prover": "alt-ergo", "time": 0.018 },
-      "vc_from_str": { "prover": "alt-ergo", "time": 0.022 }
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.011 }
     },
     "M_div": { "vc_div": { "prover": "alt-ergo", "time": 0.012 } },
     "M_div_two_causes": {
       "vc_div_two_causes": { "prover": "alt-ergo", "time": 0.019 },
-      "vc_from_str": { "prover": "alt-ergo", "time": 0.007 }
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.024 }
     },
     "M_div_two_causes_iff": {
       "vc_div_two_causes_iff": { "prover": "alt-ergo", "time": 0.017 },
-      "vc_from_str": { "prover": "alt-ergo", "time": 0.007 }
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.024 }
     },
     "M_first": { "vc_first": { "prover": "alt-ergo", "time": 0.02 } },
     "M_first_or_panic": {
       "vc_first_or_panic": { "prover": "alt-ergo", "time": 0.015 },
       "vc_get": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_fn_with_panic": {
+      "vc_fn_with_panic": { "prover": "alt-ergo", "time": 0.019 }
     },
     "M_get": { "vc_get": { "prover": "alt-ergo", "time": 0.021 } },
     "M_get_first_safe": {
@@ -42,7 +45,7 @@
     },
     "M_get_iff": { "vc_get_iff": { "prover": "alt-ergo", "time": 0.017 } },
     "M_increment": {
-      "vc_from_str": { "prover": "alt-ergo", "time": 0.007 },
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.024 },
       "vc_increment": { "prover": "alt-ergo", "time": 0.012 }
     },
     "M_never_panic": {
@@ -53,7 +56,11 @@
       "vc_never_panic_call": { "prover": "alt-ergo", "time": 0.023 }
     },
     "M_never_panic_sugar": {
-      "vc_never_panic_sugar": { "prover": "alt-ergo", "time": 0.011 }
+      "vc_never_panic_sugar": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_panic_into_require": {
+      "vc_fn_with_panic": { "prover": "alt-ergo", "time": 0.019 },
+      "vc_panic_into_require": { "prover": "alt-ergo", "time": 0.018 }
     },
     "M_vacuous_normal_post": {
       "vc_from_str": { "prover": "alt-ergo", "time": 0.017 },
