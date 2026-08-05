@@ -76,7 +76,7 @@ extern_spec! {
 /// resurfaces when the handle is joined via [`join_unwrap`](JoinHandleExt::join_unwrap),
 /// which is why the returned handle carries `may_panic_on_join` whenever `f` may panic.
 #[requires(forall<t: Ghost<Tokens>> (forall<ns> t.contains(ns)) ==> f.precondition((t,)))]
-#[ensures(exists<t: Ghost<Tokens>> (forall<ns> t.contains(ns)) 
+#[ensures(exists<t: Ghost<Tokens>> (forall<ns> t.contains(ns))
     && (forall<r> result.valid_result(r) ==> f.postcondition_once((t,), r))
     && (result.may_panic_on_join() ==> f.panic_condition((t,)))
 )]
