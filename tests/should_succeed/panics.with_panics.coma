@@ -298,6 +298,19 @@ module M_first_or_panic
       (! return {result})
     | panic -> {[@stop_split] [@expl:first_or_panic may_panic] Seq.length (Slice64.view l) = 0} (! panic) ]
 end
+module M_fn_with_panic
+  use creusot.prelude.Any
+  use creusot.int.UInt8
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let fn_with_panic (x: UInt8.t) (panic) (return (x'0: ())) = (! bb0
+    [ bb0 = return {_ret} ] [ & _ret: () = Any.any_l () ])
+    [ return (result: ()) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:fn_with_panic may_panic] UInt8.t'int x <> 0} (! panic) ]
+end
 module M_get
   use creusot.slice.Slice64Ops
   use creusot.int.UInt64
@@ -477,6 +490,28 @@ module M_never_panic_sugar
       /\ ([@stop_split] [@expl:never_panic_sugar ensures #1] UInt8.t'int result = 7)}
       (! return {result})
     | panic -> {[@stop_split] [@expl:never_panic_sugar may_panic] false} (! panic) ]
+end
+module M_panic_into_require
+  use creusot.int.UInt8
+  use creusot.prelude.Any
+  
+  let fn_with_panic (x: UInt8.t) (panic) (return (x'0: ())) = any
+    [ return (result: ()) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:fn_with_panic may_panic] UInt8.t'int x <> 0} (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let panic_into_require (x: UInt8.t) (return (x'0: ())) =
+  {[@stop_split] [@expl:panic_into_require requires] UInt8.t'int x = 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = fn_with_panic {x}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: ()) -> [ &_ret <- _x ] s1)
+      | s1 = return {_ret} ] ] [ & _ret: () = Any.any_l () | & x: UInt8.t = x ])
+    [ return (result: ()) -> (! return {result}) ]
 end
 module M_vacuous_normal_post
   use creusot.prelude.Any

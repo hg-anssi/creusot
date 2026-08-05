@@ -188,3 +188,12 @@ pub fn never_panic_sugar() -> u8 {
 pub fn div_two_causes_iff(x: u32, y: u32) -> u32 {
     if x == u32::MAX { panic!("x saturated") } else { x / y }
 }
+
+#[may_panic(x@ != 0)]
+pub fn fn_with_panic(x: u8) {}
+
+// transforming requires clause into may_panic clause is not legal
+#[requires(x@ == 0)]
+pub fn panic_into_require(x: u8) {
+    fn_with_panic(x)
+}

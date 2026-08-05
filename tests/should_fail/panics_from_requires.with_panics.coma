@@ -1,0 +1,29 @@
+module M_fn_with_req
+  use creusot.prelude.Any
+  use creusot.int.UInt8
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let fn_with_req (x: UInt8.t) (return (x'0: ())) = {[@stop_split] [@expl:fn_with_req requires] UInt8.t'int x <> 0}
+    (! bb0
+    [ bb0 = return {_ret} ] [ & _ret: () = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end
+module M_req_into_panic
+  use creusot.int.UInt8
+  use creusot.prelude.Any
+  
+  let fn_with_req (x: UInt8.t) (return (x'0: ())) = {[@stop_split] [@expl:fn_with_req requires] UInt8.t'int x <> 0}
+    any [ return (result: ()) -> (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let req_into_panic (x: UInt8.t) (panic) (return (x'0: ())) = (! bb0
+    [ bb0 = s0 [ s0 = fn_with_req {x} (fun (_x: ()) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l () | & x: UInt8.t = x ])
+    [ return (result: ()) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:req_into_panic may_panic] UInt8.t'int x = 0} (! panic) ]
+end
