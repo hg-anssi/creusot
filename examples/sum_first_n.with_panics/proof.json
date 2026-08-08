@@ -1,0 +1,15 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_sum_first_n": {
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.015 },
+      "vc_into_iter_RangeInclusive_u32": {
+        "prover": "alt-ergo",
+        "time": 0.027
+      },
+      "vc_new_u32": { "prover": "alt-ergo", "time": 0.034 },
+      "vc_next_RangeInclusive_u32": { "prover": "alt-ergo", "time": 0.026 },
+      "vc_sum_first_n": { "prover": "alt-ergo", "time": 0.945 }
+    }
+  }
+}

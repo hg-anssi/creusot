@@ -323,7 +323,7 @@ impl<T> SliceIndexSpec<[T]> for (Bound<usize>, Bound<usize>) {
 extern_spec! {
     impl<T> [T] {
         #[check(ghost)]
-        #[requires(self@.len() == src@.len())]
+        #[panics(self@.len() != src@.len())]
         #[ensures((^self)@ == src@)]
         fn copy_from_slice(&mut self, src: &[T]) where T: Copy;
 
@@ -332,8 +332,8 @@ extern_spec! {
         fn len(&self) -> usize;
 
         #[check(ghost)]
-        #[requires(i@ < self@.len())]
-        #[requires(j@ < self@.len())]
+        #[panics(i@ >= self@.len())]
+        #[panics(j@ >= self@.len())]
         #[ensures((^self)@.exchange(self@, i@, j@))]
         fn swap(&mut self, i: usize, j: usize);
 
@@ -352,7 +352,7 @@ extern_spec! {
             -> Option<&mut <I as SliceIndex<[T]>>::Output>;
 
         #[check(ghost)]
-        #[requires(mid@ <= self@.len())]
+        #[panics(mid@ > self@.len())]
         #[ensures({
             let (l,r) = result;  let sl = self@.len();
             ((^self)@.len() == sl) &&
@@ -420,6 +420,7 @@ extern_spec! {
         fn first(&self) -> Option<&T>;
 
 
+        // No panic if this constraint is not verified
         #[requires(self.deep_model().sorted())]
         #[ensures(forall<i:usize> result == Ok(i) ==>
             i@ < self@.len() && (*self).deep_model()[i@] == x.deep_model())]
@@ -456,7 +457,7 @@ extern_spec! {
 
     impl<T, I: SliceIndexSpec<[T]>> IndexMut<I> for [T] {
         #[check(ghost)]
-        #[requires(ix.in_bounds(self@))]
+        #[panics(!ix.in_bounds(self@))]
         #[ensures(ix.has_value(self@, *result))]
         #[ensures(ix.has_value((&^self)@, ^result))]
         #[ensures(ix.resolve_elswhere(self@, (&^self)@))]
@@ -466,7 +467,7 @@ extern_spec! {
 
     impl<T, I: SliceIndexSpec<[T]>> Index<I> for [T] {
         #[check(ghost)]
-        #[requires(ix.in_bounds(self@))]
+        #[panics(!ix.in_bounds(self@))]
         #[ensures(ix.has_value(self@, *result))]
         fn index(&self, ix: I) -> &<[T] as Index<I>>::Output;
     }

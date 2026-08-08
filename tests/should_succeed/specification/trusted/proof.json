@@ -7,8 +7,8 @@
   ],
   "proofs": {
     "M_carnation": {
-      "vc_carnation": { "prover": "alt-ergo", "time": 0.01 },
-      "vc_elim_Branch": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_carnation": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_elim_Branch": { "prover": "alt-ergo", "time": 0.025 },
       "vc_rose_Rose_Box_Carnation_Global": {
         "prover": "alt-ergo",
         "time": 0.018
@@ -16,20 +16,20 @@
     },
     "M_innocent_victim": {
       "vc_im_out_of_control": { "prover": "cvc5", "time": 0.01 },
-      "vc_innocent_victim": { "prover": "cvc5", "time": 0.01 },
+      "vc_innocent_victim": { "prover": "cvc5", "time": 0.02 },
       "vc_my_unverified_code": { "prover": "cvc5", "time": 0.01 }
     },
     "M_rose": {
       "vc_elim_Some": { "prover": "alt-ergo", "time": 0.014 },
       "vc_into_iter_Vec_Rose_T_Global": {
         "prover": "alt-ergo",
-        "time": 0.008
+        "time": 0.038
       },
       "vc_next_IntoIter_Rose_T_Global": {
         "prover": "alt-ergo",
-        "time": 0.016
+        "time": 0.035
       },
-      "vc_rose_T": { "prover": "alt-ergo", "time": 0.014 },
+      "vc_rose_T": { "prover": "alt-ergo", "time": 0.033 },
       "vc_rose_T'0": { "prover": "alt-ergo", "time": 0.016 }
     },
     "M_victim_of_lie": {

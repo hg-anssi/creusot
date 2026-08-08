@@ -9,7 +9,7 @@
     "M_test": {
       "vc_elim_F": { "prover": "cvc5", "time": 0.011 },
       "vc_elim_G": { "prover": "cvc5", "time": 0.01 },
-      "vc_test": { "prover": "cvc5", "time": 0.009 }
+      "vc_test": { "prover": "cvc5", "time": 0.021 }
     }
   }
 }

@@ -1,0 +1,16 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_empty": {
+      "vc_empty": { "prover": "z3", "time": 0.117 },
+      "vc_ffs'0": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_ffs": {
+      "vc_ffs'0": { "prover": "alt-ergo", "time": 0.028 },
+      "vc_leading_zeros": { "prover": "alt-ergo", "time": 0.031 }
+    },
+    "M_merge_bvs": { "vc_merge_bvs": { "prover": "z3", "time": 0.015 } },
+    "M_set_bit": { "vc_set_bit": { "prover": "z3", "time": 0.02 } },
+    "M_unset_bit": { "vc_unset_bit": { "prover": "z3", "time": 0.018 } }
+  }
+}

@@ -142,6 +142,8 @@ module M_test_fnmut
   
   type closure1 = { c0: MutBorrow.t UInt32.t }
   
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
   predicate resolve_refmut_closure1 [@inline:trivial] (_1: MutBorrow.t closure1) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure1
@@ -192,17 +194,21 @@ module M_test_fnmut
   {[@stop_split] [@expl:closure requires] UInt32.t'int self.current.c0.current < 1000000}
     (! bb0
     [ bb0 = s0
-      [ s0 = UInt32.add {self.current.c0.current} {(1: UInt32.t)}
-          (fun (_x: UInt32.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s1)
-      | s1 = -{resolve_refmut_closure1 self}- s2
-      | s2 = [ &res'0 <- (5: Int32.t) ] s3
-      | s3 = [ &res <- res'0 ] s4
-      | s4 = [ &_ret <- res ] s5
-      | s5 = return {_ret} ] ]
+      [ s0 = [ &_4 <- let (_fst, _snd) = UInt32.add_with_overflow self.current.c0.current (1: UInt32.t) in { f0 = _fst;
+                                                                                                             f1 = _snd } ]
+        s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _4.f0 } } } ] s3
+      | s3 = -{resolve_refmut_closure1 self}- s4
+      | s4 = [ &res'0 <- (5: Int32.t) ] s5
+      | s5 = [ &res <- res'0 ] s6
+      | s6 = [ &_ret <- res ] s7
+      | s7 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l ()
     | & self: MutBorrow.t closure1 = self
     | & res: Int32.t = Any.any_l ()
-    | & res'0: Int32.t = Any.any_l () ])
+    | & res'0: Int32.t = Any.any_l ()
+    | & _4: tup2_u32_bool = Any.any_l () ])
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:closure1 ensures] ([@stop_split] [@expl:closure ensures] UInt32.t'int self.final.c0.current
         = UInt32.t'int self.current.c0.current + 1)
@@ -248,6 +254,8 @@ module M_test_fnmut2
   
   type closure1 = { c0: MutBorrow.t UInt32.t }
   
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
   predicate resolve_refmut_closure1 [@inline:trivial] (_1: MutBorrow.t closure1) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure1
@@ -298,17 +306,21 @@ module M_test_fnmut2
   {[@stop_split] [@expl:closure requires] UInt32.t'int self.current.c0.current < 1000000}
     (! bb0
     [ bb0 = s0
-      [ s0 = UInt32.add {self.current.c0.current} {(1: UInt32.t)}
-          (fun (_x: UInt32.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s1)
-      | s1 = -{resolve_refmut_closure1 self}- s2
-      | s2 = [ &res'0 <- (5: Int32.t) ] s3
-      | s3 = [ &res <- res'0 ] s4
-      | s4 = [ &_ret <- res ] s5
-      | s5 = return {_ret} ] ]
+      [ s0 = [ &_4 <- let (_fst, _snd) = UInt32.add_with_overflow self.current.c0.current (1: UInt32.t) in { f0 = _fst;
+                                                                                                             f1 = _snd } ]
+        s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _4.f0 } } } ] s3
+      | s3 = -{resolve_refmut_closure1 self}- s4
+      | s4 = [ &res'0 <- (5: Int32.t) ] s5
+      | s5 = [ &res <- res'0 ] s6
+      | s6 = [ &_ret <- res ] s7
+      | s7 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l ()
     | & self: MutBorrow.t closure1 = self
     | & res: Int32.t = Any.any_l ()
-    | & res'0: Int32.t = Any.any_l () ])
+    | & res'0: Int32.t = Any.any_l ()
+    | & _4: tup2_u32_bool = Any.any_l () ])
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:closure1 ensures] ([@stop_split] [@expl:closure ensures] UInt32.t'int self.final.c0.current
         = UInt32.t'int self.current.c0.current + 1)
@@ -438,6 +450,8 @@ module M_test_fnmut2box
   
   type closure1 = { c0: MutBorrow.t UInt32.t }
   
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
   predicate resolve_refmut_closure1 [@inline:trivial] (_1: MutBorrow.t closure1) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure1
@@ -488,17 +502,21 @@ module M_test_fnmut2box
   {[@stop_split] [@expl:closure requires] UInt32.t'int self.current.c0.current < 1000000}
     (! bb0
     [ bb0 = s0
-      [ s0 = UInt32.add {self.current.c0.current} {(1: UInt32.t)}
-          (fun (_x: UInt32.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s1)
-      | s1 = -{resolve_refmut_closure1 self}- s2
-      | s2 = [ &res'0 <- (5: Int32.t) ] s3
-      | s3 = [ &res <- res'0 ] s4
-      | s4 = [ &_ret <- res ] s5
-      | s5 = return {_ret} ] ]
+      [ s0 = [ &_4 <- let (_fst, _snd) = UInt32.add_with_overflow self.current.c0.current (1: UInt32.t) in { f0 = _fst;
+                                                                                                             f1 = _snd } ]
+        s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _4.f0 } } } ] s3
+      | s3 = -{resolve_refmut_closure1 self}- s4
+      | s4 = [ &res'0 <- (5: Int32.t) ] s5
+      | s5 = [ &res <- res'0 ] s6
+      | s6 = [ &_ret <- res ] s7
+      | s7 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l ()
     | & self: MutBorrow.t closure1 = self
     | & res: Int32.t = Any.any_l ()
-    | & res'0: Int32.t = Any.any_l () ])
+    | & res'0: Int32.t = Any.any_l ()
+    | & _4: tup2_u32_bool = Any.any_l () ])
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:closure1 ensures] ([@stop_split] [@expl:closure ensures] UInt32.t'int self.final.c0.current
         = UInt32.t'int self.current.c0.current + 1)
@@ -778,6 +796,8 @@ module M_test_fnmut3
   
   type closure0 = { c0: MutBorrow.t UInt32.t }
   
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
   predicate resolve_refmut_closure0 [@inline:trivial] (_1: MutBorrow.t closure0) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure0
@@ -794,11 +814,15 @@ module M_test_fnmut3
   
   let closure0 [@coma:extspec] (self: MutBorrow.t closure0) (return (x: Int32.t)) = bb0
     [ bb0 = s0
-      [ s0 = UInt32.add {self.current.c0.current} {(1: UInt32.t)}
-          (fun (_x: UInt32.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s1)
-      | s1 = -{resolve_refmut_closure0 self}- s2
-      | s2 = [ &_ret <- (5: Int32.t) ] s3
-      | s3 = return {_ret} ] ] [ & _ret: Int32.t = Any.any_l () | & self: MutBorrow.t closure0 = self ]
+      [ s0 = [ &_2 <- let (_fst, _snd) = UInt32.add_with_overflow self.current.c0.current (1: UInt32.t) in { f0 = _fst;
+                                                                                                             f1 = _snd } ]
+        s1
+      | s1 = {[@expl:Add overflow] not _2.f1} s2
+      | s2 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _2.f0 } } } ] s3
+      | s3 = -{resolve_refmut_closure0 self}- s4
+      | s4 = [ &_ret <- (5: Int32.t) ] s5
+      | s5 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & self: MutBorrow.t closure0 = self | & _2: tup2_u32_bool = Any.any_l () ]
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
       return {result} ]
@@ -918,6 +942,8 @@ module M_test_fnmut3box
   
   type closure0 = { c0: MutBorrow.t UInt32.t }
   
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
   predicate resolve_refmut_closure0 [@inline:trivial] (_1: MutBorrow.t closure0) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure0
@@ -934,11 +960,15 @@ module M_test_fnmut3box
   
   let closure0 [@coma:extspec] (self: MutBorrow.t closure0) (return (x: Int32.t)) = bb0
     [ bb0 = s0
-      [ s0 = UInt32.add {self.current.c0.current} {(1: UInt32.t)}
-          (fun (_x: UInt32.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s1)
-      | s1 = -{resolve_refmut_closure0 self}- s2
-      | s2 = [ &_ret <- (5: Int32.t) ] s3
-      | s3 = return {_ret} ] ] [ & _ret: Int32.t = Any.any_l () | & self: MutBorrow.t closure0 = self ]
+      [ s0 = [ &_2 <- let (_fst, _snd) = UInt32.add_with_overflow self.current.c0.current (1: UInt32.t) in { f0 = _fst;
+                                                                                                             f1 = _snd } ]
+        s1
+      | s1 = {[@expl:Add overflow] not _2.f1} s2
+      | s2 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _2.f0 } } } ] s3
+      | s3 = -{resolve_refmut_closure0 self}- s4
+      | s4 = [ &_ret <- (5: Int32.t) ] s5
+      | s5 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & self: MutBorrow.t closure0 = self | & _2: tup2_u32_bool = Any.any_l () ]
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
       return {result} ]

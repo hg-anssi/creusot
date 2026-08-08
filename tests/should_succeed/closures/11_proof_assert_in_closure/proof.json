@@ -8,7 +8,7 @@
   "proofs": {
     "M_captures_and_call": {
       "vc_calls_closure_closure0": { "prover": "cvc5", "time": 0.017 },
-      "vc_captures_and_call": { "prover": "cvc5", "time": 0.015 },
+      "vc_captures_and_call": { "prover": "cvc5", "time": 0.031 },
       "vc_closure0": { "prover": "cvc5", "time": 0.019 }
     },
     "M_immutable_capture": {

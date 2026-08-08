@@ -1,0 +1,17 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_add": { "vc_add": { "prover": "alt-ergo", "time": 0.026 } },
+    "M_bool_eq": { "vc_bool_eq": { "prover": "alt-ergo", "time": 0.026 } },
+    "M_division": { "vc_division": { "prover": "alt-ergo", "time": 0.022 } },
+    "M_expression": {
+      "vc_expression": { "prover": "alt-ergo", "time": 0.047 }
+    },
+    "M_modulus": { "vc_modulus": { "prover": "alt-ergo", "time": 0.031 } },
+    "M_multiply": { "vc_multiply": { "prover": "alt-ergo", "time": 0.04 } },
+    "M_primitive_comparison": {
+      "vc_primitive_comparison": { "prover": "alt-ergo", "time": 0.016 }
+    },
+    "M_sub": { "vc_sub": { "prover": "alt-ergo", "time": 0.028 } }
+  }
+}

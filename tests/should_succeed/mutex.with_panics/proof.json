@@ -1,0 +1,21 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_concurrent": {
+      "vc_concurrent": { "prover": "alt-ergo", "time": 0.049 },
+      "vc_join_unit": { "prover": "alt-ergo", "time": 0.027 },
+      "vc_leak_Mutex_u32_Even": { "prover": "alt-ergo", "time": 0.042 },
+      "vc_new_u32": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_spawn_unit": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_impl_FakeFnOnce_for_AddsTwo__call": {
+      "vc_call_AddsTwo": { "prover": "alt-ergo", "time": 0.044 },
+      "vc_deref_u32": { "prover": "alt-ergo", "time": 0.041 },
+      "vc_lock_u32": { "prover": "alt-ergo", "time": 0.04 },
+      "vc_set_u32": { "prover": "alt-ergo", "time": 0.027 }
+    },
+    "M_impl_FakeFnOnce_for_AddsTwo__call__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.021 }
+    }
+  }
+}

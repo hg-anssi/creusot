@@ -18,8 +18,13 @@ module M_test_i8_add_example
         -> Int8.to_int r = Int8.to_int self_ + Int8.to_int rhs)}
       (! return {result}) ]
   
-  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: Int8.t) ->
+    {[@stop_split] [@expl:unwrap_i8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let is_none_i8 (self_: t_Option_i8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
@@ -389,29 +394,35 @@ module M_test_i8_div_example
   let is_none_i8 (self_: t_Option_i8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
-  
-  let wrapping_div (self_: Int8.t) (rhs: Int8.t) (return (x: Int8.t)) =
-  {[@stop_split] [@expl:wrapping_div requires] Int8.to_int rhs <> 0}
+  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
     any
     [ return (result: Int8.t) ->
-    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] Int8.to_int self_
-            = Int8.to_int const_MIN
-          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int self_)
+    {[@stop_split] [@expl:unwrap_i8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
+  
+  let wrapping_div (self_: Int8.t) (rhs: Int8.t) (return (x: Int8.t)) =
+  {[@stop_split] [@expl:wrapping_div requires (no panic)] not Int8.to_int rhs = 0}
+    any
+    [ return (result: Int8.t) ->
+    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] not Int8.to_int rhs = 0)
       /\ ([@stop_split] [@expl:wrapping_div ensures #1] Int8.to_int self_ = Int8.to_int const_MIN
+          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int self_)
+      /\ ([@stop_split] [@expl:wrapping_div ensures #2] Int8.to_int self_ = Int8.to_int const_MIN
         /\ Int8.to_int rhs = - 1
       \/ Int8.to_int result = ComputerDivision.div (Int8.to_int self_) (Int8.to_int rhs))}
       (! return {result}) ]
   
   let saturating_div (self_: Int8.t) (rhs: Int8.t) (return (x: Int8.t)) =
-  {[@stop_split] [@expl:saturating_div requires] Int8.to_int rhs <> 0}
+  {[@stop_split] [@expl:saturating_div requires (no panic)] not Int8.to_int rhs = 0}
     any
     [ return (result: Int8.t) ->
-    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] Int8.to_int self_
-            = Int8.to_int const_MIN
-          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int const_MIN)
+    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] not Int8.to_int rhs
+        = 0)
       /\ ([@stop_split] [@expl:saturating_div ensures #1] Int8.to_int self_ = Int8.to_int const_MIN
+          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int const_MIN)
+      /\ ([@stop_split] [@expl:saturating_div ensures #2] Int8.to_int self_ = Int8.to_int const_MIN
         /\ Int8.to_int rhs = - 1
       \/ Int8.to_int result = ComputerDivision.div (Int8.to_int self_) (Int8.to_int rhs))}
       (! return {result}) ]
@@ -419,16 +430,17 @@ module M_test_i8_div_example
   type tup2_i8_bool = { f0: Int8.t; f1: bool }
   
   let overflowing_div (self_: Int8.t) (rhs: Int8.t) (return (x: tup2_i8_bool)) =
-  {[@stop_split] [@expl:overflowing_div requires] Int8.to_int rhs <> 0}
+  {[@stop_split] [@expl:overflowing_div requires (no panic)] not Int8.to_int rhs = 0}
     any
     [ return (result: tup2_i8_bool) ->
-    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] Int8.to_int self_
-            = Int8.to_int const_MIN
-          /\ Int8.to_int rhs = - 1 -> Int8.to_int result.f0 = Int8.to_int self_)
+    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] not Int8.to_int rhs
+        = 0)
       /\ ([@stop_split] [@expl:overflowing_div ensures #1] Int8.to_int self_ = Int8.to_int const_MIN
+          /\ Int8.to_int rhs = - 1 -> Int8.to_int result.f0 = Int8.to_int self_)
+      /\ ([@stop_split] [@expl:overflowing_div ensures #2] Int8.to_int self_ = Int8.to_int const_MIN
           /\ Int8.to_int rhs = - 1
         \/ Int8.to_int result.f0 = ComputerDivision.div (Int8.to_int self_) (Int8.to_int rhs))
-      /\ ([@stop_split] [@expl:overflowing_div ensures #2] result.f1
+      /\ ([@stop_split] [@expl:overflowing_div ensures #3] result.f1
       = (Int8.to_int self_ = Int8.to_int const_MIN /\ Int8.to_int rhs = - 1))}
       (! return {result}) ]
   
@@ -562,29 +574,35 @@ module M_test_i8_div_no_overflow
         -> Int8.to_int r = ComputerDivision.div (Int8.to_int self_) (Int8.to_int rhs))}
       (! return {result}) ]
   
-  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
-  
-  let wrapping_div (self_: Int8.t) (rhs: Int8.t) (return (x: Int8.t)) =
-  {[@stop_split] [@expl:wrapping_div requires] Int8.to_int rhs <> 0}
+  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
     any
     [ return (result: Int8.t) ->
-    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] Int8.to_int self_
-            = Int8.to_int const_MIN
-          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int self_)
+    {[@stop_split] [@expl:unwrap_i8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
+  
+  let wrapping_div (self_: Int8.t) (rhs: Int8.t) (return (x: Int8.t)) =
+  {[@stop_split] [@expl:wrapping_div requires (no panic)] not Int8.to_int rhs = 0}
+    any
+    [ return (result: Int8.t) ->
+    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] not Int8.to_int rhs = 0)
       /\ ([@stop_split] [@expl:wrapping_div ensures #1] Int8.to_int self_ = Int8.to_int const_MIN
+          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int self_)
+      /\ ([@stop_split] [@expl:wrapping_div ensures #2] Int8.to_int self_ = Int8.to_int const_MIN
         /\ Int8.to_int rhs = - 1
       \/ Int8.to_int result = ComputerDivision.div (Int8.to_int self_) (Int8.to_int rhs))}
       (! return {result}) ]
   
   let saturating_div (self_: Int8.t) (rhs: Int8.t) (return (x: Int8.t)) =
-  {[@stop_split] [@expl:saturating_div requires] Int8.to_int rhs <> 0}
+  {[@stop_split] [@expl:saturating_div requires (no panic)] not Int8.to_int rhs = 0}
     any
     [ return (result: Int8.t) ->
-    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] Int8.to_int self_
-            = Int8.to_int const_MIN
-          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int const_MIN)
+    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] not Int8.to_int rhs
+        = 0)
       /\ ([@stop_split] [@expl:saturating_div ensures #1] Int8.to_int self_ = Int8.to_int const_MIN
+          /\ Int8.to_int rhs = - 1 -> Int8.to_int result = Int8.to_int const_MIN)
+      /\ ([@stop_split] [@expl:saturating_div ensures #2] Int8.to_int self_ = Int8.to_int const_MIN
         /\ Int8.to_int rhs = - 1
       \/ Int8.to_int result = ComputerDivision.div (Int8.to_int self_) (Int8.to_int rhs))}
       (! return {result}) ]
@@ -592,16 +610,17 @@ module M_test_i8_div_no_overflow
   type tup2_i8_bool = { f0: Int8.t; f1: bool }
   
   let overflowing_div (self_: Int8.t) (rhs: Int8.t) (return (x: tup2_i8_bool)) =
-  {[@stop_split] [@expl:overflowing_div requires] Int8.to_int rhs <> 0}
+  {[@stop_split] [@expl:overflowing_div requires (no panic)] not Int8.to_int rhs = 0}
     any
     [ return (result: tup2_i8_bool) ->
-    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] Int8.to_int self_
-            = Int8.to_int const_MIN
-          /\ Int8.to_int rhs = - 1 -> Int8.to_int result.f0 = Int8.to_int self_)
+    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] not Int8.to_int rhs
+        = 0)
       /\ ([@stop_split] [@expl:overflowing_div ensures #1] Int8.to_int self_ = Int8.to_int const_MIN
+          /\ Int8.to_int rhs = - 1 -> Int8.to_int result.f0 = Int8.to_int self_)
+      /\ ([@stop_split] [@expl:overflowing_div ensures #2] Int8.to_int self_ = Int8.to_int const_MIN
           /\ Int8.to_int rhs = - 1
         \/ Int8.to_int result.f0 = ComputerDivision.div (Int8.to_int self_) (Int8.to_int rhs))
-      /\ ([@stop_split] [@expl:overflowing_div ensures #2] result.f1
+      /\ ([@stop_split] [@expl:overflowing_div ensures #3] result.f1
       = (Int8.to_int self_ = Int8.to_int const_MIN /\ Int8.to_int rhs = - 1))}
       (! return {result}) ]
   
@@ -770,8 +789,13 @@ module M_test_i8_mul_example
         -> Int8.to_int r = Int8.to_int self_ * Int8.to_int rhs)}
       (! return {result}) ]
   
-  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: Int8.t) ->
+    {[@stop_split] [@expl:unwrap_i8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let is_none_i8 (self_: t_Option_i8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
@@ -930,8 +954,13 @@ module M_test_i8_mul_zero
         -> Int8.to_int r = Int8.to_int self_ * Int8.to_int rhs)}
       (! return {result}) ]
   
-  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: Int8.t) ->
+    {[@stop_split] [@expl:unwrap_i8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let wrapping_mul (self_: Int8.t) (rhs: Int8.t) (return (x: Int8.t)) = any
     [ return (result: Int8.t) -> {[@stop_split] [@expl:wrapping_mul ensures] result = Int8.mul self_ rhs}
@@ -1247,8 +1276,13 @@ module M_test_i8_sub_example
         -> Int8.to_int r = Int8.to_int self_ - Int8.to_int rhs)}
       (! return {result}) ]
   
-  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i8 (self_: t_Option_i8) (return (x: Int8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: Int8.t) ->
+    {[@stop_split] [@expl:unwrap_i8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let is_none_i8 (self_: t_Option_i8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
@@ -1668,8 +1702,13 @@ module M_test_u8_add_example
         -> UInt8.t'int r = UInt8.t'int self_ + UInt8.t'int rhs)}
       (! return {result}) ]
   
-  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: UInt8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: UInt8.t) ->
+    {[@stop_split] [@expl:unwrap_u8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let is_none_u8 (self_: t_Option_u8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
@@ -1900,29 +1939,35 @@ module M_test_u8_div_example
   let is_none_u8 (self_: t_Option_u8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: UInt8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
-  
-  let wrapping_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) =
-  {[@stop_split] [@expl:wrapping_div requires] UInt8.t'int rhs <> 0}
+  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
     any
     [ return (result: UInt8.t) ->
-    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] UInt8.t'int self_
-            = UInt8.t'int const_MIN
-          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int self_)
+    {[@stop_split] [@expl:unwrap_u8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
+  
+  let wrapping_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:wrapping_div requires (no panic)] not UInt8.t'int rhs = 0}
+    any
+    [ return (result: UInt8.t) ->
+    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] not UInt8.t'int rhs = 0)
       /\ ([@stop_split] [@expl:wrapping_div ensures #1] UInt8.t'int self_ = UInt8.t'int const_MIN
+          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int self_)
+      /\ ([@stop_split] [@expl:wrapping_div ensures #2] UInt8.t'int self_ = UInt8.t'int const_MIN
         /\ UInt8.t'int rhs = - 1
       \/ UInt8.t'int result = ComputerDivision.div (UInt8.t'int self_) (UInt8.t'int rhs))}
       (! return {result}) ]
   
   let saturating_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) =
-  {[@stop_split] [@expl:saturating_div requires] UInt8.t'int rhs <> 0}
+  {[@stop_split] [@expl:saturating_div requires (no panic)] not UInt8.t'int rhs = 0}
     any
     [ return (result: UInt8.t) ->
-    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] UInt8.t'int self_
-            = UInt8.t'int const_MIN
-          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int const_MIN)
+    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] not UInt8.t'int rhs
+        = 0)
       /\ ([@stop_split] [@expl:saturating_div ensures #1] UInt8.t'int self_ = UInt8.t'int const_MIN
+          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int const_MIN)
+      /\ ([@stop_split] [@expl:saturating_div ensures #2] UInt8.t'int self_ = UInt8.t'int const_MIN
         /\ UInt8.t'int rhs = - 1
       \/ UInt8.t'int result = ComputerDivision.div (UInt8.t'int self_) (UInt8.t'int rhs))}
       (! return {result}) ]
@@ -1930,16 +1975,17 @@ module M_test_u8_div_example
   type tup2_u8_bool = { f0: UInt8.t; f1: bool }
   
   let overflowing_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: tup2_u8_bool)) =
-  {[@stop_split] [@expl:overflowing_div requires] UInt8.t'int rhs <> 0}
+  {[@stop_split] [@expl:overflowing_div requires (no panic)] not UInt8.t'int rhs = 0}
     any
     [ return (result: tup2_u8_bool) ->
-    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] UInt8.t'int self_
-            = UInt8.t'int const_MIN
-          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result.f0 = UInt8.t'int self_)
+    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] not UInt8.t'int rhs
+        = 0)
       /\ ([@stop_split] [@expl:overflowing_div ensures #1] UInt8.t'int self_ = UInt8.t'int const_MIN
+          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result.f0 = UInt8.t'int self_)
+      /\ ([@stop_split] [@expl:overflowing_div ensures #2] UInt8.t'int self_ = UInt8.t'int const_MIN
           /\ UInt8.t'int rhs = - 1
         \/ UInt8.t'int result.f0 = ComputerDivision.div (UInt8.t'int self_) (UInt8.t'int rhs))
-      /\ ([@stop_split] [@expl:overflowing_div ensures #2] result.f1
+      /\ ([@stop_split] [@expl:overflowing_div ensures #3] result.f1
       = (UInt8.t'int self_ = UInt8.t'int const_MIN /\ UInt8.t'int rhs = - 1))}
       (! return {result}) ]
   
@@ -2009,29 +2055,35 @@ module M_test_u8_div_no_overflow
         -> UInt8.t'int r = ComputerDivision.div (UInt8.t'int self_) (UInt8.t'int rhs))}
       (! return {result}) ]
   
-  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: UInt8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
-  
-  let wrapping_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) =
-  {[@stop_split] [@expl:wrapping_div requires] UInt8.t'int rhs <> 0}
+  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
     any
     [ return (result: UInt8.t) ->
-    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] UInt8.t'int self_
-            = UInt8.t'int const_MIN
-          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int self_)
+    {[@stop_split] [@expl:unwrap_u8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
+  
+  let wrapping_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:wrapping_div requires (no panic)] not UInt8.t'int rhs = 0}
+    any
+    [ return (result: UInt8.t) ->
+    {[@stop_split] [@expl:wrapping_div ensures] ([@stop_split] [@expl:wrapping_div ensures #0] not UInt8.t'int rhs = 0)
       /\ ([@stop_split] [@expl:wrapping_div ensures #1] UInt8.t'int self_ = UInt8.t'int const_MIN
+          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int self_)
+      /\ ([@stop_split] [@expl:wrapping_div ensures #2] UInt8.t'int self_ = UInt8.t'int const_MIN
         /\ UInt8.t'int rhs = - 1
       \/ UInt8.t'int result = ComputerDivision.div (UInt8.t'int self_) (UInt8.t'int rhs))}
       (! return {result}) ]
   
   let saturating_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) =
-  {[@stop_split] [@expl:saturating_div requires] UInt8.t'int rhs <> 0}
+  {[@stop_split] [@expl:saturating_div requires (no panic)] not UInt8.t'int rhs = 0}
     any
     [ return (result: UInt8.t) ->
-    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] UInt8.t'int self_
-            = UInt8.t'int const_MIN
-          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int const_MIN)
+    {[@stop_split] [@expl:saturating_div ensures] ([@stop_split] [@expl:saturating_div ensures #0] not UInt8.t'int rhs
+        = 0)
       /\ ([@stop_split] [@expl:saturating_div ensures #1] UInt8.t'int self_ = UInt8.t'int const_MIN
+          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result = UInt8.t'int const_MIN)
+      /\ ([@stop_split] [@expl:saturating_div ensures #2] UInt8.t'int self_ = UInt8.t'int const_MIN
         /\ UInt8.t'int rhs = - 1
       \/ UInt8.t'int result = ComputerDivision.div (UInt8.t'int self_) (UInt8.t'int rhs))}
       (! return {result}) ]
@@ -2039,16 +2091,17 @@ module M_test_u8_div_no_overflow
   type tup2_u8_bool = { f0: UInt8.t; f1: bool }
   
   let overflowing_div (self_: UInt8.t) (rhs: UInt8.t) (return (x: tup2_u8_bool)) =
-  {[@stop_split] [@expl:overflowing_div requires] UInt8.t'int rhs <> 0}
+  {[@stop_split] [@expl:overflowing_div requires (no panic)] not UInt8.t'int rhs = 0}
     any
     [ return (result: tup2_u8_bool) ->
-    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] UInt8.t'int self_
-            = UInt8.t'int const_MIN
-          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result.f0 = UInt8.t'int self_)
+    {[@stop_split] [@expl:overflowing_div ensures] ([@stop_split] [@expl:overflowing_div ensures #0] not UInt8.t'int rhs
+        = 0)
       /\ ([@stop_split] [@expl:overflowing_div ensures #1] UInt8.t'int self_ = UInt8.t'int const_MIN
+          /\ UInt8.t'int rhs = - 1 -> UInt8.t'int result.f0 = UInt8.t'int self_)
+      /\ ([@stop_split] [@expl:overflowing_div ensures #2] UInt8.t'int self_ = UInt8.t'int const_MIN
           /\ UInt8.t'int rhs = - 1
         \/ UInt8.t'int result.f0 = ComputerDivision.div (UInt8.t'int self_) (UInt8.t'int rhs))
-      /\ ([@stop_split] [@expl:overflowing_div ensures #2] result.f1
+      /\ ([@stop_split] [@expl:overflowing_div ensures #3] result.f1
       = (UInt8.t'int self_ = UInt8.t'int const_MIN /\ UInt8.t'int rhs = - 1))}
       (! return {result}) ]
   
@@ -2180,8 +2233,13 @@ module M_test_u8_mul_example
         -> UInt8.t'int r = UInt8.t'int self_ * UInt8.t'int rhs)}
       (! return {result}) ]
   
-  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: UInt8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: UInt8.t) ->
+    {[@stop_split] [@expl:unwrap_u8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let is_none_u8 (self_: t_Option_u8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
@@ -2310,8 +2368,13 @@ module M_test_u8_mul_zero
         -> UInt8.t'int r = UInt8.t'int self_ * UInt8.t'int rhs)}
       (! return {result}) ]
   
-  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: UInt8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: UInt8.t) ->
+    {[@stop_split] [@expl:unwrap_u8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let wrapping_mul (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) = any
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:wrapping_mul ensures] result = UInt8.mul self_ rhs}
@@ -2630,8 +2693,13 @@ module M_test_u8_sub_example
   let is_none_u8 (self_: t_Option_u8) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: UInt8.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_u8 (self_: t_Option_u8) (return (x: UInt8.t)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None}
+    any
+    [ return (result: UInt8.t) ->
+    {[@stop_split] [@expl:unwrap_u8 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let wrapping_sub (self_: UInt8.t) (rhs: UInt8.t) (return (x: UInt8.t)) = any
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:wrapping_sub ensures] result = UInt8.sub self_ rhs}

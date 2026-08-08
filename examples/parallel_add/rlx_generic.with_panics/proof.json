@@ -63,10 +63,10 @@
         "time": 0.036
       },
       "vc_into_ghost_Int": { "prover": "alt-ergo", "time": 0.017 },
-      "vc_into_inner": { "prover": "alt-ergo", "time": 0.026 },
+      "vc_into_inner": { "prover": "alt-ergo", "time": 0.008 },
       "vc_into_inner_AtomicInvariant_ParallelAddAtomicInv": {
         "prover": "alt-ergo",
-        "time": 0.008
+        "time": 0.025
       },
       "vc_into_inner_Authority_Option_tup2_PositiveReal_Int": {
         "prover": "alt-ergo",
@@ -90,14 +90,14 @@
       },
       "vc_join_in_Option_tup2_PositiveReal_Int": {
         "prover": "alt-ergo",
-        "time": 0.011
+        "time": 0.027
       },
       "vc_join_unwrap_ScopedJoinHandle_Ghost_Fragment_Option_tup2_PositiveReal_Int": {
         "prover": "alt-ergo",
-        "time": 0.029
+        "time": 0.031
       },
       "vc_new": { "prover": "alt-ergo", "time": 0.015 },
-      "vc_new'0": { "prover": "alt-ergo", "time": 0.013 },
+      "vc_new'0": { "prover": "alt-ergo", "time": 0.027 },
       "vc_new'2": { "prover": "alt-ergo", "time": 0.022 },
       "vc_new'3": { "prover": "alt-ergo", "time": 0.022 },
       "vc_new_FnGhostWrapper_closure0": {
@@ -136,12 +136,12 @@
           {
             "tactic": "split_vc",
             "children": [
-              { "prover": "alt-ergo", "time": 0.033 },
+              { "prover": "alt-ergo", "time": 0.027 },
               { "prover": "alt-ergo", "time": 0.025 },
               { "prover": "alt-ergo", "time": 0.028 },
               { "prover": "alt-ergo", "time": 0.147 },
               { "prover": "alt-ergo", "time": 0.021 },
-              { "prover": "alt-ergo", "time": 0.012 },
+              { "prover": "alt-ergo", "time": 0.035 },
               { "prover": "cvc5", "time": 0.637 },
               {
                 "tactic": "split_vc",
@@ -151,12 +151,12 @@
                     "tactic": "split_vc",
                     "children": [
                       { "prover": "alt-ergo", "time": 0.03 },
+                      { "prover": "alt-ergo", "time": 0.009 },
                       { "prover": "alt-ergo", "time": 0.024 },
-                      { "prover": "alt-ergo", "time": 0.024 },
-                      { "prover": "alt-ergo", "time": 0.036 },
+                      { "prover": "alt-ergo", "time": 0.008 },
                       { "prover": "alt-ergo", "time": 0.03 },
                       { "prover": "alt-ergo", "time": 0.02 },
-                      { "prover": "alt-ergo", "time": 0.042 },
+                      { "prover": "alt-ergo", "time": 0.02 },
                       { "prover": "alt-ergo", "time": 0.024 },
                       { "prover": "alt-ergo", "time": 0.029 },
                       { "prover": "cvc4", "time": 0.124 },
@@ -167,7 +167,7 @@
                       {
                         "tactic": "split_vc",
                         "children": [
-                          { "prover": "alt-ergo", "time": 0.017 },
+                          { "prover": "alt-ergo", "time": 0.037 },
                           { "prover": "alt-ergo", "time": 0.022 },
                           {
                             "tactic": "split_vc",
@@ -265,7 +265,7 @@
                       },
                       { "prover": "cvc5", "time": 0.925 },
                       { "prover": "alt-ergo", "time": 0.128 },
-                      { "prover": "alt-ergo", "time": 0.047 },
+                      { "prover": "alt-ergo", "time": 0.023 },
                       { "prover": "alt-ergo", "time": 0.033 },
                       { "prover": "alt-ergo", "time": 0.03 },
                       { "prover": "alt-ergo", "time": 0.034 },
@@ -306,7 +306,7 @@
               { "prover": "alt-ergo", "time": 0.076 },
               { "prover": "cvc5", "time": 0.373 },
               { "prover": "alt-ergo", "time": 0.033 },
-              { "prover": "alt-ergo", "time": 0.025 },
+              { "prover": "alt-ergo", "time": 0.012 },
               { "prover": "alt-ergo", "time": 0.028 },
               { "prover": "alt-ergo", "time": 0.032 }
             ]
@@ -315,12 +315,12 @@
       },
       "vc_push_ScopedJoinHandle_Ghost_Fragment_Option_tup2_PositiveReal_Int": {
         "prover": "alt-ergo",
-        "time": 0.011
+        "time": 0.03
       },
       "vc_scope_closure0": { "prover": "alt-ergo", "time": 0.013 },
       "vc_shoot_load_AtomicI32": { "prover": "alt-ergo", "time": 0.015 },
       "vc_shoot_store_AtomicI32": { "prover": "alt-ergo", "time": 0.015 },
-      "vc_spawn_closure0": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_spawn_closure0": { "prover": "alt-ergo", "time": 0.025 },
       "vc_split_off_Option_tup2_PositiveReal_Int": {
         "prover": "alt-ergo",
         "time": 0.015

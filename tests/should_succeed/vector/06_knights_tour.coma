@@ -48,10 +48,11 @@ module M_impl_Board__available (* Board *)
   
   let index_Vec_Vec_usize_Global_Global (self_: t_Vec_Vec_usize_Global_Global) (ix: UInt64.t)
     (return (x'0: t_Vec_usize_Global)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_Vec_usize_Global_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_Vec_usize_Global_Global self_)}
     any
     [ return (result: t_Vec_usize_Global) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_Vec_usize_Global_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_Vec_usize_Global_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_Vec_usize_Global_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_Vec_usize_Global_Global self_) result)}
       (! return {result}) ]
   
   predicate in_bounds_usize'0 [@inline:trivial] (self: UInt64.t) (seq: Seq.seq UInt64.t) =
@@ -71,10 +72,11 @@ module M_impl_Board__available (* Board *)
   meta "rewrite_def" predicate has_value_usize'0
   
   let index_Vec_usize_Global (self_: t_Vec_usize_Global) (ix: UInt64.t) (return (x'0: UInt64.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize'0 ix (view_Vec_usize_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize'0 ix (view_Vec_usize_Global self_)}
     any
     [ return (result: UInt64.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize'0 ix (view_Vec_usize_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_usize_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize'0 ix (view_Vec_usize_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize'0 ix (view_Vec_usize_Global self_) result)}
       (! return {result}) ]
   
   function index_Vec_Vec_usize_Global_Global'0 [@inline:trivial] (self: t_Vec_Vec_usize_Global_Global) (ix: int) : t_Vec_usize_Global
@@ -602,8 +604,13 @@ module M_impl_Board__new (* Board *)
   
   meta "rewrite_def" predicate precondition_into_iter
   
+  predicate panic_condition_into_iter (self: ()) (args: t_MapInv_Range_usize_closure3) = false
+  
+  meta "rewrite_def" predicate panic_condition_into_iter
+  
   predicate precondition_from_iter (self: ()) (args: t_MapInv_Range_usize_closure3) =
-    let iter'0 = args in inv_MapInv_Range_usize_closure3 iter'0 /\ precondition_into_iter () iter'0
+    let iter'0 = args in inv_MapInv_Range_usize_closure3 iter'0
+    /\ precondition_into_iter () iter'0 /\ not panic_condition_into_iter () iter'0
   
   meta "rewrite_def" predicate precondition_from_iter
   
@@ -725,7 +732,8 @@ module M_impl_Board__new (* Board *)
   let from_iter_Vec_Vec_usize_Global_Global (iter'0: t_MapInv_Range_usize_closure3)
     (return (x: t_Vec_Vec_usize_Global_Global)) =
   {[@stop_split] [@expl:from_iter_Vec_Vec_usize_Global_Global requires] ([@stop_split] [@expl:from_iter 'iter' type invariant] inv_MapInv_Range_usize_closure3 iter'0)
-    /\ ([@stop_split] [@expl:from_iter requires] precondition_into_iter () iter'0)}
+    /\ ([@stop_split] [@expl:from_iter requires] precondition_into_iter () iter'0)
+    /\ ([@stop_split] [@expl:from_iter requires (no panic)] not panic_condition_into_iter () iter'0)}
     any
     [ return (result: t_Vec_Vec_usize_Global_Global) ->
     {[@stop_split] [@expl:from_iter ensures] exists into_iter: t_MapInv_Range_usize_closure3, done': MutBorrow.t t_MapInv_Range_usize_closure3. postcondition_into_iter () iter'0 into_iter
@@ -887,13 +895,14 @@ module M_impl_Board__set (* Board *)
   
   let index_mut_Vec_Vec_usize_Global_Global (self_: MutBorrow.t t_Vec_Vec_usize_Global_Global) (ix: UInt64.t)
     (return (x'0: MutBorrow.t t_Vec_usize_Global)) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_usize ix (view_Vec_Vec_usize_Global_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_usize ix (view_Vec_Vec_usize_Global_Global self_.current)}
     any
     [ return (result: MutBorrow.t t_Vec_usize_Global) ->
-    {[@stop_split] [@expl:index_mut_Vec_Vec_usize_Global_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_usize ix (view_Vec_Vec_usize_Global_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_Vec_usize_Global_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_usize ix (view_Vec_Vec_usize_Global_Global self_.current) (view_Vec_Vec_usize_Global_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_Vec_usize_Global_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_Vec_usize_Global_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize ix (view_Vec_Vec_usize_Global_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_Vec_usize_Global_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize ix (view_Vec_Vec_usize_Global_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize ix (view_Vec_Vec_usize_Global_Global self_.current) (view_Vec_Vec_usize_Global_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_Vec_usize_Global_Global self_.final)
       = Seq.length (view_Vec_Vec_usize_Global_Global self_.current))}
       (! return {result}) ]
   
@@ -920,13 +929,14 @@ module M_impl_Board__set (* Board *)
   
   let index_mut_Vec_usize_Global (self_: MutBorrow.t t_Vec_usize_Global) (ix: UInt64.t)
     (return (x'0: MutBorrow.t UInt64.t)) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_usize'0 ix (view_Vec_usize_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_usize'0 ix (view_Vec_usize_Global self_.current)}
     any
     [ return (result: MutBorrow.t UInt64.t) ->
-    {[@stop_split] [@expl:index_mut_Vec_usize_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_usize'0 ix (view_Vec_usize_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize'0 ix (view_Vec_usize_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_usize'0 ix (view_Vec_usize_Global self_.current) (view_Vec_usize_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_usize_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_usize_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize'0 ix (view_Vec_usize_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize'0 ix (view_Vec_usize_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize'0 ix (view_Vec_usize_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize'0 ix (view_Vec_usize_Global self_.current) (view_Vec_usize_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_usize_Global self_.final)
       = Seq.length (view_Vec_usize_Global self_.current))}
       (! return {result}) ]
   

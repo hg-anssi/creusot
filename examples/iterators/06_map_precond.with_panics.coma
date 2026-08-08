@@ -372,11 +372,13 @@ module M_counter
   
   type closure0 = { c0: MutBorrow.t UInt64.t }
   
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
   predicate resolve_refmut_closure0 [@inline:trivial] (_1: MutBorrow.t closure0) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure0
   
-  type tup2_u32_Snapshot_Seq_u32 = { f0: UInt32.t; f1: Seq.seq UInt32.t }
+  type tup2_u32_Snapshot_Seq_u32 = { f0'0: UInt32.t; f1'0: Seq.seq UInt32.t }
   
   predicate resolve_refmut_usize [@inline:trivial] (_1: MutBorrow.t UInt64.t) = _1.final = _1.current
   
@@ -392,15 +394,19 @@ module M_counter
     (return (x'0: UInt32.t)) = bb0
     [ bb0 = s0
       [ s0 = {[@expl:assertion] UInt64.t'int self.current.c0.current = Seq.length _prod} s1
-      | s1 = UInt64.add {self.current.c0.current} {(1: UInt64.t)}
-          (fun (_x: UInt64.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s2)
-      | s2 = -{resolve_refmut_closure0 self}- s3
-      | s3 = [ &_ret <- x ] s4
-      | s4 = return {_ret} ] ]
+      | s1 = [ &_8 <- let (_fst, _snd) = UInt64.add_with_overflow self.current.c0.current (1: UInt64.t) in { f0 = _fst;
+                                                                                                             f1 = _snd } ]
+        s2
+      | s2 = {[@expl:Add overflow] not _8.f1} s3
+      | s3 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _8.f0 } } } ] s4
+      | s4 = -{resolve_refmut_closure0 self}- s5
+      | s5 = [ &_ret <- x ] s6
+      | s6 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & self: MutBorrow.t closure0 = self
     | & x: UInt32.t = x
-    | & _prod: Seq.seq UInt32.t = _prod ]
+    | & _prod: Seq.seq UInt32.t = _prod
+    | & _8: tup2_usize_bool = Any.any_l () ]
     [ return (result: UInt32.t) ->
     {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
       return {result} ]
@@ -410,7 +416,7 @@ module M_counter
   meta "rewrite_def" predicate closure0'post'return
   
   predicate postcondition_once_closure0 (self: closure0) (args: tup2_u32_Snapshot_Seq_u32) (result: UInt32.t) =
-    let {f0 = x; f1 = _prod} = args in exists e: closure0. (exists bor_self: MutBorrow.t closure0. bor_self.current
+    let {f0'0 = x; f1'0 = _prod} = args in exists e: closure0. (exists bor_self: MutBorrow.t closure0. bor_self.current
             = self
           /\ bor_self.final = e /\ closure0'post'return bor_self x _prod result /\ hist_inv_closure0 self e)
       /\ resolve_closure0 e
@@ -418,7 +424,7 @@ module M_counter
   meta "rewrite_def" predicate postcondition_once_closure0
   
   predicate postcondition_mut_closure0 (self: closure0) (args: tup2_u32_Snapshot_Seq_u32) (result_state: closure0) (result: UInt32.t) =
-    let {f0 = x; f1 = _prod} = args in exists bor_self: MutBorrow.t closure0. bor_self.current = self
+    let {f0'0 = x; f1'0 = _prod} = args in exists bor_self: MutBorrow.t closure0. bor_self.current = self
       /\ bor_self.final = result_state
       /\ closure0'post'return bor_self x _prod result /\ hist_inv_closure0 self result_state
   
@@ -469,13 +475,13 @@ module M_counter
   meta "rewrite_def" predicate inv_u32
   
   predicate precondition_closure0 (self: closure0) (args: tup2_u32_Snapshot_Seq_u32) =
-    let {f0 = x; f1 = _prod} = args in forall bor_self: MutBorrow.t closure0. bor_self.current = self
+    let {f0'0 = x; f1'0 = _prod} = args in forall bor_self: MutBorrow.t closure0. bor_self.current = self
       -> closure0'pre bor_self x _prod
   
   meta "rewrite_def" predicate precondition_closure0
   
   predicate panic_condition_closure0 (self: closure0) (args: tup2_u32_Snapshot_Seq_u32) =
-    let {f0 = x; f1 = _prod} = args in false
+    let {f0'0 = x; f1'0 = _prod} = args in false
   
   meta "rewrite_def" predicate panic_condition_closure0
   
@@ -484,8 +490,8 @@ module M_counter
   predicate next_precondition_I (iter'0: t_I) (func'0: closure0) (produced'0: Seq.seq UInt32.t) =
     forall e: UInt32.t, i: t_I [produces_I iter'0 (Seq.singleton e) i]. inv_u32 e
         /\ produces_I iter'0 (Seq.singleton e) i
-      -> precondition_closure0 func'0 { f0 = e; f1 = produced'0 }
-      /\ not panic_condition_closure0 func'0 { f0 = e; f1 = produced'0 }
+      -> precondition_closure0 func'0 { f0'0 = e; f1'0 = produced'0 }
+      /\ not panic_condition_closure0 func'0 { f0'0 = e; f1'0 = produced'0 }
   
   predicate inv_Seq_u32 [@inline:trivial] (_1: Seq.seq UInt32.t) = true
   
@@ -500,23 +506,23 @@ module M_counter
         /\ inv_u32 e1 /\ inv_u32 e2 /\ inv_refmut_closure0 f
       -> hist_inv_closure0 func'0 f.current
       -> produces_I iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
-      -> postcondition_mut_closure0 f.current { f0 = e1; f1 = s } f.final b
-      -> precondition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
-      /\ not panic_condition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
+      -> postcondition_mut_closure0 f.current { f0'0 = e1; f1'0 = s } f.final b
+      -> precondition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc s e1 }
+      /\ not panic_condition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc s e1 }
   
   predicate reinitialize_I =
     forall iter'0: MutBorrow.t t_I, func'0: closure0. completed_I iter'0
       -> next_precondition_I iter'0.final func'0 (Seq.empty: Seq.seq UInt32.t) /\ preservation_I iter'0.final func'0
   
   predicate preservation_inv_I (iter'0: t_I) (func'0: closure0) (produced'0: Seq.seq UInt32.t) =
-    forall s: Seq.seq UInt32.t, e1: UInt32.t, e2: UInt32.t, f: MutBorrow.t closure0, b: UInt32.t, i: t_I [produces_I iter'0 (Seq.snoc (Seq.snoc s e1) e2) i, postcondition_mut_closure0 f.current { f0 = e1;
-                                                                                                                                                                                                    f1 = Seq.(++) produced'0 s } f.final b]. inv_Seq_u32 s
+    forall s: Seq.seq UInt32.t, e1: UInt32.t, e2: UInt32.t, f: MutBorrow.t closure0, b: UInt32.t, i: t_I [produces_I iter'0 (Seq.snoc (Seq.snoc s e1) e2) i, postcondition_mut_closure0 f.current { f0'0 = e1;
+                                                                                                                                                                                                    f1'0 = Seq.(++) produced'0 s } f.final b]. inv_Seq_u32 s
         /\ inv_u32 e1 /\ inv_u32 e2 /\ inv_refmut_closure0 f
       -> hist_inv_closure0 func'0 f.current
       -> produces_I iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
-      -> postcondition_mut_closure0 f.current { f0 = e1; f1 = Seq.(++) produced'0 s } f.final b
-      -> precondition_closure0 f.final { f0 = e2; f1 = Seq.snoc (Seq.(++) produced'0 s) e1 }
-      /\ not panic_condition_closure0 f.final { f0 = e2; f1 = Seq.snoc (Seq.(++) produced'0 s) e1 }
+      -> postcondition_mut_closure0 f.current { f0'0 = e1; f1'0 = Seq.(++) produced'0 s } f.final b
+      -> precondition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc (Seq.(++) produced'0 s) e1 }
+      /\ not panic_condition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc (Seq.(++) produced'0 s) e1 }
   
   axiom preservation_inv_I_spec:
     forall iter'0: t_I, func'0: closure0, produced'0: Seq.seq UInt32.t [preservation_inv_I iter'0 func'0 produced'0]. produced'0
@@ -535,8 +541,8 @@ module M_counter
   {[@stop_split] [@expl:map_I requires] ([@stop_split] [@expl:map 'iter' type invariant] inv_I iter'0)
     /\ ([@stop_split] [@expl:map requires #0] forall e: UInt32.t, i2: t_I. produces_I iter'0 (Seq.singleton e) i2
           /\ inv_u32 e
-        -> precondition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t }
-        /\ not panic_condition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t })
+        -> precondition_closure0 func'0 { f0'0 = e; f1'0 = Seq.empty: Seq.seq UInt32.t }
+        /\ not panic_condition_closure0 func'0 { f0'0 = e; f1'0 = Seq.empty: Seq.seq UInt32.t })
     /\ ([@stop_split] [@expl:map requires #1] reinitialize_I)
     /\ ([@stop_split] [@expl:map requires #2] preservation_I iter'0 func'0)}
     any
@@ -4842,7 +4848,9 @@ module M_increment
   
   meta "rewrite_def" predicate resolve_refmut_closure0
   
-  type tup2_u32_Snapshot_Seq_u32 = { f0: UInt32.t; f1: Seq.seq UInt32.t }
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
+  type tup2_u32_Snapshot_Seq_u32 = { f0'0: UInt32.t; f1'0: Seq.seq UInt32.t }
   
   predicate resolve_closure0 [@inline:trivial] (_1: ()) = true
   
@@ -4854,8 +4862,14 @@ module M_increment
   bb0
     [ bb0 = s0
       [ s0 = -{resolve_refmut_closure0 self}- s1
-      | s1 = UInt32.add {x} {(1: UInt32.t)} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s2)
-      | s2 = return {_ret} ] ] [ & _ret: UInt32.t = Any.any_l () | & self: MutBorrow.t () = self | & x: UInt32.t = x ]
+      | s1 = [ &_5 <- let (_fst, _snd) = UInt32.add_with_overflow x (1: UInt32.t) in { f0 = _fst; f1 = _snd } ] s2
+      | s2 = {[@expl:Add overflow] not _5.f1} s3
+      | s3 = [ &_ret <- _5.f0 ] s4
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & self: MutBorrow.t () = self
+    | & x: UInt32.t = x
+    | & _5: tup2_u32_bool = Any.any_l () ]
     [ return (result: UInt32.t) ->
     {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
       return {result} ]
@@ -4865,13 +4879,13 @@ module M_increment
   meta "rewrite_def" predicate closure0'post'return
   
   predicate postcondition_once_closure0 (self: ()) (args: tup2_u32_Snapshot_Seq_u32) (result: UInt32.t) =
-    let {f0 = x; f1 = _1} = args in exists e: (). exists bor_self: MutBorrow.t (). bor_self.current = self
+    let {f0'0 = x; f1'0 = _1} = args in exists e: (). exists bor_self: MutBorrow.t (). bor_self.current = self
         /\ bor_self.final = e /\ closure0'post'return bor_self x _1 result /\ hist_inv_closure0 self e
   
   meta "rewrite_def" predicate postcondition_once_closure0
   
   predicate postcondition_mut_closure0 (self: ()) (args: tup2_u32_Snapshot_Seq_u32) (result_state: ()) (result: UInt32.t) =
-    let {f0 = x; f1 = _1} = args in exists bor_self: MutBorrow.t (). bor_self.current = self
+    let {f0'0 = x; f1'0 = _1} = args in exists bor_self: MutBorrow.t (). bor_self.current = self
       /\ bor_self.final = result_state
       /\ closure0'post'return bor_self x _1 result /\ hist_inv_closure0 self result_state
   
@@ -4922,13 +4936,13 @@ module M_increment
   meta "rewrite_def" predicate inv_u32
   
   predicate precondition_closure0 (self: ()) (args: tup2_u32_Snapshot_Seq_u32) =
-    let {f0 = x; f1 = _1} = args in forall bor_self: MutBorrow.t (). bor_self.current = self
+    let {f0'0 = x; f1'0 = _1} = args in forall bor_self: MutBorrow.t (). bor_self.current = self
       -> closure0'pre bor_self x _1
   
   meta "rewrite_def" predicate precondition_closure0
   
   predicate panic_condition_closure0 (self: ()) (args: tup2_u32_Snapshot_Seq_u32) =
-    let {f0 = x; f1 = _1} = args in false
+    let {f0'0 = x; f1'0 = _1} = args in false
   
   meta "rewrite_def" predicate panic_condition_closure0
   
@@ -4937,8 +4951,8 @@ module M_increment
   predicate next_precondition_U (iter'0: t_U) (func'0: ()) (produced'0: Seq.seq UInt32.t) =
     forall e: UInt32.t, i: t_U [produces_U iter'0 (Seq.singleton e) i]. inv_u32 e
         /\ produces_U iter'0 (Seq.singleton e) i
-      -> precondition_closure0 func'0 { f0 = e; f1 = produced'0 }
-      /\ not panic_condition_closure0 func'0 { f0 = e; f1 = produced'0 }
+      -> precondition_closure0 func'0 { f0'0 = e; f1'0 = produced'0 }
+      /\ not panic_condition_closure0 func'0 { f0'0 = e; f1'0 = produced'0 }
   
   predicate inv_Seq_u32 [@inline:trivial] (_1: Seq.seq UInt32.t) = true
   
@@ -4953,23 +4967,23 @@ module M_increment
         /\ inv_u32 e1 /\ inv_u32 e2 /\ inv_refmut_closure0 f
       -> hist_inv_closure0 func'0 f.current
       -> produces_U iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
-      -> postcondition_mut_closure0 f.current { f0 = e1; f1 = s } f.final b
-      -> precondition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
-      /\ not panic_condition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
+      -> postcondition_mut_closure0 f.current { f0'0 = e1; f1'0 = s } f.final b
+      -> precondition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc s e1 }
+      /\ not panic_condition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc s e1 }
   
   predicate reinitialize_U =
     forall iter'0: MutBorrow.t t_U, func'0: (). completed_U iter'0
       -> next_precondition_U iter'0.final func'0 (Seq.empty: Seq.seq UInt32.t) /\ preservation_U iter'0.final func'0
   
   predicate preservation_inv_U (iter'0: t_U) (func'0: ()) (produced'0: Seq.seq UInt32.t) =
-    forall s: Seq.seq UInt32.t, e1: UInt32.t, e2: UInt32.t, f: MutBorrow.t (), b: UInt32.t, i: t_U [produces_U iter'0 (Seq.snoc (Seq.snoc s e1) e2) i, postcondition_mut_closure0 f.current { f0 = e1;
-                                                                                                                                                                                              f1 = Seq.(++) produced'0 s } f.final b]. inv_Seq_u32 s
+    forall s: Seq.seq UInt32.t, e1: UInt32.t, e2: UInt32.t, f: MutBorrow.t (), b: UInt32.t, i: t_U [produces_U iter'0 (Seq.snoc (Seq.snoc s e1) e2) i, postcondition_mut_closure0 f.current { f0'0 = e1;
+                                                                                                                                                                                              f1'0 = Seq.(++) produced'0 s } f.final b]. inv_Seq_u32 s
         /\ inv_u32 e1 /\ inv_u32 e2 /\ inv_refmut_closure0 f
       -> hist_inv_closure0 func'0 f.current
       -> produces_U iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
-      -> postcondition_mut_closure0 f.current { f0 = e1; f1 = Seq.(++) produced'0 s } f.final b
-      -> precondition_closure0 f.final { f0 = e2; f1 = Seq.snoc (Seq.(++) produced'0 s) e1 }
-      /\ not panic_condition_closure0 f.final { f0 = e2; f1 = Seq.snoc (Seq.(++) produced'0 s) e1 }
+      -> postcondition_mut_closure0 f.current { f0'0 = e1; f1'0 = Seq.(++) produced'0 s } f.final b
+      -> precondition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc (Seq.(++) produced'0 s) e1 }
+      /\ not panic_condition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc (Seq.(++) produced'0 s) e1 }
   
   axiom preservation_inv_U_spec:
     forall iter'0: t_U, func'0: (), produced'0: Seq.seq UInt32.t [preservation_inv_U iter'0 func'0 produced'0]. produced'0
@@ -4988,8 +5002,8 @@ module M_increment
   {[@stop_split] [@expl:map_U requires] ([@stop_split] [@expl:map 'iter' type invariant] inv_U iter'0)
     /\ ([@stop_split] [@expl:map requires #0] forall e: UInt32.t, i2: t_U. produces_U iter'0 (Seq.singleton e) i2
           /\ inv_u32 e
-        -> precondition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t }
-        /\ not panic_condition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t })
+        -> precondition_closure0 func'0 { f0'0 = e; f1'0 = Seq.empty: Seq.seq UInt32.t }
+        /\ not panic_condition_closure0 func'0 { f0'0 = e; f1'0 = Seq.empty: Seq.seq UInt32.t })
     /\ ([@stop_split] [@expl:map requires #1] reinitialize_U)
     /\ ([@stop_split] [@expl:map requires #2] preservation_U iter'0 func'0)}
     any
@@ -5020,8 +5034,8 @@ module M_increment
           )
         /\ (forall i: int. 0 <= i /\ i < Seq.length visited
           -> hist_inv_closure0 self.func (Seq.get fs i).current
-          /\ postcondition_mut_closure0 (Seq.get fs i).current { f0 = Seq.get s i;
-                                                                 f1 = Seq.(++) self.produced (Seq.([..]) s 0 i) } (Seq.get fs i).final (Seq.get visited i))))
+          /\ postcondition_mut_closure0 (Seq.get fs i).current { f0'0 = Seq.get s i;
+                                                                 f1'0 = Seq.(++) self.produced (Seq.([..]) s 0 i) } (Seq.get fs i).final (Seq.get visited i))))
   
   meta "rewrite_def" predicate produces_Map_U_closure0
   

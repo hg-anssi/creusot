@@ -260,11 +260,13 @@ module M_counter
   
   type closure0 = { c0: MutBorrow.t UInt64.t }
   
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
   predicate resolve_refmut_closure0 [@inline:trivial] (_1: MutBorrow.t closure0) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure0
   
-  type tup2_ref_u32_Snapshot_Seq_ref_u32 = { f0: UInt32.t; f1: Seq.seq UInt32.t }
+  type tup2_ref_u32_Snapshot_Seq_ref_u32 = { f0'0: UInt32.t; f1'0: Seq.seq UInt32.t }
   
   predicate resolve_refmut_usize [@inline:trivial] (_1: MutBorrow.t UInt64.t) = _1.final = _1.current
   
@@ -280,15 +282,19 @@ module M_counter
     (return (x'0: UInt32.t)) = bb0
     [ bb0 = s0
       [ s0 = {[@expl:assertion] UInt64.t'int self.current.c0.current = Seq.length _prod} s1
-      | s1 = UInt64.add {self.current.c0.current} {(1: UInt64.t)}
-          (fun (_x: UInt64.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s2)
-      | s2 = -{resolve_refmut_closure0 self}- s3
-      | s3 = [ &_ret <- x ] s4
-      | s4 = return {_ret} ] ]
+      | s1 = [ &_8 <- let (_fst, _snd) = UInt64.add_with_overflow self.current.c0.current (1: UInt64.t) in { f0 = _fst;
+                                                                                                             f1 = _snd } ]
+        s2
+      | s2 = {[@expl:Add overflow] not _8.f1} s3
+      | s3 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _8.f0 } } } ] s4
+      | s4 = -{resolve_refmut_closure0 self}- s5
+      | s5 = [ &_ret <- x ] s6
+      | s6 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & self: MutBorrow.t closure0 = self
     | & x: UInt32.t = x
-    | & _prod: Seq.seq UInt32.t = _prod ]
+    | & _prod: Seq.seq UInt32.t = _prod
+    | & _8: tup2_usize_bool = Any.any_l () ]
     [ return (result: UInt32.t) ->
     {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
       return {result} ]
@@ -298,7 +304,7 @@ module M_counter
   meta "rewrite_def" predicate closure0'post'return
   
   predicate postcondition_once_closure0 (self: closure0) (args: tup2_ref_u32_Snapshot_Seq_ref_u32) (result: UInt32.t) =
-    let {f0 = x; f1 = _prod} = args in exists e: closure0. (exists bor_self: MutBorrow.t closure0. bor_self.current
+    let {f0'0 = x; f1'0 = _prod} = args in exists e: closure0. (exists bor_self: MutBorrow.t closure0. bor_self.current
             = self
           /\ bor_self.final = e /\ closure0'post'return bor_self x _prod result /\ hist_inv_closure0 self e)
       /\ resolve_closure0 e
@@ -306,7 +312,7 @@ module M_counter
   meta "rewrite_def" predicate postcondition_once_closure0
   
   predicate postcondition_mut_closure0 (self: closure0) (args: tup2_ref_u32_Snapshot_Seq_ref_u32) (result_state: closure0) (result: UInt32.t) =
-    let {f0 = x; f1 = _prod} = args in exists bor_self: MutBorrow.t closure0. bor_self.current = self
+    let {f0'0 = x; f1'0 = _prod} = args in exists bor_self: MutBorrow.t closure0. bor_self.current = self
       /\ bor_self.final = result_state
       /\ closure0'post'return bor_self x _prod result /\ hist_inv_closure0 self result_state
   
@@ -381,13 +387,13 @@ module M_counter
   meta "rewrite_def" predicate inv_ref_u32
   
   predicate precondition_closure0 (self: closure0) (args: tup2_ref_u32_Snapshot_Seq_ref_u32) =
-    let {f0 = x; f1 = _prod} = args in forall bor_self: MutBorrow.t closure0. bor_self.current = self
+    let {f0'0 = x; f1'0 = _prod} = args in forall bor_self: MutBorrow.t closure0. bor_self.current = self
       -> closure0'pre bor_self x _prod
   
   meta "rewrite_def" predicate precondition_closure0
   
   predicate panic_condition_closure0 (self: closure0) (args: tup2_ref_u32_Snapshot_Seq_ref_u32) =
-    let {f0 = x; f1 = _prod} = args in false
+    let {f0'0 = x; f1'0 = _prod} = args in false
   
   meta "rewrite_def" predicate panic_condition_closure0
   
@@ -400,8 +406,8 @@ module M_counter
   
   predicate next_precondition_Iter_u32 [@inline:trivial] (iter'0: t_Iter_u32) (func'0: closure0) (produced'0: Seq.seq UInt32.t) =
     forall e: UInt32.t, i: t_Iter_u32. inv_ref_u32 e /\ produces_Iter_u32 iter'0 (Seq.singleton e) i
-      -> precondition_closure0 func'0 { f0 = e; f1 = produced'0 }
-      /\ not panic_condition_closure0 func'0 { f0 = e; f1 = produced'0 }
+      -> precondition_closure0 func'0 { f0'0 = e; f1'0 = produced'0 }
+      /\ not panic_condition_closure0 func'0 { f0'0 = e; f1'0 = produced'0 }
   
   meta "rewrite_def" predicate next_precondition_Iter_u32
   
@@ -417,9 +423,9 @@ module M_counter
     forall s: Seq.seq UInt32.t, e1: UInt32.t, e2: UInt32.t, f: MutBorrow.t closure0, b: UInt32.t, i: t_Iter_u32. hist_inv_closure0 func'0 f.current
       -> inv_Seq_ref_u32 s /\ inv_ref_u32 e1 /\ inv_ref_u32 e2 /\ inv_refmut_closure0 f
       -> produces_Iter_u32 iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
-      -> postcondition_mut_closure0 f.current { f0 = e1; f1 = s } f.final b
-      -> precondition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
-      /\ not panic_condition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
+      -> postcondition_mut_closure0 f.current { f0'0 = e1; f1'0 = s } f.final b
+      -> precondition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc s e1 }
+      /\ not panic_condition_closure0 f.final { f0'0 = e2; f1'0 = Seq.snoc s e1 }
   
   meta "rewrite_def" predicate preservation_Iter_u32
   
@@ -452,8 +458,8 @@ module M_counter
   {[@stop_split] [@expl:map_inv_Iter_u32 requires] ([@stop_split] [@expl:map_inv 'self' type invariant] inv_Iter_u32 self)
     /\ ([@stop_split] [@expl:map_inv requires #0] forall e: UInt32.t, i2: t_Iter_u32. produces_Iter_u32 self (Seq.singleton e) i2
           /\ inv_ref_u32 e
-        -> precondition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t }
-        /\ not panic_condition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t })
+        -> precondition_closure0 func'0 { f0'0 = e; f1'0 = Seq.empty: Seq.seq UInt32.t }
+        /\ not panic_condition_closure0 func'0 { f0'0 = e; f1'0 = Seq.empty: Seq.seq UInt32.t })
     /\ ([@stop_split] [@expl:map_inv requires #1] reinitialize_Iter_u32)
     /\ ([@stop_split] [@expl:map_inv requires #2] preservation_Iter_u32 self func'0)}
     any
@@ -556,8 +562,8 @@ module M_counter
           )
         /\ (forall i: int. 0 <= i /\ i < Seq.length visited
           -> hist_inv_closure0 self.func (Seq.get fs i).current
-          /\ postcondition_mut_closure0 (Seq.get fs i).current { f0 = Seq.get s i;
-                                                                 f1 = Seq.(++) self.produced (Seq.([..]) s 0 i) } (Seq.get fs i).final (Seq.get visited i))))
+          /\ postcondition_mut_closure0 (Seq.get fs i).current { f0'0 = Seq.get s i;
+                                                                 f1'0 = Seq.(++) self.produced (Seq.([..]) s 0 i) } (Seq.get fs i).final (Seq.get visited i))))
   
   meta "rewrite_def" predicate produces_MapInv_Iter_u32_closure0
   
@@ -585,7 +591,11 @@ module M_counter
     forall x: t_MapInv_Iter_u32_closure0 [resolve_MapInv_Iter_u32_closure0 x]. resolve_MapInv_Iter_u32_closure0 x
       = (resolve_Iter_u32 x.iter /\ resolve_closure0 x.func)
   
-  let from_iter_Vec_u32_Global (iter'0: t_MapInv_Iter_u32_closure0) (return (x: t_Vec_u32_Global)) =
+  predicate panic_condition_into_iter (self: ()) (args: t_MapInv_Iter_u32_closure0) = let self_ = args in false
+  
+  meta "rewrite_def" predicate panic_condition_into_iter
+  
+  let from_iter_Vec_u32_Global (iter'0: t_MapInv_Iter_u32_closure0) (panic) (return (x: t_Vec_u32_Global)) =
   {[@stop_split] [@expl:from_iter_Vec_u32_Global requires] ([@stop_split] [@expl:from_iter 'iter' type invariant] inv_MapInv_Iter_u32_closure0 iter'0)
     /\ ([@stop_split] [@expl:from_iter requires] precondition_into_iter () iter'0)}
     any
@@ -593,7 +603,8 @@ module M_counter
     {[@stop_split] [@expl:from_iter ensures] exists into_iter: t_MapInv_Iter_u32_closure0, done': MutBorrow.t t_MapInv_Iter_u32_closure0. postcondition_into_iter () iter'0 into_iter
         /\ produces_MapInv_Iter_u32_closure0 into_iter (view_Vec_u32_Global result) done'.current
         /\ completed_MapInv_Iter_u32_closure0 done' /\ resolve_MapInv_Iter_u32_closure0 done'.final}
-      (! return {result}) ]
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:from_iter may_panic] panic_condition_into_iter () iter'0} (! panic) ]
   
   predicate postcondition_once_from_iter (self: ()) (args: t_MapInv_Iter_u32_closure0) (result: t_Vec_u32_Global) =
     let iter'0 = args in exists into_iter: t_MapInv_Iter_u32_closure0, done': MutBorrow.t t_MapInv_Iter_u32_closure0. postcondition_into_iter () iter'0 into_iter
@@ -1199,14 +1210,21 @@ module M_my_reverse
         end}
       any) ]
   
-  let swap_T (self_: MutBorrow.t (Slice64.slice t_T)) (i: UInt64.t) (j: UInt64.t) (return (x: ())) =
-  {[@stop_split] [@expl:swap_T requires] ([@stop_split] [@expl:swap 'self_' type invariant] inv_refmut_slice_T self_)
-    /\ ([@stop_split] [@expl:swap requires #0] UInt64.t'int i < Seq.length (Slice64.view self_.current))
-    /\ ([@stop_split] [@expl:swap requires #1] UInt64.t'int j < Seq.length (Slice64.view self_.current))}
+  type tup2_usize_bool = { f0'0: UInt64.t; f1'0: bool }
+  
+  let swap_T (self_: MutBorrow.t (Slice64.slice t_T)) (i: UInt64.t) (j: UInt64.t) (panic) (return (x: ())) =
+  {[@stop_split] [@expl:swap 'self_' type invariant] inv_refmut_slice_T self_}
     any
     [ return (result: ()) ->
-    {[@stop_split] [@expl:swap ensures] Permut.exchange (Slice64.view self_.final) (Slice64.view self_.current) (UInt64.t'int i) (UInt64.t'int j)}
-      (! return {result}) ]
+    {[@stop_split] [@expl:swap_T ensures] ([@stop_split] [@expl:swap ensures #0] not UInt64.t'int i
+        >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #1] not UInt64.t'int j >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #2] Permut.exchange (Slice64.view self_.final) (Slice64.view self_.current) (UInt64.t'int i) (UInt64.t'int j))}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:swap_T may_panic] ([@stop_split] [@expl:swap may_panic #0] UInt64.t'int i
+        >= Seq.length (Slice64.view self_.current))
+      \/ ([@stop_split] [@expl:swap may_panic #1] UInt64.t'int j >= Seq.length (Slice64.view self_.current))}
+      (! panic) ]
   
   predicate resolve_Zip_Range_usize_Range_usize (_1: t_Zip_Range_usize_Range_usize)
   
@@ -1272,22 +1290,27 @@ module M_my_reverse
           | s1 = [ &produced <- Seq.(++) produced (Seq.singleton __creusot_proc_iter_elem) ] s2
           | s2 = [ &i <- __creusot_proc_iter_elem.f0 ] s3
           | s3 = [ &j <- __creusot_proc_iter_elem.f1 ] s4
-          | s4 = UInt64.sub {n} {j} (fun (_x: UInt64.t) -> [ &_68 <- _x ] s5)
-          | s5 = UInt64.sub {_68} {(1: UInt64.t)} (fun (_x: UInt64.t) -> [ &_67 <- _x ] s6)
-          | s6 = MutBorrow.borrow_mut <Slice64.slice t_T> {slice.current}
+          | s4 = [ &_71 <- let (_fst, _snd) = UInt64.sub_with_overflow n j in { f0'0 = _fst; f1'0 = _snd } ] s5
+          | s5 = {[@expl:Sub overflow] not _71.f1'0} s6
+          | s6 = [ &_72 <- let (_fst, _snd) = UInt64.sub_with_overflow _71.f0'0 (1: UInt64.t) in { f0'0 = _fst;
+                                                                                                   f1'0 = _snd } ] s7
+          | s7 = {[@expl:Sub overflow] not _72.f1'0} s8
+          | s8 = MutBorrow.borrow_mut <Slice64.slice t_T> {slice.current}
               (fun (_bor: MutBorrow.t (Slice64.slice t_T)) ->
                 [ &_65 <- _bor ] -{inv_slice_T _bor.final}-
-                [ &slice <- { slice with current = _bor.final } ] s7)
+                [ &slice <- { slice with current = _bor.final } ] s9)
             [ _ck -> (! {[@expl:type invariant] inv_slice_T slice.current} any) ]
-          | s7 = swap_T {_65} {i} {_67} (fun (_x: ()) -> [ &_64 <- _x ] s8)
-          | s8 = {[@expl:assertion] i = j} s9
-          | s9 = {[@expl:assertion] Seq.get (Slice64.view slice.current) (UInt64.t'int i)
+          | s9 = swap_T {_65} {i} {_72.f0'0}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: ()) -> [ &_64 <- _x ] s10)
+          | s10 = {[@expl:assertion] i = j} s11
+          | s11 = {[@expl:assertion] Seq.get (Slice64.view slice.current) (UInt64.t'int i)
             = Seq.get old_v (UInt64.t'int n - UInt64.t'int j - 1)}
-            s10
-          | s10 = {[@expl:assertion] Seq.get (Slice64.view slice.current) (UInt64.t'int n - UInt64.t'int j - 1)
+            s12
+          | s12 = {[@expl:assertion] Seq.get (Slice64.view slice.current) (UInt64.t'int n - UInt64.t'int j - 1)
             = Seq.get old_v (UInt64.t'int i)}
-            s11
-          | s11 = bb9 ] ] ]
+            s13
+          | s13 = bb9 ] ] ]
     | bb14 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_Zip_Range_usize_Range_usize iter} any) ]
       | s1 = -{resolve_Zip_Range_usize_Range_usize iter}- s2
@@ -1316,8 +1339,8 @@ module M_my_reverse
     | & j: UInt64.t = Any.any_l ()
     | & _64: () = Any.any_l ()
     | & _65: MutBorrow.t (Slice64.slice t_T) = Any.any_l ()
-    | & _67: UInt64.t = Any.any_l ()
-    | & _68: UInt64.t = Any.any_l ()
+    | & _71: tup2_usize_bool = Any.any_l ()
+    | & _72: tup2_usize_bool = Any.any_l ()
     | & _old: Slice64.slice t_T = Any.any_l () ])
     [ return (result: ()) ->
     {[@stop_split] [@expl:my_reverse ensures] Seq.(==) (Slice64.view slice.final) (Reverse.reverse (Slice64.view slice.current))}
@@ -1705,6 +1728,8 @@ module M_slice_iter
         end}
       any) ]
   
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
   predicate resolve_Iter_T (_1: t_Iter_T)
   
   meta "compute_max_steps" 1000000
@@ -1743,8 +1768,10 @@ module M_slice_iter
         [ bb11 = s0
           [ s0 = elim_Some {_29} (fun (r0: t_T) -> [ &__creusot_proc_iter_elem <- r0 ] s1)
           | s1 = [ &produced <- Seq.(++) produced (Seq.singleton __creusot_proc_iter_elem) ] s2
-          | s2 = UInt64.add {i} {(1: UInt64.t)} (fun (_x: UInt64.t) -> [ &i <- _x ] s3)
-          | s3 = bb5 ] ] ]
+          | s2 = [ &_39 <- let (_fst, _snd) = UInt64.add_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s3
+          | s3 = {[@expl:Add overflow] not _39.f1} s4
+          | s4 = [ &i <- _39.f0 ] s5
+          | s5 = bb5 ] ] ]
     | bb10 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_Iter_T iter} any) ]
       | s1 = -{resolve_Iter_T iter}- s2
@@ -1760,7 +1787,8 @@ module M_slice_iter
     | & _29: t_Option_ref_T = Any.any_l ()
     | & _30: MutBorrow.t t_Iter_T = Any.any_l ()
     | & _31: MutBorrow.t t_Iter_T = Any.any_l ()
-    | & __creusot_proc_iter_elem: t_T = Any.any_l () ])
+    | & __creusot_proc_iter_elem: t_T = Any.any_l ()
+    | & _39: tup2_usize_bool = Any.any_l () ])
     [ return (result: UInt64.t) -> {[@stop_split] [@expl:slice_iter ensures] UInt64.t'int result
       = Seq.length (Slice64.view slice)}
       (! return {result}) ]
@@ -1873,6 +1901,8 @@ module M_sum_range
         end}
       any) ]
   
+  type tup2_isize_bool = { f0: Int64.t; f1: bool }
+  
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
@@ -1901,8 +1931,10 @@ module M_sum_range
         [ bb10 = s0
           [ s0 = elim_Some {_30} (fun (r0: Int64.t) -> [ &__creusot_proc_iter_elem <- r0 ] s1)
           | s1 = [ &produced <- Seq.(++) produced (Seq.singleton __creusot_proc_iter_elem) ] s2
-          | s2 = Int64.add {i} {(1: Int64.t)} (fun (_x: Int64.t) -> [ &i <- _x ] s3)
-          | s3 = bb4 ] ] ]
+          | s2 = [ &_40 <- let (_fst, _snd) = Int64.add_with_overflow i (1: Int64.t) in { f0 = _fst; f1 = _snd } ] s3
+          | s3 = {[@expl:Add overflow] not _40.f1} s4
+          | s4 = [ &i <- _40.f0 ] s5
+          | s5 = bb4 ] ] ]
     | bb9 = s0 [ s0 = [ &_ret <- i ] s1 | s1 = return {_ret} ] ]
     [ & _ret: Int64.t = Any.any_l ()
     | & n: Int64.t = n
@@ -1914,7 +1946,8 @@ module M_sum_range
     | & _30: t_Option_isize = Any.any_l ()
     | & _31: MutBorrow.t t_Range_isize = Any.any_l ()
     | & _32: MutBorrow.t t_Range_isize = Any.any_l ()
-    | & __creusot_proc_iter_elem: Int64.t = Any.any_l () ])
+    | & __creusot_proc_iter_elem: Int64.t = Any.any_l ()
+    | & _40: tup2_isize_bool = Any.any_l () ])
     [ return (result: Int64.t) -> {[@stop_split] [@expl:sum_range ensures] result = n} (! return {result}) ]
 end
 module M_vec_iter
@@ -2071,6 +2104,8 @@ module M_vec_iter
         end}
       any) ]
   
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
   predicate resolve_Iter_T (_1: t_Iter_T)
   
   meta "compute_max_steps" 1000000
@@ -2108,8 +2143,10 @@ module M_vec_iter
         [ bb10 = s0
           [ s0 = elim_Some {_28} (fun (r0: t_T) -> [ &__creusot_proc_iter_elem <- r0 ] s1)
           | s1 = [ &produced <- Seq.(++) produced (Seq.singleton __creusot_proc_iter_elem) ] s2
-          | s2 = UInt64.add {i} {(1: UInt64.t)} (fun (_x: UInt64.t) -> [ &i <- _x ] s3)
-          | s3 = bb4 ] ] ]
+          | s2 = [ &_38 <- let (_fst, _snd) = UInt64.add_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s3
+          | s3 = {[@expl:Add overflow] not _38.f1} s4
+          | s4 = [ &i <- _38.f0 ] s5
+          | s5 = bb4 ] ] ]
     | bb9 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_Iter_T iter} any) ]
       | s1 = -{resolve_Iter_T iter}- s2
@@ -2124,7 +2161,8 @@ module M_vec_iter
     | & _28: t_Option_ref_T = Any.any_l ()
     | & _29: MutBorrow.t t_Iter_T = Any.any_l ()
     | & _30: MutBorrow.t t_Iter_T = Any.any_l ()
-    | & __creusot_proc_iter_elem: t_T = Any.any_l () ])
+    | & __creusot_proc_iter_elem: t_T = Any.any_l ()
+    | & _38: tup2_usize_bool = Any.any_l () ])
     [ return (result: UInt64.t) -> {[@stop_split] [@expl:vec_iter ensures] UInt64.t'int result
       = Seq.length (view_Vec_T_Global vec)}
       (! return {result}) ]

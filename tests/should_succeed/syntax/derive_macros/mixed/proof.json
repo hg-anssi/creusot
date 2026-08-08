@@ -18,7 +18,7 @@
     },
     "M_impl_Clone_for_Sum2_A_B__clone": {
       "vc_clone_A": { "prover": "cvc5", "time": 0.026 },
-      "vc_clone_B": { "prover": "cvc5", "time": 0.013 },
+      "vc_clone_B": { "prover": "cvc5", "time": 0.026 },
       "vc_clone_Sum2_A_B": { "prover": "cvc5", "time": 0.021 },
       "vc_clone_bool": { "prover": "cvc5", "time": 0.023 },
       "vc_elim_X": { "prover": "cvc5", "time": 0.014 },

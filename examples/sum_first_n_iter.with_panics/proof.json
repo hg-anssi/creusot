@@ -5,7 +5,7 @@
       "vc_closure0": { "prover": "alt-ergo", "time": 0.014 },
       "vc_collect_MapInv_RangeInclusive_usize_closure0": {
         "prover": "alt-ergo",
-        "time": 0.024
+        "time": 0.008
       },
       "vc_from_iter_unit": { "prover": "alt-ergo", "time": 0.025 },
       "vc_into_iter_MapInv_RangeInclusive_usize_closure0": {
@@ -16,7 +16,7 @@
         "prover": "alt-ergo",
         "time": 0.025
       },
-      "vc_new_usize": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_new_usize": { "prover": "alt-ergo", "time": 0.021 },
       "vc_sum_first_n_iter": {
         "tactic": "compute_specified",
         "children": [

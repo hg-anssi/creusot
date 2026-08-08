@@ -19,7 +19,7 @@
       "vc_simple_T": { "prover": "cvc5", "time": 0.012 }
     },
     "M_swapper": { "vc_swapper_T": { "prover": "cvc5", "time": 0.012 } },
-    "M_temp_move": { "vc_temp_move_T": { "prover": "cvc5", "time": 0.026 } },
+    "M_temp_move": { "vc_temp_move_T": { "prover": "cvc5", "time": 0.008 } },
     "M_tuple": { "vc_tuple_T": { "prover": "cvc5", "time": 0.021 } },
     "M_y": {
       "vc_index_mut_Vec_i32_Global": { "prover": "cvc5", "time": 0.015 },

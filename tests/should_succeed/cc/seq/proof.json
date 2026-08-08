@@ -10,7 +10,7 @@
       "vc_deref_Ghost_Int": { "prover": "cvc5", "time": 0.018 },
       "vc_f": { "prover": "cvc5", "time": 0.032 },
       "vc_get_mut_ghost_refmut_usize": { "prover": "cvc5", "time": 0.017 },
-      "vc_into_inner_Seq_refmut_usize": { "prover": "cvc5", "time": 0.01 },
+      "vc_into_inner_Seq_refmut_usize": { "prover": "cvc5", "time": 0.02 },
       "vc_new": { "prover": "cvc5", "time": 0.014 },
       "vc_new_refmut_usize": { "prover": "cvc5", "time": 0.013 },
       "vc_new_usize": { "prover": "cvc5", "time": 0.015 },

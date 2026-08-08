@@ -1378,11 +1378,12 @@ module M_implementation__find_inner
   let unwrap_ref_Box_Perm_ptr_Node_T_Global (self_: t_Option_ref_Box_Perm_ptr_Node_T_Global)
     (return (x: t_Perm_ptr_Node_T)) =
   {[@stop_split] [@expl:unwrap_ref_Box_Perm_ptr_Node_T_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_ref_Box_Perm_ptr_Node_T_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: t_Perm_ptr_Node_T) ->
     {[@stop_split] [@expl:unwrap_ref_Box_Perm_ptr_Node_T_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_ref_Box_Perm_ptr_Node_T_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate invariant_ref_Perm_ptr_Node_T [@inline:trivial] (self: t_Perm_ptr_Node_T) = inv_Perm_ptr_Node_T self
@@ -1632,11 +1633,12 @@ module M_implementation__find_inner
   let unwrap_refmut_Box_Perm_ptr_Node_T_Global (self_: t_Option_refmut_Box_Perm_ptr_Node_T_Global)
     (return (x: MutBorrow.t t_Perm_ptr_Node_T)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Perm_ptr_Node_T_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Perm_ptr_Node_T_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'1)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'1)}
     any
     [ return (result: MutBorrow.t t_Perm_ptr_Node_T) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Perm_ptr_Node_T_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Perm_ptr_Node_T_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'1 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_refmut_UFInner_T [@inline:trivial] (_1: MutBorrow.t (MutBorrow.t t_UFInner_T)) =
@@ -2217,11 +2219,12 @@ module M_implementation__get
   let unwrap_ref_Box_Perm_ptr_Node_T_Global (self_: t_Option_ref_Box_Perm_ptr_Node_T_Global)
     (return (x: t_Perm_ptr_Node_T)) =
   {[@stop_split] [@expl:unwrap_ref_Box_Perm_ptr_Node_T_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_ref_Box_Perm_ptr_Node_T_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: t_Perm_ptr_Node_T) ->
     {[@stop_split] [@expl:unwrap_ref_Box_Perm_ptr_Node_T_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_ref_Box_Perm_ptr_Node_T_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate invariant_ref_Perm_ptr_Node_T [@inline:trivial] (self: t_Perm_ptr_Node_T) = inv_Perm_ptr_Node_T self
@@ -3445,11 +3448,12 @@ module M_implementation__link
   let unwrap_refmut_Box_Perm_ptr_Node_T_Global (self_: t_Option_refmut_Box_Perm_ptr_Node_T_Global)
     (return (x: MutBorrow.t t_Perm_ptr_Node_T)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Perm_ptr_Node_T_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Perm_ptr_Node_T_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Perm_ptr_Node_T) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Perm_ptr_Node_T_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Perm_ptr_Node_T_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_refmut_FMap_Element_Box_Perm_ptr_Node_T_Global [@inline:trivial] (_1: MutBorrow.t (MutBorrow.t t_FMap_Element_Box_Perm_ptr_Node_T_Global)) =

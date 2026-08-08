@@ -1,0 +1,241 @@
+module M_add
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let add (x: UInt64.t) (y: UInt64.t) (return (x'0: UInt64.t)) = {[@stop_split] [@expl:add requires] UInt64.t'int x
+      + UInt64.t'int y
+    <= UInt64.t'int const_MAX}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_8 <- let (_fst, _snd) = UInt64.add_with_overflow x y in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _8.f1} s2
+      | s2 = [ &_ret <- _8.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l () | & x: UInt64.t = x | & y: UInt64.t = y | & _8: tup2_usize_bool = Any.any_l () ])
+    [ return (result: UInt64.t) -> (! return {result}) ]
+end
+module M_bool_eq
+  use creusot.prelude.Any
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let bool_eq (a: bool) (b: bool) (return (x: bool)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_ret <- a = b ] s1 | s1 = return {_ret} ] ]
+    [ & _ret: bool = Any.any_l () | & a: bool = a | & b: bool = b ])
+    [ return (result: bool) -> {[@stop_split] [@expl:bool_eq ensures] result = (a = b)} (! return {result}) ]
+end
+module M_division
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.Int
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let division (x: UInt64.t) (y: UInt64.t) (return (x'0: UInt64.t)) =
+  {[@stop_split] [@expl:division requires] UInt64.t'int y > 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_6 <- y ] s1
+      | s1 = [ &_7 <- _6 = (0: UInt64.t) ] s2
+      | s2 = {[@expl:division by zero] not _7} s3
+      | s3 = UInt64.div {x} {_6} (fun (_x: UInt64.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l ()
+    | & x: UInt64.t = x
+    | & y: UInt64.t = y
+    | & _6: UInt64.t = Any.any_l ()
+    | & _7: bool = Any.any_l () ]) [ return (result: UInt64.t) -> (! return {result}) ]
+end
+module M_expression
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.ComputerDivision
+  use int.Int
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let expression (x: UInt64.t) (y: UInt64.t) (z: UInt64.t) (return (x'0: bool)) =
+  {[@stop_split] [@expl:expression requires] ([@stop_split] [@expl:expression requires #0] UInt64.t'int y > 0)
+    /\ ([@stop_split] [@expl:expression requires #1] ComputerDivision.div (UInt64.t'int x) (UInt64.t'int y)
+      * UInt64.t'int z
+    <= UInt64.t'int const_MAX)}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_14 <- y ] s1
+      | s1 = [ &_15 <- _14 = (0: UInt64.t) ] s2
+      | s2 = {[@expl:division by zero] not _15} s3
+      | s3 = UInt64.div {x} {_14} (fun (_x: UInt64.t) -> [ &_12 <- _x ] s4)
+      | s4 = [ &_17 <- let (_fst, _snd) = UInt64.mul_with_overflow _12 z in { f0 = _fst; f1 = _snd } ] s5
+      | s5 = {[@expl:Mul overflow] not _17.f1} s6
+      | s6 = [ &_21 <- y ] s7
+      | s7 = [ &_22 <- _21 = (0: UInt64.t) ] s8
+      | s8 = {[@expl:division by zero] not _22} s9
+      | s9 = UInt64.div {x} {_21} (fun (_x: UInt64.t) -> [ &_19 <- _x ] s10)
+      | s10 = [ &_24 <- let (_fst, _snd) = UInt64.mul_with_overflow _19 z in { f0 = _fst; f1 = _snd } ] s11
+      | s11 = {[@expl:Mul overflow] not _24.f1} s12
+      | s12 = [ &_ret <- _17.f0 = _24.f0 ] s13
+      | s13 = return {_ret} ] ]
+    [ & _ret: bool = Any.any_l ()
+    | & x: UInt64.t = x
+    | & y: UInt64.t = y
+    | & z: UInt64.t = z
+    | & _12: UInt64.t = Any.any_l ()
+    | & _14: UInt64.t = Any.any_l ()
+    | & _15: bool = Any.any_l ()
+    | & _17: tup2_usize_bool = Any.any_l ()
+    | & _19: UInt64.t = Any.any_l ()
+    | & _21: UInt64.t = Any.any_l ()
+    | & _22: bool = Any.any_l ()
+    | & _24: tup2_usize_bool = Any.any_l () ])
+    [ return (result: bool) -> {[@stop_split] [@expl:expression ensures] result} (! return {result}) ]
+end
+module M_modulus
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.Int
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let modulus (x: UInt64.t) (y: UInt64.t) (return (x'0: UInt64.t)) =
+  {[@stop_split] [@expl:modulus requires] UInt64.t'int y > 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_6 <- y ] s1
+      | s1 = [ &_7 <- _6 = (0: UInt64.t) ] s2
+      | s2 = {[@expl:remainder by zero] not _7} s3
+      | s3 = UInt64.rem {x} {_6} (fun (_x: UInt64.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l ()
+    | & x: UInt64.t = x
+    | & y: UInt64.t = y
+    | & _6: UInt64.t = Any.any_l ()
+    | & _7: bool = Any.any_l () ]) [ return (result: UInt64.t) -> (! return {result}) ]
+end
+module M_multiply
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let multiply (x: UInt64.t) (y: UInt64.t) (return (x'0: UInt64.t)) =
+  {[@stop_split] [@expl:multiply requires] UInt64.t'int x * UInt64.t'int y <= UInt64.t'int const_MAX}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_8 <- let (_fst, _snd) = UInt64.mul_with_overflow x y in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Mul overflow] not _8.f1} s2
+      | s2 = [ &_ret <- _8.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l () | & x: UInt64.t = x | & y: UInt64.t = y | & _8: tup2_usize_bool = Any.any_l () ])
+    [ return (result: UInt64.t) -> (! return {result}) ]
+end
+module M_primitive_comparison
+  use creusot.prelude.Any
+  use creusot.int.UInt64
+  
+  type t_X = { a: UInt64.t }
+  
+  type t_Ordering = Less | Equal | Greater
+  
+  function cmp_log_usize (self: UInt64.t) (o: UInt64.t) : t_Ordering = if UInt64.lt self o then
+      Less
+    else
+      if self = o then Equal else Greater
+  
+  
+  function eq_cmp_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom eq_cmp_usize_spec: forall x: UInt64.t, y: UInt64.t. (x = y) = (cmp_log_usize x y = Equal)
+  
+  function antisym2_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym2_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Greater -> cmp_log_usize y x = Less
+  
+  function antisym1_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym1_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Less -> cmp_log_usize y x = Greater
+  
+  function trans_usize (x: UInt64.t) (y: UInt64.t) (z: UInt64.t) (o: t_Ordering) : ()
+  
+  axiom trans_usize_spec: forall x: UInt64.t, y: UInt64.t, z: UInt64.t, o: t_Ordering. cmp_log_usize x y = o
+      -> cmp_log_usize y z = o -> cmp_log_usize x z = o
+  
+  function refl_usize (x: UInt64.t) : ()
+  
+  axiom refl_usize_spec: forall x: UInt64.t. cmp_log_usize x x = Equal
+  
+  function cmp_gt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_gt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.gt x y = (cmp_log_usize x y = Greater)
+  
+  function cmp_ge_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_ge_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.ge x y = (cmp_log_usize x y <> Less)
+  
+  function cmp_lt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_lt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.lt x y = (cmp_log_usize x y = Less)
+  
+  function cmp_le_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_le_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.le x y = (cmp_log_usize x y <> Greater)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let primitive_comparison (x: t_X) (return (x'0: ())) = (! bb0
+    [ bb0 = return {_ret} ] [ & _ret: () = Any.any_l () ])
+    [ return (result: ()) -> {[@stop_split] [@expl:primitive_comparison ensures] UInt64.le x.a x.a}
+      (! return {result}) ]
+end
+module M_sub
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let sub (x: UInt64.t) (y: UInt64.t) (return (x'0: UInt64.t)) = {[@stop_split] [@expl:sub requires] UInt64.t'int x
+      - UInt64.t'int y
+    >= 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_8 <- let (_fst, _snd) = UInt64.sub_with_overflow x y in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Sub overflow] not _8.f1} s2
+      | s2 = [ &_ret <- _8.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l () | & x: UInt64.t = x | & y: UInt64.t = y | & _8: tup2_usize_bool = Any.any_l () ])
+    [ return (result: UInt64.t) -> (! return {result}) ]
+end

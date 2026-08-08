@@ -18,7 +18,7 @@
       "vc_set_Y": { "prover": "cvc5", "time": 0.014 }
     },
     "M_array_param": {
-      "vc_array_param": { "prover": "cvc5", "time": 0.013 },
+      "vc_array_param": { "prover": "cvc5", "time": 0.033 },
       "vc_len_u32": { "prover": "cvc5", "time": 0.015 }
     },
     "M_fn_pointer_test": {
@@ -35,7 +35,7 @@
       "vc_inline_tuple": { "prover": "cvc5", "time": 0.016 }
     },
     "M_is_zst": {
-      "vc_is_zst_T": { "prover": "alt-ergo", "time": 0.007 },
+      "vc_is_zst_T": { "prover": "alt-ergo", "time": 0.028 },
       "vc_set_IS_ZST": { "prover": "cvc5", "time": 0.017 },
       "vc_set_SIZE": { "prover": "cvc5", "time": 0.023 },
       "vc_size_of_T'0": { "prover": "alt-ergo", "time": 0.02 }
@@ -52,7 +52,7 @@
       "vc_nat_I_T_U": { "prover": "cvc5", "time": 0.019 },
       "vc_nat_i_T": { "prover": "cvc5", "time": 0.011 }
     },
-    "M_nat_i2": { "vc_nat_i2_T": { "prover": "cvc5", "time": 0.008 } },
+    "M_nat_i2": { "vc_nat_i2_T": { "prover": "cvc5", "time": 0.024 } },
     "M_nat_i3": {
       "vc_nat_i3_T": {
         "tactic": "split_vc",

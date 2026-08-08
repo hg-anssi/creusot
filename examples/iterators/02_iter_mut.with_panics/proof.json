@@ -1,0 +1,167 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_all_zero": {
+      "vc_all_zero": { "prover": "alt-ergo", "time": 0.123 },
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.019 },
+      "vc_into_iter_usize": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_iter_mut_usize": { "prover": "alt-ergo", "time": 0.015 },
+      "vc_next_IterMut_usize": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_common__trait_ExactSizeIterator__is_empty": {
+      "vc_is_empty_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_common__trait_ExactSizeIterator__len": {
+      "vc_eq_Option_usize": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.021 }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__next_back": {
+      "vc_next_back_IterMut_T": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.019 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo", "time": 0.01 },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      { "prover": "alt-ergo", "time": 0.02 },
+                      {
+                        "tactic": "compute_specified",
+                        "children": [
+                          { "prover": "alt-ergo", "time": 0.078 }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              { "prover": "alt-ergo", "time": 0.025 },
+              { "prover": "alt-ergo", "time": 0.022 }
+            ]
+          }
+        ]
+      },
+      "vc_split_off_last_mut_T": { "prover": "alt-ergo", "time": 0.028 }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__next_back__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.014 }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__produces_back_refl": {
+      "vc_produces_back_refl_IterMut_T": {
+        "prover": "alt-ergo",
+        "time": 0.008
+      }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__produces_back_refl__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.015 }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__produces_back_trans": {
+      "vc_produces_back_trans_IterMut_T": {
+        "prover": "alt-ergo",
+        "time": 0.032
+      }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__produces_back_trans__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.027 }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__size_hint_back_spec": {
+      "vc_size_hint_IterMut_T": { "prover": "alt-ergo", "time": 0.027 },
+      "vc_size_hint_back_spec_IterMut_T": {
+        "prover": "alt-ergo",
+        "time": 0.051
+      }
+    },
+    "M_impl_DoubleEndedIterator_for_IterMut_T__size_hint_back_spec__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_size_hint_IterMut_T": { "prover": "alt-ergo", "time": 0.027 }
+    },
+    "M_impl_ExactSizeIterator_for_IterMut_T__len": {
+      "vc_len_IterMut_T": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_len_T": { "prover": "alt-ergo", "time": 0.017 }
+    },
+    "M_impl_ExactSizeIterator_for_IterMut_T__len__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_size_hint_IterMut_T": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_impl_ExactSizeIterator_for_IterMut_T__size_hint_exact": {
+      "vc_size_hint_IterMut_T": { "prover": "alt-ergo", "time": 0.013 },
+      "vc_size_hint_exact_IterMut_T": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_impl_ExactSizeIterator_for_IterMut_T__size_hint_exact__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_size_hint_IterMut_T": { "prover": "alt-ergo", "time": 0.013 }
+    },
+    "M_impl_IterMut_T__into_iter": {
+      "vc_into_iter_T": { "prover": "alt-ergo", "time": 0.011 }
+    },
+    "M_impl_Iterator_for_IterMut_T__next": {
+      "vc_next_IterMut_T": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.016 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo", "time": 0.032 },
+                  {
+                    "tactic": "split_vc",
+                    "children": [
+                      { "prover": "alt-ergo", "time": 0.022 },
+                      {
+                        "tactic": "compute_specified",
+                        "children": [
+                          { "prover": "alt-ergo", "time": 0.029 }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              { "prover": "alt-ergo", "time": 0.012 },
+              { "prover": "alt-ergo", "time": 0.012 }
+            ]
+          }
+        ]
+      },
+      "vc_split_off_first_mut_T": { "prover": "alt-ergo", "time": 0.014 }
+    },
+    "M_impl_Iterator_for_IterMut_T__next__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.026 }
+    },
+    "M_impl_Iterator_for_IterMut_T__produces_refl": {
+      "vc_produces_refl_IterMut_T": { "prover": "alt-ergo", "time": 0.025 }
+    },
+    "M_impl_Iterator_for_IterMut_T__produces_refl__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.017 }
+    },
+    "M_impl_Iterator_for_IterMut_T__produces_trans": {
+      "vc_produces_trans_IterMut_T": { "prover": "alt-ergo", "time": 0.013 }
+    },
+    "M_impl_Iterator_for_IterMut_T__produces_trans__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.025 }
+    },
+    "M_impl_Iterator_for_IterMut_T__size_hint": {
+      "vc_len_T": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_size_hint_IterMut_T": { "prover": "alt-ergo", "time": 0.016 }
+    },
+    "M_impl_Iterator_for_IterMut_T__size_hint__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.025 }
+    },
+    "M_iter_mut": {
+      "vc_index_mut_Vec_T_Global": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_iter_mut_T": { "prover": "alt-ergo", "time": 0.012 }
+    }
+  }
+}

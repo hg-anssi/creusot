@@ -9,7 +9,7 @@
     "M_impl_VacantEntry_K__insert": {
       "vc_clone_K": { "prover": "cvc5", "time": 0.015 },
       "vc_insert_K": { "prover": "cvc5", "time": 0.015 },
-      "vc_insert_K'0": { "prover": "cvc5", "time": 0.01 }
+      "vc_insert_K'0": { "prover": "cvc5", "time": 0.032 }
     },
     "M_test": {
       "vc_len_usize": { "prover": "cvc5", "time": 0.016 },

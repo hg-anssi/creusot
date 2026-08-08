@@ -20,7 +20,7 @@
       "vc_as_ref_Rc_i32_Global": { "prover": "cvc5", "time": 0.01 },
       "vc_clone_Rc_i32_Global": { "prover": "cvc5", "time": 0.022 },
       "vc_new_i32": { "prover": "cvc5", "time": 0.019 },
-      "vc_ptr_eq_i32": { "prover": "cvc5", "time": 0.01 },
+      "vc_ptr_eq_i32": { "prover": "cvc5", "time": 0.02 },
       "vc_rc": { "prover": "cvc5", "time": 0.027 }
     }
   }

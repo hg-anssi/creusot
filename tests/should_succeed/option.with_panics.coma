@@ -298,19 +298,22 @@ module M_and_then
       = (deep_model_ref_Option_i32 self_ = deep_model_ref_Option_i32 rhs)}
       (! return {result}) ]
   
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
   let closure1 (self: ()) (x: Int32.t) (return (x'0: t_Option_i32)) = (! bb0
-    [ bb0 = s0 [ s0 = [ &_4 <- x = (1: Int32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb2) | br1 -> {_4} (! bb1) ] ]
+    [ bb0 = s0 [ s0 = [ &_4 <- x = (1: Int32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb3) | br1 -> {_4} (! bb1) ] ]
     | bb1 = s0
-      [ s0 = Int32.add {x} {(1: Int32.t)} (fun (_x: Int32.t) -> [ &_6 <- _x ] s1)
-      | s1 = [ &res <- Some _6 ] s2
-      | s2 = bb3 ]
-    | bb2 = s0 [ s0 = [ &res <- None ] s1 | s1 = bb3 ]
-    | bb3 = s0 [ s0 = [ &_ret <- res ] s1 | s1 = return {_ret} ] ]
+      [ s0 = [ &_8 <- let (_fst, _snd) = Int32.add_with_overflow x (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _8.f1} s2
+      | s2 = [ &res <- Some (_8.f0) ] s3
+      | s3 = bb4 ]
+    | bb3 = s0 [ s0 = [ &res <- None ] s1 | s1 = bb4 ]
+    | bb4 = s0 [ s0 = [ &_ret <- res ] s1 | s1 = return {_ret} ] ]
     [ & _ret: t_Option_i32 = Any.any_l ()
     | & x: Int32.t = x
     | & res: t_Option_i32 = Any.any_l ()
     | & _4: bool = Any.any_l ()
-    | & _6: Int32.t = Any.any_l () ])
+    | & _8: tup2_i32_bool = Any.any_l () ])
     [ return (result: t_Option_i32) -> {[@stop_split] [@expl:closure ensures] Int32.to_int x = 1
         /\ (exists y: Int32.t. result = Some y /\ Int32.to_int y = Int32.to_int x + 1)
       \/ Int32.to_int x <> 1 /\ result = None}
@@ -442,14 +445,19 @@ module M_as_mut
   let is_none_refmut_i32 (self_: t_Option_refmut_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None'0)} (! return {result}) ]
   
-  let unwrap_refmut_i32 (self_: t_Option_refmut_i32) (return (x: MutBorrow.t Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'0}
-    any
-    [ return (result: MutBorrow.t Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result = self_}
-      (! return {result}) ]
+  let unwrap_refmut_i32 (self_: t_Option_refmut_i32) (panic) (return (x: MutBorrow.t Int32.t)) = any
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:unwrap_refmut_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None'0} (! panic) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None} (! panic) ]
   
   meta "compute_max_steps" 1000000
   
@@ -469,20 +477,28 @@ module M_as_mut
       [ s0 = MutBorrow.borrow_mut <t_Option_i32> {some}
           (fun (_bor: MutBorrow.t t_Option_i32) -> [ &_11 <- _bor ] [ &some <- _bor.final ] s1)
       | s1 = as_mut_i32 {_11} (fun (_x: t_Option_refmut_i32) -> [ &_10 <- _x ] s2)
-      | s2 = unwrap_refmut_i32 {_10} (fun (_x: MutBorrow.t Int32.t) -> [ &_9 <- _x ] s3)
+      | s2 = unwrap_refmut_i32 {_10}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: MutBorrow.t Int32.t) -> [ &_9 <- _x ] s3)
       | s3 = [ &_9 <- { _9 with current = (2: Int32.t) } ] s4
       | s4 = -{resolve_refmut_i32 _9}- s5
-      | s5 = unwrap_i32 {some} (fun (_x: Int32.t) -> [ &_14 <- _x ] s6)
+      | s5 = unwrap_i32 {some}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_14 <- _x ] s6)
       | s6 = [ &_13 <- _14 = (2: Int32.t) ] s7
       | s7 = any [ br0 -> {_13 = false} (! bb9) | br1 -> {_13} (! bb8) ] ]
     | bb8 = s0
       [ s0 = MutBorrow.borrow_mut <t_Option_i32> {some}
           (fun (_bor: MutBorrow.t t_Option_i32) -> [ &_19 <- _bor ] [ &some <- _bor.final ] s1)
       | s1 = as_mut_i32 {_19} (fun (_x: t_Option_refmut_i32) -> [ &_18 <- _x ] s2)
-      | s2 = unwrap_refmut_i32 {_18} (fun (_x: MutBorrow.t Int32.t) -> [ &_17 <- _x ] s3)
+      | s2 = unwrap_refmut_i32 {_18}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: MutBorrow.t Int32.t) -> [ &_17 <- _x ] s3)
       | s3 = [ &_17 <- { _17 with current = (1: Int32.t) } ] s4
       | s4 = -{resolve_refmut_i32 _17}- s5
-      | s5 = unwrap_i32 {some} (fun (_x: Int32.t) -> [ &_22 <- _x ] s6)
+      | s5 = unwrap_i32 {some}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_22 <- _x ] s6)
       | s6 = [ &_21 <- _22 = (1: Int32.t) ] s7
       | s7 = any [ br0 -> {_21 = false} (! bb14) | br1 -> {_21} (! bb13) ] ]
     | bb13 = return {_ret}
@@ -524,9 +540,12 @@ module M_as_ref
   let is_none_ref_i32 (self_: t_Option_ref_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None'0)} (! return {result}) ]
   
-  let unwrap_ref_i32 (self_: t_Option_ref_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_
-    <> None'0}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result = self_} (! return {result}) ]
+  let unwrap_ref_i32 (self_: t_Option_ref_i32) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_ref_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None'0} (! panic) ]
   
   meta "compute_max_steps" 1000000
   
@@ -541,7 +560,9 @@ module M_as_ref
       | s4 = any [ br0 -> {_4 = false} (! bb4) | br1 -> {_4} (! bb3) ] ]
     | bb3 = s0
       [ s0 = as_ref_i32 {some} (fun (_x: t_Option_ref_i32) -> [ &_13 <- _x ] s1)
-      | s1 = unwrap_ref_i32 {_13} (fun (_x: Int32.t) -> [ &_12 <- _x ] s2)
+      | s1 = unwrap_ref_i32 {_13}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_12 <- _x ] s2)
       | s2 = [ &_10 <- _12 = (1: Int32.t) ] s3
       | s3 = any [ br0 -> {_10 = false} (! bb8) | br1 -> {_10} (! bb7) ] ]
     | bb7 = return {_ret}
@@ -582,8 +603,12 @@ module M_copied_cloned
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None} (! panic) ]
   
   type t_Option_refmut_i32 = None'1 | Some'1 (MutBorrow.t Int32.t)
   
@@ -699,7 +724,9 @@ module M_copied_cloned
     | bb4 = s0
       [ s0 = as_ref_i32 {some} (fun (_x: t_Option_ref_i32) -> [ &_14 <- _x ] s1)
       | s1 = copied_i32 {_14} (fun (_x: t_Option_i32) -> [ &_13 <- _x ] s2)
-      | s2 = unwrap_i32 {_13} (fun (_x: Int32.t) -> [ &_12 <- _x ] s3)
+      | s2 = unwrap_i32 {_13}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_12 <- _x ] s3)
       | s3 = [ &_11 <- _12 = (1: Int32.t) ] s4
       | s4 = any [ br0 -> {_11 = false} (! bb10) | br1 -> {_11} (! bb9) ] ]
     | bb9 = s0
@@ -714,7 +741,9 @@ module M_copied_cloned
           (fun (_bor: MutBorrow.t t_Option_i32) -> [ &_29 <- _bor ] [ &some <- _bor.final ] s1)
       | s1 = as_mut_i32 {_29} (fun (_x: t_Option_refmut_i32) -> [ &_28 <- _x ] s2)
       | s2 = copied_i32'0 {_28} (fun (_x: t_Option_i32) -> [ &_27 <- _x ] s3)
-      | s3 = unwrap_i32 {_27} (fun (_x: Int32.t) -> [ &_26 <- _x ] s4)
+      | s3 = unwrap_i32 {_27}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_26 <- _x ] s4)
       | s4 = [ &_25 <- _26 = (1: Int32.t) ] s5
       | s5 = any [ br0 -> {_25 = false} (! bb20) | br1 -> {_25} (! bb19) ] ]
     | bb19 = s0
@@ -725,7 +754,9 @@ module M_copied_cloned
     | bb24 = s0
       [ s0 = as_ref_i32 {some} (fun (_x: t_Option_ref_i32) -> [ &_42 <- _x ] s1)
       | s1 = cloned_i32 {_42} (fun (_x: t_Option_i32) -> [ &_41 <- _x ] s2)
-      | s2 = unwrap_i32 {_41} (fun (_x: Int32.t) -> [ &_40 <- _x ] s3)
+      | s2 = unwrap_i32 {_41}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_40 <- _x ] s3)
       | s3 = [ &_39 <- _40 = (1: Int32.t) ] s4
       | s4 = any [ br0 -> {_39 = false} (! bb30) | br1 -> {_39} (! bb29) ] ]
     | bb29 = s0
@@ -740,7 +771,9 @@ module M_copied_cloned
           (fun (_bor: MutBorrow.t t_Option_i32) -> [ &_57 <- _bor ] [ &some <- _bor.final ] s1)
       | s1 = as_mut_i32 {_57} (fun (_x: t_Option_refmut_i32) -> [ &_56 <- _x ] s2)
       | s2 = cloned_i32'0 {_56} (fun (_x: t_Option_i32) -> [ &_55 <- _x ] s3)
-      | s3 = unwrap_i32 {_55} (fun (_x: Int32.t) -> [ &_54 <- _x ] s4)
+      | s3 = unwrap_i32 {_55}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_54 <- _x ] s4)
       | s4 = [ &_53 <- _54 = (1: Int32.t) ] s5
       | s5 = any [ br0 -> {_53 = false} (! bb40) | br1 -> {_53} (! bb39) ] ]
     | bb39 = return {_ret}
@@ -1021,8 +1054,12 @@ module M_flatten
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None} (! panic) ]
   
   meta "compute_max_steps" 1000000
   
@@ -1044,7 +1081,9 @@ module M_flatten
       [ s0 = [ &_17 <- Some (1: Int32.t) ] s1
       | s1 = [ &opt'1 <- Some'0 _17 ] s2
       | s2 = flatten_i32 {opt'1} (fun (_x: t_Option_i32) -> [ &_21 <- _x ] s3)
-      | s3 = unwrap_i32 {_21} (fun (_x: Int32.t) -> [ &_20 <- _x ] s4)
+      | s3 = unwrap_i32 {_21}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_20 <- _x ] s4)
       | s4 = [ &_19 <- _20 = (1: Int32.t) ] s5
       | s5 = any [ br0 -> {_19 = false} (! bb12) | br1 -> {_19} (! bb11) ] ]
     | bb11 = return {_ret}
@@ -1874,9 +1913,16 @@ module M_map
       = (deep_model_ref_Option_i32 self_ = deep_model_ref_Option_i32 rhs)}
       (! return {result}) ]
   
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
   let closure2 [@coma:extspec] (self: ()) (x: Int32.t) (return (x'0: Int32.t)) = bb0
-    [ bb0 = s0 [ s0 = Int32.add {x} {(1: Int32.t)} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x ] [ return (result: Int32.t) -> return {result} ]
+    [ bb0 = s0
+      [ s0 = [ &_4 <- let (_fst, _snd) = Int32.add_with_overflow x (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &_ret <- _4.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x | & _4: tup2_i32_bool = Any.any_l () ]
+    [ return (result: Int32.t) -> return {result} ]
   
   meta "rewrite_def" predicate closure2'pre
   
@@ -2055,9 +2101,16 @@ module M_map_or
         end}
       (! panic) ]
   
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
   let closure2 [@coma:extspec] (self: ()) (x: Int32.t) (return (x'0: Int32.t)) = bb0
-    [ bb0 = s0 [ s0 = Int32.add {x} {(1: Int32.t)} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x ] [ return (result: Int32.t) -> return {result} ]
+    [ bb0 = s0
+      [ s0 = [ &_4 <- let (_fst, _snd) = Int32.add_with_overflow x (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &_ret <- _4.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x | & _4: tup2_i32_bool = Any.any_l () ]
+    [ return (result: Int32.t) -> return {result} ]
   
   meta "rewrite_def" predicate closure2'pre
   
@@ -2158,8 +2211,13 @@ module M_map_or
   meta "rewrite_def" predicate closure5'post'return
   
   let closure6 [@coma:extspec] (self: ()) (x: Int32.t) (return (x'0: Int32.t)) = bb0
-    [ bb0 = s0 [ s0 = Int32.add {x} {(1: Int32.t)} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x ] [ return (result: Int32.t) -> return {result} ]
+    [ bb0 = s0
+      [ s0 = [ &_4 <- let (_fst, _snd) = Int32.add_with_overflow x (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &_ret <- _4.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x | & _4: tup2_i32_bool = Any.any_l () ]
+    [ return (result: Int32.t) -> return {result} ]
   
   meta "rewrite_def" predicate closure6'pre
   
@@ -2584,8 +2642,12 @@ module M_replace
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None} (! panic) ]
   
   meta "compute_max_steps" 1000000
   
@@ -2601,29 +2663,39 @@ module M_replace
       | s4 = is_none_i32 {_6} (fun (_x: bool) -> [ &_4 <- _x ] s5)
       | s5 = any [ br0 -> {_4 = false} (! bb4) | br1 -> {_4} (! bb3) ] ]
     | bb3 = s0
-      [ s0 = unwrap_i32 {none} (fun (_x: Int32.t) -> [ &_11 <- _x ] s1)
+      [ s0 = unwrap_i32 {none}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_11 <- _x ] s1)
       | s1 = [ &_10 <- _11 = (2: Int32.t) ] s2
       | s2 = any [ br0 -> {_10 = false} (! bb7) | br1 -> {_10} (! bb6) ] ]
     | bb6 = s0
       [ s0 = MutBorrow.borrow_mut <t_Option_i32> {some}
           (fun (_bor: MutBorrow.t t_Option_i32) -> [ &_18 <- _bor ] [ &some <- _bor.final ] s1)
       | s1 = replace_i32 {_18} {(2: Int32.t)} (fun (_x: t_Option_i32) -> [ &_17 <- _x ] s2)
-      | s2 = unwrap_i32 {_17} (fun (_x: Int32.t) -> [ &_16 <- _x ] s3)
+      | s2 = unwrap_i32 {_17}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_16 <- _x ] s3)
       | s3 = [ &_15 <- _16 = (1: Int32.t) ] s4
       | s4 = any [ br0 -> {_15 = false} (! bb11) | br1 -> {_15} (! bb10) ] ]
     | bb10 = s0
-      [ s0 = unwrap_i32 {some} (fun (_x: Int32.t) -> [ &_22 <- _x ] s1)
+      [ s0 = unwrap_i32 {some}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_22 <- _x ] s1)
       | s1 = [ &_21 <- _22 = (2: Int32.t) ] s2
       | s2 = any [ br0 -> {_21 = false} (! bb14) | br1 -> {_21} (! bb13) ] ]
     | bb13 = s0
       [ s0 = MutBorrow.borrow_mut <t_Option_i32> {some}
           (fun (_bor: MutBorrow.t t_Option_i32) -> [ &_29 <- _bor ] [ &some <- _bor.final ] s1)
       | s1 = replace_i32 {_29} {(1: Int32.t)} (fun (_x: t_Option_i32) -> [ &_28 <- _x ] s2)
-      | s2 = unwrap_i32 {_28} (fun (_x: Int32.t) -> [ &_27 <- _x ] s3)
+      | s2 = unwrap_i32 {_28}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_27 <- _x ] s3)
       | s3 = [ &_26 <- _27 = (2: Int32.t) ] s4
       | s4 = any [ br0 -> {_26 = false} (! bb18) | br1 -> {_26} (! bb17) ] ]
     | bb17 = s0
-      [ s0 = unwrap_i32 {some} (fun (_x: Int32.t) -> [ &_33 <- _x ] s1)
+      [ s0 = unwrap_i32 {some}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_33 <- _x ] s1)
       | s1 = [ &_32 <- _33 = (1: Int32.t) ] s2
       | s2 = any [ br0 -> {_32 = false} (! bb21) | br1 -> {_32} (! bb20) ] ]
     | bb20 = return {_ret}
@@ -3145,8 +3217,12 @@ module M_take
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None} (! panic) ]
   
   meta "compute_max_steps" 1000000
   
@@ -3168,7 +3244,9 @@ module M_take
       [ s0 = MutBorrow.borrow_mut <t_Option_i32> {some}
           (fun (_bor: MutBorrow.t t_Option_i32) -> [ &_17 <- _bor ] [ &some <- _bor.final ] s1)
       | s1 = take_i32 {_17} (fun (_x: t_Option_i32) -> [ &_16 <- _x ] s2)
-      | s2 = unwrap_i32 {_16} (fun (_x: Int32.t) -> [ &_15 <- _x ] s3)
+      | s2 = unwrap_i32 {_16}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_15 <- _x ] s3)
       | s3 = [ &_14 <- _15 = (1: Int32.t) ] s4
       | s4 = any [ br0 -> {_14 = false} (! bb11) | br1 -> {_14} (! bb10) ] ]
     | bb10 = s0
@@ -3485,10 +3563,13 @@ module M_transpose
         end}
       (! return {result}) ]
   
-  let unwrap_Option_i32 (self_: t_Result_Option_i32_bool) (return (x: t_Option_i32)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: t_Option_i32. self_ = Ok'0 t}
-    any
-    [ return (result: t_Option_i32) -> {[@stop_split] [@expl:unwrap ensures] Ok'0 result = self_} (! return {result}) ]
+  let unwrap_Option_i32 (self_: t_Result_Option_i32_bool) (panic) (return (x: t_Option_i32)) = any
+    [ return (result: t_Option_i32) ->
+    {[@stop_split] [@expl:unwrap_Option_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: bool. self_
+          = Err'0 e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok'0 result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] exists e: bool. self_ = Err'0 e} (! panic) ]
   
   type t_Option_Int = None'1 | Some'1 int
   
@@ -3512,9 +3593,13 @@ module M_transpose
       = (deep_model_ref_Option_i32 self_ = deep_model_ref_Option_i32 rhs)}
       (! return {result}) ]
   
-  let unwrap_err_Option_i32 (self_: t_Result_Option_i32_bool) (return (x: bool)) =
-  {[@stop_split] [@expl:unwrap_err requires] exists e: bool. self_ = Err'0 e}
-    any [ return (result: bool) -> {[@stop_split] [@expl:unwrap_err ensures] Err'0 result = self_} (! return {result}) ]
+  let unwrap_err_Option_i32 (self_: t_Result_Option_i32_bool) (panic) (return (x: bool)) = any
+    [ return (result: bool) ->
+    {[@stop_split] [@expl:unwrap_err_Option_i32 ensures] ([@stop_split] [@expl:unwrap_err ensures #0] not (exists t: t_Option_i32. self_
+          = Ok'0 t))
+      /\ ([@stop_split] [@expl:unwrap_err ensures #1] Err'0 result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap_err may_panic] exists t: t_Option_i32. self_ = Ok'0 t} (! panic) ]
   
   meta "compute_max_steps" 1000000
   
@@ -3528,7 +3613,9 @@ module M_transpose
       | s3 = [ &_5 <- Err true ] s4
       | s4 = [ &some_err <- Some _5 ] s5
       | s5 = transpose_i32 {none} (fun (_x: t_Result_Option_i32_bool) -> [ &_10 <- _x ] s6)
-      | s6 = unwrap_Option_i32 {_10} (fun (_x: t_Option_i32) -> [ &_9 <- _x ] s7)
+      | s6 = unwrap_Option_i32 {_10}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: t_Option_i32) -> [ &_9 <- _x ] s7)
       | s7 = bb0'0
         [ bb0'0 = s0'0 [ s0'0 = [ &_1 <- None'0 ] s1'0 | s1'0 = [ &_ret'0 <- _1 ] s2'0 | s2'0 = _const_ret {_ret'0} ] ]
         [ & _ret'0: t_Option_i32 = Any.any_l () | & _1: t_Option_i32 = Any.any_l () ]
@@ -3537,7 +3624,9 @@ module M_transpose
       | s9 = any [ br0 -> {_7 = false} (! bb5) | br1 -> {_7} (! bb4) ] ]
     | bb4 = s0
       [ s0 = transpose_i32 {some_ok} (fun (_x: t_Result_Option_i32_bool) -> [ &_19 <- _x ] s1)
-      | s1 = unwrap_Option_i32 {_19} (fun (_x: t_Option_i32) -> [ &_18 <- _x ] s2)
+      | s1 = unwrap_Option_i32 {_19}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: t_Option_i32) -> [ &_18 <- _x ] s2)
       | s2 = bb0'0
         [ bb0'0 = s0'0
           [ s0'0 = [ &_1 <- Some'0 (1: Int32.t) ] s1'0 | s1'0 = [ &_ret'0 <- _1 ] s2'0 | s2'0 = _const_ret {_ret'0} ] ]
@@ -3547,7 +3636,9 @@ module M_transpose
       | s4 = any [ br0 -> {_16 = false} (! bb10) | br1 -> {_16} (! bb9) ] ]
     | bb9 = s0
       [ s0 = transpose_i32 {some_err} (fun (_x: t_Result_Option_i32_bool) -> [ &_27 <- _x ] s1)
-      | s1 = unwrap_err_Option_i32 {_27} (fun (_x: bool) -> [ &_26 <- _x ] s2)
+      | s1 = unwrap_err_Option_i32 {_27}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: bool) -> [ &_26 <- _x ] s2)
       | s2 = [ &_25 <- _26 ] s3
       | s3 = any [ br0 -> {_25 = false} (! bb14) | br1 -> {_25} (! bb13) ] ]
     | bb13 = return {_ret}
@@ -3578,12 +3669,19 @@ module M_unwrap
   
   type t_Option_i32 = None | Some Int32.t
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None} (! panic) ]
   
-  let expect_i32 (self_: t_Option_i32) (msg: string) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:expect requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:expect ensures] Some result = self_} (! return {result}) ]
+  let expect_i32 (self_: t_Option_i32) (msg: string) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:expect_i32 ensures] ([@stop_split] [@expl:expect ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:expect ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:expect may_panic] self_ = None} (! panic) ]
   
   predicate resolve_i32 [@inline:trivial] (_1: Int32.t) = true
   
@@ -3740,12 +3838,16 @@ module M_unwrap
     [ bb0 = s0
       [ s0 = [ &none <- None ] s1
       | s1 = [ &some <- Some (1: Int32.t) ] s2
-      | s2 = unwrap_i32 {some} (fun (_x: Int32.t) -> [ &_5 <- _x ] s3)
+      | s2 = unwrap_i32 {some}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_5 <- _x ] s3)
       | s3 = [ &_4 <- _5 = (1: Int32.t) ] s4
       | s4 = any [ br0 -> {_4 = false} (! bb3) | br1 -> {_4} (! bb2) ] ]
     | bb2 = s0
       [ s0 = [ &_13 <- "failed" ] s1
-      | s1 = expect_i32 {some} {_13} (fun (_x: Int32.t) -> [ &_10 <- _x ] s2)
+      | s1 = expect_i32 {some} {_13}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: Int32.t) -> [ &_10 <- _x ] s2)
       | s2 = [ &_9 <- _10 = (1: Int32.t) ] s3
       | s3 = any [ br0 -> {_9 = false} (! bb6) | br1 -> {_9} (! bb5) ] ]
     | bb5 = s0

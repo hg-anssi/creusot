@@ -11,11 +11,11 @@
       "vc_branch_Option_T": { "prover": "cvc5", "time": 0.015 },
       "vc_elim_Break": { "prover": "cvc5", "time": 0.021 },
       "vc_elim_Continue": { "prover": "cvc5", "time": 0.013 },
-      "vc_from_residual_Option_T": { "prover": "cvc5", "time": 0.005 },
-      "vc_try_option_T": { "prover": "cvc5", "time": 0.007 }
+      "vc_from_residual_Option_T": { "prover": "cvc5", "time": 0.026 },
+      "vc_try_option_T": { "prover": "cvc5", "time": 0.022 }
     },
     "M_try_result": {
-      "vc_branch_Result_T_E": { "prover": "cvc5", "time": 0.011 },
+      "vc_branch_Result_T_E": { "prover": "cvc5", "time": 0.022 },
       "vc_elim_Break": { "prover": "cvc5", "time": 0.018 },
       "vc_elim_Continue": { "prover": "cvc5", "time": 0.023 },
       "vc_from_E": { "prover": "cvc5", "time": 0.017 },

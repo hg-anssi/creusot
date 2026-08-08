@@ -22,11 +22,14 @@ module M_test_duration
       /\ view_Duration self <= secs_to_nanos (UInt64.t'int const_MAX) + 999999999
   
   let new (secs: UInt64.t) (nanos: UInt32.t) (return (x: t_Duration)) =
-  {[@stop_split] [@expl:new requires] UInt64.t'int secs + nanos_to_secs (UInt32.t'int nanos) <= UInt64.t'int const_MAX}
+  {[@stop_split] [@expl:new requires (no panic)] not UInt64.t'int secs + nanos_to_secs (UInt32.t'int nanos)
+    > UInt64.t'int const_MAX}
     any
     [ return (result: t_Duration) ->
     {[@stop_split] [@expl:new ensures] ([@stop_split] [@expl:new result type invariant] inv_Duration result)
-      /\ ([@stop_split] [@expl:new ensures] view_Duration result
+      /\ ([@stop_split] [@expl:new ensures #0] not UInt64.t'int secs + nanos_to_secs (UInt32.t'int nanos)
+        > UInt64.t'int const_MAX)
+      /\ ([@stop_split] [@expl:new ensures #1] view_Duration result
       = secs_to_nanos (UInt64.t'int secs) + UInt32.t'int nanos)}
       (! return {result}) ]
   
@@ -267,22 +270,25 @@ module M_test_duration
   let add_Duration (self_: t_Duration) (rhs: t_Duration) (return (x: t_Duration)) =
   {[@stop_split] [@expl:add_Duration requires] ([@stop_split] [@expl:add 'self_' type invariant] inv_Duration self_)
     /\ ([@stop_split] [@expl:add 'rhs' type invariant] inv_Duration rhs)
-    /\ ([@stop_split] [@expl:add requires] view_Duration self_ + view_Duration rhs
-    <= secs_to_nanos (UInt64.t'int const_MAX) + 999999999)}
+    /\ ([@stop_split] [@expl:add requires (no panic)] not view_Duration self_ + view_Duration rhs
+    > secs_to_nanos (UInt64.t'int const_MAX) + 999999999)}
     any
     [ return (result: t_Duration) ->
     {[@stop_split] [@expl:add_Duration ensures] ([@stop_split] [@expl:add result type invariant] inv_Duration result)
-      /\ ([@stop_split] [@expl:add ensures] view_Duration self_ + view_Duration rhs = view_Duration result)}
+      /\ ([@stop_split] [@expl:add ensures #0] not view_Duration self_ + view_Duration rhs
+        > secs_to_nanos (UInt64.t'int const_MAX) + 999999999)
+      /\ ([@stop_split] [@expl:add ensures #1] view_Duration self_ + view_Duration rhs = view_Duration result)}
       (! return {result}) ]
   
   let sub_Duration (self_: t_Duration) (rhs: t_Duration) (return (x: t_Duration)) =
   {[@stop_split] [@expl:sub_Duration requires] ([@stop_split] [@expl:sub 'self_' type invariant] inv_Duration self_)
     /\ ([@stop_split] [@expl:sub 'rhs' type invariant] inv_Duration rhs)
-    /\ ([@stop_split] [@expl:sub requires] view_Duration self_ - view_Duration rhs >= 0)}
+    /\ ([@stop_split] [@expl:sub requires (no panic)] not view_Duration self_ - view_Duration rhs < 0)}
     any
     [ return (result: t_Duration) ->
     {[@stop_split] [@expl:sub_Duration ensures] ([@stop_split] [@expl:sub result type invariant] inv_Duration result)
-      /\ ([@stop_split] [@expl:sub ensures] view_Duration self_ - view_Duration rhs = view_Duration result)}
+      /\ ([@stop_split] [@expl:sub ensures #0] not view_Duration self_ - view_Duration rhs < 0)
+      /\ ([@stop_split] [@expl:sub ensures #1] view_Duration self_ - view_Duration rhs = view_Duration result)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000

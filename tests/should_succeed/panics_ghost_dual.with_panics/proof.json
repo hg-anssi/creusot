@@ -2,21 +2,21 @@
   "profile": [],
   "proofs": {
     "M_checked_id": {
-      "vc_checked_id": { "prover": "alt-ergo", "time": 0.01 },
-      "vc_from_str": { "prover": "alt-ergo", "time": 0.013 }
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.047 }
     },
     "M_ghost_use": {
-      "vc_checked_id": { "prover": "alt-ergo", "time": 0.016 },
-      "vc_ghost_use": { "prover": "alt-ergo", "time": 0.007 },
-      "vc_new_unit": { "prover": "alt-ergo", "time": 0.016 }
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.034 },
+      "vc_ghost_use": { "prover": "alt-ergo", "time": 0.031 },
+      "vc_new_unit": { "prover": "alt-ergo", "time": 0.034 }
     },
     "M_program_discharge": {
-      "vc_checked_id": { "prover": "alt-ergo", "time": 0.016 },
-      "vc_program_discharge": { "prover": "alt-ergo", "time": 0.007 }
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.034 },
+      "vc_program_discharge": { "prover": "alt-ergo", "time": 0.024 }
     },
     "M_program_propagate": {
-      "vc_checked_id": { "prover": "alt-ergo", "time": 0.016 },
-      "vc_program_propagate": { "prover": "alt-ergo", "time": 0.007 }
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.034 },
+      "vc_program_propagate": { "prover": "alt-ergo", "time": 0.004 }
     }
   }
 }

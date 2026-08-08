@@ -11,7 +11,7 @@
       "vc_reserve_T": { "prover": "cvc5", "time": 0.013 },
       "vc_reserve_exact_T": { "prover": "cvc5", "time": 0.015 },
       "vc_shrink_to_T": { "prover": "cvc5", "time": 0.015 },
-      "vc_shrink_to_fit_T": { "prover": "cvc5", "time": 0.01 }
+      "vc_shrink_to_fit_T": { "prover": "cvc5", "time": 0.021 }
     },
     "M_clear_vec": {
       "vc_clear_T": { "prover": "cvc5", "time": 0.008 },

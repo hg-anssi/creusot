@@ -12,7 +12,7 @@
         "prover": "cvc5",
         "time": 0.037
       },
-      "vc_from_iter_unit": { "prover": "alt-ergo", "time": 0.041 },
+      "vc_from_iter_unit": { "prover": "alt-ergo", "time": 0.019 },
       "vc_into_iter_MapInv_RangeInclusive_usize_closure0": {
         "prover": "alt-ergo",
         "time": 0.016
@@ -36,13 +36,13 @@
                     "children": [
                       { "prover": "alt-ergo", "time": 0.041 },
                       { "prover": "alt-ergo", "time": 0.228 },
-                      { "prover": "alt-ergo", "time": 0.263 },
+                      { "prover": "alt-ergo", "time": 0.1 },
                       { "prover": "alt-ergo", "time": 0.063 }
                     ]
                   }
                 ]
               },
-              { "prover": "alt-ergo", "time": 0.024 },
+              { "prover": "alt-ergo", "time": 0.02 },
               { "prover": "z3", "time": 0.038 }
             ]
           }

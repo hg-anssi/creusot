@@ -12,7 +12,7 @@
     "M_lemma_num_of_pos_strictly_increasing": {
       "vc_lemma_num_of_pos_strictly_increasing": {
         "prover": "cvc5",
-        "time": 0.01
+        "time": 0.02
       }
     },
     "M_m": {

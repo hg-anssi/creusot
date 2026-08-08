@@ -1,0 +1,10 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_slice_range_inclusive": {
+      "vc_index_mut_slice_u32": { "prover": "alt-ergo", "time": 0.019 },
+      "vc_new_usize": { "prover": "alt-ergo", "time": 0.009 },
+      "vc_slice_range_inclusive": { "prover": "alt-ergo", "time": 0.038 }
+    }
+  }
+}

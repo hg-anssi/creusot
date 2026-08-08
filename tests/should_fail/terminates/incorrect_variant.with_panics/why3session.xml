@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.15.3" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC5" version="1.3.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="coma">
+<path name=".."/><path name="incorrect_variant.with_panics.coma"/>
+<theory name="M_incorrect_loop_variant">
+ <goal name="vc_incorrect_loop_variant">
+ <proof prover="0"><result status="unknown" time="0.025334" steps="10009"/></proof>
+ <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="12757"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="19526069"/></proof>
+ <proof prover="3"><result status="timeout" time="1.000000" steps="122765"/></proof>
+ <transf name="compute_specified" >
+  <goal name="vc_incorrect_loop_variant.0">
+  <proof prover="0"><result status="unknown" time="0.038223" steps="9038"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="11329"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="10608151"/></proof>
+  <proof prover="3"><result status="timeout" time="1.000000" steps="141700"/></proof>
+  <transf name="split_vc" >
+   <goal name="vc_incorrect_loop_variant.0.0" expl="Rem overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.017374" steps="6"/></proof>
+   </goal>
+   <goal name="vc_incorrect_loop_variant.0.1" expl="division by zero" proved="true">
+   <proof prover="1"><result status="valid" time="0.015958" steps="7"/></proof>
+   </goal>
+   <goal name="vc_incorrect_loop_variant.0.2" expl="integer overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.017409" steps="9"/></proof>
+   </goal>
+   <goal name="vc_incorrect_loop_variant.0.3" expl="Sub overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.020441" steps="39"/></proof>
+   </goal>
+   <goal name="vc_incorrect_loop_variant.0.4" expl="loop variant" proved="true">
+   <proof prover="1"><result status="valid" time="0.029394" steps="130"/></proof>
+   </goal>
+   <goal name="vc_incorrect_loop_variant.0.5" expl="Add overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.012886" steps="43"/></proof>
+   </goal>
+   <goal name="vc_incorrect_loop_variant.0.6" expl="loop variant">
+   <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.047522" steps="7234"/></proof>
+   <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="25769"/></proof>
+   <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="21738952"/></proof>
+   <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="205679"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_incorrect_recursion">
+ <goal name="vc_incorrect_recursion&#39;0">
+ <proof prover="0"><result status="unknown" time="0.033989" steps="10022"/></proof>
+ <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="15356"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="7205951"/></proof>
+ <proof prover="3"><result status="timeout" time="1.000000" steps="122869"/></proof>
+ <transf name="compute_specified" >
+  <goal name="vc_incorrect_recursion&#39;0.0">
+  <proof prover="0"><result status="unknown" time="0.031827" steps="9051"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="10211"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="10879075"/></proof>
+  <proof prover="3"><result status="timeout" time="1.000000" steps="141707"/></proof>
+  <transf name="split_vc" >
+   <goal name="vc_incorrect_recursion&#39;0.0.0" expl="Rem overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.012854" steps="7"/></proof>
+   </goal>
+   <goal name="vc_incorrect_recursion&#39;0.0.1" expl="division by zero" proved="true">
+   <proof prover="1"><result status="valid" time="0.020877" steps="8"/></proof>
+   </goal>
+   <goal name="vc_incorrect_recursion&#39;0.0.2" expl="integer overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.018842" steps="9"/></proof>
+   </goal>
+   <goal name="vc_incorrect_recursion&#39;0.0.3" expl="Sub overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.021263" steps="40"/></proof>
+   </goal>
+   <goal name="vc_incorrect_recursion&#39;0.0.4" expl="function variant" proved="true">
+   <proof prover="1"><result status="valid" time="0.021225" steps="132"/></proof>
+   </goal>
+   <goal name="vc_incorrect_recursion&#39;0.0.5" expl="Add overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.012608" steps="43"/></proof>
+   </goal>
+   <goal name="vc_incorrect_recursion&#39;0.0.6" expl="function variant">
+   <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.022574" steps="7246"/></proof>
+   <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="35031"/></proof>
+   <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="30336164"/></proof>
+   <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="185287"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_incorrect_recursion_logic">
+ <goal name="vc_incorrect_recursion">
+ <proof prover="0"><result status="unknown" time="0.018236" steps="2938"/></proof>
+ <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="14489"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="5403154"/></proof>
+ <proof prover="3"><result status="unknown" time="0.026067" steps="8765"/></proof>
+ <transf name="split_vc" >
+  <goal name="vc_incorrect_recursion.0" expl="incorrect_recursion_logic ensures" proved="true">
+  <proof prover="1"><result status="valid" time="0.024665" steps="2"/></proof>
+  </goal>
+  <goal name="vc_incorrect_recursion.1" expl="variant decreases">
+  <proof prover="0"><result status="unknown" time="0.003770" steps="2865"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="10631"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="4756097"/></proof>
+  <proof prover="3"><result status="unknown" time="0.023485" steps="8708"/></proof>
+  <transf name="compute_specified" >
+   <goal name="vc_incorrect_recursion.1.0" expl="variant decreases">
+   <proof prover="0"><result status="unknown" time="0.025293" steps="2865"/></proof>
+   <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="12904"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="10768662"/></proof>
+   <proof prover="3"><result status="unknown" time="0.022437" steps="8708"/></proof>
+   <transf name="split_vc" >
+    <goal name="vc_incorrect_recursion.1.0.0" expl="variant decreases">
+    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.019344" steps="2836"/></proof>
+    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="68522"/></proof>
+    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="38499849"/></proof>
+    <proof prover="3" timelimit="2" memlimit="4000"><result status="unknown" time="0.022721" steps="8780"/></proof>
+    </goal>
+    <goal name="vc_incorrect_recursion.1.0.1" expl="variant decreases">
+    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.019944" steps="2851"/></proof>
+    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="24342"/></proof>
+    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="30634482"/></proof>
+    <proof prover="3" timelimit="2" memlimit="4000"><result status="unknown" time="0.029771" steps="8700"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="vc_incorrect_recursion.2" expl="incorrect_recursion_logic ensures" proved="true">
+  <proof prover="1"><result status="valid" time="0.008367" steps="7"/></proof>
+  </goal>
+  <goal name="vc_incorrect_recursion.3" expl="variant decreases">
+  <proof prover="0"><result status="unknown" time="0.016793" steps="2855"/></proof>
+  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="23676"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="6688826"/></proof>
+  <proof prover="3"><result status="unknown" time="0.025223" steps="8995"/></proof>
+  <transf name="compute_specified" >
+   <goal name="vc_incorrect_recursion.3.0" expl="variant decreases">
+   <proof prover="0"><result status="unknown" time="0.019473" steps="2855"/></proof>
+   <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="18707"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="8084658"/></proof>
+   <proof prover="3"><result status="unknown" time="0.024641" steps="8995"/></proof>
+   <transf name="split_vc" >
+    <goal name="vc_incorrect_recursion.3.0.0" expl="variant decreases">
+    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.014993" steps="2831"/></proof>
+    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="51115"/></proof>
+    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="12558118"/></proof>
+    <proof prover="3" timelimit="2" memlimit="4000"><result status="unknown" time="0.034828" steps="8981"/></proof>
+    </goal>
+    <goal name="vc_incorrect_recursion.3.0.1" expl="variant decreases" proved="true">
+    <proof prover="1"><result status="valid" time="0.012906" steps="4"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+  <goal name="vc_incorrect_recursion.4" expl="incorrect_recursion_logic ensures" proved="true">
+  <proof prover="1"><result status="valid" time="0.027886" steps="7"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

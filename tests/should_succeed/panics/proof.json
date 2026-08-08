@@ -84,7 +84,7 @@
       "vc_vacuous_normal_post": { "prover": "alt-ergo", "time": 0.043 }
     },
     "M_vacuous_normal_post_call": {
-      "vc_vacuous_normal_post_call": { "prover": "alt-ergo", "time": 0.022 }
+      "vc_vacuous_normal_post_call": { "prover": "alt-ergo", "time": 0.045 }
     }
   }
 }

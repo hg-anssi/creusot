@@ -12,7 +12,7 @@
       "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.03 }
     },
     "M_impl_ExactSizeIterator_for_Map_I_F__is_empty": {
-      "vc_is_empty_I": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_is_empty_I": { "prover": "alt-ergo", "time": 0.035 },
       "vc_is_empty_Map_I_F": {
         "tactic": "compute_specified",
         "children": [
@@ -37,17 +37,17 @@
     "M_impl_ExactSizeIterator_for_Map_I_F__len": {
       "vc_len_I": { "prover": "alt-ergo", "time": 0.021 },
       "vc_len_Map_I_F": { "prover": "alt-ergo", "time": 0.036 },
-      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.014 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.032 },
       "vc_size_hint_Map_I_F": { "prover": "alt-ergo", "time": 0.018 }
     },
     "M_impl_ExactSizeIterator_for_Map_I_F__len__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.029 },
-      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.015 },
-      "vc_size_hint_Map_I_F": { "prover": "alt-ergo", "time": 0.015 }
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.034 },
+      "vc_size_hint_Map_I_F": { "prover": "alt-ergo", "time": 0.034 }
     },
     "M_impl_ExactSizeIterator_for_Map_I_F__size_hint_exact": {
-      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.016 },
-      "vc_size_hint_Map_I_F": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.037 },
+      "vc_size_hint_Map_I_F": { "prover": "alt-ergo", "time": 0.034 },
       "vc_size_hint_exact_Map_I_F": { "prover": "alt-ergo", "time": 0.023 }
     },
     "M_impl_ExactSizeIterator_for_Map_I_F__size_hint_exact__refines": {
@@ -56,7 +56,7 @@
       "vc_size_hint_Map_I_F": { "prover": "alt-ergo", "time": 0.036 }
     },
     "M_impl_Iterator_for_Map_I_F__next": {
-      "vc_call_mut_F": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_call_mut_F": { "prover": "alt-ergo", "time": 0.014 },
       "vc_elim_Some": { "prover": "alt-ergo", "time": 0.021 },
       "vc_next_I": { "prover": "alt-ergo", "time": 0.018 },
       "vc_next_Map_I_F": { "prover": "cvc4", "time": 0.071 }
@@ -98,7 +98,7 @@
               { "prover": "alt-ergo", "time": 0.025 },
               {
                 "tactic": "split_vc",
-                "children": [ { "prover": "alt-ergo", "time": 0.027 } ]
+                "children": [ { "prover": "alt-ergo", "time": 0.012 } ]
               },
               {
                 "tactic": "compute_specified",
@@ -107,7 +107,7 @@
                     "tactic": "split_vc",
                     "children": [
                       { "prover": "alt-ergo", "time": 0.04 },
-                      { "prover": "alt-ergo", "time": 0.081 }
+                      { "prover": "alt-ergo", "time": 0.037 }
                     ]
                   }
                 ]
@@ -170,7 +170,7 @@
             "tactic": "split_vc",
             "children": [
               { "prover": "alt-ergo", "time": 0.029 },
-              { "prover": "alt-ergo", "time": 0.044 },
+              { "prover": "alt-ergo", "time": 0.016 },
               { "prover": "alt-ergo", "time": 0.021 },
               { "prover": "alt-ergo", "time": 0.058 }
             ]

@@ -1,0 +1,41 @@
+module M_test
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  let closure0 (self: ()) (x: UInt64.t) (return (x'0: UInt64.t)) =
+  {[@stop_split] [@expl:closure requires] UInt64.t'int x < 1000}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_6 <- let (_fst, _snd) = UInt64.add_with_overflow x (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _6.f1} s2
+      | s2 = [ &res'0 <- _6.f0 ] s3
+      | s3 = [ &res <- res'0 ] s4
+      | s4 = [ &_ret <- res ] s5
+      | s5 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l ()
+    | & x: UInt64.t = x
+    | & res: UInt64.t = Any.any_l ()
+    | & res'0: UInt64.t = Any.any_l ()
+    | & _6: tup2_usize_bool = Any.any_l () ])
+    [ return (result: UInt64.t) -> {[@stop_split] [@expl:closure ensures] UInt64.t'int result = UInt64.t'int x + 1}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let test (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &c <- () ] s1
+      | s1 = [ &_4 <- (2: UInt64.t) ] s2
+      | s2 = closure0 {c} {_4} (fun (_x: UInt64.t) -> [ &y <- _x ] s3)
+      | s3 = {[@expl:assertion] UInt64.t'int y = 3} s4
+      | s4 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & c: () = Any.any_l ()
+    | & y: UInt64.t = Any.any_l ()
+    | & _4: UInt64.t = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end

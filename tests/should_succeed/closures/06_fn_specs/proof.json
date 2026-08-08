@@ -8,7 +8,7 @@
   "proofs": {
     "M_caller": {
       "vc_caller": { "prover": "cvc5", "time": 0.024 },
-      "vc_closure0": { "prover": "cvc5", "time": 0.011 },
+      "vc_closure0": { "prover": "cvc5", "time": 0.024 },
       "vc_fn_once_user_closure0": { "prover": "cvc5", "time": 0.008 }
     },
     "M_fn_once_user": {

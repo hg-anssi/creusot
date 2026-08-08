@@ -2,18 +2,25 @@ module M_foo
   use creusot.int.Int32
   use creusot.prelude.Any
   
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
   let closure0 [@coma:extspec] (self: ()) (x: Int32.t) (return (x'0: Int32.t)) = bb0
-    [ bb0 = s0 [ s0 = Int32.add {x} {(1: Int32.t)} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x ] [ return (result: Int32.t) -> return {result} ]
+    [ bb0 = s0
+      [ s0 = [ &_4 <- let (_fst, _snd) = Int32.add_with_overflow x (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &_ret <- _4.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x | & _4: tup2_i32_bool = Any.any_l () ]
+    [ return (result: Int32.t) -> return {result} ]
   
   meta "rewrite_def" predicate closure0'pre
   
   meta "rewrite_def" predicate closure0'post'return
   
-  type t_FnGhostWrapper_closure0 = { f0: () }
+  type t_FnGhostWrapper_closure0 = { f0'0: () }
   
   let __new_closure0 (f: ()) (return (x: t_FnGhostWrapper_closure0)) = any
-    [ return (result: t_FnGhostWrapper_closure0) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+    [ return (result: t_FnGhostWrapper_closure0) -> {[@stop_split] [@expl:__new ensures] result.f0'0 = f}
       (! return {result}) ]
   
   predicate precondition_closure0 (self: ()) (args: Int32.t) = let x = args in closure0'pre self x
@@ -21,7 +28,7 @@ module M_foo
   meta "rewrite_def" predicate precondition_closure0
   
   predicate precondition_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: Int32.t) =
-    precondition_closure0 self.f0 args
+    precondition_closure0 self.f0'0 args
   
   meta "rewrite_def" predicate precondition_FnGhostWrapper_closure0
   
@@ -31,7 +38,7 @@ module M_foo
   meta "rewrite_def" predicate postcondition_once_closure0
   
   predicate postcondition_once_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: Int32.t) (result: Int32.t) =
-    postcondition_once_closure0 self.f0 args result
+    postcondition_once_closure0 self.f0'0 args result
   
   meta "rewrite_def" predicate postcondition_once_FnGhostWrapper_closure0
   
@@ -73,7 +80,7 @@ module M_foo
   meta "rewrite_def" predicate resolve_FnGhostWrapper_closure0
   
   predicate postcondition_mut_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: Int32.t) (result_state: t_FnGhostWrapper_closure0) (result: Int32.t) =
-    postcondition_mut_closure0 self.f0 args result_state.f0 result
+    postcondition_mut_closure0 self.f0'0 args result_state.f0'0 result
   
   meta "rewrite_def" predicate postcondition_mut_FnGhostWrapper_closure0
   
@@ -133,7 +140,7 @@ module M_foo
       = (self = res_state)
   
   predicate postcondition_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: Int32.t) (result: Int32.t) =
-    postcondition_closure0 self.f0 args result
+    postcondition_closure0 self.f0'0 args result
   
   meta "rewrite_def" predicate postcondition_FnGhostWrapper_closure0
   
@@ -154,7 +161,7 @@ module M_foo
   meta "rewrite_def" predicate panic_condition_closure0
   
   predicate panic_condition_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: Int32.t) =
-    panic_condition_closure0 self.f0 args
+    panic_condition_closure0 self.f0'0 args
   
   meta "rewrite_def" predicate panic_condition_FnGhostWrapper_closure0
   

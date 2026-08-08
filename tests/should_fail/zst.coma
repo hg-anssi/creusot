@@ -42,13 +42,14 @@ module M_zst_pointers_may_be_equal
   meta "rewrite_def" predicate resolve_elswhere_usize
   
   let index_mut_Vec_unit_Global (self_: MutBorrow.t t_Vec_unit_Global) (ix: UInt64.t) (return (x: MutBorrow.t ())) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_usize ix (view_Vec_unit_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_usize ix (view_Vec_unit_Global self_.current)}
     any
     [ return (result: MutBorrow.t ()) ->
-    {[@stop_split] [@expl:index_mut_Vec_unit_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_usize ix (view_Vec_unit_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_unit_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_usize ix (view_Vec_unit_Global self_.current) (view_Vec_unit_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_unit_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_unit_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize ix (view_Vec_unit_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_unit_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize ix (view_Vec_unit_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize ix (view_Vec_unit_Global self_.current) (view_Vec_unit_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_unit_Global self_.final)
       = Seq.length (view_Vec_unit_Global self_.current))}
       (! return {result}) ]
   
@@ -120,10 +121,11 @@ module M_zst_pointers_may_be_equal
   meta "rewrite_def" predicate resolve_refmut_unit
   
   let index_Vec_unit_Global (self_: t_Vec_unit_Global) (ix: UInt64.t) (return (x: ())) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_unit_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_unit_Global self_)}
     any
     [ return (result: ()) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_unit_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_unit_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_unit_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_unit_Global self_) result)}
       (! return {result}) ]
   
   type tup2_ptr_unit_Ghost_ref_Perm_ptr_unit = { f0'0: Opaque.ptr; f1'0: t_Perm_ptr_unit }

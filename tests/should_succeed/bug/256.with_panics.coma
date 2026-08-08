@@ -1,0 +1,38 @@
+module M_bug_256
+  use creusot.prelude.Any
+  
+  type t_String
+  
+  predicate inv_String (_1: t_String)
+  
+  predicate resolve_String (_1: t_String)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let bug_256 (_x: t_String) (return (x: ())) = {[@stop_split] [@expl:bug_256 '_x' type invariant] inv_String _x}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_String _x} any) ]
+      | s1 = -{resolve_String _x}- s2
+      | s2 = return {_ret} ] ] [ & _ret: () = Any.any_l () | & _x: t_String = _x ])
+    [ return (result: ()) -> (! return {result}) ]
+end
+module M_u8_safe
+  use creusot.int.UInt8
+  use creusot.prelude.Any
+  
+  type tup2_u8_bool = { f0: UInt8.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let u8_safe (u: UInt8.t) (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_4 <- let (_fst, _snd) = UInt8.add_with_overflow u (0: UInt8.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = return {_ret} ] ] [ & _ret: () = Any.any_l () | & u: UInt8.t = u | & _4: tup2_u8_bool = Any.any_l () ])
+    [ return (result: ()) -> (! return {result}) ]
+end

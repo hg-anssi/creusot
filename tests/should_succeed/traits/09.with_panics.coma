@@ -1,0 +1,35 @@
+module M_test
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let test_T (t: UInt32.t) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_3 <- let (_fst, _snd) = UInt32.add_with_overflow t (0: UInt32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _3.f1} s2
+      | s2 = [ &_ret <- _3.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l () | & t: UInt32.t = t | & _3: tup2_u32_bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result}) ]
+end
+module M_test2
+  use creusot.prelude.Any
+  
+  type t_X
+  
+  predicate inv_X (_1: t_X)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let test2_T (t: t_X) (return (x: t_X)) = {[@stop_split] [@expl:test2 't' type invariant] inv_X t}
+    (! bb0
+    [ bb0 = s0 [ s0 = [ &_ret <- t ] s1 | s1 = return {_ret} ] ] [ & _ret: t_X = Any.any_l () | & t: t_X = t ])
+    [ return (result: t_X) -> {[@stop_split] [@expl:test2 result type invariant] inv_X result} (! return {result}) ]
+end

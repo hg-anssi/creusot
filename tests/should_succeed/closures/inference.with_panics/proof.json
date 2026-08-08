@@ -63,7 +63,7 @@
     "M_closure_fn_mut": {
       "vc_call_with_one_mut_closure0": {
         "prover": "alt-ergo",
-        "time": 0.008
+        "time": 0.021
       },
       "vc_call_with_one_once_closure0": {
         "prover": "alt-ergo",
@@ -78,7 +78,7 @@
         "time": 0.016
       },
       "vc_closure0": { "prover": "alt-ergo", "time": 0.013 },
-      "vc_closure_fn_once": { "prover": "alt-ergo", "time": 0.027 }
+      "vc_closure_fn_once": { "prover": "alt-ergo", "time": 0.054 }
     }
   }
 }

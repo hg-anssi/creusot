@@ -1,0 +1,339 @@
+module M_gnome_sort
+  use creusot.int.UInt64
+  use creusot.prelude.MutBorrow
+  use seq.Seq
+  use seq.Permut
+  use creusot.slice.Slice64
+  use creusot.prelude.Any
+  use int.Int
+  
+  type t_Vec_T_Global
+  
+  type t_T
+  
+  predicate inv_T (_1: t_T)
+  
+  predicate invariant_ref_T [@inline:trivial] (self: t_T) = inv_T self
+  
+  meta "rewrite_def" predicate invariant_ref_T
+  
+  predicate inv_ref_T [@inline:trivial] (_1: t_T) = invariant_ref_T _1
+  
+  meta "rewrite_def" predicate inv_ref_T
+  
+  predicate invariant_Seq_T [@inline:trivial] (self: Seq.seq t_T) =
+    forall i: int. 0 <= i /\ i < Seq.length self -> inv_ref_T (Seq.get self i)
+  
+  meta "rewrite_def" predicate invariant_Seq_T
+  
+  predicate inv_Seq_T [@inline:trivial] (_1: Seq.seq t_T) = invariant_Seq_T _1
+  
+  meta "rewrite_def" predicate inv_Seq_T
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  function view_Vec_T_Global (self: t_Vec_T_Global) : Seq.seq t_T
+  
+  axiom view_Vec_T_Global_spec:
+    forall self: t_Vec_T_Global [view_Vec_T_Global self]. Seq.length (view_Vec_T_Global self) <= UInt64.t'int const_MAX
+  
+  predicate invariant_Vec_T_Global (self: t_Vec_T_Global) = inv_Seq_T (view_Vec_T_Global self)
+  
+  predicate inv_Vec_T_Global (_1: t_Vec_T_Global)
+  
+  axiom inv_axiom: forall x: t_Vec_T_Global [inv_Vec_T_Global x]. inv_Vec_T_Global x -> invariant_Vec_T_Global x
+  
+  predicate invariant_ref_Vec_T_Global [@inline:trivial] (self: t_Vec_T_Global) = inv_Vec_T_Global self
+  
+  meta "rewrite_def" predicate invariant_ref_Vec_T_Global
+  
+  predicate inv_ref_Vec_T_Global [@inline:trivial] (_1: t_Vec_T_Global) = invariant_ref_Vec_T_Global _1
+  
+  meta "rewrite_def" predicate inv_ref_Vec_T_Global
+  
+  let len_T (self_: t_Vec_T_Global) (return (x: UInt64.t)) =
+  {[@stop_split] [@expl:len 'self_' type invariant] inv_ref_Vec_T_Global self_}
+    any
+    [ return (result: UInt64.t) -> {[@stop_split] [@expl:len ensures] UInt64.t'int result
+      = Seq.length (view_Vec_T_Global self_)}
+      (! return {result}) ]
+  
+  predicate permutation_of_T (self: Seq.seq t_T) (other: Seq.seq t_T) = Permut.permut self other 0 (Seq.length self)
+  
+  type t_DeepModelTy
+  
+  type t_Ordering = Less | Equal | Greater
+  
+  function cmp_log_DeepModelTy (self: t_DeepModelTy) (other: t_DeepModelTy) : t_Ordering
+  
+  function eq_cmp_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) : ()
+  
+  axiom eq_cmp_DeepModelTy_spec: forall x: t_DeepModelTy, y: t_DeepModelTy. (x = y) = (cmp_log_DeepModelTy x y = Equal)
+  
+  function antisym2_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) : ()
+  
+  axiom antisym2_DeepModelTy_spec: forall x: t_DeepModelTy, y: t_DeepModelTy. cmp_log_DeepModelTy x y = Greater
+      -> cmp_log_DeepModelTy y x = Less
+  
+  function antisym1_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) : ()
+  
+  axiom antisym1_DeepModelTy_spec: forall x: t_DeepModelTy, y: t_DeepModelTy. cmp_log_DeepModelTy x y = Less
+      -> cmp_log_DeepModelTy y x = Greater
+  
+  function trans_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) (z: t_DeepModelTy) (o: t_Ordering) : ()
+  
+  axiom trans_DeepModelTy_spec:
+    forall x: t_DeepModelTy, y: t_DeepModelTy, z: t_DeepModelTy, o: t_Ordering. cmp_log_DeepModelTy x y = o
+      -> cmp_log_DeepModelTy y z = o -> cmp_log_DeepModelTy x z = o
+  
+  function refl_DeepModelTy (x: t_DeepModelTy) : ()
+  
+  axiom refl_DeepModelTy_spec: forall x: t_DeepModelTy. cmp_log_DeepModelTy x x = Equal
+  
+  predicate gt_log_DeepModelTy (self: t_DeepModelTy) (o: t_DeepModelTy)
+  
+  function cmp_gt_log_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) : ()
+  
+  axiom cmp_gt_log_DeepModelTy_spec: forall x: t_DeepModelTy, y: t_DeepModelTy. gt_log_DeepModelTy x y
+      = (cmp_log_DeepModelTy x y = Greater)
+  
+  predicate ge_log_DeepModelTy (self: t_DeepModelTy) (o: t_DeepModelTy)
+  
+  function cmp_ge_log_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) : ()
+  
+  axiom cmp_ge_log_DeepModelTy_spec: forall x: t_DeepModelTy, y: t_DeepModelTy. ge_log_DeepModelTy x y
+      = (cmp_log_DeepModelTy x y <> Less)
+  
+  predicate lt_log_DeepModelTy (self: t_DeepModelTy) (o: t_DeepModelTy)
+  
+  function cmp_lt_log_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) : ()
+  
+  axiom cmp_lt_log_DeepModelTy_spec: forall x: t_DeepModelTy, y: t_DeepModelTy. lt_log_DeepModelTy x y
+      = (cmp_log_DeepModelTy x y = Less)
+  
+  predicate le_log_DeepModelTy (self: t_DeepModelTy) (o: t_DeepModelTy)
+  
+  function cmp_le_log_DeepModelTy (x: t_DeepModelTy) (y: t_DeepModelTy) : ()
+  
+  axiom cmp_le_log_DeepModelTy_spec: forall x: t_DeepModelTy, y: t_DeepModelTy. le_log_DeepModelTy x y
+      = (cmp_log_DeepModelTy x y <> Greater)
+  
+  predicate sorted_range_DeepModelTy (s: Seq.seq t_DeepModelTy) (l: int) (u: int) =
+    forall i: int, j: int. l <= i /\ i < j /\ j < u -> le_log_DeepModelTy (Seq.get s i) (Seq.get s j)
+  
+  function deep_model_T (self: t_T) : t_DeepModelTy
+  
+  function index_Vec_T_Global [@inline:trivial] (self: t_Vec_T_Global) (ix: int) : t_T =
+    Seq.get (view_Vec_T_Global self) ix
+  
+  meta "rewrite_def" function index_Vec_T_Global
+  
+  function deep_model_Vec_T_Global (self: t_Vec_T_Global) : Seq.seq t_DeepModelTy
+  
+  axiom deep_model_Vec_T_Global_spec:
+    forall self: t_Vec_T_Global [deep_model_Vec_T_Global self]. Seq.length (view_Vec_T_Global self)
+      = Seq.length (deep_model_Vec_T_Global self)
+  
+  axiom deep_model_Vec_T_Global_spec'0: forall self: t_Vec_T_Global [deep_model_Vec_T_Global self]. forall i: int. 0
+            <= i
+          /\ i < Seq.length (view_Vec_T_Global self)
+        -> Seq.get (deep_model_Vec_T_Global self) i = deep_model_T (index_Vec_T_Global self i)
+  
+  function deep_model_refmut_Vec_T_Global [@inline:trivial] (self: MutBorrow.t t_Vec_T_Global) : Seq.seq t_DeepModelTy =
+    deep_model_Vec_T_Global self.current
+  
+  meta "rewrite_def" function deep_model_refmut_Vec_T_Global
+  
+  predicate invariant_refmut_Vec_T_Global [@inline:trivial] (self: MutBorrow.t t_Vec_T_Global) =
+    inv_Vec_T_Global self.current /\ inv_Vec_T_Global self.final
+  
+  meta "rewrite_def" predicate invariant_refmut_Vec_T_Global
+  
+  predicate inv_refmut_Vec_T_Global [@inline:trivial] (_1: MutBorrow.t t_Vec_T_Global) =
+    invariant_refmut_Vec_T_Global _1
+  
+  meta "rewrite_def" predicate inv_refmut_Vec_T_Global
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  predicate in_bounds_usize [@inline:trivial] (self: UInt64.t) (seq: Seq.seq t_T) = UInt64.t'int self < Seq.length seq
+  
+  meta "rewrite_def" predicate in_bounds_usize
+  
+  predicate has_value_usize [@inline:trivial] (self: UInt64.t) (seq: Seq.seq t_T) (out: t_T) =
+    Seq.get seq (UInt64.t'int self) = out
+  
+  meta "rewrite_def" predicate has_value_usize
+  
+  let index_Vec_T_Global'0 (self_: t_Vec_T_Global) (ix: UInt64.t) (panic) (return (x: t_T)) =
+  {[@stop_split] [@expl:index 'self_' type invariant] inv_ref_Vec_T_Global self_}
+    any
+    [ return (result: t_T) ->
+    {[@stop_split] [@expl:index_Vec_T_Global ensures] ([@stop_split] [@expl:index result type invariant] inv_ref_T result)
+      /\ ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_T_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_T_Global self_) result)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:index may_panic] not in_bounds_usize ix (view_Vec_T_Global self_)} (! panic) ]
+  
+  type tup2_ref_T_ref_T = { f0'0: t_T; f1'0: t_T }
+  
+  predicate precondition_le (self: ()) (args: tup2_ref_T_ref_T)
+  
+  axiom precondition_fndef:
+    forall args: tup2_ref_T_ref_T [precondition_le () args]. (let {f0'0 = self_; f1'0 = other} = args in inv_ref_T self_
+        /\ inv_ref_T other) -> precondition_le () args
+  
+  function deep_model_ref_T [@inline:trivial] (self: t_T) : t_DeepModelTy = deep_model_T self
+  
+  meta "rewrite_def" function deep_model_ref_T
+  
+  predicate postcondition_once_le (self: ()) (args: tup2_ref_T_ref_T) (result: bool)
+  
+  axiom postcondition_fndef:
+    forall args: tup2_ref_T_ref_T, res: bool [postcondition_once_le () args res]. postcondition_once_le () args res
+      -> (let {f0'0 = self_; f1'0 = other} = args in res
+      = le_log_DeepModelTy (deep_model_ref_T self_) (deep_model_ref_T other))
+  
+  let le_T (self_: t_T) (other: t_T) (return (x: bool)) =
+  {[@stop_split] [@expl:le requires] precondition_le () { f0'0 = self_; f1'0 = other }}
+    any
+    [ return (result: bool) -> {[@stop_split] [@expl:le ensures] postcondition_once_le () { f0'0 = self_;
+                                                                                            f1'0 = other } result}
+      (! return {result}) ]
+  
+  predicate invariant_slice_T (self: Slice64.slice t_T) = inv_Seq_T (Slice64.view self)
+  
+  predicate inv_slice_T [@inline:trivial] (_1: Slice64.slice t_T) = invariant_slice_T _1
+  
+  meta "rewrite_def" predicate inv_slice_T
+  
+  predicate invariant_refmut_slice_T [@inline:trivial] (self: MutBorrow.t (Slice64.slice t_T)) =
+    inv_slice_T self.current /\ inv_slice_T self.final
+  
+  meta "rewrite_def" predicate invariant_refmut_slice_T
+  
+  predicate inv_refmut_slice_T [@inline:trivial] (_1: MutBorrow.t (Slice64.slice t_T)) = invariant_refmut_slice_T _1
+  
+  meta "rewrite_def" predicate inv_refmut_slice_T
+  
+  let deref_mut_Vec_T_Global (self_: MutBorrow.t t_Vec_T_Global) (return (x: MutBorrow.t (Slice64.slice t_T))) =
+  {[@stop_split] [@expl:deref_mut 'self_' type invariant] inv_refmut_Vec_T_Global self_}
+    any
+    [ return (result: MutBorrow.t (Slice64.slice t_T)) ->
+    {[@stop_split] [@expl:deref_mut_Vec_T_Global ensures] ([@stop_split] [@expl:deref_mut result type invariant] inv_refmut_slice_T result)
+      /\ ([@stop_split] [@expl:deref_mut ensures #0] Slice64.view result.current = view_Vec_T_Global self_.current)
+      /\ ([@stop_split] [@expl:deref_mut ensures #1] Seq.length (view_Vec_T_Global self_.final)
+        = Seq.length (view_Vec_T_Global self_.current))
+      /\ ([@stop_split] [@expl:deref_mut ensures #2] Slice64.view result.final = view_Vec_T_Global self_.final)}
+      (! return {result}) ]
+  
+  let swap_T (self_: MutBorrow.t (Slice64.slice t_T)) (i: UInt64.t) (j: UInt64.t) (panic) (return (x: ())) =
+  {[@stop_split] [@expl:swap 'self_' type invariant] inv_refmut_slice_T self_}
+    any
+    [ return (result: ()) ->
+    {[@stop_split] [@expl:swap_T ensures] ([@stop_split] [@expl:swap ensures #0] not UInt64.t'int i
+        >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #1] not UInt64.t'int j >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #2] Permut.exchange (Slice64.view self_.final) (Slice64.view self_.current) (UInt64.t'int i) (UInt64.t'int j))}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:swap_T may_panic] ([@stop_split] [@expl:swap may_panic #0] UInt64.t'int i
+        >= Seq.length (Slice64.view self_.current))
+      \/ ([@stop_split] [@expl:swap may_panic #1] UInt64.t'int j >= Seq.length (Slice64.view self_.current))}
+      (! panic) ]
+  
+  predicate resolve_refmut_slice_T [@inline:trivial] (_1: MutBorrow.t (Slice64.slice t_T)) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_slice_T
+  
+  predicate resolve_refmut_Vec_T_Global [@inline:trivial] (_1: MutBorrow.t t_Vec_T_Global) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_Vec_T_Global
+  
+  predicate sorted_DeepModelTy (s: Seq.seq t_DeepModelTy) = sorted_range_DeepModelTy s 0 (Seq.length s)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let gnome_sort_T (v: MutBorrow.t t_Vec_T_Global) (return (x: ())) =
+  {[@stop_split] [@expl:gnome_sort 'v' type invariant] inv_refmut_Vec_T_Global v}
+    (! bb0
+    [ bb0 = s0 [ s0 = [ &old_v <- v ] s1 | s1 = [ &i <- (0: UInt64.t) ] s2 | s2 = [ &_old <- v.final ] s3 | s3 = bb2 ]
+    | bb2 = bb2
+      [ bb2 = {[@expl:inferred invariant: type invariant] inv_refmut_Vec_T_Global v}
+        {[@expl:inferred invariant: unchanged value] _old = v.final}
+        {[@expl:loop invariant #0] sorted_range_DeepModelTy (deep_model_refmut_Vec_T_Global v) 0 (UInt64.t'int i)}
+        {[@expl:loop invariant #1] permutation_of_T (view_Vec_T_Global v.current) (view_Vec_T_Global old_v.current)}
+        (! s0)
+        [ s0 = len_T {v.current} (fun (_x: UInt64.t) -> [ &_20 <- _x ] s1)
+        | s1 = [ &_18 <- UInt64.lt i _20 ] s2
+        | s2 = any [ br0 -> {_18 = false} (! bb21) | br1 -> {_18} (! bb5) ] ]
+        [ bb5 = s0
+          [ s0 = [ &_22 <- i = (0: UInt64.t) ] s1 | s1 = any [ br0 -> {_22 = false} (! bb7) | br1 -> {_22} (! bb13) ] ]
+        | bb7 = s0
+          [ s0 = [ &_30 <- let (_fst, _snd) = UInt64.sub_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s1
+          | s1 = {[@expl:Sub overflow] not _30.f1} s2
+          | s2 = index_Vec_T_Global'0 {v.current} {_30.f0}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: t_T) -> [ &_26 <- _x ] s3)
+          | s3 = index_Vec_T_Global'0 {v.current} {i}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: t_T) -> [ &_32 <- _x ] s4)
+          | s4 = le_T {_26} {_32} (fun (_x: bool) -> [ &_24 <- _x ] s5)
+          | s5 = any [ br0 -> {_24 = false} (! bb15) | br1 -> {_24} (! bb13) ] ]
+        | bb13 = s0
+          [ s0 = [ &_35 <- let (_fst, _snd) = UInt64.add_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s1
+          | s1 = {[@expl:Add overflow] not _35.f1} s2
+          | s2 = [ &i <- _35.f0 ] s3
+          | s3 = bb2 ]
+        | bb15 = s0
+          [ s0 = MutBorrow.borrow_mut <t_Vec_T_Global> {v.current}
+              (fun (_bor: MutBorrow.t t_Vec_T_Global) ->
+                [ &_39 <- _bor ] -{inv_Vec_T_Global _bor.final}-
+                [ &v <- { v with current = _bor.final } ] s1)
+            [ _ck -> (! {[@expl:type invariant] inv_Vec_T_Global v.current} any) ]
+          | s1 = deref_mut_Vec_T_Global {_39} (fun (_x: MutBorrow.t (Slice64.slice t_T)) -> [ &_38 <- _x ] s2)
+          | s2 = [ &_42 <- let (_fst, _snd) = UInt64.sub_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s3
+          | s3 = {[@expl:Sub overflow] not _42.f1} s4
+          | s4 = MutBorrow.borrow_final <Slice64.slice t_T> {_38.current} {MutBorrow.get_id _38}
+              (fun (_bor: MutBorrow.t (Slice64.slice t_T)) ->
+                [ &_37 <- _bor ] -{inv_slice_T _bor.final}-
+                [ &_38 <- { _38 with current = _bor.final } ] s5)
+            [ _ck -> (! {[@expl:type invariant] inv_slice_T _38.current} any) ]
+          | s5 = swap_T {_37} {_42.f0} {i}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: ()) -> [ &_36 <- _x ] s6)
+          | s6 = s7 [ _ck -> (! {[@expl:type invariant] inv_refmut_slice_T _38} any) ]
+          | s7 = -{resolve_refmut_slice_T _38}- s8
+          | s8 = [ &_44 <- let (_fst, _snd) = UInt64.sub_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s9
+          | s9 = {[@expl:Sub overflow] not _44.f1} s10
+          | s10 = [ &i <- _44.f0 ] s11
+          | s11 = bb2 ] ] ]
+    | bb21 = s0
+      [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_refmut_Vec_T_Global v} any) ]
+      | s1 = -{resolve_refmut_Vec_T_Global v}- s2
+      | s2 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & v: MutBorrow.t t_Vec_T_Global = v
+    | & old_v: MutBorrow.t t_Vec_T_Global = Any.any_l ()
+    | & i: UInt64.t = Any.any_l ()
+    | & _18: bool = Any.any_l ()
+    | & _20: UInt64.t = Any.any_l ()
+    | & _22: bool = Any.any_l ()
+    | & _24: bool = Any.any_l ()
+    | & _26: t_T = Any.any_l ()
+    | & _30: tup2_usize_bool = Any.any_l ()
+    | & _32: t_T = Any.any_l ()
+    | & _35: tup2_usize_bool = Any.any_l ()
+    | & _36: () = Any.any_l ()
+    | & _37: MutBorrow.t (Slice64.slice t_T) = Any.any_l ()
+    | & _38: MutBorrow.t (Slice64.slice t_T) = Any.any_l ()
+    | & _39: MutBorrow.t t_Vec_T_Global = Any.any_l ()
+    | & _42: tup2_usize_bool = Any.any_l ()
+    | & _44: tup2_usize_bool = Any.any_l ()
+    | & _old: t_Vec_T_Global = Any.any_l () ])
+    [ return (result: ()) ->
+    {[@stop_split] [@expl:gnome_sort_T ensures] ([@stop_split] [@expl:gnome_sort ensures #0] sorted_DeepModelTy (deep_model_Vec_T_Global v.final))
+      /\ ([@stop_split] [@expl:gnome_sort ensures #1] permutation_of_T (view_Vec_T_Global v.final) (view_Vec_T_Global v.current))}
+      (! return {result}) ]
+end

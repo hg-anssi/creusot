@@ -1,0 +1,14 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_all_ldz": {
+      "vc_all_ldz": { "prover": "alt-ergo", "time": 0.176 },
+      "vc_leading_zeros": { "prover": "alt-ergo", "time": 0.028 },
+      "vc_len_u64": { "prover": "alt-ergo", "time": 0.016 }
+    },
+    "M_boolvec_to_bitvec": {
+      "vc_boolvec_to_bitvec": { "prover": "z3", "time": 0.602 },
+      "vc_len_bool": { "prover": "alt-ergo", "time": 0.021 }
+    }
+  }
+}

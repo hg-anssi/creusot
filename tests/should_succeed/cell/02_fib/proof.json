@@ -18,7 +18,7 @@
             "children": [
               { "prover": "alt-ergo", "time": 0.028 },
               { "prover": "alt-ergo", "time": 0.109 },
-              { "prover": "alt-ergo", "time": 0.026 },
+              { "prover": "alt-ergo", "time": 0.061 },
               { "prover": "alt-ergo", "time": 0.14 },
               { "prover": "alt-ergo", "time": 0.048 },
               { "prover": "alt-ergo", "time": 0.128 },

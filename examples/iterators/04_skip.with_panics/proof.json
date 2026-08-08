@@ -1,0 +1,67 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_common__trait_ExactSizeIterator__is_empty": {
+      "vc_is_empty_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_common__trait_ExactSizeIterator__len": {
+      "vc_eq_Option_usize": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.021 }
+    },
+    "M_impl_ExactSizeIterator_for_Skip_I__size_hint_exact": {
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.011 },
+      "vc_size_hint_Skip_I": { "prover": "alt-ergo", "time": 0.011 },
+      "vc_size_hint_exact_Skip_I": { "prover": "alt-ergo", "time": 0.031 }
+    },
+    "M_impl_ExactSizeIterator_for_Skip_I__size_hint_exact__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.011 },
+      "vc_size_hint_Skip_I": { "prover": "alt-ergo", "time": 0.011 }
+    },
+    "M_impl_Iterator_for_Skip_I__next": {
+      "vc_default_usize": { "prover": "alt-ergo", "time": 0.031 },
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.027 },
+      "vc_next_I": { "prover": "alt-ergo", "time": 0.028 },
+      "vc_next_Skip_I": { "prover": "alt-ergo", "time": 0.071 },
+      "vc_take_usize": { "prover": "alt-ergo", "time": 0.031 }
+    },
+    "M_impl_Iterator_for_Skip_I__next__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.031 }
+    },
+    "M_impl_Iterator_for_Skip_I__produces_refl": {
+      "vc_produces_refl_Skip_I": { "prover": "alt-ergo", "time": 0.008 }
+    },
+    "M_impl_Iterator_for_Skip_I__produces_refl__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_impl_Iterator_for_Skip_I__produces_trans": {
+      "vc_produces_trans_Skip_I": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo", "time": 0.041 },
+          { "prover": "alt-ergo", "time": 0.044 },
+          { "prover": "alt-ergo", "time": 0.037 },
+          { "prover": "alt-ergo", "time": 0.06 },
+          { "prover": "cvc5", "time": 0.061 },
+          { "prover": "alt-ergo", "time": 0.031 }
+        ]
+      }
+    },
+    "M_impl_Iterator_for_Skip_I__produces_trans__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.011 }
+    },
+    "M_impl_Iterator_for_Skip_I__size_hint": {
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.036 },
+      "vc_saturating_sub": { "prover": "alt-ergo", "time": 0.036 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.034 },
+      "vc_size_hint_Skip_I": { "prover": "alt-ergo", "time": 0.158 }
+    },
+    "M_impl_Iterator_for_Skip_I__size_hint__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.138 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.029 }
+    }
+  }
+}

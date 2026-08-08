@@ -128,7 +128,7 @@ extern_spec! {
         fn pop(&mut self) -> Option<T>;
 
         #[check(ghost)]
-        #[requires(ix@ < self@.len())]
+        #[panics(ix@ >= self@.len())]
         #[ensures(result == self[ix@])]
         #[ensures((^self)@ == self@.subsequence(0, ix@).concat(self@.subsequence(ix@ + 1, self@.len())))]
         #[ensures((^self)@.len() == self@.len() - 1)]
@@ -172,6 +172,7 @@ extern_spec! {
 
     impl<T, A: Allocator> Extend<T> for Vec<T, A> {
         #[requires(I::into_iter.precondition((iter,)))]
+        #[may_panic(I::into_iter.panic_condition((iter,)))]
         #[ensures(exists<start_: I::IntoIter, done: &mut I::IntoIter, prod: Seq<T>>
             inv(start_) && inv(done) && inv(prod) &&
             I::into_iter.postcondition((iter,), start_) &&
@@ -182,7 +183,7 @@ extern_spec! {
 
     impl<T, I: SliceIndexSpec<[T]>, A: Allocator> IndexMut<I> for Vec<T, A> {
         #[check(ghost)]
-        #[requires(ix.in_bounds(self@))]
+        #[panics(!ix.in_bounds(self@))]
         #[ensures(ix.has_value(self@, *result))]
         #[ensures(ix.has_value((^self)@, ^result))]
         #[ensures(ix.resolve_elswhere(self@, (^self)@))]
@@ -192,7 +193,7 @@ extern_spec! {
 
     impl<T, I: SliceIndexSpec<[T]>, A: Allocator> Index<I> for Vec<T, A> {
         #[check(ghost)]
-        #[requires(ix.in_bounds(self@))]
+        #[panics(!ix.in_bounds(self@))]
         #[ensures(ix.has_value(self@, *result))]
         fn index(&self, ix: I) -> & <Vec<T, A> as Index<I>>::Output;
     }
@@ -246,6 +247,7 @@ extern_spec! {
 
     impl<T> FromIterator<T> for Vec<T> {
         #[requires(I::into_iter.precondition((iter,)))]
+        #[may_panic(I::into_iter.panic_condition((iter,)))]
         #[ensures(exists<into_iter: I::IntoIter, done: &mut I::IntoIter>
             I::into_iter.postcondition((iter,), into_iter) &&
             into_iter.produces(result@, *done) && done.completed() && resolve(^done))]

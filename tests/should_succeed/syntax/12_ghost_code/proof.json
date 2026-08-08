@@ -8,7 +8,7 @@
   "proofs": {
     "M_ghost_arg": { "vc_ghost_arg": { "prover": "cvc5", "time": 0.01 } },
     "M_ghost_check": {
-      "vc_ghost_check": { "prover": "cvc5", "time": 0.01 },
+      "vc_ghost_check": { "prover": "cvc5", "time": 0.024 },
       "vc_len_i32": { "prover": "cvc5", "time": 0.011 },
       "vc_new_i32": { "prover": "cvc5", "time": 0.012 },
       "vc_push_i32": { "prover": "cvc5", "time": 0.01 }

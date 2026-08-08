@@ -7,7 +7,7 @@
   ],
   "proofs": {
     "M_custom_variant_0": {
-      "vc_custom_variant": { "prover": "cvc5", "time": 0.024 }
+      "vc_custom_variant": { "prover": "cvc5", "time": 0.048 }
     },
     "M_custom_variant__impl_WellFounded_for_CustomVariant__no_infinite_decreasing_sequence": {
       "vc_no_infinite_decreasing_sequence_CustomVariant": {
@@ -16,7 +16,7 @@
       }
     },
     "M_custom_variant__impl_WellFounded_for_CustomVariant__no_infinite_decreasing_sequence__refines": {
-      "refines": { "prover": "cvc5", "time": 0.011 }
+      "refines": { "prover": "cvc5", "time": 0.03 }
     },
     "M_variant_int": {
       "vc_variant_int": { "prover": "cvc5", "time": 0.022 }

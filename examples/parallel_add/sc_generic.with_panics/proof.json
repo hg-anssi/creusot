@@ -8,7 +8,7 @@
       "vc___new_closure0'0": { "prover": "alt-ergo", "time": 0.016 },
       "vc_alloc_Option_tup2_PositiveReal_Int": {
         "prover": "alt-ergo",
-        "time": 0.021
+        "time": 0.008
       },
       "vc_borrow_AtomicInvariantSC_ParallelAddAtomicInv": {
         "prover": "alt-ergo",
@@ -38,7 +38,7 @@
         "prover": "alt-ergo",
         "time": 0.017
       },
-      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.022 },
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.009 },
       "vc_elim_Some'0": { "prover": "alt-ergo", "time": 0.02 },
       "vc_fetch_add_FnGhostWrapper_closure0": {
         "prover": "alt-ergo",
@@ -72,7 +72,7 @@
       },
       "vc_into_inner_Perm_AtomicI32": { "prover": "alt-ergo", "time": 0.021 },
       "vc_into_inner_Tokens": { "prover": "alt-ergo", "time": 0.019 },
-      "vc_into_iter_Range_i32": { "prover": "alt-ergo", "time": 0.022 },
+      "vc_into_iter_Range_i32": { "prover": "alt-ergo", "time": 0.008 },
       "vc_into_iter_Vec_ScopedJoinHandle_Ghost_Fragment_Option_tup2_PositiveReal_Int_Global": {
         "prover": "alt-ergo",
         "time": 0.025
@@ -112,7 +112,7 @@
       },
       "vc_next_IntoIter_ScopedJoinHandle_Ghost_Fragment_Option_tup2_PositiveReal_Int_Global": {
         "prover": "alt-ergo",
-        "time": 0.022
+        "time": 0.011
       },
       "vc_next_Range_i32": { "prover": "alt-ergo", "time": 0.016 },
       "vc_open_ParallelAddAtomicInv": { "prover": "alt-ergo", "time": 0.025 },
@@ -141,7 +141,7 @@
                       { "prover": "alt-ergo", "time": 0.027 },
                       { "prover": "alt-ergo", "time": 0.024 },
                       { "prover": "alt-ergo", "time": 0.028 },
-                      { "prover": "alt-ergo", "time": 0.04 },
+                      { "prover": "alt-ergo", "time": 0.019 },
                       { "prover": "alt-ergo", "time": 0.044 },
                       { "prover": "alt-ergo", "time": 0.027 },
                       { "prover": "alt-ergo", "time": 0.032 },
@@ -181,7 +181,7 @@
                       { "prover": "alt-ergo", "time": 0.034 },
                       { "prover": "alt-ergo", "time": 0.034 },
                       { "prover": "alt-ergo", "time": 0.032 },
-                      { "prover": "alt-ergo", "time": 0.016 },
+                      { "prover": "alt-ergo", "time": 0.032 },
                       { "prover": "alt-ergo", "time": 0.042 },
                       { "prover": "alt-ergo", "time": 0.065 },
                       { "prover": "alt-ergo", "time": 0.047 },
@@ -191,8 +191,8 @@
                       { "prover": "alt-ergo", "time": 0.042 },
                       { "prover": "alt-ergo", "time": 0.038 },
                       { "prover": "alt-ergo", "time": 0.017 },
-                      { "prover": "alt-ergo", "time": 0.014 },
-                      { "prover": "alt-ergo", "time": 0.03 },
+                      { "prover": "alt-ergo", "time": 0.028 },
+                      { "prover": "alt-ergo", "time": 0.015 },
                       { "prover": "alt-ergo", "time": 0.026 },
                       { "prover": "alt-ergo", "time": 0.024 }
                     ]

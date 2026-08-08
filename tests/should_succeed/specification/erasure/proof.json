@@ -30,7 +30,7 @@
     },
     "M_ghost_split2": {
       "vc_ghost_split2": { "prover": "cvc5", "time": 0.015 },
-      "vc_new_tup2_unit_unit": { "prover": "cvc5", "time": 0.022 },
+      "vc_new_tup2_unit_unit": { "prover": "cvc5", "time": 0.011 },
       "vc_split_unit": { "prover": "cvc5", "time": 0.012 }
     },
     "M_impl_Quux_for_i32__quux": {
@@ -130,7 +130,7 @@
     },
     "M_test_ptr2": {
       "vc_as_ref_T": { "prover": "cvc5", "time": 0.017 },
-      "vc_test_ptr2_T": { "prover": "cvc5", "time": 0.02 }
+      "vc_test_ptr2_T": { "prover": "cvc5", "time": 0.007 }
     },
     "M_test_ptr_mut2": {
       "vc_as_mut_T": { "prover": "cvc5", "time": 0.019 },

@@ -435,13 +435,20 @@ module M_as_mut
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None'0)} (! return {result}) ]
   
   let unwrap_refmut_i32 (self_: t_Option_refmut_i32) (return (x: MutBorrow.t Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'0}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0}
     any
-    [ return (result: MutBorrow.t Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result = self_}
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:unwrap_refmut_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
@@ -516,9 +523,13 @@ module M_as_ref
   let is_none_ref_i32 (self_: t_Option_ref_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None'0)} (! return {result}) ]
   
-  let unwrap_ref_i32 (self_: t_Option_ref_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_
-    <> None'0}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result = self_} (! return {result}) ]
+  let unwrap_ref_i32 (self_: t_Option_ref_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_ref_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
@@ -574,8 +585,13 @@ module M_copied_cloned
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   type t_Option_refmut_i32 = None'1 | Some'1 (MutBorrow.t Int32.t)
   
@@ -1004,8 +1020,13 @@ module M_flatten
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
@@ -2519,8 +2540,13 @@ module M_replace
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
@@ -3074,8 +3100,13 @@ module M_take
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
@@ -3409,9 +3440,13 @@ module M_transpose
       (! return {result}) ]
   
   let unwrap_Option_i32 (self_: t_Result_Option_i32_bool) (return (x: t_Option_i32)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: t_Option_i32. self_ = Ok'0 t}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not (exists e: bool. self_ = Err'0 e)}
     any
-    [ return (result: t_Option_i32) -> {[@stop_split] [@expl:unwrap ensures] Ok'0 result = self_} (! return {result}) ]
+    [ return (result: t_Option_i32) ->
+    {[@stop_split] [@expl:unwrap_Option_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: bool. self_
+          = Err'0 e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok'0 result = self_)}
+      (! return {result}) ]
   
   type t_Option_Int = None'1 | Some'1 int
   
@@ -3436,8 +3471,13 @@ module M_transpose
       (! return {result}) ]
   
   let unwrap_err_Option_i32 (self_: t_Result_Option_i32_bool) (return (x: bool)) =
-  {[@stop_split] [@expl:unwrap_err requires] exists e: bool. self_ = Err'0 e}
-    any [ return (result: bool) -> {[@stop_split] [@expl:unwrap_err ensures] Err'0 result = self_} (! return {result}) ]
+  {[@stop_split] [@expl:unwrap_err requires (no panic)] not (exists t: t_Option_i32. self_ = Ok'0 t)}
+    any
+    [ return (result: bool) ->
+    {[@stop_split] [@expl:unwrap_err_Option_i32 ensures] ([@stop_split] [@expl:unwrap_err ensures #0] not (exists t: t_Option_i32. self_
+          = Ok'0 t))
+      /\ ([@stop_split] [@expl:unwrap_err ensures #1] Err'0 result = self_)}
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
@@ -3501,12 +3541,21 @@ module M_unwrap
   
   type t_Option_i32 = None | Some Int32.t
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let expect_i32 (self_: t_Option_i32) (msg: string) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:expect requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:expect ensures] Some result = self_} (! return {result}) ]
+  {[@stop_split] [@expl:expect requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:expect_i32 ensures] ([@stop_split] [@expl:expect ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:expect ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   predicate resolve_i32 [@inline:trivial] (_1: Int32.t) = true
   

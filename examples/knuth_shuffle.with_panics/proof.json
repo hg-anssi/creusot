@@ -1,0 +1,15 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_knuth_shuffle": {
+      "vc_deref_mut_Vec_T_Global": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.031 },
+      "vc_into_iter_Range_usize": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_knuth_shuffle_T": { "prover": "cvc4", "time": 0.104 },
+      "vc_len_T": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_next_Range_usize": { "prover": "alt-ergo", "time": 0.034 },
+      "vc_rand_in_range": { "prover": "alt-ergo", "time": 0.022 },
+      "vc_swap_T": { "prover": "alt-ergo", "time": 0.016 }
+    }
+  }
+}

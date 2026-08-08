@@ -137,7 +137,7 @@ extern_spec! {
         }
 
         #[check(ghost)]
-        #[requires(self != None)]
+        #[panics(self == None)]
         #[ensures(Some(result) == self)]
         fn expect(self, msg: &str) -> T {
             match self {
@@ -147,7 +147,7 @@ extern_spec! {
         }
 
         #[check(ghost)]
-        #[requires(self != None)]
+        #[panics(self == None)]
         #[ensures(Some(result) == self)]
         fn unwrap(self) -> T {
             match self {
@@ -312,6 +312,10 @@ extern_spec! {
             None => true,
             Some(cur) => forall<bor: &mut T> *bor == cur ==> T::deref_mut.precondition((bor,)),
         })]
+        #[may_panic(match *self {
+            None => false,
+            Some(cur) => exists<bor: &mut T> *bor == cur && T::deref_mut.panic_condition((bor,)),
+        })]
         #[ensures(match (*self, ^self, result) {
             (None, None, None) => true,
             (Some(cur), Some(fin), Some(r)) => exists<bor: &mut T> *bor == cur && ^bor == fin && T::deref_mut.postcondition((bor,), r),
@@ -456,6 +460,10 @@ extern_spec! {
         #[requires(match self {
             None => T::default.precondition(()),
             Some(_) => true,
+        })]
+        #[may_panic(match self {
+            None => T::default.panic_condition(()),
+            Some(_) => false,
         })]
         #[ensures(match *self {
             None => T::default.postcondition((), *result) && ^self == Some(^result),

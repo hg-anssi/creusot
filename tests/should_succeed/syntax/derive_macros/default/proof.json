@@ -21,17 +21,17 @@
       "vc_default_i32": { "prover": "cvc5", "time": 0.013 }
     },
     "M_impl_Default_for_EUnit__default": {
-      "vc_default_EUnit": { "prover": "cvc5", "time": 0.012 }
+      "vc_default_EUnit": { "prover": "cvc5", "time": 0.025 }
     },
     "M_impl_Default_for_Named_T__default": {
       "vc_default_Named_T": { "prover": "cvc5", "time": 0.028 },
-      "vc_default_T": { "prover": "cvc5", "time": 0.012 },
+      "vc_default_T": { "prover": "cvc5", "time": 0.024 },
       "vc_default_i32": { "prover": "cvc5", "time": 0.009 }
     },
     "M_impl_Default_for_Named_T__default__refines": {
       "refines": { "prover": "cvc5", "time": 0.008 },
       "vc_default_T": { "prover": "cvc5", "time": 0.014 },
-      "vc_default_i32": { "prover": "cvc5", "time": 0.01 }
+      "vc_default_i32": { "prover": "cvc5", "time": 0.025 }
     },
     "M_impl_Default_for_Tuple__default": {
       "vc_default_Tuple": { "prover": "cvc5", "time": 0.011 },

@@ -8,7 +8,7 @@
   "proofs": {
     "M_test_deque": {
       "vc_clear_u32": { "prover": "cvc5", "time": 0.014 },
-      "vc_eq_Option_u32": { "prover": "cvc5", "time": 0.01 },
+      "vc_eq_Option_u32": { "prover": "cvc5", "time": 0.021 },
       "vc_is_empty_u32": { "prover": "cvc5", "time": 0.019 },
       "vc_len_u32": { "prover": "cvc5", "time": 0.013 },
       "vc_new_u32": { "prover": "cvc5", "time": 0.018 },

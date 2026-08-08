@@ -10,7 +10,7 @@
       "vc_elim_Err": { "prover": "cvc5", "time": 0.016 },
       "vc_elim_Ok": { "prover": "cvc5", "time": 0.016 },
       "vc_elim_Some": { "prover": "cvc5", "time": 0.025 },
-      "vc_transpose_T": { "prover": "cvc5", "time": 0.014 }
+      "vc_transpose_T": { "prover": "cvc5", "time": 0.031 }
     },
     "M_impl_OwnResult_T_E__and": {
       "vc_and_T": { "prover": "cvc5", "time": 0.02 },
@@ -88,8 +88,8 @@
     "M_impl_OwnResult_refmut_T_E__cloned": {
       "vc_clone_T": { "prover": "cvc5", "time": 0.015 },
       "vc_cloned_T": { "prover": "cvc5", "time": 0.027 },
-      "vc_elim_Err": { "prover": "cvc5", "time": 0.006 },
-      "vc_elim_Ok": { "prover": "cvc5", "time": 0.011 }
+      "vc_elim_Err": { "prover": "cvc5", "time": 0.022 },
+      "vc_elim_Ok": { "prover": "cvc5", "time": 0.022 }
     },
     "M_impl_OwnResult_refmut_T_E__copied": {
       "vc_copied_T": { "prover": "cvc5", "time": 0.021 },

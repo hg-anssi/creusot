@@ -26,7 +26,7 @@
           }
         ]
       },
-      "vc_len_bool": { "prover": "alt-ergo", "time": 0.008 }
+      "vc_len_bool": { "prover": "alt-ergo", "time": 0.021 }
     }
   }
 }

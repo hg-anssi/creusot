@@ -3,19 +3,19 @@
   "proofs": {
     "M_foo": {
       "vc___new_closure0": { "prover": "alt-ergo", "time": 0.018 },
-      "vc_closure0": { "prover": "alt-ergo", "time": 0.004 },
-      "vc_foo": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.033 },
+      "vc_foo": { "prover": "alt-ergo", "time": 0.069 },
       "vc_takes_ghost_fn_FnGhostWrapper_closure0": {
         "prover": "alt-ergo",
-        "time": 0.013
+        "time": 0.041
       },
       "vc_takes_ghost_fnmut_FnGhostWrapper_closure0": {
         "prover": "alt-ergo",
-        "time": 0.016
+        "time": 0.043
       },
       "vc_takes_ghost_fnonce_FnGhostWrapper_closure0": {
         "prover": "alt-ergo",
-        "time": 0.018
+        "time": 0.036
       }
     },
     "M_takes_ghost_fn": {
@@ -24,10 +24,10 @@
     },
     "M_takes_ghost_fnmut": {
       "vc_call_mut_F": { "prover": "alt-ergo", "time": 0.013 },
-      "vc_takes_ghost_fnmut_F": { "prover": "alt-ergo", "time": 0.012 }
+      "vc_takes_ghost_fnmut_F": { "prover": "alt-ergo", "time": 0.037 }
     },
     "M_takes_ghost_fnonce": {
-      "vc_call_once_F": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_call_once_F": { "prover": "alt-ergo", "time": 0.025 },
       "vc_takes_ghost_fnonce_F": { "prover": "alt-ergo", "time": 0.015 }
     }
   }

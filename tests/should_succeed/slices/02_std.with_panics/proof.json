@@ -1,0 +1,10 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_binary_search": {
+      "vc_binary_search": { "prover": "alt-ergo", "time": 0.045 },
+      "vc_binary_search_u32": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_unwrap_usize": { "prover": "alt-ergo", "time": 0.025 }
+    }
+  }
+}
