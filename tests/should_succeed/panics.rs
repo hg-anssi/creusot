@@ -61,10 +61,10 @@ pub fn check_limit(x: u32) -> u32 {
 /// Note: arithmetic overflow is still modeled as a hard proof obligation (a
 /// precondition of the arithmetic operations), even in functions that may
 /// panic. Here the panic case is made explicit instead.
-#[may_panic(x == u32::MAX)]
+#[panics(x == u32::MAX)]
 #[ensures(result@ == x@ + 1)]
 pub fn increment(x: u32) -> u32 {
-    if x == u32::MAX { panic!("overflow") } else { x + 1 }
+    x + 1
 }
 
 /// The function returns `x / y`, or panics (only possible when `y == 0`).

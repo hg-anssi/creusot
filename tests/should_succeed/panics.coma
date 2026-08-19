@@ -415,14 +415,6 @@ module M_increment
   
   constant const_MAX: UInt32.t = (4294967295: UInt32.t)
   
-  type t_Arguments
-  
-  predicate inv_Arguments (_1: t_Arguments)
-  
-  let from_str (s: string) (return (x: t_Arguments)) = any
-    [ return (result: t_Arguments) -> {[@stop_split] [@expl:from_str result type invariant] inv_Arguments result}
-      (! return {result}) ]
-  
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
@@ -430,14 +422,11 @@ module M_increment
   let increment (x: UInt32.t) (return (x'0: UInt32.t)) = {[@stop_split] [@expl:increment requires (no panic)] not x
     = const_MAX}
     (! bb0
-    [ bb0 = s0 [ s0 = [ &_6 <- x = const_MAX ] s1 | s1 = any [ br0 -> {_6 = false} (! bb3) | br1 -> {_6} (! bb1) ] ]
-    | bb1 = s0 [ s0 = from_str {"overflow"} (fun (_x: t_Arguments) -> [ &_10 <- _x ] s1) | s1 = {false} any ]
-    | bb3 = s0 [ s0 = UInt32.add {x} {(1: UInt32.t)} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: UInt32.t = Any.any_l ()
-    | & x: UInt32.t = x
-    | & _6: bool = Any.any_l ()
-    | & _10: t_Arguments = Any.any_l () ])
-    [ return (result: UInt32.t) -> {[@stop_split] [@expl:increment ensures] UInt32.t'int result = UInt32.t'int x + 1}
+    [ bb0 = s0 [ s0 = UInt32.add {x} {(1: UInt32.t)} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l () | & x: UInt32.t = x ])
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:increment ensures] ([@stop_split] [@expl:increment ensures #0] not x = const_MAX)
+      /\ ([@stop_split] [@expl:increment ensures #1] UInt32.t'int result = UInt32.t'int x + 1)}
       (! return {result}) ]
 end
 module M_never_panic
