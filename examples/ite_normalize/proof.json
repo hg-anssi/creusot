@@ -39,7 +39,7 @@
       "vc_clone_Expr": { "prover": "cvc5", "time": 0.01 },
       "vc_elim_IfThenElse": { "prover": "cvc5", "time": 0.01 },
       "vc_transpose": { "prover": "cvc5", "time": 0.01 },
-      "vc_transpose'0": { "prover": "alt-ergo", "time": 0.121 }
+      "vc_transpose'0": { "prover": "alt-ergo", "time": 0.037 }
     },
     "M_impl_Expr__variable": {
       "vc_variable": { "prover": "cvc5", "time": 0.009 }

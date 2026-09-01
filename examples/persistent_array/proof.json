@@ -18,7 +18,7 @@
       },
       "vc_deref_Ghost_Fragment_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.022
+        "time": 0.008
       },
       "vc_new_Fragment_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
@@ -26,7 +26,7 @@
       }
     },
     "M_implementation__impl_Clone_for_PersistentArray_T__clone__refines": {
-      "refines": { "prover": "cvc5", "time": 0.035 }
+      "refines": { "prover": "cvc5", "time": 0.014 }
     },
     "M_implementation__impl_PersistentArray_T__get": {
       "vc_borrow_Inner_T": { "prover": "cvc5", "time": 0.013 },
@@ -37,14 +37,14 @@
       },
       "vc_deref_Ghost_Fragment_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.02
+        "time": 0.008
       },
       "vc_deref_Ghost_refmut_PA_T": { "prover": "cvc5", "time": 0.019 },
       "vc_deref_Rc_PermCell_Inner_T_Global": {
         "prover": "cvc5",
         "time": 0.025
       },
-      "vc_deref_Vec_T_Global": { "prover": "cvc5", "time": 0.03 },
+      "vc_deref_Vec_T_Global": { "prover": "cvc5", "time": 0.013 },
       "vc_deref_mut_Ghost_refmut_PA_T": { "prover": "cvc5", "time": 0.027 },
       "vc_elim_Direct": { "prover": "cvc5", "time": 0.027 },
       "vc_frag_lemma_FMap_PermCell_Inner_T_Ag_Seq_T": {
@@ -62,11 +62,11 @@
       "vc_get_unchecked_T": { "prover": "cvc5", "time": 0.029 },
       "vc_into_inner_refmut_PA_T": { "prover": "cvc5", "time": 0.024 },
       "vc_new_ref_Perm_PermCell_Inner_T": { "prover": "cvc5", "time": 0.025 },
-      "vc_new_refmut_PA_T": { "prover": "cvc5", "time": 0.026 },
+      "vc_new_refmut_PA_T": { "prover": "cvc5", "time": 0.011 },
       "vc_new_unit": { "prover": "cvc5", "time": 0.014 },
       "vc_open_Ghost_ref_GhostShared_NonAtomicInvariant_PA_T": {
         "prover": "alt-ergo",
-        "time": 0.057
+        "time": 0.02
       },
       "vc_open_Ghost_ref_NonAtomicInvariant_PA_T": {
         "prover": "cvc5",
@@ -85,7 +85,7 @@
     "M_implementation__impl_PersistentArray_T__get_immut": {
       "vc_deref_GhostShared_NonAtomicInvariant_PA_T": {
         "prover": "alt-ergo",
-        "time": 0.027
+        "time": 0.008
       },
       "vc_deref_Ghost_Fragment_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
@@ -93,15 +93,15 @@
       },
       "vc_deref_Ghost_GhostShared_NonAtomicInvariant_PA_T": {
         "prover": "alt-ergo",
-        "time": 0.025
+        "time": 0.004
       },
       "vc_deref_Ghost_ref_PA_T": { "prover": "cvc5", "time": 0.024 },
       "vc_deref_Ghost_ref_Tokens": { "prover": "cvc5", "time": 0.006 },
       "vc_frag_lemma_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.025
+        "time": 0.012
       },
-      "vc_get_immut_T": { "prover": "z3", "time": 0.024 },
+      "vc_get_immut_T": { "prover": "z3", "time": 0.012 },
       "vc_get_inner_immut_T": { "prover": "cvc5", "time": 0.027 },
       "vc_new_ref_PA_T": { "prover": "cvc5", "time": 0.022 },
       "vc_new_unit": { "prover": "cvc5", "time": 0.025 },
@@ -148,7 +148,7 @@
       },
       "vc_deref_mut_Ghost_Fragment_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.035
+        "time": 0.007
       },
       "vc_id_ghost_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
@@ -176,10 +176,10 @@
       },
       "vc_new_Fragment_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.011
+        "time": 0.022
       },
       "vc_new_Inner_T": { "prover": "cvc5", "time": 0.017 },
-      "vc_new_NonAtomicInvariant_PA_T": { "prover": "cvc5", "time": 0.024 },
+      "vc_new_NonAtomicInvariant_PA_T": { "prover": "cvc5", "time": 0.011 },
       "vc_new_NonAtomicInvariant_PA_T'0": {
         "prover": "alt-ergo",
         "time": 0.017
@@ -187,7 +187,7 @@
       "vc_new_PA_T": { "prover": "cvc5", "time": 0.026 },
       "vc_new_PA_T'0": { "prover": "cvc5", "time": 0.012 },
       "vc_new_PermCell_Inner_T": { "prover": "cvc5", "time": 0.013 },
-      "vc_new_Snapshot_PermCell_Inner_T": { "prover": "cvc5", "time": 0.03 },
+      "vc_new_Snapshot_PermCell_Inner_T": { "prover": "cvc5", "time": 0.012 },
       "vc_new_T": {
         "tactic": "compute_specified",
         "children": [ { "prover": "z3", "time": 0.015 } ]
@@ -230,7 +230,7 @@
       },
       "vc_into_inner_Perm_PermCell_Inner_T": {
         "prover": "alt-ergo",
-        "time": 0.039
+        "time": 0.011
       },
       "vc_new_Option_Perm_PermCell_Inner_T": {
         "prover": "alt-ergo",
@@ -272,18 +272,18 @@
         "prover": "cvc5",
         "time": 0.025
       },
-      "vc_closure0": { "prover": "cvc5", "time": 0.028 },
+      "vc_closure0": { "prover": "cvc5", "time": 0.011 },
       "vc_deref_GhostShared_NonAtomicInvariant_PA_T": {
         "prover": "alt-ergo",
-        "time": 0.041
+        "time": 0.007
       },
       "vc_deref_Ghost_Fragment_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.026
+        "time": 0.012
       },
       "vc_deref_Ghost_Perm_PermCell_Inner_T": {
         "prover": "alt-ergo",
-        "time": 0.024
+        "time": 0.009
       },
       "vc_deref_Ghost_refmut_PA_T": { "prover": "cvc5", "time": 0.013 },
       "vc_deref_mut_Ghost_refmut_PA_T": { "prover": "cvc5", "time": 0.028 },
@@ -320,7 +320,7 @@
       "vc_new_PermCell_Inner_T": { "prover": "cvc5", "time": 0.043 },
       "vc_new_unit_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.025
+        "time": 0.012
       },
       "vc_open_Ghost_ref_GhostShared_NonAtomicInvariant_PA_T": {
         "prover": "alt-ergo",
@@ -340,44 +340,44 @@
           {
             "tactic": "split_vc",
             "children": [
-              { "prover": "alt-ergo", "time": 0.034 },
+              { "prover": "alt-ergo", "time": 0.016 },
               { "prover": "alt-ergo", "time": 0.034 },
               {
                 "tactic": "split_vc",
                 "children": [
-                  { "prover": "alt-ergo", "time": 0.028 },
+                  { "prover": "alt-ergo", "time": 0.012 },
                   { "prover": "alt-ergo", "time": 0.034 },
                   {
                     "tactic": "split_vc",
                     "children": [
                       { "prover": "alt-ergo", "time": 0.036 },
                       { "prover": "alt-ergo", "time": 0.017 },
-                      { "prover": "alt-ergo", "time": 0.039 },
+                      { "prover": "alt-ergo", "time": 0.018 },
                       { "prover": "alt-ergo", "time": 0.023 },
                       { "prover": "alt-ergo", "time": 0.036 },
-                      { "prover": "alt-ergo", "time": 0.044 },
-                      { "prover": "alt-ergo", "time": 0.041 },
+                      { "prover": "alt-ergo", "time": 0.017 },
+                      { "prover": "alt-ergo", "time": 0.019 },
                       { "prover": "alt-ergo", "time": 0.031 },
                       { "prover": "alt-ergo", "time": 0.036 },
-                      { "prover": "alt-ergo", "time": 0.049 },
-                      { "prover": "alt-ergo", "time": 0.038 },
-                      { "prover": "alt-ergo", "time": 0.047 },
+                      { "prover": "alt-ergo", "time": 0.021 },
+                      { "prover": "alt-ergo", "time": 0.013 },
+                      { "prover": "alt-ergo", "time": 0.012 },
                       { "prover": "alt-ergo", "time": 0.031 },
-                      { "prover": "alt-ergo", "time": 0.051 },
+                      { "prover": "alt-ergo", "time": 0.016 },
                       { "prover": "alt-ergo", "time": 0.048 },
                       { "prover": "alt-ergo", "time": 0.04 },
                       { "prover": "alt-ergo", "time": 0.037 },
-                      { "prover": "alt-ergo", "time": 0.046 },
-                      { "prover": "alt-ergo", "time": 0.053 },
+                      { "prover": "alt-ergo", "time": 0.014 },
+                      { "prover": "alt-ergo", "time": 0.015 },
                       { "prover": "alt-ergo", "time": 0.048 },
                       { "prover": "alt-ergo", "time": 0.035 },
                       { "prover": "alt-ergo", "time": 0.04 },
                       { "prover": "alt-ergo", "time": 0.042 },
-                      { "prover": "alt-ergo", "time": 0.051 },
-                      { "prover": "alt-ergo", "time": 0.049 },
+                      { "prover": "alt-ergo", "time": 0.025 },
+                      { "prover": "alt-ergo", "time": 0.024 },
                       { "prover": "alt-ergo", "time": 0.043 },
-                      { "prover": "alt-ergo", "time": 0.065 },
-                      { "prover": "alt-ergo", "time": 0.052 },
+                      { "prover": "alt-ergo", "time": 0.025 },
+                      { "prover": "alt-ergo", "time": 0.024 },
                       { "prover": "alt-ergo", "time": 0.041 },
                       { "prover": "alt-ergo", "time": 0.028 },
                       { "prover": "alt-ergo", "time": 0.045 },
@@ -395,19 +395,19 @@
                   }
                 ]
               },
-              { "prover": "alt-ergo", "time": 0.132 }
+              { "prover": "alt-ergo", "time": 0.065 }
             ]
           }
         ]
       },
       "vc_update_FMap_PermCell_Inner_T_Ag_Seq_T": {
         "prover": "cvc5",
-        "time": 0.026
+        "time": 0.012
       }
     },
     "M_testing": {
       "vc_clone_PersistentArray_i32": { "prover": "cvc5", "time": 0.022 },
-      "vc_deref_mut_Ghost_Tokens": { "prover": "cvc5", "time": 0.033 },
+      "vc_deref_mut_Ghost_Tokens": { "prover": "cvc5", "time": 0.014 },
       "vc_into_vec_i32": { "prover": "cvc5", "time": 0.023 },
       "vc_new_Tokens": { "prover": "cvc5", "time": 0.017 },
       "vc_new_i32": { "prover": "cvc5", "time": 0.023 },

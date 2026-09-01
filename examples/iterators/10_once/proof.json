@@ -22,7 +22,7 @@
     },
     "M_impl_ExactSizeIterator_for_Once_T__len__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.015 },
-      "vc_size_hint_Once_T": { "prover": "alt-ergo", "time": 0.011 }
+      "vc_size_hint_Once_T": { "prover": "alt-ergo", "time": 0.022 }
     },
     "M_impl_ExactSizeIterator_for_Once_T__size_hint_exact": {
       "vc_size_hint_Once_T": { "prover": "alt-ergo", "time": 0.016 },
@@ -30,11 +30,11 @@
     },
     "M_impl_ExactSizeIterator_for_Once_T__size_hint_exact__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.014 },
-      "vc_size_hint_Once_T": { "prover": "alt-ergo", "time": 0.036 }
+      "vc_size_hint_Once_T": { "prover": "alt-ergo", "time": 0.009 }
     },
     "M_impl_Iterator_for_Once_T__next": {
       "vc_next_Once_T": { "prover": "cvc5", "time": 0.022 },
-      "vc_take_T": { "prover": "cvc5", "time": 0.02 }
+      "vc_take_T": { "prover": "cvc5", "time": 0.008 }
     },
     "M_impl_Iterator_for_Once_T__next__refines": {
       "refines": { "prover": "cvc5", "time": 0.011 }

@@ -36,7 +36,7 @@
     "M_poke_8bit": { "vc_poke_8bit": { "prover": "cvc5", "time": 0.022 } },
     "M_poke_8bit_array": {
       "vc_poke_8bit": { "prover": "cvc5", "time": 0.009 },
-      "vc_poke_8bit_array": { "prover": "cvc5", "time": 0.013 }
+      "vc_poke_8bit_array": { "prover": "cvc5", "time": 0.028 }
     },
     "M_poke_bit_64": {
       "vc_poke_bit_64": { "prover": "cvc5", "time": 0.015 }

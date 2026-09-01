@@ -7,12 +7,12 @@
   ],
   "proofs": {
     "M_create_arr": {
-      "vc_create_arr": { "prover": "cvc4", "time": 0.025 },
+      "vc_create_arr": { "prover": "cvc4", "time": 0.053 },
       "vc_new_i32": { "prover": "cvc5", "time": 0.016 },
       "vc_push_i32": { "prover": "cvc5", "time": 0.019 }
     },
     "M_test_range": {
-      "vc_create_arr": { "prover": "cvc5", "time": 0.03 },
+      "vc_create_arr": { "prover": "cvc5", "time": 0.01 },
       "vc_deref_Vec_i32_Global": { "prover": "cvc5", "time": 0.018 },
       "vc_get_i32": { "prover": "cvc5", "time": 0.018 },
       "vc_index_Vec_i32_Global'0": { "prover": "cvc5", "time": 0.018 },
@@ -24,7 +24,7 @@
       "vc_test_range": { "prover": "z3", "time": 0.026 }
     },
     "M_test_range_from": {
-      "vc_create_arr": { "prover": "cvc5", "time": 0.03 },
+      "vc_create_arr": { "prover": "cvc5", "time": 0.01 },
       "vc_deref_Vec_i32_Global": { "prover": "cvc5", "time": 0.017 },
       "vc_get_i32": { "prover": "cvc5", "time": 0.019 },
       "vc_index_Vec_i32_Global'0": { "prover": "cvc5", "time": 0.019 },
@@ -36,7 +36,7 @@
       "vc_test_range_from": { "prover": "z3", "time": 0.021 }
     },
     "M_test_range_full": {
-      "vc_create_arr": { "prover": "cvc5", "time": 0.03 },
+      "vc_create_arr": { "prover": "cvc5", "time": 0.01 },
       "vc_index_Vec_i32_Global'0": { "prover": "cvc5", "time": 0.01 },
       "vc_index_Vec_i32_Global'1": { "prover": "cvc5", "time": 0.02 },
       "vc_index_mut_Vec_i32_Global": { "prover": "cvc5", "time": 0.022 },
@@ -45,7 +45,7 @@
       "vc_test_range_full": { "prover": "cvc5", "time": 0.021 }
     },
     "M_test_range_to": {
-      "vc_create_arr": { "prover": "cvc5", "time": 0.03 },
+      "vc_create_arr": { "prover": "cvc5", "time": 0.01 },
       "vc_deref_Vec_i32_Global": { "prover": "cvc5", "time": 0.012 },
       "vc_get_i32": { "prover": "cvc5", "time": 0.019 },
       "vc_index_Vec_i32_Global'0": { "prover": "cvc5", "time": 0.014 },
@@ -57,7 +57,7 @@
       "vc_test_range_to": { "prover": "cvc5", "time": 0.071 }
     },
     "M_test_range_to_inclusive": {
-      "vc_create_arr": { "prover": "cvc5", "time": 0.03 },
+      "vc_create_arr": { "prover": "cvc5", "time": 0.01 },
       "vc_deref_Vec_i32_Global": { "prover": "cvc5", "time": 0.016 },
       "vc_get_i32": { "prover": "cvc5", "time": 0.014 },
       "vc_index_Vec_i32_Global'0": { "prover": "cvc5", "time": 0.017 },

@@ -18,14 +18,14 @@
             "children": [
               { "prover": "alt-ergo", "time": 0.028 },
               { "prover": "alt-ergo", "time": 0.109 },
-              { "prover": "alt-ergo", "time": 0.071 },
+              { "prover": "alt-ergo", "time": 0.026 },
               { "prover": "alt-ergo", "time": 0.14 },
               { "prover": "alt-ergo", "time": 0.048 },
-              { "prover": "alt-ergo", "time": 0.284 },
+              { "prover": "alt-ergo", "time": 0.128 },
               { "prover": "cvc5", "time": 0.109 },
-              { "prover": "alt-ergo", "time": 0.093 },
+              { "prover": "alt-ergo", "time": 0.044 },
               { "prover": "alt-ergo", "time": 0.192 },
-              { "prover": "alt-ergo", "time": 0.058 },
+              { "prover": "alt-ergo", "time": 0.023 },
               { "prover": "cvc5", "time": 0.084 },
               { "prover": "alt-ergo", "time": 0.041 }
             ]

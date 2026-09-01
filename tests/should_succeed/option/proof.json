@@ -31,14 +31,14 @@
     "M_as_ref": {
       "vc_as_ref": { "prover": "cvc5", "time": 0.017 },
       "vc_as_ref_i32": { "prover": "cvc5", "time": 0.017 },
-      "vc_is_none_ref_i32": { "prover": "cvc5", "time": 0.026 },
+      "vc_is_none_ref_i32": { "prover": "cvc5", "time": 0.012 },
       "vc_unwrap_ref_i32": { "prover": "cvc5", "time": 0.026 }
     },
     "M_copied_cloned": {
       "vc_as_mut_i32": { "prover": "cvc5", "time": 0.025 },
       "vc_as_ref_i32": { "prover": "cvc5", "time": 0.013 },
       "vc_clone_i32": { "prover": "cvc5", "time": 0.024 },
-      "vc_cloned_i32": { "prover": "cvc5", "time": 0.024 },
+      "vc_cloned_i32": { "prover": "cvc5", "time": 0.008 },
       "vc_cloned_i32'0": { "prover": "cvc5", "time": 0.01 },
       "vc_copied_cloned": { "prover": "cvc5", "time": 0.023 },
       "vc_copied_i32": { "prover": "cvc5", "time": 0.014 },
@@ -138,7 +138,7 @@
       "vc_closure2": { "prover": "cvc5", "time": 0.018 },
       "vc_eq_Option_i32": { "prover": "cvc5", "time": 0.013 },
       "vc_or_else": { "prover": "cvc5", "time": 0.017 },
-      "vc_or_else_i32": { "prover": "cvc5", "time": 0.013 },
+      "vc_or_else_i32": { "prover": "cvc5", "time": 0.027 },
       "vc_or_else_i32'0": { "prover": "cvc5", "time": 0.02 },
       "vc_or_else_i32'1": { "prover": "cvc5", "time": 0.016 }
     },
@@ -158,9 +158,9 @@
       "vc_filter_refmut_i32": { "prover": "cvc5", "time": 0.025 },
       "vc_get_or_insert_refmut_i32": { "prover": "cvc5", "time": 0.015 },
       "vc_insert_refmut_i32": { "prover": "cvc5", "time": 0.018 },
-      "vc_is_some_and_refmut_i32": { "prover": "cvc5", "time": 0.009 },
+      "vc_is_some_and_refmut_i32": { "prover": "cvc5", "time": 0.021 },
       "vc_or_refmut_i32": { "prover": "cvc5", "time": 0.021 },
-      "vc_resolve": { "prover": "cvc5", "time": 0.023 },
+      "vc_resolve": { "prover": "cvc5", "time": 0.06 },
       "vc_xor_refmut_i32": { "prover": "cvc5", "time": 0.011 },
       "vc_zip_refmut_i32": { "prover": "cvc5", "time": 0.015 }
     },
@@ -189,7 +189,7 @@
     },
     "M_unwrap": {
       "vc_closure0": { "prover": "cvc5", "time": 0.013 },
-      "vc_closure1": { "prover": "cvc5", "time": 0.009 },
+      "vc_closure1": { "prover": "cvc5", "time": 0.027 },
       "vc_default_i32": { "prover": "cvc5", "time": 0.018 },
       "vc_expect_i32": { "prover": "cvc5", "time": 0.016 },
       "vc_unwrap": { "prover": "cvc5", "time": 0.017 },

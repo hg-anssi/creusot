@@ -9,12 +9,12 @@
     "M_example": {
       "vc_borrow_UF_i32": { "prover": "cvc5", "time": 0.027 },
       "vc_borrow_mut_UF_i32": { "prover": "cvc5", "time": 0.026 },
-      "vc_clone_Elem_i32": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_clone_Elem_i32": { "prover": "alt-ergo", "time": 0.013 },
       "vc_example": { "prover": "cvc5", "time": 0.16 },
       "vc_find_i32": { "prover": "cvc5", "time": 0.011 },
-      "vc_get_i32": { "prover": "cvc5", "time": 0.026 },
-      "vc_make_i32": { "prover": "cvc5", "time": 0.024 },
-      "vc_new_i32": { "prover": "cvc5", "time": 0.026 },
+      "vc_get_i32": { "prover": "cvc5", "time": 0.012 },
+      "vc_make_i32": { "prover": "cvc5", "time": 0.008 },
+      "vc_new_i32": { "prover": "cvc5", "time": 0.011 },
       "vc_union_i32": { "prover": "cvc5", "time": 0.025 }
     },
     "M_implementation__find": {
@@ -39,10 +39,10 @@
           {
             "tactic": "split_vc",
             "children": [
-              { "prover": "alt-ergo", "time": 0.045 },
+              { "prover": "alt-ergo", "time": 0.021 },
               { "prover": "alt-ergo", "time": 0.03 },
-              { "prover": "alt-ergo", "time": 0.043 },
-              { "prover": "alt-ergo", "time": 0.047 },
+              { "prover": "alt-ergo", "time": 0.008 },
+              { "prover": "alt-ergo", "time": 0.02 },
               { "prover": "z3", "time": 0.01 },
               { "prover": "alt-ergo", "time": 0.082 },
               { "prover": "alt-ergo", "time": 0.044 },
@@ -58,14 +58,14 @@
               { "prover": "z3", "time": 0.009 },
               { "prover": "cvc5", "time": 0.202 },
               { "prover": "alt-ergo", "time": 0.106 },
-              { "prover": "alt-ergo", "time": 0.128 },
+              { "prover": "alt-ergo", "time": 0.06 },
               { "prover": "alt-ergo", "time": 0.045 },
               { "prover": "z3", "time": 0.009 },
               { "prover": "z3", "time": 0.008 },
               { "prover": "alt-ergo", "time": 0.06 },
               { "prover": "z3", "time": 0.004 },
-              { "prover": "alt-ergo", "time": 0.093 },
-              { "prover": "alt-ergo", "time": 0.158 },
+              { "prover": "alt-ergo", "time": 0.042 },
+              { "prover": "alt-ergo", "time": 0.079 },
               { "prover": "alt-ergo", "time": 0.162 },
               { "prover": "alt-ergo", "time": 0.063 },
               { "prover": "alt-ergo", "time": 0.041 },
@@ -100,8 +100,8 @@
       }
     },
     "M_implementation__get": {
-      "vc_borrow_Node_T": { "prover": "alt-ergo", "time": 0.037 },
-      "vc_deref_Ghost_ref_UF_T": { "prover": "cvc5", "time": 0.011 },
+      "vc_borrow_Node_T": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_deref_Ghost_ref_UF_T": { "prover": "cvc5", "time": 0.022 },
       "vc_deref_Rc_PermCell_Node_T_Global": {
         "prover": "alt-ergo",
         "time": 0.037
@@ -122,7 +122,7 @@
       "vc_clone_Elem_T": { "prover": "alt-ergo", "time": 0.016 },
       "vc_clone_Rc_PermCell_Node_T_Global": {
         "prover": "alt-ergo",
-        "time": 0.022
+        "time": 0.008
       }
     },
     "M_implementation__impl_Clone_for_Elem_T__clone__refines": {
@@ -130,7 +130,7 @@
     },
     "M_implementation__impl_PartialEq_for_Elem_T__eq": {
       "vc_eq_Elem_T": { "prover": "alt-ergo", "time": 0.037 },
-      "vc_ptr_eq_PermCell_Node_T": { "prover": "alt-ergo", "time": 0.03 }
+      "vc_ptr_eq_PermCell_Node_T": { "prover": "alt-ergo", "time": 0.012 }
     },
     "M_implementation__impl_PartialEq_for_Elem_T__eq__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.027 }
@@ -140,14 +140,14 @@
     },
     "M_implementation__link": {
       "vc_borrow_mut_Node_T": { "prover": "alt-ergo", "time": 0.039 },
-      "vc_clone_Elem_T": { "prover": "alt-ergo", "time": 0.04 },
+      "vc_clone_Elem_T": { "prover": "alt-ergo", "time": 0.017 },
       "vc_deref_Rc_PermCell_Node_T_Global": {
         "prover": "alt-ergo",
         "time": 0.035
       },
       "vc_deref_mut_Ghost_refmut_FMap_Snapshot_Elem_T_Perm_PermCell_Node_T": {
         "prover": "alt-ergo",
-        "time": 0.042
+        "time": 0.021
       },
       "vc_deref_mut_Ghost_refmut_Perm_PermCell_Node_T": {
         "prover": "alt-ergo",
@@ -163,7 +163,7 @@
       "vc_eq_refmut_PeanoInt": { "prover": "cvc5", "time": 0.029 },
       "vc_get_mut_ghost_Snapshot_Elem_T": {
         "prover": "alt-ergo",
-        "time": 0.036
+        "time": 0.014
       },
       "vc_incr": { "prover": "cvc5", "time": 0.031 },
       "vc_link_T": {
@@ -172,9 +172,9 @@
           {
             "tactic": "split_vc",
             "children": [
-              { "prover": "alt-ergo", "time": 0.093 },
+              { "prover": "alt-ergo", "time": 0.039 },
               { "prover": "alt-ergo", "time": 0.037 },
-              { "prover": "alt-ergo", "time": 0.041 },
+              { "prover": "alt-ergo", "time": 0.016 },
               { "prover": "alt-ergo", "time": 0.043 },
               { "prover": "alt-ergo", "time": 0.046 },
               { "prover": "alt-ergo", "time": 0.036 },
@@ -182,13 +182,13 @@
               { "prover": "z3", "time": 0.029 },
               { "prover": "alt-ergo", "time": 0.107 },
               { "prover": "alt-ergo", "time": 0.087 },
-              { "prover": "alt-ergo", "time": 0.052 },
+              { "prover": "alt-ergo", "time": 0.024 },
               { "prover": "alt-ergo", "time": 0.055 },
               { "prover": "z3", "time": 0.037 },
               { "prover": "z3", "time": 0.005 },
               { "prover": "cvc4", "time": 0.128 },
               { "prover": "alt-ergo", "time": 0.097 },
-              { "prover": "alt-ergo", "time": 0.058 },
+              { "prover": "alt-ergo", "time": 0.029 },
               { "prover": "alt-ergo", "time": 0.092 },
               { "prover": "alt-ergo", "time": 0.04 },
               { "prover": "alt-ergo", "time": 0.044 },
@@ -216,7 +216,7 @@
               { "prover": "z3", "time": 0.048 },
               { "prover": "cvc5", "time": 0.441 },
               { "prover": "alt-ergo", "time": 0.095 },
-              { "prover": "alt-ergo", "time": 0.096 }
+              { "prover": "alt-ergo", "time": 0.048 }
             ]
           }
         ]
@@ -231,10 +231,10 @@
         "prover": "alt-ergo",
         "time": 0.014
       },
-      "vc_new_unit": { "prover": "cvc5", "time": 0.029 },
+      "vc_new_unit": { "prover": "cvc5", "time": 0.012 },
       "vc_split_mut_ghost_Snapshot_Elem_T": {
         "prover": "alt-ergo",
-        "time": 0.042
+        "time": 0.016
       },
       "vc_split_refmut_Perm_PermCell_Node_T": {
         "prover": "alt-ergo",
@@ -242,23 +242,23 @@
       },
       "vc_unwrap_refmut_Perm_PermCell_Node_T": {
         "prover": "alt-ergo",
-        "time": 0.012
+        "time": 0.025
       }
     },
     "M_implementation__make": {
       "vc_disjoint_lemma_PermCell_Node_T": {
         "prover": "alt-ergo",
-        "time": 0.049
+        "time": 0.019
       },
       "vc_elim_Some": { "prover": "cvc5", "time": 0.027 },
-      "vc_get_ghost_Snapshot_Elem_T": { "prover": "alt-ergo", "time": 0.038 },
+      "vc_get_ghost_Snapshot_Elem_T": { "prover": "alt-ergo", "time": 0.016 },
       "vc_insert_ghost_Snapshot_Elem_T": {
         "prover": "alt-ergo",
         "time": 0.033
       },
       "vc_into_inner_Perm_PermCell_Node_T": {
         "prover": "alt-ergo",
-        "time": 0.027
+        "time": 0.008
       },
       "vc_into_inner_refmut_UF_T": { "prover": "cvc5", "time": 0.025 },
       "vc_make_T": {
@@ -273,9 +273,9 @@
     "M_implementation__new": {
       "vc_into_inner_FMap_Snapshot_Elem_T_Perm_PermCell_Node_T": {
         "prover": "alt-ergo",
-        "time": 0.036
+        "time": 0.015
       },
-      "vc_new_Snapshot_Elem_T": { "prover": "alt-ergo", "time": 0.033 },
+      "vc_new_Snapshot_Elem_T": { "prover": "alt-ergo", "time": 0.013 },
       "vc_new_T": { "prover": "cvc4", "time": 0.041 },
       "vc_new_UF_T": { "prover": "cvc5", "time": 0.028 }
     },

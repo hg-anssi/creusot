@@ -33,6 +33,6 @@
       "vc_with_capacity_ref_Item_Name": { "prover": "cvc5", "time": 0.013 }
     },
     "M_m": { "vc_m_Name": { "prover": "cvc5", "time": 0.014 } },
-    "M_max": { "vc_max": { "prover": "cvc5", "time": 0.01 } }
+    "M_max": { "vc_max": { "prover": "cvc5", "time": 0.021 } }
   }
 }

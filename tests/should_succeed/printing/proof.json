@@ -10,7 +10,7 @@
       "vc__eprint": { "prover": "cvc5", "time": 0.011 },
       "vc__print": { "prover": "cvc5", "time": 0.013 },
       "vc_f": { "prover": "cvc5", "time": 0.012 },
-      "vc_from_str": { "prover": "cvc5", "time": 0.024 }
+      "vc_from_str": { "prover": "cvc5", "time": 0.004 }
     }
   }
 }

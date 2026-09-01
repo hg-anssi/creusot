@@ -18,6 +18,8 @@
     "M_custom_variant__impl_WellFounded_for_CustomVariant__no_infinite_decreasing_sequence__refines": {
       "refines": { "prover": "cvc5", "time": 0.011 }
     },
-    "M_variant_int": { "vc_variant_int": { "prover": "cvc5", "time": 0.01 } }
+    "M_variant_int": {
+      "vc_variant_int": { "prover": "cvc5", "time": 0.022 }
+    }
   }
 }

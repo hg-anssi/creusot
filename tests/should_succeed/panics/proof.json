@@ -10,11 +10,10 @@
       "vc_from_str": { "prover": "alt-ergo", "time": 0.008 }
     },
     "M_call_always_panic": {
-      "vc_always_panic": { "prover": "alt-ergo", "time": 0.013 },
       "vc_call_always_panic": { "prover": "alt-ergo", "time": 0.019 }
     },
     "M_check_limit": {
-      "vc_check_limit": { "prover": "alt-ergo", "time": 0.022 },
+      "vc_check_limit": { "prover": "alt-ergo", "time": 0.011 },
       "vc_from_str": { "prover": "alt-ergo", "time": 0.016 }
     },
     "M_clamp_or_panic": {
@@ -23,7 +22,7 @@
     },
     "M_div": { "vc_div": { "prover": "alt-ergo", "time": 0.022 } },
     "M_div_two_causes": {
-      "vc_div_two_causes": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_div_two_causes": { "prover": "alt-ergo", "time": 0.023 },
       "vc_from_str": { "prover": "alt-ergo", "time": 0.021 }
     },
     "M_div_two_causes_iff": {
@@ -60,8 +59,7 @@
       "vc_vacuous_normal_post": { "prover": "alt-ergo", "time": 0.019 }
     },
     "M_vacuous_normal_post_call": {
-      "vc_always_panic": { "prover": "alt-ergo", "time": 0.012 },
-      "vc_vacuous_normal_post_call": { "prover": "alt-ergo", "time": 0.011 }
+      "vc_vacuous_normal_post_call": { "prover": "alt-ergo", "time": 0.028 }
     }
   }
 }

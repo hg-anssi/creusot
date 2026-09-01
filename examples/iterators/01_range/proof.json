@@ -18,7 +18,7 @@
     },
     "M_impl_DoubleEndedIterator_for_RangeInclusive__next_back": {
       "vc_is_empty": { "prover": "alt-ergo", "time": 0.03 },
-      "vc_next_back_RangeInclusive": { "prover": "alt-ergo", "time": 0.07 }
+      "vc_next_back_RangeInclusive": { "prover": "alt-ergo", "time": 0.035 }
     },
     "M_impl_DoubleEndedIterator_for_RangeInclusive__next_back__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.031 }
@@ -35,7 +35,7 @@
     "M_impl_DoubleEndedIterator_for_RangeInclusive__produces_back_trans": {
       "vc_produces_back_trans_RangeInclusive": {
         "prover": "alt-ergo",
-        "time": 0.063
+        "time": 0.028
       }
     },
     "M_impl_DoubleEndedIterator_for_RangeInclusive__produces_back_trans__refines": {
@@ -60,7 +60,7 @@
             "tactic": "split_vc",
             "children": [
               { "prover": "alt-ergo", "time": 0.024 },
-              { "prover": "alt-ergo", "time": 0.045 },
+              { "prover": "alt-ergo", "time": 0.022 },
               { "prover": "alt-ergo", "time": 0.031 }
             ]
           }
@@ -71,7 +71,7 @@
       "refines": { "prover": "alt-ergo", "time": 0.032 }
     },
     "M_impl_DoubleEndedIterator_for_Range__produces_back_refl": {
-      "vc_produces_back_refl_Range": { "prover": "alt-ergo", "time": 0.03 }
+      "vc_produces_back_refl_Range": { "prover": "alt-ergo", "time": 0.014 }
     },
     "M_impl_DoubleEndedIterator_for_Range__produces_back_refl__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.028 }
@@ -80,18 +80,18 @@
       "vc_produces_back_trans_Range": { "prover": "alt-ergo", "time": 0.036 }
     },
     "M_impl_DoubleEndedIterator_for_Range__produces_back_trans__refines": {
-      "refines": { "prover": "alt-ergo", "time": 0.03 }
+      "refines": { "prover": "alt-ergo", "time": 0.012 }
     },
     "M_impl_DoubleEndedIterator_for_Range__size_hint_back_spec": {
       "vc_size_hint_Range": { "prover": "alt-ergo", "time": 0.026 },
       "vc_size_hint_back_spec_Range": { "prover": "alt-ergo", "time": 0.042 }
     },
     "M_impl_DoubleEndedIterator_for_Range__size_hint_back_spec__refines": {
-      "refines": { "prover": "alt-ergo", "time": 0.023 },
-      "vc_size_hint_Range": { "prover": "alt-ergo", "time": 0.024 }
+      "refines": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_size_hint_Range": { "prover": "alt-ergo", "time": 0.008 }
     },
     "M_impl_ExactSizeIterator_for_RangeInclusive__size_hint_exact": {
-      "vc_size_hint_RangeInclusive": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_size_hint_RangeInclusive": { "prover": "alt-ergo", "time": 0.012 },
       "vc_size_hint_exact_RangeInclusive": {
         "prover": "alt-ergo",
         "time": 0.021
@@ -123,7 +123,7 @@
       }
     },
     "M_impl_Iterator_for_RangeInclusive__produces_refl__refines": {
-      "refines": { "prover": "alt-ergo", "time": 0.02 }
+      "refines": { "prover": "alt-ergo", "time": 0.008 }
     },
     "M_impl_Iterator_for_RangeInclusive__produces_trans": {
       "vc_produces_trans_RangeInclusive": {

@@ -7,7 +7,7 @@
   ],
   "proofs": {
     "M_impl_List__lemma_sum_nonneg": {
-      "vc_lemma_sum_nonneg": { "prover": "cvc5", "time": 0.02 }
+      "vc_lemma_sum_nonneg": { "prover": "cvc5", "time": 0.01 }
     },
     "M_impl_List__sum_x": {
       "vc_elim_Cons": { "prover": "cvc5", "time": 0.019 },

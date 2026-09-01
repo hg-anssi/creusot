@@ -32,7 +32,7 @@
       "vc_len_Enumerate_I": { "prover": "alt-ergo", "time": 0.017 },
       "vc_len_I": { "prover": "alt-ergo", "time": 0.014 },
       "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.013 },
-      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.011 }
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.022 }
     },
     "M_impl_ExactSizeIterator_for_Enumerate_I__len__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.022 },
@@ -41,7 +41,7 @@
     },
     "M_impl_ExactSizeIterator_for_Enumerate_I__size_hint_exact": {
       "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.029 },
-      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.012 },
       "vc_size_hint_exact_Enumerate_I": {
         "prover": "alt-ergo",
         "time": 0.025
@@ -49,7 +49,7 @@
     },
     "M_impl_ExactSizeIterator_for_Enumerate_I__size_hint_exact__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.014 },
-      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.013 },
       "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.029 }
     },
     "M_impl_Iterator_for_Enumerate_I__next": {

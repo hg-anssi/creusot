@@ -15,7 +15,7 @@
       "vc_call_once_F": { "prover": "cvc5", "time": 0.008 }
     },
     "M_foo1": {
-      "vc_apply_mut_closure9": { "prover": "cvc5", "time": 0.03 },
+      "vc_apply_mut_closure9": { "prover": "cvc5", "time": 0.015 },
       "vc_closure9": { "prover": "cvc5", "time": 0.029 },
       "vc_elim_Some": { "prover": "cvc5", "time": 0.025 },
       "vc_foo1": { "prover": "cvc5", "time": 0.048 },

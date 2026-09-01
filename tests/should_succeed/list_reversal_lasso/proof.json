@@ -36,7 +36,7 @@
       "vc_find_ptr_in_seq": { "prover": "cvc5", "time": 0.036 }
     },
     "M_impl_Memory_0__list_reversal_lasso": {
-      "vc_index_mut_Memory": { "prover": "cvc5", "time": 0.02 },
+      "vc_index_mut_Memory": { "prover": "cvc5", "time": 0.01 },
       "vc_list_reversal_lasso": {
         "tactic": "compute_specified",
         "children": [
@@ -53,7 +53,7 @@
               },
               { "prover": "alt-ergo", "time": 0.076 },
               { "prover": "alt-ergo", "time": 0.031 },
-              { "prover": "alt-ergo", "time": 0.016 },
+              { "prover": "alt-ergo", "time": 0.036 },
               { "prover": "alt-ergo", "time": 0.943 },
               { "prover": "alt-ergo", "time": 0.934 },
               {

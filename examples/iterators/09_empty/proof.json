@@ -26,7 +26,7 @@
       "refines": { "prover": "alt-ergo", "time": 0.016 }
     },
     "M_impl_Iterator_for_Empty_T__produces_refl": {
-      "vc_produces_refl_Empty_T": { "prover": "alt-ergo", "time": 0.033 }
+      "vc_produces_refl_Empty_T": { "prover": "alt-ergo", "time": 0.014 }
     },
     "M_impl_Iterator_for_Empty_T__produces_refl__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.011 }
@@ -34,7 +34,7 @@
     "M_impl_Iterator_for_Empty_T__produces_trans": {
       "vc_produces_trans_Empty_T": {
         "tactic": "compute_specified",
-        "children": [ { "prover": "alt-ergo", "time": 0.027 } ]
+        "children": [ { "prover": "alt-ergo", "time": 0.012 } ]
       }
     },
     "M_impl_Iterator_for_Empty_T__produces_trans__refines": {
@@ -44,7 +44,7 @@
       "vc_size_hint_Empty_T": { "prover": "alt-ergo", "time": 0.012 }
     },
     "M_impl_Iterator_for_Empty_T__size_hint__refines": {
-      "refines": { "prover": "alt-ergo", "time": 0.023 }
+      "refines": { "prover": "alt-ergo", "time": 0.011 }
     }
   }
 }

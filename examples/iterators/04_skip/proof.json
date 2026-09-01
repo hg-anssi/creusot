@@ -18,14 +18,14 @@
     },
     "M_impl_ExactSizeIterator_for_Skip_I__size_hint_exact__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.013 },
-      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.025 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.008 },
       "vc_size_hint_Skip_I": { "prover": "alt-ergo", "time": 0.025 }
     },
     "M_impl_Iterator_for_Skip_I__next": {
       "vc_default_usize": { "prover": "alt-ergo", "time": 0.013 },
       "vc_elim_Some": { "prover": "alt-ergo", "time": 0.013 },
       "vc_next_I": { "prover": "alt-ergo", "time": 0.027 },
-      "vc_next_Skip_I": { "prover": "alt-ergo", "time": 0.184 },
+      "vc_next_Skip_I": { "prover": "alt-ergo", "time": 0.073 },
       "vc_take_usize": { "prover": "alt-ergo", "time": 0.013 }
     },
     "M_impl_Iterator_for_Skip_I__next__refines": {

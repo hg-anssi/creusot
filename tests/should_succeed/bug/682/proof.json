@@ -9,7 +9,7 @@
     "M_add_some": { "vc_add_some": { "prover": "cvc5", "time": 0.014 } },
     "M_foo": {
       "vc_add_some": { "prover": "cvc5", "time": 0.013 },
-      "vc_foo": { "prover": "cvc5", "time": 0.007 }
+      "vc_foo": { "prover": "cvc5", "time": 0.02 }
     }
   }
 }

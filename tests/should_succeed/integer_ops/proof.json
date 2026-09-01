@@ -22,7 +22,7 @@
       "vc_test_from_bool": { "prover": "cvc5", "time": 0.009 }
     },
     "M_i128__test_from_bool_bw": {
-      "vc_test_from_bool_bw": { "prover": "cvc5", "time": 0.024 }
+      "vc_test_from_bool_bw": { "prover": "cvc5", "time": 0.008 }
     },
     "M_i128__test_mul": {
       "vc_test_mul": { "prover": "cvc5", "time": 0.013 }

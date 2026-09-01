@@ -8,9 +8,9 @@
   "proofs": {
     "M_foo": {
       "vc_foo": { "prover": "cvc5", "time": 0.009 },
-      "vc_into_inner_Int": { "prover": "cvc5", "time": 0.009 },
-      "vc_new": { "prover": "cvc5", "time": 0.009 },
-      "vc_new_Int": { "prover": "cvc5", "time": 0.009 }
+      "vc_into_inner_Int": { "prover": "cvc5", "time": 0.023 },
+      "vc_new": { "prover": "cvc5", "time": 0.023 },
+      "vc_new_Int": { "prover": "cvc5", "time": 0.023 }
     }
   }
 }

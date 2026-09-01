@@ -8,10 +8,10 @@
   "proofs": {
     "M_all_zero": {
       "vc_all_zero": { "prover": "alt-ergo", "time": 0.144 },
-      "vc_elim_Some": { "prover": "cvc5", "time": 0.041 },
+      "vc_elim_Some": { "prover": "cvc5", "time": 0.009 },
       "vc_into_iter_usize": { "prover": "cvc5", "time": 0.021 },
       "vc_iter_mut_usize": { "prover": "cvc5", "time": 0.021 },
-      "vc_next_IterMut_usize": { "prover": "cvc5", "time": 0.041 }
+      "vc_next_IterMut_usize": { "prover": "cvc5", "time": 0.015 }
     },
     "M_common__trait_ExactSizeIterator__is_empty": {
       "vc_is_empty_Self": { "prover": "alt-ergo", "time": 0.022 },
@@ -34,7 +34,7 @@
               {
                 "tactic": "split_vc",
                 "children": [
-                  { "prover": "alt-ergo", "time": 0.038 },
+                  { "prover": "alt-ergo", "time": 0.004 },
                   {
                     "tactic": "split_vc",
                     "children": [
@@ -55,7 +55,7 @@
           }
         ]
       },
-      "vc_split_off_last_mut_T": { "prover": "alt-ergo", "time": 0.027 }
+      "vc_split_off_last_mut_T": { "prover": "alt-ergo", "time": 0.012 }
     },
     "M_impl_DoubleEndedIterator_for_IterMut_T__next_back__refines": {
       "refines": { "tactic": "compute_specified", "children": [] }
@@ -67,7 +67,7 @@
       }
     },
     "M_impl_DoubleEndedIterator_for_IterMut_T__produces_back_refl__refines": {
-      "refines": { "prover": "alt-ergo", "time": 0.024 }
+      "refines": { "prover": "alt-ergo", "time": 0.008 }
     },
     "M_impl_DoubleEndedIterator_for_IterMut_T__produces_back_trans": {
       "vc_produces_back_trans_IterMut_T": {
@@ -115,7 +115,7 @@
           {
             "tactic": "split_vc",
             "children": [
-              { "prover": "alt-ergo", "time": 0.032 },
+              { "prover": "alt-ergo", "time": 0.015 },
               {
                 "tactic": "split_vc",
                 "children": [
@@ -123,7 +123,7 @@
                   {
                     "tactic": "split_vc",
                     "children": [
-                      { "prover": "alt-ergo", "time": 0.032 },
+                      { "prover": "alt-ergo", "time": 0.016 },
                       {
                         "tactic": "compute_specified",
                         "children": [
@@ -135,7 +135,7 @@
                 ]
               },
               { "prover": "z3", "time": 0.018 },
-              { "prover": "alt-ergo", "time": 0.027 }
+              { "prover": "alt-ergo", "time": 0.011 }
             ]
           }
         ]
@@ -146,13 +146,13 @@
       "refines": { "prover": "cvc5", "time": 0.024 }
     },
     "M_impl_Iterator_for_IterMut_T__produces_refl": {
-      "vc_produces_refl_IterMut_T": { "prover": "cvc5", "time": 0.042 }
+      "vc_produces_refl_IterMut_T": { "prover": "cvc5", "time": 0.021 }
     },
     "M_impl_Iterator_for_IterMut_T__produces_refl__refines": {
       "refines": { "prover": "cvc5", "time": 0.02 }
     },
     "M_impl_Iterator_for_IterMut_T__produces_trans": {
-      "vc_produces_trans_IterMut_T": { "prover": "cvc4", "time": 0.064 }
+      "vc_produces_trans_IterMut_T": { "prover": "cvc4", "time": 0.023 }
     },
     "M_impl_Iterator_for_IterMut_T__produces_trans__refines": {
       "refines": { "prover": "cvc5", "time": 0.049 }
@@ -162,7 +162,7 @@
       "vc_size_hint_IterMut_T": { "prover": "alt-ergo", "time": 0.014 }
     },
     "M_impl_Iterator_for_IterMut_T__size_hint__refines": {
-      "refines": { "prover": "alt-ergo", "time": 0.043 }
+      "refines": { "prover": "alt-ergo", "time": 0.011 }
     },
     "M_iter_mut": {
       "vc_index_mut_Vec_T_Global": { "prover": "cvc5", "time": 0.035 },

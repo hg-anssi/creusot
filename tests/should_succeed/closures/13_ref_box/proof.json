@@ -20,7 +20,7 @@
     },
     "M_test1": {
       "vc_call_fn_ref_F": { "prover": "cvc5", "time": 0.012 },
-      "vc_test1_F": { "prover": "cvc5", "time": 0.02 }
+      "vc_test1_F": { "prover": "cvc5", "time": 0.009 }
     },
     "M_test10": {
       "vc_call_fnmut_refmut_F": { "prover": "cvc5", "time": 0.013 },
@@ -44,10 +44,10 @@
     },
     "M_test15": {
       "vc_call_fnonce_F": { "prover": "cvc5", "time": 0.015 },
-      "vc_test15_F": { "prover": "cvc5", "time": 0.012 }
+      "vc_test15_F": { "prover": "cvc5", "time": 0.027 }
     },
     "M_test16": {
-      "vc_call_fnonce_F": { "prover": "cvc5", "time": 0.011 },
+      "vc_call_fnonce_F": { "prover": "cvc5", "time": 0.023 },
       "vc_test16_F": { "prover": "cvc5", "time": 0.016 }
     },
     "M_test2": {

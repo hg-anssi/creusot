@@ -24,7 +24,7 @@
             "tactic": "split_vc",
             "children": [
               { "prover": "alt-ergo", "time": 0.021 },
-              { "prover": "alt-ergo", "time": 0.021 },
+              { "prover": "alt-ergo", "time": 0.008 },
               { "prover": "alt-ergo", "time": 0.027 }
             ]
           }
@@ -32,7 +32,7 @@
       },
       "vc_is_empty_I": { "prover": "alt-ergo", "time": 0.012 },
       "vc_size_hint_Cloned_I": { "prover": "alt-ergo", "time": 0.018 },
-      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.04 }
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.017 }
     },
     "M_impl_ExactSizeIterator_for_Cloned_I__is_empty__refines": {
       "refines": { "prover": "alt-ergo", "time": 0.016 },
@@ -79,7 +79,7 @@
       "vc_produces_trans_Cloned_I": { "prover": "cvc5", "time": 0.093 }
     },
     "M_impl_Iterator_for_Cloned_I__produces_trans__refines": {
-      "refines": { "prover": "cvc5", "time": 0.01 }
+      "refines": { "prover": "cvc5", "time": 0.02 }
     },
     "M_impl_Iterator_for_Cloned_I__size_hint": {
       "vc_size_hint_Cloned_I": { "prover": "alt-ergo", "time": 0.024 },
