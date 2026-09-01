@@ -14,11 +14,11 @@ module M_always_panic
   
   meta "select_lsinst" "all"
   
-  let always_panic (panic) (return (x: UInt8.t)) = (! bb0
-    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_5 <- _x ] s1) | s1 = panic ] ]
+  let always_panic (return (x: UInt8.t)) = {[@stop_split] [@expl:always_panic requires (no panic)] false}
+    (! bb0
+    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_5 <- _x ] s1) | s1 = {false} any ] ]
     [ & _5: t_Arguments = Any.any_l () ])
-    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic ensures] false} (! return {result})
-    | panic -> (! panic) ]
+    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic ensures] false} (! return {result}) ]
 end
 module M_always_panic_sugar
   use creusot.prelude.Any
@@ -36,29 +36,24 @@ module M_always_panic_sugar
   
   meta "select_lsinst" "all"
   
-  let always_panic_sugar (panic) (return (x: UInt8.t)) = (! bb0
-    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_5 <- _x ] s1) | s1 = panic ] ]
+  let always_panic_sugar (return (x: UInt8.t)) = {[@stop_split] [@expl:always_panic_sugar requires (no panic)] false}
+    (! bb0
+    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_5 <- _x ] s1) | s1 = {false} any ] ]
     [ & _5: t_Arguments = Any.any_l () ])
-    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic_sugar ensures] not true} (! return {result})
-    | panic -> (! panic) ]
+    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic_sugar ensures] not true} (! return {result}) ]
 end
 module M_call_always_panic
   use creusot.int.UInt8
   use creusot.prelude.Any
   
-  let always_panic (panic) (return (x: UInt8.t)) = any
-    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic ensures] false} (! return {result})
-    | panic -> (! panic) ]
-  
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
   
-  let call_always_panic (panic) (return (x: UInt8.t)) = (! bb0
-    [ bb0 = s0 [ s0 = always_panic (panic) (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: UInt8.t = Any.any_l () ])
-    [ return (result: UInt8.t) -> {[@stop_split] [@expl:call_always_panic ensures] false} (! return {result})
-    | panic -> (! panic) ]
+  let call_always_panic (return (x: UInt8.t)) = {[@stop_split] [@expl:call_always_panic requires (no panic)] false}
+    (! bb0
+    [ bb0 = {false} any ] [ & _ret: UInt8.t = Any.any_l () ])
+    [ return (result: UInt8.t) -> {[@stop_split] [@expl:call_always_panic ensures] false} (! return {result}) ]
 end
 module M_check_limit
   use creusot.int.UInt32
@@ -77,18 +72,19 @@ module M_check_limit
   
   meta "select_lsinst" "all"
   
-  let check_limit (x: UInt32.t) (panic) (return (x'0: UInt32.t)) = (! bb0
+  let check_limit (x: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:check_limit requires (no panic)] not UInt32.t'int x >= 100}
+    (! bb0
     [ bb0 = s0
       [ s0 = [ &_6 <- UInt32.ge x (100: UInt32.t) ] s1
       | s1 = any [ br0 -> {_6 = false} (! bb3) | br1 -> {_6} (! bb1) ] ]
-    | bb1 = s0 [ s0 = from_str {"x is too large"} (fun (_x: t_Arguments) -> [ &_10 <- _x ] s1) | s1 = panic ]
+    | bb1 = s0 [ s0 = from_str {"x is too large"} (fun (_x: t_Arguments) -> [ &_10 <- _x ] s1) | s1 = {false} any ]
     | bb3 = s0 [ s0 = [ &_ret <- x ] s1 | s1 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & x: UInt32.t = x
     | & _6: bool = Any.any_l ()
     | & _10: t_Arguments = Any.any_l () ])
-    [ return (result: UInt32.t) -> {[@stop_split] [@expl:check_limit ensures] result = x} (! return {result})
-    | panic -> {[@stop_split] [@expl:check_limit may_panic] UInt32.t'int x >= 100} (! panic) ]
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:check_limit ensures] result = x} (! return {result}) ]
 end
 module M_clamp_or_panic
   use creusot.int.UInt32
@@ -107,11 +103,13 @@ module M_clamp_or_panic
   
   meta "select_lsinst" "all"
   
-  let clamp_or_panic (x: UInt32.t) (panic) (return (x'0: UInt32.t)) = (! bb0
+  let clamp_or_panic (x: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:clamp_or_panic requires (no panic)] not UInt32.t'int x > 100}
+    (! bb0
     [ bb0 = s0
       [ s0 = [ &_7 <- UInt32.gt x (100: UInt32.t) ] s1
       | s1 = any [ br0 -> {_7 = false} (! bb3) | br1 -> {_7} (! bb1) ] ]
-    | bb1 = s0 [ s0 = from_str {"too large"} (fun (_x: t_Arguments) -> [ &_11 <- _x ] s1) | s1 = panic ]
+    | bb1 = s0 [ s0 = from_str {"too large"} (fun (_x: t_Arguments) -> [ &_11 <- _x ] s1) | s1 = {false} any ]
     | bb3 = s0 [ s0 = [ &_ret <- x ] s1 | s1 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & x: UInt32.t = x
@@ -121,8 +119,7 @@ module M_clamp_or_panic
     {[@stop_split] [@expl:clamp_or_panic ensures] ([@stop_split] [@expl:clamp_or_panic ensures #0] UInt32.t'int result
         <= 100)
       /\ ([@stop_split] [@expl:clamp_or_panic ensures #1] result = x)}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:clamp_or_panic may_panic] UInt32.t'int x > 100} (! panic) ]
+      (! return {result}) ]
 end
 module M_div
   use creusot.int.UInt32
@@ -133,13 +130,15 @@ module M_div
   
   meta "select_lsinst" "all"
   
-  let div (x: UInt32.t) (y: UInt32.t) (panic) (return (x'0: UInt32.t)) = (! bb0
+  let div (x: UInt32.t) (y: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:div requires (no panic)] not UInt32.t'int y = 0}
+    (! bb0
     [ bb0 = s0
       [ s0 = [ &_9 <- y ] s1
       | s1 = [ &_10 <- _9 = (0: UInt32.t) ] s2
-      | s2 = any [ br0 -> {_10 = false} (! bb1) | br1 -> {_10} (! bb3) ] ]
-    | bb3 = panic
-    | bb1 = s0 [ s0 = UInt32.div {x} {_9} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+      | s2 = {[@expl:division by zero] not _10} s3
+      | s3 = UInt32.div {x} {_9} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & x: UInt32.t = x
     | & y: UInt32.t = y
@@ -147,8 +146,7 @@ module M_div
     | & _10: bool = Any.any_l () ])
     [ return (result: UInt32.t) -> {[@stop_split] [@expl:div ensures] UInt32.t'int result
       = ComputerDivision.div (UInt32.t'int x) (UInt32.t'int y)}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:div may_panic] UInt32.t'int y = 0} (! panic) ]
+      (! return {result}) ]
 end
 module M_div_two_causes
   use creusot.int.UInt32
@@ -169,15 +167,19 @@ module M_div_two_causes
   
   meta "select_lsinst" "all"
   
-  let div_two_causes (x: UInt32.t) (y: UInt32.t) (panic) (return (x'0: UInt32.t)) = (! bb0
+  let div_two_causes (x: UInt32.t) (y: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:div_two_causes requires] ([@stop_split] [@expl:div_two_causes requires (no panic) #0] not UInt32.t'int y
+      = 0)
+    /\ ([@stop_split] [@expl:div_two_causes requires (no panic) #1] not x = const_MAX)}
+    (! bb0
     [ bb0 = s0 [ s0 = [ &_10 <- x = const_MAX ] s1 | s1 = any [ br0 -> {_10 = false} (! bb3) | br1 -> {_10} (! bb1) ] ]
-    | bb1 = s0 [ s0 = from_str {"x saturated"} (fun (_x: t_Arguments) -> [ &_14 <- _x ] s1) | s1 = panic ]
+    | bb1 = s0 [ s0 = from_str {"x saturated"} (fun (_x: t_Arguments) -> [ &_14 <- _x ] s1) | s1 = {false} any ]
     | bb3 = s0
       [ s0 = [ &_16 <- y ] s1
       | s1 = [ &_17 <- _16 = (0: UInt32.t) ] s2
-      | s2 = any [ br0 -> {_17 = false} (! bb4) | br1 -> {_17} (! bb6) ] ]
-    | bb6 = panic
-    | bb4 = s0 [ s0 = UInt32.div {x} {_16} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+      | s2 = {[@expl:division by zero] not _17} s3
+      | s3 = UInt32.div {x} {_16} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & x: UInt32.t = x
     | & y: UInt32.t = y
@@ -187,12 +189,7 @@ module M_div_two_causes
     | & _17: bool = Any.any_l () ])
     [ return (result: UInt32.t) -> {[@stop_split] [@expl:div_two_causes ensures] UInt32.t'int result
       = ComputerDivision.div (UInt32.t'int x) (UInt32.t'int y)}
-      (! return {result})
-    | panic ->
-    {[@stop_split] [@expl:div_two_causes may_panic] ([@stop_split] [@expl:div_two_causes may_panic #0] UInt32.t'int y
-        = 0)
-      \/ ([@stop_split] [@expl:div_two_causes may_panic #1] x = const_MAX)}
-      (! panic) ]
+      (! return {result}) ]
 end
 module M_div_two_causes_iff
   use creusot.int.UInt32
@@ -213,15 +210,19 @@ module M_div_two_causes_iff
   
   meta "select_lsinst" "all"
   
-  let div_two_causes_iff (x: UInt32.t) (y: UInt32.t) (panic) (return (x'0: UInt32.t)) = (! bb0
+  let div_two_causes_iff (x: UInt32.t) (y: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:div_two_causes_iff requires] ([@stop_split] [@expl:div_two_causes_iff requires (no panic) #0] not UInt32.t'int y
+      = 0)
+    /\ ([@stop_split] [@expl:div_two_causes_iff requires (no panic) #1] not x = const_MAX)}
+    (! bb0
     [ bb0 = s0 [ s0 = [ &_14 <- x = const_MAX ] s1 | s1 = any [ br0 -> {_14 = false} (! bb3) | br1 -> {_14} (! bb1) ] ]
-    | bb1 = s0 [ s0 = from_str {"x saturated"} (fun (_x: t_Arguments) -> [ &_18 <- _x ] s1) | s1 = panic ]
+    | bb1 = s0 [ s0 = from_str {"x saturated"} (fun (_x: t_Arguments) -> [ &_18 <- _x ] s1) | s1 = {false} any ]
     | bb3 = s0
       [ s0 = [ &_20 <- y ] s1
       | s1 = [ &_21 <- _20 = (0: UInt32.t) ] s2
-      | s2 = any [ br0 -> {_21 = false} (! bb4) | br1 -> {_21} (! bb6) ] ]
-    | bb6 = panic
-    | bb4 = s0 [ s0 = UInt32.div {x} {_20} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+      | s2 = {[@expl:division by zero] not _21} s3
+      | s3 = UInt32.div {x} {_20} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & x: UInt32.t = x
     | & y: UInt32.t = y
@@ -235,12 +236,7 @@ module M_div_two_causes_iff
       /\ ([@stop_split] [@expl:div_two_causes_iff ensures #1] not x = const_MAX)
       /\ ([@stop_split] [@expl:div_two_causes_iff ensures #2] UInt32.t'int result
       = ComputerDivision.div (UInt32.t'int x) (UInt32.t'int y))}
-      (! return {result})
-    | panic ->
-    {[@stop_split] [@expl:div_two_causes_iff may_panic] ([@stop_split] [@expl:div_two_causes_iff may_panic #0] UInt32.t'int y
-        = 0)
-      \/ ([@stop_split] [@expl:div_two_causes_iff may_panic #1] x = const_MAX)}
-      (! panic) ]
+      (! return {result}) ]
 end
 module M_first
   use creusot.int.UInt64
@@ -254,22 +250,22 @@ module M_first
   
   meta "select_lsinst" "all"
   
-  let first (l: Slice64.slice UInt8.t) (panic) (return (x: UInt8.t)) = (! bb0
+  let first (l: Slice64.slice UInt8.t) (return (x: UInt8.t)) = {[@stop_split] [@expl:first requires (no panic)] false}
+    (! bb0
     [ bb0 = s0
       [ s0 = [ &_5 <- (0: UInt64.t) ] s1
       | s1 = [ &_6 <- Slice64Ops.length l ] s2
       | s2 = [ &_7 <- UInt64.lt _5 _6 ] s3
-      | s3 = any [ br0 -> {_7 = false} (! bb3) | br1 -> {_7} (! bb1) ] ]
-    | bb1 = s0 [ s0 = Slice64Ops.get <UInt8.t> {l} {_5} (fun (r: UInt8.t) -> [ &_ret <- r ] s1) | s1 = return {_ret} ]
-    | bb3 = panic ]
+      | s3 = {[@expl:index in bounds] _7} s4
+      | s4 = Slice64Ops.get <UInt8.t> {l} {_5} (fun (r: UInt8.t) -> [ &_ret <- r ] s5)
+      | s5 = return {_ret} ] ]
     [ & _ret: UInt8.t = Any.any_l ()
     | & l: Slice64.slice UInt8.t = l
     | & _5: UInt64.t = Any.any_l ()
     | & _6: UInt64.t = Any.any_l ()
     | & _7: bool = Any.any_l () ])
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:first ensures] result = Seq.get (Slice64.view l) 0}
-      (! return {result})
-    | panic -> (! panic) ]
+      (! return {result}) ]
 end
 module M_first_or_panic
   use creusot.slice.Slice64
@@ -279,24 +275,26 @@ module M_first_or_panic
   use creusot.prelude.Any
   use int.Int
   
-  let get (l: Slice64.slice UInt8.t) (i: UInt64.t) (panic) (return (x: UInt8.t)) = any
+  let get (l: Slice64.slice UInt8.t) (i: UInt64.t) (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:get requires (no panic)] not UInt64.t'int i >= Seq.length (Slice64.view l)}
+    any
     [ return (result: UInt8.t) ->
     {[@stop_split] [@expl:get ensures] ([@stop_split] [@expl:get ensures #0] UInt64.t'int i
         < Seq.length (Slice64.view l))
       /\ ([@stop_split] [@expl:get ensures #1] result = Seq.get (Slice64.view l) (UInt64.t'int i))}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:get may_panic] UInt64.t'int i >= Seq.length (Slice64.view l)} (! panic) ]
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
   
-  let first_or_panic (l: Slice64.slice UInt8.t) (panic) (return (x: UInt8.t)) = (! bb0
-    [ bb0 = s0 [ s0 = get {l} {(0: UInt64.t)} (panic) (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+  let first_or_panic (l: Slice64.slice UInt8.t) (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:first_or_panic requires (no panic)] not Seq.length (Slice64.view l) = 0}
+    (! bb0
+    [ bb0 = s0 [ s0 = get {l} {(0: UInt64.t)} (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: UInt8.t = Any.any_l () | & l: Slice64.slice UInt8.t = l ])
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:first_or_panic ensures] result = Seq.get (Slice64.view l) 0}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:first_or_panic may_panic] Seq.length (Slice64.view l) = 0} (! panic) ]
+      (! return {result}) ]
 end
 module M_get
   use creusot.slice.Slice64Ops
@@ -311,14 +309,16 @@ module M_get
   
   meta "select_lsinst" "all"
   
-  let get (l: Slice64.slice UInt8.t) (i: UInt64.t) (panic) (return (x: UInt8.t)) = (! bb0
+  let get (l: Slice64.slice UInt8.t) (i: UInt64.t) (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:get requires (no panic)] not UInt64.t'int i >= Seq.length (Slice64.view l)}
+    (! bb0
     [ bb0 = s0
       [ s0 = [ &_12 <- i ] s1
       | s1 = [ &_13 <- Slice64Ops.length l ] s2
       | s2 = [ &_14 <- UInt64.lt _12 _13 ] s3
-      | s3 = any [ br0 -> {_14 = false} (! bb3) | br1 -> {_14} (! bb1) ] ]
-    | bb1 = s0 [ s0 = Slice64Ops.get <UInt8.t> {l} {_12} (fun (r: UInt8.t) -> [ &_ret <- r ] s1) | s1 = return {_ret} ]
-    | bb3 = panic ]
+      | s3 = {[@expl:index in bounds] _14} s4
+      | s4 = Slice64Ops.get <UInt8.t> {l} {_12} (fun (r: UInt8.t) -> [ &_ret <- r ] s5)
+      | s5 = return {_ret} ] ]
     [ & _ret: UInt8.t = Any.any_l ()
     | & l: Slice64.slice UInt8.t = l
     | & i: UInt64.t = i
@@ -329,8 +329,7 @@ module M_get
     {[@stop_split] [@expl:get ensures] ([@stop_split] [@expl:get ensures #0] UInt64.t'int i
         < Seq.length (Slice64.view l))
       /\ ([@stop_split] [@expl:get ensures #1] result = Seq.get (Slice64.view l) (UInt64.t'int i))}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:get may_panic] UInt64.t'int i >= Seq.length (Slice64.view l)} (! panic) ]
+      (! return {result}) ]
 end
 module M_get_first_safe
   use creusot.slice.Slice64
@@ -340,13 +339,14 @@ module M_get_first_safe
   use creusot.prelude.Any
   use int.Int
   
-  let get (l: Slice64.slice UInt8.t) (i: UInt64.t) (panic) (return (x: UInt8.t)) = any
+  let get (l: Slice64.slice UInt8.t) (i: UInt64.t) (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:get requires (no panic)] not UInt64.t'int i >= Seq.length (Slice64.view l)}
+    any
     [ return (result: UInt8.t) ->
     {[@stop_split] [@expl:get ensures] ([@stop_split] [@expl:get ensures #0] UInt64.t'int i
         < Seq.length (Slice64.view l))
       /\ ([@stop_split] [@expl:get ensures #1] result = Seq.get (Slice64.view l) (UInt64.t'int i))}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:get may_panic] UInt64.t'int i >= Seq.length (Slice64.view l)} (! panic) ]
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
@@ -355,11 +355,8 @@ module M_get_first_safe
   let get_first_safe (l: Slice64.slice UInt8.t) (return (x: UInt8.t)) =
   {[@stop_split] [@expl:get_first_safe requires] Seq.length (Slice64.view l) > 0}
     (! bb0
-    [ bb0 = s0
-      [ s0 = get {l} {(0: UInt64.t)}
-          (-> {[@expl:the callee cannot panic here] false} any)
-          (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1)
-      | s1 = return {_ret} ] ] [ & _ret: UInt8.t = Any.any_l () | & l: Slice64.slice UInt8.t = l ])
+    [ bb0 = s0 [ s0 = get {l} {(0: UInt64.t)} (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: UInt8.t = Any.any_l () | & l: Slice64.slice UInt8.t = l ])
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:get_first_safe ensures] result = Seq.get (Slice64.view l) 0}
       (! return {result}) ]
 end
@@ -376,14 +373,16 @@ module M_get_iff
   
   meta "select_lsinst" "all"
   
-  let get_iff (l: Slice64.slice UInt8.t) (i: UInt64.t) (panic) (return (x: UInt8.t)) = (! bb0
+  let get_iff (l: Slice64.slice UInt8.t) (i: UInt64.t) (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:get_iff requires (no panic)] not UInt64.t'int i >= Seq.length (Slice64.view l)}
+    (! bb0
     [ bb0 = s0
       [ s0 = [ &_12 <- i ] s1
       | s1 = [ &_13 <- Slice64Ops.length l ] s2
       | s2 = [ &_14 <- UInt64.lt _12 _13 ] s3
-      | s3 = any [ br0 -> {_14 = false} (! bb3) | br1 -> {_14} (! bb1) ] ]
-    | bb1 = s0 [ s0 = Slice64Ops.get <UInt8.t> {l} {_12} (fun (r: UInt8.t) -> [ &_ret <- r ] s1) | s1 = return {_ret} ]
-    | bb3 = panic ]
+      | s3 = {[@expl:index in bounds] _14} s4
+      | s4 = Slice64Ops.get <UInt8.t> {l} {_12} (fun (r: UInt8.t) -> [ &_ret <- r ] s5)
+      | s5 = return {_ret} ] ]
     [ & _ret: UInt8.t = Any.any_l ()
     | & l: Slice64.slice UInt8.t = l
     | & i: UInt64.t = i
@@ -394,8 +393,7 @@ module M_get_iff
     {[@stop_split] [@expl:get_iff ensures] ([@stop_split] [@expl:get_iff ensures #0] not UInt64.t'int i
         >= Seq.length (Slice64.view l))
       /\ ([@stop_split] [@expl:get_iff ensures #1] result = Seq.get (Slice64.view l) (UInt64.t'int i))}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:get_iff may_panic] UInt64.t'int i >= Seq.length (Slice64.view l)} (! panic) ]
+      (! return {result}) ]
 end
 module M_increment
   use creusot.int.UInt32
@@ -416,17 +414,18 @@ module M_increment
   
   meta "select_lsinst" "all"
   
-  let increment (x: UInt32.t) (panic) (return (x'0: UInt32.t)) = (! bb0
+  let increment (x: UInt32.t) (return (x'0: UInt32.t)) = {[@stop_split] [@expl:increment requires (no panic)] not x
+    = const_MAX}
+    (! bb0
     [ bb0 = s0 [ s0 = [ &_6 <- x = const_MAX ] s1 | s1 = any [ br0 -> {_6 = false} (! bb3) | br1 -> {_6} (! bb1) ] ]
-    | bb1 = s0 [ s0 = from_str {"overflow"} (fun (_x: t_Arguments) -> [ &_10 <- _x ] s1) | s1 = panic ]
+    | bb1 = s0 [ s0 = from_str {"overflow"} (fun (_x: t_Arguments) -> [ &_10 <- _x ] s1) | s1 = {false} any ]
     | bb3 = s0 [ s0 = UInt32.add {x} {(1: UInt32.t)} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: UInt32.t = Any.any_l ()
     | & x: UInt32.t = x
     | & _6: bool = Any.any_l ()
     | & _10: t_Arguments = Any.any_l () ])
     [ return (result: UInt32.t) -> {[@stop_split] [@expl:increment ensures] UInt32.t'int result = UInt32.t'int x + 1}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:increment may_panic] x = const_MAX} (! panic) ]
+      (! return {result}) ]
 end
 module M_never_panic
   use creusot.int.UInt8
@@ -436,29 +435,26 @@ module M_never_panic
   
   meta "select_lsinst" "all"
   
-  let never_panic (panic) (return (x: UInt8.t)) = (! bb0
+  let never_panic (return (x: UInt8.t)) = (! bb0
     [ bb0 = s0 [ s0 = [ &_ret <- (24: UInt8.t) ] s1 | s1 = return {_ret} ] ] [ & _ret: UInt8.t = Any.any_l () ])
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:never_panic ensures] UInt8.t'int result = 24}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:never_panic may_panic] false} (! panic) ]
+      (! return {result}) ]
 end
 module M_never_panic_call
   use creusot.int.UInt8
   use creusot.prelude.Any
   
-  let never_panic (panic) (return (x: UInt8.t)) = any
+  let never_panic (return (x: UInt8.t)) = any
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:never_panic ensures] UInt8.t'int result = 24}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:never_panic may_panic] false} (! panic) ]
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
   
   let never_panic_call (return (x: UInt8.t)) = (! bb0
-    [ bb0 = s0
-      [ s0 = never_panic (-> {[@expl:the callee cannot panic here] false} any) (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1)
-      | s1 = return {_ret} ] ] [ & _ret: UInt8.t = Any.any_l () ])
+    [ bb0 = s0 [ s0 = never_panic (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: UInt8.t = Any.any_l () ])
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:never_panic_call ensures] UInt8.t'int result = 24}
       (! return {result}) ]
 end
@@ -470,13 +466,12 @@ module M_never_panic_sugar
   
   meta "select_lsinst" "all"
   
-  let never_panic_sugar (panic) (return (x: UInt8.t)) = (! bb0
+  let never_panic_sugar (return (x: UInt8.t)) = (! bb0
     [ bb0 = s0 [ s0 = [ &_ret <- (7: UInt8.t) ] s1 | s1 = return {_ret} ] ] [ & _ret: UInt8.t = Any.any_l () ])
     [ return (result: UInt8.t) ->
     {[@stop_split] [@expl:never_panic_sugar ensures] ([@stop_split] [@expl:never_panic_sugar ensures #0] not false)
       /\ ([@stop_split] [@expl:never_panic_sugar ensures #1] UInt8.t'int result = 7)}
-      (! return {result})
-    | panic -> {[@stop_split] [@expl:never_panic_sugar may_panic] false} (! panic) ]
+      (! return {result}) ]
 end
 module M_vacuous_normal_post
   use creusot.prelude.Any
@@ -494,29 +489,25 @@ module M_vacuous_normal_post
   
   meta "select_lsinst" "all"
   
-  let vacuous_normal_post (panic) (return (x: UInt8.t)) = (! bb0
-    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_5 <- _x ] s1) | s1 = panic ] ]
+  let vacuous_normal_post (return (x: UInt8.t)) = {[@stop_split] [@expl:vacuous_normal_post requires (no panic)] false}
+    (! bb0
+    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_5 <- _x ] s1) | s1 = {false} any ] ]
     [ & _5: t_Arguments = Any.any_l () ])
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:vacuous_normal_post ensures] UInt8.t'int result = 42}
-      (! return {result})
-    | panic -> (! panic) ]
+      (! return {result}) ]
 end
 module M_vacuous_normal_post_call
   use creusot.int.UInt8
   use creusot.prelude.Any
   
-  let always_panic (panic) (return (x: UInt8.t)) = any
-    [ return (result: UInt8.t) -> {[@stop_split] [@expl:always_panic ensures] false} (! return {result})
-    | panic -> (! panic) ]
-  
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
   
-  let vacuous_normal_post_call (panic) (return (x: UInt8.t)) = (! bb0
-    [ bb0 = s0 [ s0 = always_panic (panic) (fun (_x: UInt8.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: UInt8.t = Any.any_l () ])
+  let vacuous_normal_post_call (return (x: UInt8.t)) =
+  {[@stop_split] [@expl:vacuous_normal_post_call requires (no panic)] false}
+    (! bb0
+    [ bb0 = {false} any ] [ & _ret: UInt8.t = Any.any_l () ])
     [ return (result: UInt8.t) -> {[@stop_split] [@expl:vacuous_normal_post_call ensures] UInt8.t'int result = 42}
-      (! return {result})
-    | panic -> (! panic) ]
+      (! return {result}) ]
 end

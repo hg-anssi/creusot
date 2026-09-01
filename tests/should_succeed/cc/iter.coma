@@ -90,6 +90,13 @@ module M_test_filter
   predicate no_precondition_ref_ref_bool (_1: ()) =
     forall f: (), i: bool. inv_closure0 f /\ inv_ref_ref_bool i -> precondition_closure0 f i
   
+  predicate panic_condition_closure0 (self: ()) (args: bool) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
+  predicate no_panic_ref_ref_bool (_1: ()) =
+    forall f: (), i: bool. inv_closure0 f /\ inv_ref_ref_bool i -> not panic_condition_closure0 f i
+  
   predicate precise_ref_ref_bool (_1: ()) =
     forall f1: (), f2: (), i: bool. not (postcondition_mut_closure0 f1 i f2 true
       /\ postcondition_mut_closure0 f1 i f2 false)
@@ -120,7 +127,8 @@ module M_test_filter
   {[@stop_split] [@expl:filter_Iter_bool requires] ([@stop_split] [@expl:filter 'self_' type invariant] inv_Iter_bool self_)
     /\ ([@stop_split] [@expl:filter requires #0] immutable_ref_ref_bool f)
     /\ ([@stop_split] [@expl:filter requires #1] no_precondition_ref_ref_bool f)
-    /\ ([@stop_split] [@expl:filter requires #2] precise_ref_ref_bool f)}
+    /\ ([@stop_split] [@expl:filter requires #2] no_panic_ref_ref_bool f)
+    /\ ([@stop_split] [@expl:filter requires #3] precise_ref_ref_bool f)}
     any
     [ return (result: t_Filter_Iter_bool_closure0) ->
     {[@stop_split] [@expl:filter_Iter_bool ensures] ([@stop_split] [@expl:filter result type invariant] inv_Filter_Iter_bool_closure0 result)
@@ -493,6 +501,12 @@ module M_test_filter_map
   
   predicate no_precondition_ref_bool (f: ()) = forall i: bool. inv_ref_bool i -> precondition_closure0 f i
   
+  predicate panic_condition_closure0 (self: ()) (args: bool) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
+  predicate no_panic_ref_bool (f: ()) = forall i: bool. inv_ref_bool i -> not panic_condition_closure0 f i
+  
   predicate precise_ref_bool (f1: ()) =
     forall f2: (), i: bool. not ((exists b: bool. postcondition_mut_closure0 f1 i f2 (Some b))
       /\ postcondition_mut_closure0 f1 i f2 (None))
@@ -523,7 +537,8 @@ module M_test_filter_map
   {[@stop_split] [@expl:filter_map_Iter_bool requires] ([@stop_split] [@expl:filter_map 'self_' type invariant] inv_Iter_bool self_)
     /\ ([@stop_split] [@expl:filter_map requires #0] immutable_ref_bool f)
     /\ ([@stop_split] [@expl:filter_map requires #1] no_precondition_ref_bool f)
-    /\ ([@stop_split] [@expl:filter_map requires #2] precise_ref_bool f)}
+    /\ ([@stop_split] [@expl:filter_map requires #2] no_panic_ref_bool f)
+    /\ ([@stop_split] [@expl:filter_map requires #3] precise_ref_bool f)}
     any
     [ return (result: t_FilterMap_Iter_bool_closure0) ->
     {[@stop_split] [@expl:filter_map_Iter_bool ensures] ([@stop_split] [@expl:filter_map result type invariant] inv_FilterMap_Iter_bool_closure0 result)

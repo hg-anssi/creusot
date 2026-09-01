@@ -1,0 +1,146 @@
+module M_scope_spawn_rejects_panic
+  type namespace_other
+  
+  type t_Namespace = Other namespace_other
+  
+  use creusot.prelude.Any
+  use creusot.int.UInt32
+  use creusot.prelude.MutBorrow
+  use set.Set
+  
+  type t_Arguments
+  
+  predicate inv_Arguments (_1: t_Arguments)
+  
+  let from_str (s: string) (return (x: t_Arguments)) = any
+    [ return (result: t_Arguments) -> {[@stop_split] [@expl:from_str result type invariant] inv_Arguments result}
+      (! return {result}) ]
+  
+  type t_Tokens
+  
+  let closure0 (self: ()) (_tokens: t_Tokens) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_6 <- _x ] s1) | s1 = panic ] ]
+    [ & _6: t_Arguments = Any.any_l () ]) [ return (result: UInt32.t) -> (! return {result}) | panic -> (! panic) ]
+  
+  type t_Scope
+  
+  predicate inv_Scope (_1: t_Scope)
+  
+  type t_ScopedJoinHandle_u32
+  
+  predicate invariant_refmut_Scope [@inline:trivial] (self: MutBorrow.t t_Scope) =
+    inv_Scope self.current /\ inv_Scope self.final
+  
+  meta "rewrite_def" predicate invariant_refmut_Scope
+  
+  predicate inv_refmut_Scope [@inline:trivial] (_1: MutBorrow.t t_Scope) = invariant_refmut_Scope _1
+  
+  meta "rewrite_def" predicate inv_refmut_Scope
+  
+  predicate contains_Namespace [@inline:trivial] (self: Set.set t_Namespace) (e: t_Namespace) = Set.mem e self
+  
+  meta "rewrite_def" predicate contains_Namespace
+  
+  function namespaces (self: t_Tokens) : Set.set t_Namespace
+  
+  predicate contains (self: t_Tokens) (namespace: t_Namespace) = contains_Namespace (namespaces self) namespace
+  
+  predicate precondition_closure0 (self: ()) (args: t_Tokens) = let _tokens = args in true
+  
+  meta "rewrite_def" predicate precondition_closure0
+  
+  predicate panic_condition_closure0 (self: ()) (args: t_Tokens) = let _tokens = args in true
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
+  predicate inv_ScopedJoinHandle_u32 (_1: t_ScopedJoinHandle_u32)
+  
+  predicate valid_result_ScopedJoinHandle_u32 (self: t_ScopedJoinHandle_u32) (_x: UInt32.t)
+  
+  predicate postcondition_once_closure0 (self: ()) (args: t_Tokens) (result: UInt32.t) = let _tokens = args in true
+  
+  meta "rewrite_def" predicate postcondition_once_closure0
+  
+  predicate may_panic_on_join_ScopedJoinHandle_u32 (self: t_ScopedJoinHandle_u32)
+  
+  let spawn_closure0 (self: MutBorrow.t t_Scope) (f: ()) (return (x: t_ScopedJoinHandle_u32)) =
+  {[@stop_split] [@expl:spawn_closure0 requires] ([@stop_split] [@expl:spawn 'self' type invariant] inv_refmut_Scope self)
+    /\ ([@stop_split] [@expl:spawn requires #0] forall t: t_Tokens. (forall ns: t_Namespace. contains t ns)
+        -> precondition_closure0 f t)
+    /\ ([@stop_split] [@expl:spawn requires #1] forall t: t_Tokens. (forall ns: t_Namespace. contains t ns)
+      -> not panic_condition_closure0 f t)}
+    any
+    [ return (result: t_ScopedJoinHandle_u32) ->
+    {[@stop_split] [@expl:spawn_closure0 ensures] ([@stop_split] [@expl:spawn result type invariant] inv_ScopedJoinHandle_u32 result)
+      /\ ([@stop_split] [@expl:spawn ensures] exists t: t_Tokens. (forall ns: t_Namespace. contains t ns)
+        /\ (forall r: UInt32.t. valid_result_ScopedJoinHandle_u32 result r -> postcondition_once_closure0 f t r)
+        /\ not may_panic_on_join_ScopedJoinHandle_u32 result)}
+      (! return {result}) ]
+  
+  predicate resolve_refmut_Scope [@inline:trivial] (_1: MutBorrow.t t_Scope) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_Scope
+  
+  predicate resolve_ScopedJoinHandle_u32 (_1: t_ScopedJoinHandle_u32)
+  
+  let closure0'0 [@coma:extspec] (self: ()) (s: MutBorrow.t t_Scope) (return (x: ())) =
+  {[@stop_split] [@expl:closure 's' type invariant] inv_refmut_Scope s}
+    bb0
+    [ bb0 = s0
+      [ s0 = [ &f <- () ] s1
+      | s1 = MutBorrow.borrow_final <t_Scope> {s.current} {MutBorrow.get_id s}
+          (fun (_bor: MutBorrow.t t_Scope) ->
+            [ &_5 <- _bor ] -{inv_Scope _bor.final}-
+            [ &s <- { s with current = _bor.final } ] s2)
+        [ _ck -> (! {[@expl:type invariant] inv_Scope s.current} any) ]
+      | s2 = spawn_closure0 {_5} {f} (fun (_x: t_ScopedJoinHandle_u32) -> [ &_4 <- _x ] s3)
+      | s3 = s4 [ _ck -> (! {[@expl:type invariant] inv_refmut_Scope s} any) ]
+      | s4 = -{resolve_refmut_Scope s}- s5
+      | s5 = s6 [ _ck -> (! {[@expl:type invariant] inv_ScopedJoinHandle_u32 _4} any) ]
+      | s6 = -{resolve_ScopedJoinHandle_u32 _4}- s7
+      | s7 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & s: MutBorrow.t t_Scope = s
+    | & f: () = Any.any_l ()
+    | & _4: t_ScopedJoinHandle_u32 = Any.any_l ()
+    | & _5: MutBorrow.t t_Scope = Any.any_l () ] [ return (result: ()) -> return {result} ]
+  
+  meta "rewrite_def" predicate closure0'0'pre
+  
+  meta "rewrite_def" predicate closure0'0'post'return
+  
+  predicate precondition_closure0'0 (self: ()) (args: MutBorrow.t t_Scope) = let s = args in closure0'0'pre self s
+  
+  meta "rewrite_def" predicate precondition_closure0'0
+  
+  predicate postcondition_once_closure0'0 (self: ()) (args: MutBorrow.t t_Scope) (result: ()) =
+    let s = args in closure0'0'post'return self s result
+  
+  meta "rewrite_def" predicate postcondition_once_closure0'0
+  
+  predicate panic_condition_closure0'0 (self: ()) (args: MutBorrow.t t_Scope) = let s = args in false
+  
+  meta "rewrite_def" predicate panic_condition_closure0'0
+  
+  let scope_closure0 (f: ()) (panic) (return (x: ())) =
+  {[@stop_split] [@expl:scope requires] forall s: MutBorrow.t t_Scope. inv_refmut_Scope s
+      -> precondition_closure0'0 f s}
+    any
+    [ return (result: ()) -> {[@stop_split] [@expl:scope ensures] exists s: MutBorrow.t t_Scope. inv_refmut_Scope s
+        /\ postcondition_once_closure0'0 f s result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:scope may_panic] exists s: MutBorrow.t t_Scope. inv_refmut_Scope s
+        /\ panic_condition_closure0'0 f s}
+      (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let scope_spawn_rejects_panic (panic) (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_3 <- () ] s1
+      | s1 = scope_closure0 {_3} (panic) (fun (_x: ()) -> [ &_2 <- _x ] s2)
+      | s2 = return {_ret} ] ] [ & _ret: () = Any.any_l () | & _2: () = Any.any_l () | & _3: () = Any.any_l () ])
+    [ return (result: ()) -> (! return {result}) | panic -> (! panic) ]
+end

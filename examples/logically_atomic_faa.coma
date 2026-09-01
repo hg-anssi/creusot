@@ -209,11 +209,16 @@ module M_fetch_add
   
   predicate precondition_F (self: t_F) (args: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst)
   
+  predicate panic_condition_F (self: t_F) (args: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst) (result: ())
   
   let call_once_F (self_: t_F) (arg: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst) (return (x: ())) =
   {[@stop_split] [@expl:call_once_F requires] ([@stop_split] [@expl:call_once 'self_' type invariant] inv_F self_)
-    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call_once requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:call_once ensures] postcondition_once_F self_ arg result}
       (! return {result}) ]
@@ -448,7 +453,8 @@ module M_fetch_add
     /\ ([@stop_split] [@expl:fetch_add requires] forall c: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst. not shot_store_AtomicI32'0 c.current
       -> ward_AtomicI32'0 c.current = at'
       -> val_store_AtomicI32 c.current = Int32.add val' (val_load_AtomicI32'0 c.current)
-      -> precondition_F f c /\ (postcondition_once_F f c () -> shot_store_AtomicI32'0 c.final))}
+      -> precondition_F f c
+      /\ not panic_condition_F f c /\ (postcondition_once_F f c () -> shot_store_AtomicI32'0 c.final))}
     (! bb0
     [ bb0 = s0
       [ s0 = [ &_16 <- () ] s1

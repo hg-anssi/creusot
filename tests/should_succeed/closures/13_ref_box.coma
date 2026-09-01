@@ -18,6 +18,10 @@ module M_call_fn
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   predicate postcondition_mut_F (self: t_F) (args: Int32.t) (result_state: t_F) (result: Int32.t)
@@ -67,7 +71,8 @@ module M_call_fn
   
   let call_F (self_: t_F) (arg: Int32.t) (return (x: Int32.t)) =
   {[@stop_split] [@expl:call_F requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_F self_)
-    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call ensures] postcondition_F self_ arg result}
       (! return {result}) ]
@@ -78,15 +83,16 @@ module M_call_fn
   
   let call_fn_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fn_F requires] ([@stop_split] [@expl:call_fn 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:call_fn requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:call_fn requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:call_fn requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
       | s1 = -{resolve_F f}- s2
-      | s2 = [ &_10 <- x ] s3
-      | s3 = call_F {f} {_10} (fun (_x: Int32.t) -> [ &_ret <- _x ] s4)
+      | s2 = [ &_13 <- x ] s3
+      | s3 = call_F {f} {_13} (fun (_x: Int32.t) -> [ &_ret <- _x ] s4)
       | s4 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _10: Int32.t = Any.any_l () ])
+    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _13: Int32.t = Any.any_l () ])
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fn ensures] postcondition_F f x result}
       (! return {result}) ]
 end
@@ -108,6 +114,10 @@ module M_call_fnmut
   meta "rewrite_def" predicate inv_refmut_F
   
   predicate precondition_F (self: t_F) (args: Int32.t)
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -141,7 +151,8 @@ module M_call_fnmut
   
   let call_mut_F (self_: MutBorrow.t t_F) (arg: Int32.t) (return (x: Int32.t)) =
   {[@stop_split] [@expl:call_mut_F requires] ([@stop_split] [@expl:call_mut 'self_' type invariant] inv_refmut_F self_)
-    /\ ([@stop_split] [@expl:call_mut requires] precondition_F self_.current arg)}
+    /\ ([@stop_split] [@expl:call_mut requires] precondition_F self_.current arg)
+    /\ ([@stop_split] [@expl:call_mut requires (no panic)] not panic_condition_F self_.current arg)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_mut ensures] postcondition_mut_F self_.current arg self_.final result}
@@ -153,22 +164,23 @@ module M_call_fnmut
   
   let call_fnmut_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnmut_F requires] ([@stop_split] [@expl:call_fnmut 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:call_fnmut requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = MutBorrow.borrow_mut <t_F> {f}
-          (fun (_bor: MutBorrow.t t_F) -> [ &_9 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
+          (fun (_bor: MutBorrow.t t_F) -> [ &_12 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
         [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
-      | s1 = [ &_10 <- x ] s2
-      | s2 = call_mut_F {_9} {_10} (fun (_x: Int32.t) -> [ &_ret <- _x ] s3)
+      | s1 = [ &_13 <- x ] s2
+      | s2 = call_mut_F {_12} {_13} (fun (_x: Int32.t) -> [ &_ret <- _x ] s3)
       | s3 = s4 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
       | s4 = -{resolve_F f}- s5
       | s5 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l ()
     | & f: t_F = f
     | & x: Int32.t = x
-    | & _9: MutBorrow.t t_F = Any.any_l ()
-    | & _10: Int32.t = Any.any_l () ])
+    | & _12: MutBorrow.t t_F = Any.any_l ()
+    | & _13: Int32.t = Any.any_l () ])
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_fnmut ensures] exists f2: t_F. postcondition_mut_F f x f2 result /\ resolve_F f2}
       (! return {result}) ]
@@ -183,11 +195,16 @@ module M_call_fnonce
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   let call_once_F (self_: t_F) (arg: Int32.t) (return (x: Int32.t)) =
   {[@stop_split] [@expl:call_once_F requires] ([@stop_split] [@expl:call_once 'self_' type invariant] inv_F self_)
-    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call_once requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_once ensures] postcondition_once_F self_ arg result}
       (! return {result}) ]
@@ -198,13 +215,14 @@ module M_call_fnonce
   
   let call_fnonce_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_F requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
-      [ s0 = [ &_10 <- x ] s1
-      | s1 = call_once_F {f} {_10} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
+      [ s0 = [ &_13 <- x ] s1
+      | s1 = call_once_F {f} {_13} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
       | s2 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _10: Int32.t = Any.any_l () ])
+    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _13: Int32.t = Any.any_l () ])
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_F f x result}
       (! return {result}) ]
 end
@@ -231,6 +249,10 @@ module M_test1
   predicate precondition_ref_F (self: t_F) (args: Int32.t) = precondition_F self args
   
   meta "rewrite_def" predicate precondition_ref_F
+  
+  predicate panic_condition_ref_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_ref_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -339,10 +361,15 @@ module M_test1
   
   let call_fn_ref_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fn_ref_F requires] ([@stop_split] [@expl:call_fn 'f' type invariant] inv_ref_F f)
-    /\ ([@stop_split] [@expl:call_fn requires] precondition_ref_F f x)}
+    /\ ([@stop_split] [@expl:call_fn requires] precondition_ref_F f x)
+    /\ ([@stop_split] [@expl:call_fn requires (no panic)] not panic_condition_ref_F f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fn ensures] postcondition_ref_F f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -350,7 +377,8 @@ module M_test1
   
   let test1_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test1_F requires] ([@stop_split] [@expl:test1 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test1 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test1 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test1 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
@@ -381,6 +409,10 @@ module M_test10
   predicate precondition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = precondition_F self.current args
   
   meta "rewrite_def" predicate precondition_refmut_F
+  
+  predicate panic_condition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_refmut_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -455,12 +487,17 @@ module M_test10
   
   let call_fnmut_refmut_F (f: MutBorrow.t t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnmut_refmut_F requires] ([@stop_split] [@expl:call_fnmut 'f' type invariant] inv_refmut_F f)
-    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_refmut_F f x)}
+    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_refmut_F f x)
+    /\ ([@stop_split] [@expl:call_fnmut requires (no panic)] not panic_condition_refmut_F f x)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_fnmut ensures] exists f2: MutBorrow.t t_F. postcondition_mut_refmut_F f x f2 result
         /\ resolve_refmut_F f2}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -468,17 +505,18 @@ module M_test10
   
   let test10_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test10_F requires] ([@stop_split] [@expl:test10 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test10 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test10 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test10 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = MutBorrow.borrow_mut <t_F> {f}
-          (fun (_bor: MutBorrow.t t_F) -> [ &_9 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
+          (fun (_bor: MutBorrow.t t_F) -> [ &_12 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
         [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
-      | s1 = call_fnmut_refmut_F {_9} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
+      | s1 = call_fnmut_refmut_F {_12} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
       | s2 = s3 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
       | s3 = -{resolve_F f}- s4
       | s4 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _9: MutBorrow.t t_F = Any.any_l () ])
+    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _12: MutBorrow.t t_F = Any.any_l () ])
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:test10 ensures] exists f2: t_F. postcondition_mut_F f x f2 result /\ resolve_F f2}
       (! return {result}) ]
@@ -503,6 +541,10 @@ module M_test11
   
   meta "rewrite_def" predicate precondition_Box_F_Global
   
+  predicate panic_condition_Box_F_Global (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_Box_F_Global
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   predicate postcondition_once_Box_F_Global (self: t_F) (args: Int32.t) (result: Int32.t) =
@@ -512,10 +554,15 @@ module M_test11
   
   let call_fnonce_Box_F_Global (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_Box_F_Global requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_Box_F_Global f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_Box_F_Global f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_Box_F_Global f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_Box_F_Global f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_Box_F_Global f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   predicate resolve_F (_1: t_F)
   
@@ -551,7 +598,8 @@ module M_test11
   
   let test11_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test11_F requires] ([@stop_split] [@expl:test11 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test11 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test11 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test11 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = call_fnonce_Box_F_Global {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
@@ -582,6 +630,10 @@ module M_test12
   predicate precondition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = precondition_F self.current args
   
   meta "rewrite_def" predicate precondition_refmut_F
+  
+  predicate panic_condition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_refmut_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -620,10 +672,15 @@ module M_test12
   
   let call_fnonce_refmut_F (f: MutBorrow.t t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_refmut_F requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_refmut_F f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_refmut_F f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_refmut_F f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_refmut_F f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_refmut_F f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -631,17 +688,18 @@ module M_test12
   
   let test12_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test12_F requires] ([@stop_split] [@expl:test12 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test12 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test12 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test12 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = MutBorrow.borrow_mut <t_F> {f}
-          (fun (_bor: MutBorrow.t t_F) -> [ &_9 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
+          (fun (_bor: MutBorrow.t t_F) -> [ &_12 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
         [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
-      | s1 = call_fnonce_refmut_F {_9} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
+      | s1 = call_fnonce_refmut_F {_12} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
       | s2 = s3 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
       | s3 = -{resolve_F f}- s4
       | s4 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _9: MutBorrow.t t_F = Any.any_l () ])
+    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _12: MutBorrow.t t_F = Any.any_l () ])
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:test12 ensures] exists f2: t_F. postcondition_mut_F f x f2 result /\ resolve_F f2}
       (! return {result}) ]
@@ -666,6 +724,10 @@ module M_test13
   
   meta "rewrite_def" predicate precondition_Box_F_Global
   
+  predicate panic_condition_Box_F_Global (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_Box_F_Global
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   predicate postcondition_once_Box_F_Global (self: t_F) (args: Int32.t) (result: Int32.t) =
@@ -675,10 +737,15 @@ module M_test13
   
   let call_fnonce_Box_F_Global (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_Box_F_Global requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_Box_F_Global f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_Box_F_Global f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_Box_F_Global f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_Box_F_Global f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_Box_F_Global f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -686,7 +753,8 @@ module M_test13
   
   let test13_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test13_F requires] ([@stop_split] [@expl:test13 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test13 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test13 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test13 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = call_fnonce_Box_F_Global {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
@@ -703,6 +771,10 @@ module M_test14
   predicate inv_F (_1: t_F)
   
   predicate precondition_F (self: t_F) (args: Int32.t)
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -736,7 +808,8 @@ module M_test14
   
   let call_fnmut_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnmut_F requires] ([@stop_split] [@expl:call_fnmut 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:call_fnmut requires (no panic)] not panic_condition_F f x)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_fnmut ensures] exists f2: t_F. postcondition_mut_F f x f2 result /\ resolve_F f2}
@@ -767,7 +840,8 @@ module M_test14
   
   let test14_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test14_F requires] ([@stop_split] [@expl:test14 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test14 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test14 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test14 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0 [ s0 = call_fnmut_F {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x ])
@@ -784,11 +858,16 @@ module M_test15
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   let call_fnonce_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_F requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_F f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_F f x result}
       (! return {result}) ]
@@ -846,7 +925,8 @@ module M_test15
   
   let test15_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test15_F requires] ([@stop_split] [@expl:test15 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test15 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test15 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test15 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0 [ s0 = call_fnonce_F {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x ])
@@ -863,11 +943,16 @@ module M_test16
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   let call_fnonce_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_F requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_F f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_F f x result}
       (! return {result}) ]
@@ -906,7 +991,8 @@ module M_test16
   
   let test16_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test16_F requires] ([@stop_split] [@expl:test16 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test16 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test16 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test16 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0 [ s0 = call_fnonce_F {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x ])
@@ -933,6 +1019,10 @@ module M_test2
   predicate precondition_Box_F_Global (self: t_F) (args: Int32.t) = precondition_F self args
   
   meta "rewrite_def" predicate precondition_Box_F_Global
+  
+  predicate panic_condition_Box_F_Global (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_Box_F_Global
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -1047,10 +1137,15 @@ module M_test2
   
   let call_fn_Box_F_Global (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fn_Box_F_Global requires] ([@stop_split] [@expl:call_fn 'f' type invariant] inv_Box_F_Global f)
-    /\ ([@stop_split] [@expl:call_fn requires] precondition_Box_F_Global f x)}
+    /\ ([@stop_split] [@expl:call_fn requires] precondition_Box_F_Global f x)
+    /\ ([@stop_split] [@expl:call_fn requires (no panic)] not panic_condition_Box_F_Global f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fn ensures] postcondition_Box_F_Global f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -1058,7 +1153,8 @@ module M_test2
   
   let test2_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test2_F requires] ([@stop_split] [@expl:test2 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test2 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test2 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test2 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0 [ s0 = call_fn_Box_F_Global {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x ])
@@ -1087,6 +1183,10 @@ module M_test3
   predicate precondition_ref_F (self: t_F) (args: Int32.t) = precondition_F self args
   
   meta "rewrite_def" predicate precondition_ref_F
+  
+  predicate panic_condition_ref_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_ref_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -1174,11 +1274,16 @@ module M_test3
   
   let call_fnmut_ref_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnmut_ref_F requires] ([@stop_split] [@expl:call_fnmut 'f' type invariant] inv_ref_F f)
-    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_ref_F f x)}
+    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_ref_F f x)
+    /\ ([@stop_split] [@expl:call_fnmut requires (no panic)] not panic_condition_ref_F f x)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_fnmut ensures] exists f2: t_F. postcondition_mut_ref_F f x f2 result /\ resolve_ref_F f2}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -1186,7 +1291,8 @@ module M_test3
   
   let test3_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test3_F requires] ([@stop_split] [@expl:test3 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test3 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test3 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test3 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
@@ -1214,6 +1320,10 @@ module M_test4
   predicate precondition_Box_F_Global (self: t_F) (args: Int32.t) = precondition_F self args
   
   meta "rewrite_def" predicate precondition_Box_F_Global
+  
+  predicate panic_condition_Box_F_Global (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_Box_F_Global
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -1287,12 +1397,17 @@ module M_test4
   
   let call_fnmut_Box_F_Global (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnmut_Box_F_Global requires] ([@stop_split] [@expl:call_fnmut 'f' type invariant] inv_Box_F_Global f)
-    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_Box_F_Global f x)}
+    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_Box_F_Global f x)
+    /\ ([@stop_split] [@expl:call_fnmut requires (no panic)] not panic_condition_Box_F_Global f x)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_fnmut ensures] exists f2: t_F. postcondition_mut_Box_F_Global f x f2 result
         /\ resolve_Box_F_Global f2}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   function fn_hist_inv_F (self: t_F) (res_state: t_F) : ()
   
@@ -1319,7 +1434,8 @@ module M_test4
   
   let test4_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test4_F requires] ([@stop_split] [@expl:test4 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test4 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test4 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test4 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0 [ s0 = call_fnmut_Box_F_Global {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x ])
@@ -1347,6 +1463,10 @@ module M_test5
   predicate precondition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = precondition_F self.current args
   
   meta "rewrite_def" predicate precondition_refmut_F
+  
+  predicate panic_condition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_refmut_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -1421,12 +1541,17 @@ module M_test5
   
   let call_fnmut_refmut_F (f: MutBorrow.t t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnmut_refmut_F requires] ([@stop_split] [@expl:call_fnmut 'f' type invariant] inv_refmut_F f)
-    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_refmut_F f x)}
+    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_refmut_F f x)
+    /\ ([@stop_split] [@expl:call_fnmut requires (no panic)] not panic_condition_refmut_F f x)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_fnmut ensures] exists f2: MutBorrow.t t_F. postcondition_mut_refmut_F f x f2 result
         /\ resolve_refmut_F f2}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   function fn_hist_inv_F (self: t_F) (res_state: t_F) : ()
   
@@ -1453,17 +1578,18 @@ module M_test5
   
   let test5_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test5_F requires] ([@stop_split] [@expl:test5 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test5 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test5 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test5 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = MutBorrow.borrow_mut <t_F> {f}
-          (fun (_bor: MutBorrow.t t_F) -> [ &_9 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
+          (fun (_bor: MutBorrow.t t_F) -> [ &_12 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
         [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
-      | s1 = call_fnmut_refmut_F {_9} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
+      | s1 = call_fnmut_refmut_F {_12} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
       | s2 = s3 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
       | s3 = -{resolve_F f}- s4
       | s4 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _9: MutBorrow.t t_F = Any.any_l () ])
+    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _12: MutBorrow.t t_F = Any.any_l () ])
     [ return (result: Int32.t) -> {[@stop_split] [@expl:test5 ensures] postcondition_F f x result} (! return {result}) ]
 end
 module M_test6
@@ -1489,6 +1615,10 @@ module M_test6
   predicate precondition_ref_F (self: t_F) (args: Int32.t) = precondition_F self args
   
   meta "rewrite_def" predicate precondition_ref_F
+  
+  predicate panic_condition_ref_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_ref_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -1543,10 +1673,15 @@ module M_test6
   
   let call_fnonce_ref_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_ref_F requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_ref_F f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_ref_F f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_ref_F f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_ref_F f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_ref_F f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -1554,7 +1689,8 @@ module M_test6
   
   let test6_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test6_F requires] ([@stop_split] [@expl:test6 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test6 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test6 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test6 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
@@ -1583,6 +1719,10 @@ module M_test7
   
   meta "rewrite_def" predicate precondition_Box_F_Global
   
+  predicate panic_condition_Box_F_Global (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_Box_F_Global
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   predicate postcondition_once_Box_F_Global (self: t_F) (args: Int32.t) (result: Int32.t) =
@@ -1592,10 +1732,15 @@ module M_test7
   
   let call_fnonce_Box_F_Global (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_Box_F_Global requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_Box_F_Global f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_Box_F_Global f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_Box_F_Global f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_Box_F_Global f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_Box_F_Global f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   predicate resolve_F (_1: t_F)
   
@@ -1650,7 +1795,8 @@ module M_test7
   
   let test7_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test7_F requires] ([@stop_split] [@expl:test7 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test7 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test7 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test7 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = call_fnonce_Box_F_Global {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
@@ -1679,6 +1825,10 @@ module M_test8
   predicate precondition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = precondition_F self.current args
   
   meta "rewrite_def" predicate precondition_refmut_F
+  
+  predicate panic_condition_refmut_F (self: MutBorrow.t t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_refmut_F
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -1717,10 +1867,15 @@ module M_test8
   
   let call_fnonce_refmut_F (f: MutBorrow.t t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnonce_refmut_F requires] ([@stop_split] [@expl:call_fnonce 'f' type invariant] inv_refmut_F f)
-    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_refmut_F f x)}
+    /\ ([@stop_split] [@expl:call_fnonce requires] precondition_refmut_F f x)
+    /\ ([@stop_split] [@expl:call_fnonce requires (no panic)] not panic_condition_refmut_F f x)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_fnonce ensures] postcondition_once_refmut_F f x result}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   function fn_hist_inv_F (self: t_F) (res_state: t_F) : ()
   
@@ -1747,17 +1902,18 @@ module M_test8
   
   let test8_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test8_F requires] ([@stop_split] [@expl:test8 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test8 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test8 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test8 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0
       [ s0 = MutBorrow.borrow_mut <t_F> {f}
-          (fun (_bor: MutBorrow.t t_F) -> [ &_9 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
+          (fun (_bor: MutBorrow.t t_F) -> [ &_12 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
         [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
-      | s1 = call_fnonce_refmut_F {_9} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
+      | s1 = call_fnonce_refmut_F {_12} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s2)
       | s2 = s3 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
       | s3 = -{resolve_F f}- s4
       | s4 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _9: MutBorrow.t t_F = Any.any_l () ])
+    [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x | & _12: MutBorrow.t t_F = Any.any_l () ])
     [ return (result: Int32.t) -> {[@stop_split] [@expl:test8 ensures] postcondition_F f x result} (! return {result}) ]
 end
 module M_test9
@@ -1779,6 +1935,10 @@ module M_test9
   predicate precondition_Box_F_Global (self: t_F) (args: Int32.t) = precondition_F self args
   
   meta "rewrite_def" predicate precondition_Box_F_Global
+  
+  predicate panic_condition_Box_F_Global (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_Box_F_Global
   
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
@@ -1852,12 +2012,17 @@ module M_test9
   
   let call_fnmut_Box_F_Global (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:call_fnmut_Box_F_Global requires] ([@stop_split] [@expl:call_fnmut 'f' type invariant] inv_Box_F_Global f)
-    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_Box_F_Global f x)}
+    /\ ([@stop_split] [@expl:call_fnmut requires] precondition_Box_F_Global f x)
+    /\ ([@stop_split] [@expl:call_fnmut requires (no panic)] not panic_condition_Box_F_Global f x)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_fnmut ensures] exists f2: t_F. postcondition_mut_Box_F_Global f x f2 result
         /\ resolve_Box_F_Global f2}
       (! return {result}) ]
+  
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
   
   meta "compute_max_steps" 1000000
   
@@ -1865,7 +2030,8 @@ module M_test9
   
   let test9_F (f: t_F) (x: Int32.t) (return (x'0: Int32.t)) =
   {[@stop_split] [@expl:test9_F requires] ([@stop_split] [@expl:test9 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:test9 requires] precondition_F f x)}
+    /\ ([@stop_split] [@expl:test9 requires] precondition_F f x)
+    /\ ([@stop_split] [@expl:test9 requires (no panic)] not panic_condition_F f x)}
     (! bb0
     [ bb0 = s0 [ s0 = call_fnmut_Box_F_Global {f} {x} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l () | & f: t_F = f | & x: Int32.t = x ])

@@ -1,0 +1,13 @@
+warning: unreachable statement
+  --> thread_join_unwrap_panic.rs:18:13
+   |
+18 |     let f = #[may_panic(true)]
+   |             ^^^^^^^^^^^^^^^^^^ unreachable statement
+19 |     |_tokens: Ghost<Tokens>| -> u32 { panic!("boom") };
+   |                                       -------------- any code following this expression is unreachable
+   |
+   = note: `#[warn(unreachable_code)]` (part of `#[warn(unused)]`) on by default
+   = note: this warning originates in the attribute macro `may_panic` (in Nightly builds, run with -Z macro-backtrace for more info)
+
+warning: 1 warning emitted
+

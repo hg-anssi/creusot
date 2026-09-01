@@ -42,6 +42,10 @@ module M_closure_param
   
   predicate precondition_F (self: t_F) (args: UInt32.t)
   
+  predicate panic_condition_F (self: t_F) (args: UInt32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: UInt32.t) (result: ())
   
   predicate postcondition_mut_F (self: t_F) (args: UInt32.t) (result_state: t_F) (result: ())
@@ -91,7 +95,8 @@ module M_closure_param
   
   let call_F (self_: t_F) (arg: UInt32.t) (return (x: ())) =
   {[@stop_split] [@expl:call_F requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_F self_)
-    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:call ensures] postcondition_F self_ arg result} (! return {result}) ]
   
