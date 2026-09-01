@@ -496,6 +496,12 @@ module M_ghost__fn_ghost__impl_FnMut_for_FnGhostWrapper_F__call_mut__refines (* 
     forall self: t_FnGhostWrapper_F, args: t_I, res_state: t_FnGhostWrapper_F, res: t_Output [postcondition_mut_FnGhostWrapper_F self args res_state res | hist_inv_FnGhostWrapper_F self res_state]. postcondition_mut_FnGhostWrapper_F self args res_state res
       -> hist_inv_FnGhostWrapper_F self res_state
   
+  predicate panic_condition_F (self: t_F) (args: t_I)
+  
+  predicate panic_condition_FnGhostWrapper_F (self: t_FnGhostWrapper_F) (args: t_I) = panic_condition_F self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_F
+  
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
@@ -507,8 +513,9 @@ module M_ghost__fn_ghost__impl_FnMut_for_FnGhostWrapper_F__call_mut__refines (* 
       /\ inv_I arg
       /\ precondition_FnGhostWrapper_F self_.current arg
       /\ (forall result: t_Output. inv_Output result
-          /\ postcondition_mut_FnGhostWrapper_F self_.current arg self_.final result
-        -> inv_Output result /\ postcondition_mut_FnGhostWrapper_F self_.current arg self_.final result)
+            /\ postcondition_mut_FnGhostWrapper_F self_.current arg self_.final result
+          -> inv_Output result /\ postcondition_mut_FnGhostWrapper_F self_.current arg self_.final result)
+      /\ (panic_condition_FnGhostWrapper_F self_.current arg -> panic_condition_FnGhostWrapper_F self_.current arg)
 end
 module M_ghost__fn_ghost__impl_FnOnce_for_FnGhostWrapper_F__call_once__refines (* <ghost::fn_ghost::FnGhostWrapper<F> as std::ops::FnOnce<I>> *)
   type namespace_other
@@ -546,6 +553,12 @@ module M_ghost__fn_ghost__impl_FnOnce_for_FnGhostWrapper_F__call_once__refines (
   
   meta "rewrite_def" predicate postcondition_once_FnGhostWrapper_F
   
+  predicate panic_condition_F (self: t_F) (args: t_I)
+  
+  predicate panic_condition_FnGhostWrapper_F (self: t_FnGhostWrapper_F) (args: t_I) = panic_condition_F self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_F
+  
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
@@ -557,7 +570,8 @@ module M_ghost__fn_ghost__impl_FnOnce_for_FnGhostWrapper_F__call_once__refines (
       /\ inv_I arg
       /\ precondition_FnGhostWrapper_F self_ arg
       /\ (forall result: t_Output. inv_Output result /\ postcondition_once_FnGhostWrapper_F self_ arg result
-        -> inv_Output result /\ postcondition_once_FnGhostWrapper_F self_ arg result)
+          -> inv_Output result /\ postcondition_once_FnGhostWrapper_F self_ arg result)
+      /\ (panic_condition_FnGhostWrapper_F self_ arg -> panic_condition_FnGhostWrapper_F self_ arg)
 end
 module M_ghost__fn_ghost__impl_Fn_for_FnGhostWrapper_F__call__refines (* <ghost::fn_ghost::FnGhostWrapper<F> as std::ops::Fn<I>> *)
   type namespace_other
@@ -709,6 +723,12 @@ module M_ghost__fn_ghost__impl_Fn_for_FnGhostWrapper_F__call__refines (* <ghost:
     forall self: t_FnGhostWrapper_F, args: t_I, res_state: t_FnGhostWrapper_F, res: t_Output [postcondition_mut_FnGhostWrapper_F self args res_state res]. postcondition_mut_FnGhostWrapper_F self args res_state res
       = (postcondition_FnGhostWrapper_F self args res /\ self = res_state)
   
+  predicate panic_condition_F (self: t_F) (args: t_I)
+  
+  predicate panic_condition_FnGhostWrapper_F (self: t_FnGhostWrapper_F) (args: t_I) = panic_condition_F self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_F
+  
   meta "compute_max_steps" 1000000
   
   meta "select_lsinst" "all"
@@ -720,7 +740,8 @@ module M_ghost__fn_ghost__impl_Fn_for_FnGhostWrapper_F__call__refines (* <ghost:
       /\ inv_I arg
       /\ precondition_FnGhostWrapper_F self_ arg
       /\ (forall result: t_Output. inv_Output result /\ postcondition_FnGhostWrapper_F self_ arg result
-        -> inv_Output result /\ postcondition_FnGhostWrapper_F self_ arg result)
+          -> inv_Output result /\ postcondition_FnGhostWrapper_F self_ arg result)
+      /\ (panic_condition_FnGhostWrapper_F self_ arg -> panic_condition_FnGhostWrapper_F self_ arg)
 end
 module M_ghost__impl_Clone_for_Ghost_T__clone (* <ghost::Ghost<T> as std::clone::Clone> *)
   type namespace_other
