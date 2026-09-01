@@ -223,6 +223,10 @@ module M_takes_ghost_fn
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   predicate postcondition_mut_F (self: t_F) (args: Int32.t) (result_state: t_F) (result: Int32.t)
@@ -272,7 +276,8 @@ module M_takes_ghost_fn
   
   let call_F (self_: t_F) (arg: Int32.t) (return (x: Int32.t)) =
   {[@stop_split] [@expl:call_F requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_F self_)
-    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call ensures] postcondition_F self_ arg result}
       (! return {result}) ]
@@ -313,6 +318,10 @@ module M_takes_ghost_fnmut
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   predicate resolve_F (_1: t_F)
@@ -345,7 +354,8 @@ module M_takes_ghost_fnmut
   
   let call_mut_F (self_: MutBorrow.t t_F) (arg: Int32.t) (return (x: Int32.t)) =
   {[@stop_split] [@expl:call_mut_F requires] ([@stop_split] [@expl:call_mut 'self_' type invariant] inv_refmut_F self_)
-    /\ ([@stop_split] [@expl:call_mut requires] precondition_F self_.current arg)}
+    /\ ([@stop_split] [@expl:call_mut requires] precondition_F self_.current arg)
+    /\ ([@stop_split] [@expl:call_mut requires (no panic)] not panic_condition_F self_.current arg)}
     any
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:call_mut ensures] postcondition_mut_F self_.current arg self_.final result}
@@ -386,11 +396,16 @@ module M_takes_ghost_fnonce
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   let call_once_F (self_: t_F) (arg: Int32.t) (return (x: Int32.t)) =
   {[@stop_split] [@expl:call_once_F requires] ([@stop_split] [@expl:call_once 'self_' type invariant] inv_F self_)
-    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call_once requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_once ensures] postcondition_once_F self_ arg result}
       (! return {result}) ]

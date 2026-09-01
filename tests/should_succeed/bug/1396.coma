@@ -16,6 +16,10 @@ module M_apply_mut
   
   predicate precondition_F (self: t_F) (args: ())
   
+  predicate panic_condition_F (self: t_F) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: ()) (result: ())
   
   predicate resolve_F (_1: t_F)
@@ -48,7 +52,8 @@ module M_apply_mut
   
   let call_mut_F (self_: MutBorrow.t t_F) (arg: ()) (return (x: ())) =
   {[@stop_split] [@expl:call_mut_F requires] ([@stop_split] [@expl:call_mut 'self_' type invariant] inv_refmut_F self_)
-    /\ ([@stop_split] [@expl:call_mut requires] precondition_F self_.current arg)}
+    /\ ([@stop_split] [@expl:call_mut requires] precondition_F self_.current arg)
+    /\ ([@stop_split] [@expl:call_mut requires (no panic)] not panic_condition_F self_.current arg)}
     any
     [ return (result: ()) ->
     {[@stop_split] [@expl:call_mut ensures] postcondition_mut_F self_.current arg self_.final result}
@@ -60,17 +65,18 @@ module M_apply_mut
   
   let apply_mut_F (f: t_F) (return (x: ())) =
   {[@stop_split] [@expl:apply_mut_F requires] ([@stop_split] [@expl:apply_mut 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:apply_mut requires] precondition_F f ())}
+    /\ ([@stop_split] [@expl:apply_mut requires] precondition_F f ())
+    /\ ([@stop_split] [@expl:apply_mut requires (no panic)] not panic_condition_F f ())}
     (! bb0
     [ bb0 = s0
       [ s0 = MutBorrow.borrow_mut <t_F> {f}
-          (fun (_bor: MutBorrow.t t_F) -> [ &_6 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
+          (fun (_bor: MutBorrow.t t_F) -> [ &_8 <- _bor ] -{inv_F _bor.final}- [ &f <- _bor.final ] s1)
         [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
-      | s1 = call_mut_F {_6} {_7} (fun (_x: ()) -> [ &_ret <- _x ] s2)
+      | s1 = call_mut_F {_8} {_9} (fun (_x: ()) -> [ &_ret <- _x ] s2)
       | s2 = s3 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
       | s3 = -{resolve_F f}- s4
       | s4 = return {_ret} ] ]
-    [ & _ret: () = Any.any_l () | & f: t_F = f | & _6: MutBorrow.t t_F = Any.any_l () | & _7: () = Any.any_l () ])
+    [ & _ret: () = Any.any_l () | & f: t_F = f | & _8: MutBorrow.t t_F = Any.any_l () | & _9: () = Any.any_l () ])
     [ return (result: ()) -> {[@stop_split] [@expl:apply_mut ensures] exists g: t_F. postcondition_mut_F f () g ()
         /\ resolve_F g}
       (! return {result}) ]
@@ -84,11 +90,16 @@ module M_apply_once
   
   predicate precondition_F (self: t_F) (args: ())
   
+  predicate panic_condition_F (self: t_F) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: ()) (result: ())
   
   let call_once_F (self_: t_F) (arg: ()) (return (x: ())) =
   {[@stop_split] [@expl:call_once_F requires] ([@stop_split] [@expl:call_once 'self_' type invariant] inv_F self_)
-    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call_once requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:call_once ensures] postcondition_once_F self_ arg result}
       (! return {result}) ]
@@ -99,10 +110,11 @@ module M_apply_once
   
   let apply_once_F (f: t_F) (return (x: ())) =
   {[@stop_split] [@expl:apply_once_F requires] ([@stop_split] [@expl:apply_once 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:apply_once requires] precondition_F f ())}
+    /\ ([@stop_split] [@expl:apply_once requires] precondition_F f ())
+    /\ ([@stop_split] [@expl:apply_once requires (no panic)] not panic_condition_F f ())}
     (! bb0
-    [ bb0 = s0 [ s0 = call_once_F {f} {_7} (fun (_x: ()) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: () = Any.any_l () | & f: t_F = f | & _7: () = Any.any_l () ])
+    [ bb0 = s0 [ s0 = call_once_F {f} {_9} (fun (_x: ()) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l () | & f: t_F = f | & _9: () = Any.any_l () ])
     [ return (result: ()) -> {[@stop_split] [@expl:apply_once ensures] postcondition_once_F f () ()}
       (! return {result}) ]
 end
@@ -236,8 +248,13 @@ module M_foo1
   
   meta "rewrite_def" predicate precondition_closure9
   
+  predicate panic_condition_closure9 (self: closure9) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure9
+  
   let apply_mut_closure9 (f: closure9) (return (x: ())) =
-  {[@stop_split] [@expl:apply_mut requires] precondition_closure9 f ()}
+  {[@stop_split] [@expl:apply_mut_closure9 requires] ([@stop_split] [@expl:apply_mut requires] precondition_closure9 f ())
+    /\ ([@stop_split] [@expl:apply_mut requires (no panic)] not panic_condition_closure9 f ())}
     any
     [ return (result: ()) ->
     {[@stop_split] [@expl:apply_mut ensures] exists g: closure9. postcondition_mut_closure9 f () g ()
@@ -438,8 +455,13 @@ module M_foo2
   
   meta "rewrite_def" predicate precondition_closure9
   
+  predicate panic_condition_closure9 (self: closure9) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure9
+  
   let apply_mut_closure9 (f: closure9) (return (x: ())) =
-  {[@stop_split] [@expl:apply_mut requires] precondition_closure9 f ()}
+  {[@stop_split] [@expl:apply_mut_closure9 requires] ([@stop_split] [@expl:apply_mut requires] precondition_closure9 f ())
+    /\ ([@stop_split] [@expl:apply_mut requires (no panic)] not panic_condition_closure9 f ())}
     any
     [ return (result: ()) ->
     {[@stop_split] [@expl:apply_mut ensures] exists g: closure9. postcondition_mut_closure9 f () g ()
@@ -638,8 +660,13 @@ module M_foo3
   
   meta "rewrite_def" predicate precondition_closure1
   
+  predicate panic_condition_closure1 (self: closure1) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure1
+  
   let apply_mut_closure1 (f: closure1) (return (x: ())) =
-  {[@stop_split] [@expl:apply_mut requires] precondition_closure1 f ()}
+  {[@stop_split] [@expl:apply_mut_closure1 requires] ([@stop_split] [@expl:apply_mut requires] precondition_closure1 f ())
+    /\ ([@stop_split] [@expl:apply_mut requires (no panic)] not panic_condition_closure1 f ())}
     any
     [ return (result: ()) ->
     {[@stop_split] [@expl:apply_mut ensures] exists g: closure1. postcondition_mut_closure1 f () g ()
@@ -794,13 +821,18 @@ module M_foo4
   
   meta "rewrite_def" predicate precondition_closure9
   
+  predicate panic_condition_closure9 (self: closure9) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure9
+  
   predicate postcondition_once_closure9 (self: closure9) (args: ()) (result: ()) =
     Int32.to_int self.c0.current + 1 = Int32.to_int self.c0.final
   
   meta "rewrite_def" predicate postcondition_once_closure9
   
   let apply_once_closure9 (f: closure9) (return (x: ())) =
-  {[@stop_split] [@expl:apply_once requires] precondition_closure9 f ()}
+  {[@stop_split] [@expl:apply_once_closure9 requires] ([@stop_split] [@expl:apply_once requires] precondition_closure9 f ())
+    /\ ([@stop_split] [@expl:apply_once requires (no panic)] not panic_condition_closure9 f ())}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:apply_once ensures] postcondition_once_closure9 f () ()}
       (! return {result}) ]
@@ -953,13 +985,18 @@ module M_foo5
   
   meta "rewrite_def" predicate precondition_closure9
   
+  predicate panic_condition_closure9 (self: closure9) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure9
+  
   predicate postcondition_once_closure9 (self: closure9) (args: ()) (result: ()) =
     Int32.to_int self.c0.current + 1 = Int32.to_int self.c0.final
   
   meta "rewrite_def" predicate postcondition_once_closure9
   
   let apply_once_closure9 (f: closure9) (return (x: ())) =
-  {[@stop_split] [@expl:apply_once requires] precondition_closure9 f ()}
+  {[@stop_split] [@expl:apply_once_closure9 requires] ([@stop_split] [@expl:apply_once requires] precondition_closure9 f ())
+    /\ ([@stop_split] [@expl:apply_once requires (no panic)] not panic_condition_closure9 f ())}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:apply_once ensures] postcondition_once_closure9 f () ()}
       (! return {result}) ]

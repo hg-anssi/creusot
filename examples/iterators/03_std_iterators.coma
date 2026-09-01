@@ -386,6 +386,10 @@ module M_counter
   
   meta "rewrite_def" predicate precondition_closure0
   
+  predicate panic_condition_closure0 (self: closure0) (args: tup2_ref_u32_Snapshot_Seq_ref_u32) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
   predicate resolve_refmut_Iter_u32 [@inline:trivial] (_1: MutBorrow.t t_Iter_u32) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_Iter_u32
@@ -396,6 +400,7 @@ module M_counter
   predicate next_precondition_Iter_u32 [@inline:trivial] (iter'0: t_Iter_u32) (func'0: closure0) (produced'0: Seq.seq UInt32.t) =
     forall e: UInt32.t, i: t_Iter_u32. inv_ref_u32 e /\ produces_Iter_u32 iter'0 (Seq.singleton e) i
       -> precondition_closure0 func'0 { f0 = e; f1 = produced'0 }
+      /\ not panic_condition_closure0 func'0 { f0 = e; f1 = produced'0 }
   
   meta "rewrite_def" predicate next_precondition_Iter_u32
   
@@ -413,6 +418,7 @@ module M_counter
       -> produces_Iter_u32 iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
       -> postcondition_mut_closure0 f.current { f0 = e1; f1 = s } f.final b
       -> precondition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
+      /\ not panic_condition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
   
   meta "rewrite_def" predicate preservation_Iter_u32
   
@@ -444,7 +450,9 @@ module M_counter
   let map_inv_Iter_u32 (self: t_Iter_u32) (func'0: closure0) (return (x: t_MapInv_Iter_u32_closure0)) =
   {[@stop_split] [@expl:map_inv_Iter_u32 requires] ([@stop_split] [@expl:map_inv 'self' type invariant] inv_Iter_u32 self)
     /\ ([@stop_split] [@expl:map_inv requires #0] forall e: UInt32.t, i2: t_Iter_u32. produces_Iter_u32 self (Seq.singleton e) i2
-          /\ inv_ref_u32 e -> precondition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t })
+          /\ inv_ref_u32 e
+        -> precondition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t }
+        /\ not panic_condition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt32.t })
     /\ ([@stop_split] [@expl:map_inv requires #1] reinitialize_Iter_u32)
     /\ ([@stop_split] [@expl:map_inv requires #2] preservation_Iter_u32 self func'0)}
     any

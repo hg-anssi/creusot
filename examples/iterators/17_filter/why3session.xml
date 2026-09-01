@@ -201,7 +201,7 @@
          <proof prover="2"><result status="valid" time="0.043951" steps="8487"/></proof>
          </goal>
          <goal name="vc_produces_trans_Filter_I_F.0.0.1.1.1.0.0.4" proved="true">
-         <proof prover="2"><result status="valid" time="0.158696" steps="10164"/></proof>
+         <proof prover="2"><result status="valid" time="0.032027" steps="10164"/></proof>
          </goal>
          <goal name="vc_produces_trans_Filter_I_F.0.0.1.1.1.0.0.5" proved="true">
          <proof prover="3" timelimit="5"><result status="valid" time="0.095971" steps="13584"/></proof>
@@ -266,7 +266,7 @@
  <goal name="vc_less_than" proved="true">
  <transf name="split_vc" proved="true" >
   <goal name="vc_less_than.0" expl="filter_IntoIter_u32_Global requires" proved="true">
-  <proof prover="3" timelimit="5"><result status="valid" time="0.061911" steps="9251"/></proof>
+  <proof prover="3" timelimit="5"><result status="valid" time="0.061911" steps="9359"/></proof>
   </goal>
   <goal name="vc_less_than.1" expl="collect_Filter_IntoIter_u32_Global_closure2 requires" proved="true">
   <proof prover="3" timelimit="5"><result status="valid" time="0.040799" steps="7188"/></proof>

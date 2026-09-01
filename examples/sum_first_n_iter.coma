@@ -165,6 +165,10 @@ module M_sum_first_n_iter
   
   meta "rewrite_def" predicate precondition_closure0
   
+  predicate panic_condition_closure0 (self: closure0) (args: tup2_usize_Snapshot_Seq_usize) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
   predicate completed_RangeInclusive_usize (self: MutBorrow.t t_RangeInclusive_usize) =
     is_empty_log_RangeInclusive_usize self.current /\ is_empty_log_RangeInclusive_usize self.final
   
@@ -172,6 +176,7 @@ module M_sum_first_n_iter
     forall e: UInt64.t, i: t_RangeInclusive_usize. inv_usize e
         /\ produces_RangeInclusive_usize iter'0 (Seq.singleton e) i
       -> precondition_closure0 func'0 { f0 = e; f1 = produced'0 }
+      /\ not panic_condition_closure0 func'0 { f0 = e; f1 = produced'0 }
   
   meta "rewrite_def" predicate next_precondition_RangeInclusive_usize
   
@@ -189,6 +194,7 @@ module M_sum_first_n_iter
       -> produces_RangeInclusive_usize iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
       -> postcondition_mut_closure0 f.current { f0 = e1; f1 = s } f.final b
       -> precondition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
+      /\ not panic_condition_closure0 f.final { f0 = e2; f1 = Seq.snoc s e1 }
   
   meta "rewrite_def" predicate preservation_RangeInclusive_usize
   
@@ -222,7 +228,9 @@ module M_sum_first_n_iter
     (return (x: t_MapInv_RangeInclusive_usize_closure0)) =
   {[@stop_split] [@expl:map_inv_RangeInclusive_usize requires] ([@stop_split] [@expl:map_inv 'self' type invariant] inv_RangeInclusive_usize self)
     /\ ([@stop_split] [@expl:map_inv requires #0] forall e: UInt64.t, i2: t_RangeInclusive_usize. produces_RangeInclusive_usize self (Seq.singleton e) i2
-          /\ inv_usize e -> precondition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt64.t })
+          /\ inv_usize e
+        -> precondition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt64.t }
+        /\ not panic_condition_closure0 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt64.t })
     /\ ([@stop_split] [@expl:map_inv requires #1] reinitialize_RangeInclusive_usize)
     /\ ([@stop_split] [@expl:map_inv requires #2] preservation_RangeInclusive_usize self func'0)}
     any

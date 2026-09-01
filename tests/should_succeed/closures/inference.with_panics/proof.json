@@ -1,0 +1,84 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_call_with_one": {
+      "vc_call_F": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_call_with_one_F": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.017 },
+              { "prover": "alt-ergo", "time": 0.014 },
+              { "prover": "alt-ergo", "time": 0.017 }
+            ]
+          }
+        ]
+      }
+    },
+    "M_call_with_one_mut": {
+      "vc_call_mut_F": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_call_with_one_mut_F": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.016 },
+              { "prover": "alt-ergo", "time": 0.025 },
+              { "prover": "alt-ergo", "time": 0.027 },
+              { "prover": "alt-ergo", "time": 0.016 },
+              { "prover": "alt-ergo", "time": 0.02 }
+            ]
+          }
+        ]
+      }
+    },
+    "M_call_with_one_once": {
+      "vc_call_once_F": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_call_with_one_once_F": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.015 },
+              { "prover": "alt-ergo", "time": 0.022 }
+            ]
+          }
+        ]
+      }
+    },
+    "M_closure_fn": {
+      "vc_call_with_one_closure0": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_call_with_one_mut_closure0": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_call_with_one_once_closure0": {
+        "prover": "alt-ergo",
+        "time": 0.017
+      },
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.014 },
+      "vc_closure_fn": { "prover": "alt-ergo", "time": 0.038 }
+    },
+    "M_closure_fn_mut": {
+      "vc_call_with_one_mut_closure0": {
+        "prover": "alt-ergo",
+        "time": 0.008
+      },
+      "vc_call_with_one_once_closure0": {
+        "prover": "alt-ergo",
+        "time": 0.02
+      },
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_closure_fn_mut": { "prover": "z3", "time": 0.008 }
+    },
+    "M_closure_fn_once": {
+      "vc_call_with_one_once_closure0": {
+        "prover": "alt-ergo",
+        "time": 0.016
+      },
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.013 },
+      "vc_closure_fn_once": { "prover": "alt-ergo", "time": 0.027 }
+    }
+  }
+}

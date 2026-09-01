@@ -70,6 +70,7 @@ impl<I: Iterator, B, F: FnMut(I::Item) -> B> Iterator for Map<I, F> {
         match self.iter.next() {
             Some(v) => {
                 proof_assert! { self.func.precondition((v,)) };
+                proof_assert! { !self.func.panic_condition((v,)) };
                 snapshot! { Self::produces_one_invariant };
                 Some((self.func)(v))
             }
@@ -110,7 +111,7 @@ impl<I: Iterator, B, F: FnMut(I::Item) -> B> Map<I, F> {
             forall<e: I::Item, i: I>
                 #[trigger(iter.produces(Seq::singleton(e), i))]
                 inv(e) && iter.produces(Seq::singleton(e), i) ==>
-                func.precondition((e,))
+                func.precondition((e,)) && !func.panic_condition((e,))
         }
     }
 
@@ -123,7 +124,7 @@ impl<I: Iterator, B, F: FnMut(I::Item) -> B> Map<I, F> {
                 inv(s) && inv(e1) && inv(e2) && inv(f) ==>
                 iter.produces(s.push_back(e1).push_back(e2), i) ==>
                 (*f).postcondition_mut((e1,), ^f, b) ==>
-                (^f).precondition((e2, ))
+                (^f).precondition((e2, )) && !(^f).panic_condition((e2, ))
         }
     }
 
@@ -219,7 +220,7 @@ impl<I: Iterator, B, F: FnMut(I::Item) -> B> Invariant for Map<I, F> {
 
 #[requires(forall<e: I::Item, i2: I>
                 iter.produces(Seq::singleton(e), i2) && inv(e) ==>
-                func.precondition((e,)))]
+                func.precondition((e,)) && !func.panic_condition((e,)))]
 #[requires(Map::<I, F>::reinitialize())]
 #[requires(Map::<I, F>::preservation(iter, func))]
 #[ensures(result == Map { iter, func })]

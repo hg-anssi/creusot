@@ -520,6 +520,10 @@ module M_impl_Board__new (* Board *)
   
   meta "rewrite_def" predicate precondition_closure3
   
+  predicate panic_condition_closure3 (self: closure3) (args: tup2_usize_Snapshot_Seq_usize) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure3
+  
   predicate resolve_refmut_Range_usize [@inline:trivial] (_1: MutBorrow.t t_Range_usize) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_Range_usize
@@ -530,6 +534,7 @@ module M_impl_Board__new (* Board *)
   predicate next_precondition_Range_usize [@inline:trivial] (iter'0: t_Range_usize) (func'0: closure3) (produced'0: Seq.seq UInt64.t) =
     forall e: UInt64.t, i: t_Range_usize. inv_usize e /\ produces_Range_usize iter'0 (Seq.singleton e) i
       -> precondition_closure3 func'0 { f0 = e; f1 = produced'0 }
+      /\ not panic_condition_closure3 func'0 { f0 = e; f1 = produced'0 }
   
   meta "rewrite_def" predicate next_precondition_Range_usize
   
@@ -547,6 +552,7 @@ module M_impl_Board__new (* Board *)
       -> produces_Range_usize iter'0 (Seq.snoc (Seq.snoc s e1) e2) i
       -> postcondition_mut_closure3 f.current { f0 = e1; f1 = s } f.final b
       -> precondition_closure3 f.final { f0 = e2; f1 = Seq.snoc s e1 }
+      /\ not panic_condition_closure3 f.final { f0 = e2; f1 = Seq.snoc s e1 }
   
   meta "rewrite_def" predicate preservation_Range_usize
   
@@ -577,7 +583,9 @@ module M_impl_Board__new (* Board *)
   
   let map_inv_Range_usize (self: t_Range_usize) (func'0: closure3) (return (x: t_MapInv_Range_usize_closure3)) =
   {[@stop_split] [@expl:map_inv_Range_usize requires] ([@stop_split] [@expl:map_inv requires #0] forall e: UInt64.t, i2: t_Range_usize. produces_Range_usize self (Seq.singleton e) i2
-          /\ inv_usize e -> precondition_closure3 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt64.t })
+          /\ inv_usize e
+        -> precondition_closure3 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt64.t }
+        /\ not panic_condition_closure3 func'0 { f0 = e; f1 = Seq.empty: Seq.seq UInt64.t })
     /\ ([@stop_split] [@expl:map_inv requires #1] reinitialize_Range_usize)
     /\ ([@stop_split] [@expl:map_inv requires #2] preservation_Range_usize self func'0)}
     any

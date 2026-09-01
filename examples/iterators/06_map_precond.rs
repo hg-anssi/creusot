@@ -59,6 +59,7 @@ impl<I: Iterator, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> Iterator fo
         match self.iter.next() {
             Some(v) => {
                 proof_assert! { self.func.precondition((v, self.produced)) };
+                proof_assert! { !self.func.panic_condition((v, self.produced)) };
                 let produced = snapshot! { self.produced.push_back(v) };
                 let r = (self.func)(v, self.produced);
                 self.produced = produced;
@@ -107,7 +108,7 @@ impl<I: Iterator, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> Map<I, F> {
             forall<e: I::Item, i: I>
                 #[trigger(iter.produces(Seq::singleton(e), i))]
                 inv(e) && iter.produces(Seq::singleton(e), i) ==>
-                func.precondition((e, Snapshot::new(produced)))
+                func.precondition((e, Snapshot::new(produced))) && !func.panic_condition((e, Snapshot::new(produced)))
         }
     }
 
@@ -121,7 +122,7 @@ impl<I: Iterator, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> Map<I, F> {
                 func.hist_inv(*f) ==>
                 iter.produces(s.push_back(e1).push_back(e2), i) ==>
                 (*f).postcondition_mut((e1, Snapshot::new(produced.concat(s))), ^f, b) ==>
-                (^f).precondition((e2, Snapshot::new(produced.concat(s).push_back(e1))))
+                (^f).precondition((e2, Snapshot::new(produced.concat(s).push_back(e1)))) && !(^f).panic_condition((e2, Snapshot::new(produced.concat(s).push_back(e1))))
         }
     }
 
@@ -133,7 +134,7 @@ impl<I: Iterator, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> Map<I, F> {
                 func.hist_inv(*f) ==>
                 iter.produces(s.push_back(e1).push_back(e2), i) ==>
                 (*f).postcondition_mut((e1, Snapshot::new(s)), ^f, b) ==>
-                (^f).precondition((e2, Snapshot::new(s.push_back(e1))))
+                (^f).precondition((e2, Snapshot::new(s.push_back(e1)))) && !(^f).panic_condition((e2, Snapshot::new(s.push_back(e1))))
         }
     }
 
@@ -190,7 +191,7 @@ impl<I: Iterator, B, F: FnMut(I::Item, Snapshot<Seq<I::Item>>) -> B> Invariant f
 
 #[requires(forall<e: I::Item, i2: I>
                 iter.produces(Seq::singleton(e), i2) && inv(e) ==>
-                func.precondition((e, Snapshot::new(Seq::empty()))))]
+                func.precondition((e, Snapshot::new(Seq::empty()))) && !func.panic_condition((e, Snapshot::new(Seq::empty()))))]
 #[requires(Map::<I, F>::reinitialize())]
 #[requires(Map::<I, F>::preservation(iter, func))]
 #[ensures(result == Map { iter, func, produced: Snapshot::new(Seq::empty()) })]

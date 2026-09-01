@@ -100,6 +100,10 @@ module M_count_paths
   
   meta "rewrite_def" predicate precondition_closure0
   
+  predicate panic_condition_closure0 (self: ()) (args: Int64.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
   predicate resolve_refmut_Range_isize [@inline:trivial] (_1: MutBorrow.t t_Range_isize) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_Range_isize
@@ -109,7 +113,8 @@ module M_count_paths
   
   predicate next_precondition_Range_isize [@inline:trivial] (iter: t_Range_isize) (func: ()) =
     forall e: Int64.t, i: t_Range_isize [produces_Range_isize iter (Seq.singleton e) i]. inv_isize e
-        /\ produces_Range_isize iter (Seq.singleton e) i -> precondition_closure0 func e
+        /\ produces_Range_isize iter (Seq.singleton e) i
+      -> precondition_closure0 func e /\ not panic_condition_closure0 func e
   
   meta "rewrite_def" predicate next_precondition_Range_isize
   
@@ -125,7 +130,8 @@ module M_count_paths
     forall s: Seq.seq Int64.t, e1: Int64.t, e2: Int64.t, f: MutBorrow.t (), b: (), i: t_Range_isize [produces_Range_isize iter (Seq.snoc (Seq.snoc s e1) e2) i, postcondition_mut_closure0 f.current e1 f.final b]. hist_inv_closure0 func f.current
       -> inv_Seq_isize s /\ inv_isize e1 /\ inv_isize e2 /\ inv_refmut_closure0 f
       -> produces_Range_isize iter (Seq.snoc (Seq.snoc s e1) e2) i
-      -> postcondition_mut_closure0 f.current e1 f.final b -> precondition_closure0 f.final e2
+      -> postcondition_mut_closure0 f.current e1 f.final b
+      -> precondition_closure0 f.final e2 /\ not panic_condition_closure0 f.final e2
   
   meta "rewrite_def" predicate preservation_Range_isize
   
@@ -161,8 +167,10 @@ module M_count_paths
   let map_Range_isize (self_: t_Range_isize) (f: ()) (return (x: t_Map_Range_isize_closure0)) =
   {[@stop_split] [@expl:map_Range_isize requires] ([@stop_split] [@expl:map requires #0] forall e: Int64.t, i2: t_Range_isize. produces_Range_isize self_ (Seq.singleton e) i2
           /\ inv_isize e -> precondition_closure0 f e)
-    /\ ([@stop_split] [@expl:map requires #1] reinitialize_Range_isize)
-    /\ ([@stop_split] [@expl:map requires #2] preservation_Range_isize self_ f)}
+    /\ ([@stop_split] [@expl:map requires #1] forall e: Int64.t, i2: t_Range_isize. produces_Range_isize self_ (Seq.singleton e) i2
+          /\ inv_isize e -> not panic_condition_closure0 f e)
+    /\ ([@stop_split] [@expl:map requires #2] reinitialize_Range_isize)
+    /\ ([@stop_split] [@expl:map requires #3] preservation_Range_isize self_ f)}
     any
     [ return (result: t_Map_Range_isize_closure0) ->
     {[@stop_split] [@expl:map_Range_isize ensures] ([@stop_split] [@expl:map result type invariant] inv_Map_Range_isize_closure0 result)
