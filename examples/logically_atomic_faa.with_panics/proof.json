@@ -34,17 +34,18 @@
                   {
                     "tactic": "split_vc",
                     "children": [
-                      { "prover": "alt-ergo", "time": 0.023 },
-                      { "prover": "alt-ergo", "time": 0.019 },
                       { "prover": "alt-ergo", "time": 0.027 },
+                      { "prover": "alt-ergo", "time": 0.018 },
+                      { "prover": "alt-ergo", "time": 0.025 },
                       { "prover": "alt-ergo", "time": 0.03 },
-                      { "prover": "alt-ergo", "time": 0.032 },
-                      { "prover": "alt-ergo", "time": 0.021 },
-                      { "prover": "alt-ergo", "time": 0.031 },
-                      { "prover": "alt-ergo", "time": 0.032 },
-                      { "prover": "alt-ergo", "time": 0.023 },
-                      { "prover": "alt-ergo", "time": 0.019 },
-                      { "prover": "alt-ergo", "time": 0.039 }
+                      { "prover": "alt-ergo", "time": 0.044 },
+                      { "prover": "alt-ergo", "time": 0.024 },
+                      { "prover": "alt-ergo", "time": 0.046 },
+                      { "prover": "alt-ergo", "time": 0.03 },
+                      { "prover": "alt-ergo", "time": 0.022 },
+                      { "prover": "alt-ergo", "time": 0.029 },
+                      { "prover": "alt-ergo", "time": 0.02 },
+                      { "prover": "alt-ergo", "time": 0.024 }
                     ]
                   },
                   { "prover": "alt-ergo", "time": 0.02 }
@@ -55,7 +56,7 @@
               { "prover": "alt-ergo", "time": 0.022 },
               { "prover": "alt-ergo", "time": 0.014 },
               { "prover": "alt-ergo", "time": 0.066 },
-              { "prover": "alt-ergo", "time": 0.008 }
+              { "prover": "alt-ergo", "time": 0.022 }
             ]
           }
         ]
@@ -73,10 +74,10 @@
         "prover": "alt-ergo",
         "time": 0.018
       },
-      "vc_new_Option_F": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_new_Option_F": { "prover": "alt-ergo", "time": 0.009 },
       "vc_take_F": { "prover": "alt-ergo", "time": 0.022 },
       "vc_unwrap_F": { "prover": "alt-ergo", "time": 0.013 },
-      "vc_wrapping_add": { "prover": "alt-ergo", "time": 0.023 }
+      "vc_wrapping_add": { "prover": "alt-ergo", "time": 0.009 }
     }
   }
 }

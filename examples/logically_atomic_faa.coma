@@ -453,7 +453,8 @@ module M_fetch_add
     /\ ([@stop_split] [@expl:fetch_add requires] forall c: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst. not shot_store_AtomicI32'0 c.current
       -> ward_AtomicI32'0 c.current = at'
       -> val_store_AtomicI32 c.current = Int32.add val' (val_load_AtomicI32'0 c.current)
-      -> precondition_F f c /\ (postcondition_once_F f c () -> shot_store_AtomicI32'0 c.final))}
+      -> precondition_F f c
+      /\ not panic_condition_F f c /\ (postcondition_once_F f c () -> shot_store_AtomicI32'0 c.final))}
     (! bb0
     [ bb0 = s0
       [ s0 = [ &_16 <- () ] s1
