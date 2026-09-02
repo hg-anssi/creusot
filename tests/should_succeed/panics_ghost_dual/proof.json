@@ -1,0 +1,22 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_checked_id": {
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_from_str": { "prover": "alt-ergo", "time": 0.013 }
+    },
+    "M_ghost_use": {
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_ghost_use": { "prover": "alt-ergo", "time": 0.014 },
+      "vc_new_unit": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_program_discharge": {
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_program_discharge": { "prover": "alt-ergo", "time": 0.015 }
+    },
+    "M_program_propagate": {
+      "vc_checked_id": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_program_propagate": { "prover": "alt-ergo", "time": 0.008 }
+    }
+  }
+}

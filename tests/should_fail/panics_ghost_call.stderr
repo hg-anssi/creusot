@@ -1,8 +1,0 @@
-error: called non-ghost function `may_panic_fn` in ghost context
-  --> panics_ghost_call.rs:12:9
-   |
-12 |         may_panic_fn();
-   |         ^^^^^^^^^^^^
-
-error: aborting due to 1 previous error
-

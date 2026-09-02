@@ -1,0 +1,34 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_checked_id": {
+      "vc_call_F": { "prover": "alt-ergo", "time": 0.013 },
+      "vc_checked_id_F": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo", "time": 0.004 },
+                  { "prover": "alt-ergo", "time": 0.022 }
+                ]
+              },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo", "time": 0.012 },
+                  { "prover": "alt-ergo", "time": 0.016 }
+                ]
+              },
+              { "prover": "alt-ergo", "time": 0.012 }
+            ]
+          }
+        ]
+      },
+      "vc_new_unit": { "prover": "alt-ergo", "time": 0.022 }
+    }
+  }
+}

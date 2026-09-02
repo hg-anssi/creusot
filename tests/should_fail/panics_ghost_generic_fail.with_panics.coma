@@ -1,0 +1,104 @@
+module M_checked_id
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  type t_F
+  
+  predicate inv_F (_1: t_F)
+  
+  predicate resolve_F (_1: t_F)
+  
+  predicate invariant_ref_F [@inline:trivial] (self: t_F) = inv_F self
+  
+  meta "rewrite_def" predicate invariant_ref_F
+  
+  predicate inv_ref_F [@inline:trivial] (_1: t_F) = invariant_ref_F _1
+  
+  meta "rewrite_def" predicate inv_ref_F
+  
+  predicate precondition_F (self: t_F) (args: UInt32.t)
+  
+  predicate postcondition_once_F (self: t_F) (args: UInt32.t) (result: UInt32.t)
+  
+  predicate postcondition_mut_F (self: t_F) (args: UInt32.t) (result_state: t_F) (result: UInt32.t)
+  
+  function fn_mut_once_F (self: t_F) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_F_spec:
+    forall self: t_F, args: UInt32.t, res: UInt32.t [postcondition_once_F self args res]. postcondition_once_F self args res
+      = (exists res_state: t_F. postcondition_mut_F self args res_state res /\ resolve_F res_state)
+  
+  predicate hist_inv_F (self: t_F) (result_state: t_F)
+  
+  function hist_inv_trans_F (self: t_F) (b: t_F) (c: t_F) : ()
+  
+  axiom hist_inv_trans_F_spec:
+    forall self: t_F, b: t_F, c: t_F [hist_inv_F self b, hist_inv_F b c | hist_inv_F self b, hist_inv_F self c | hist_inv_F b c, hist_inv_F self c]. hist_inv_F self b
+      -> hist_inv_F b c -> hist_inv_F self c
+  
+  function hist_inv_refl_F (self: t_F) : ()
+  
+  axiom hist_inv_refl_F_spec: forall self: t_F [hist_inv_F self self]. hist_inv_F self self
+  
+  function postcondition_mut_hist_inv_F (self: t_F) (args: UInt32.t) (res_state: t_F) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_F_spec:
+    forall self: t_F, args: UInt32.t, res_state: t_F, res: UInt32.t [postcondition_mut_F self args res_state res | hist_inv_F self res_state]. postcondition_mut_F self args res_state res
+      -> hist_inv_F self res_state
+  
+  function fn_hist_inv_F (self: t_F) (res_state: t_F) : ()
+  
+  axiom fn_hist_inv_F_spec: forall self: t_F, res_state: t_F [hist_inv_F self res_state]. hist_inv_F self res_state
+      = (self = res_state)
+  
+  predicate postcondition_F (self: t_F) (args: UInt32.t) (result: UInt32.t)
+  
+  function fn_once_F (self: t_F) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_F_spec:
+    forall self: t_F, args: UInt32.t, res: UInt32.t [postcondition_once_F self args res]. postcondition_once_F self args res
+      = (postcondition_F self args res /\ resolve_F self)
+  
+  function fn_mut_F (self: t_F) (args: UInt32.t) (res_state: t_F) (res: UInt32.t) : ()
+  
+  axiom fn_mut_F_spec:
+    forall self: t_F, args: UInt32.t, res_state: t_F, res: UInt32.t [postcondition_mut_F self args res_state res]. postcondition_mut_F self args res_state res
+      = (postcondition_F self args res /\ self = res_state)
+  
+  predicate panic_condition_F (self: t_F) (args: UInt32.t)
+  
+  let call_F (self_: t_F) (arg: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:call_F requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_F self_)
+    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)}
+    any
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:call ensures] postcondition_F self_ arg result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_F self_ arg} (! panic) ]
+  
+  let new_unit (x: ()) (return (x'0: ())) = any
+    [ return (result: ()) -> {[@stop_split] [@expl:new ensures] result = x} (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let checked_id_F (f: t_F) (panic) (return (x: ())) =
+  {[@stop_split] [@expl:checked_id_F requires] ([@stop_split] [@expl:checked_id 'f' type invariant] inv_F f)
+    /\ ([@stop_split] [@expl:checked_id requires] forall x: UInt32.t. precondition_F f x)}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
+      | s1 = -{resolve_F f}- s2
+      | s2 = [ &_9 <- (32: UInt32.t) ] s3
+      | s3 = call_F {f} {_9}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_7 <- _x ] s4)
+      | s4 = new_unit {_6} (fun (_x: ()) -> [ &_5 <- _x ] s5)
+      | s5 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & f: t_F = f
+    | & _5: () = Any.any_l ()
+    | & _6: () = Any.any_l ()
+    | & _7: UInt32.t = Any.any_l ()
+    | & _9: UInt32.t = Any.any_l () ]) [ return (result: ()) -> (! return {result}) | panic -> (! panic) ]
+end

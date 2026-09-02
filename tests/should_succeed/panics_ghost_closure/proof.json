@@ -1,0 +1,80 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_apply": {
+      "vc_apply_F": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_call_F": { "prover": "alt-ergo", "time": 0.016 }
+    },
+    "M_define_ghost_maypanic_in_empty": {
+      "vc___new_closure0": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_define_ghost_maypanic_in_empty": {
+        "prover": "alt-ergo",
+        "time": 0.017
+      }
+    },
+    "M_use_closure_in_ghost_requires": {
+      "vc___new_closure1": { "prover": "alt-ergo", "time": 0.004 },
+      "vc_call_FnGhostWrapper_closure1": {
+        "prover": "alt-ergo",
+        "time": 0.017
+      },
+      "vc_closure1": { "prover": "alt-ergo", "time": 0.009 },
+      "vc_new_unit": { "prover": "alt-ergo", "time": 0.019 },
+      "vc_use_closure_in_ghost_requires": {
+        "prover": "alt-ergo",
+        "time": 0.02
+      }
+    },
+    "M_use_closure_in_ghost_value": {
+      "vc___new_closure0": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_call_FnGhostWrapper_closure0": {
+        "prover": "alt-ergo",
+        "time": 0.019
+      },
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.026 },
+      "vc_new_unit": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_use_closure_in_ghost_value": {
+        "prover": "alt-ergo",
+        "time": 0.012
+      }
+    },
+    "M_use_ghost_maypanic_in_maypanic": {
+      "vc___new_closure1": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_call_FnGhostWrapper_closure1": {
+        "prover": "alt-ergo",
+        "time": 0.025
+      },
+      "vc_closure1": { "prover": "alt-ergo", "time": 0.01 },
+      "vc_use_ghost_maypanic_in_maypanic": {
+        "prover": "alt-ergo",
+        "time": 0.024
+      }
+    },
+    "M_use_ghost_maypanic_in_requires": {
+      "vc___new_closure1": { "prover": "alt-ergo", "time": 0.015 },
+      "vc_call_FnGhostWrapper_closure1": {
+        "prover": "alt-ergo",
+        "time": 0.013
+      },
+      "vc_closure1": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_use_ghost_maypanic_in_requires": {
+        "prover": "alt-ergo",
+        "time": 0.023
+      }
+    },
+    "M_use_requires": {
+      "vc___new_closure1": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_apply_FnGhostWrapper_closure1": {
+        "prover": "alt-ergo",
+        "time": 0.012
+      },
+      "vc_call_FnGhostWrapper_closure1": {
+        "prover": "alt-ergo",
+        "time": 0.013
+      },
+      "vc_closure1": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_use_requires": { "prover": "alt-ergo", "time": 0.016 }
+    }
+  }
+}

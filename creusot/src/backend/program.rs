@@ -1386,11 +1386,11 @@ impl<'tcx> Statement<'tcx> {
                     e.into_why(self.span, lower, lhs.ty(lower.ctx.tcx, lower.locals), &mut istmts);
                 lower.assignment(&lhs, rhs, &mut istmts, self.span);
             }
-            StatementKind::Call(dest, fun_id, subst, args, span) => {
+            StatementKind::Call(dest, fun_id, subst, args, span, ghost) => {
                 let params =
                     args.iter().map(|a| lower.ty(a.ty(lower.ctx.tcx, lower.locals))).collect();
                 let (fun_qname, args) =
-                    func_call_to_why3(lower, fun_id, subst, args, span, &mut istmts);
+                    func_call_to_why3(lower, fun_id, subst, args, span, ghost, &mut istmts);
                 let ty = dest.ty(lower.ctx.tcx, lower.locals);
                 let ty = lower.ty(ty);
                 if lower.ctx.should_check_variant_decreases(lower.def_id, fun_id) {
@@ -1432,17 +1432,24 @@ fn func_call_to_why3<'tcx>(
     subst: GenericArgsRef<'tcx>,
     args: Box<[Operand<'tcx>]>,
     call_span: Span,
+    ghost: bool,
     istmts: &mut Vec<IntermediateStmt>,
 ) -> (Name, Box<[Arg]>) {
     // If the callee is allowed to panic, its handler takes an extra `panic`
     // continuation (before the `return` one, which is appended by
     // [`assemble_intermediates`]).
     let panic_cont = lower.ctx.sig(id).contract.may_panic().then(|| {
-        Arg::Cont(match lower.panic_ident {
+        // A ghost call site has no operational panic outcome: even inside a
+        // `may_panic` function, a `ghost!` block cannot panic at runtime. So we
+        // ignore the caller's panic continuation and force the "cannot panic here"
+        // obligation — i.e. `may_panic(P)` behaves as `requires(!P)` in ghost code.
+        let panic_ident = if ghost { None } else { lower.panic_ident };
+        Arg::Cont(match panic_ident {
             // Panics of the callee propagate to the panic exit of the caller.
             Some(panic_ident) => Expr::var(panic_ident),
-            // The caller is not allowed to panic: it must prove that the panic
-            // condition of the callee does not hold for these arguments.
+            // The caller is not allowed to panic (or the call is in ghost code): it
+            // must prove that the panic condition of the callee does not hold for
+            // these arguments.
             None => {
                 let mut exp = Exp::mk_false()
                     .with_attr(Attribute::Attr("expl:the callee cannot panic here".to_string()));
