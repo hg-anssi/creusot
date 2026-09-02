@@ -93,6 +93,10 @@ module M_impl_FakeIterator_for_Map_I_F__next (* <Map<I, F> as FakeIterator> *)
   
   predicate precondition_F (self: t_F) (args: t_A)
   
+  predicate panic_condition_F (self: t_F) (args: t_A) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate inv_B (_1: t_B)
   
   predicate postcondition_once_F (self: t_F) (args: t_A) (result: t_B)
@@ -147,7 +151,8 @@ module M_impl_FakeIterator_for_Map_I_F__next (* <Map<I, F> as FakeIterator> *)
   let call_F (self_: t_F) (arg: t_A) (return (x: t_B)) =
   {[@stop_split] [@expl:call_F requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_F self_)
     /\ ([@stop_split] [@expl:call 'arg' type invariant] inv_tup1_A arg)
-    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: t_B) ->
     {[@stop_split] [@expl:call_F ensures] ([@stop_split] [@expl:call result type invariant] inv_B result)

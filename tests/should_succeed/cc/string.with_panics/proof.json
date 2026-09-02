@@ -1,0 +1,17 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_test_split_at": {
+      "vc_split_at": { "prover": "alt-ergo", "time": 0.015 },
+      "vc_test_split_at": { "prover": "alt-ergo", "time": 0.054 }
+    },
+    "M_test_str_len": {
+      "vc_len": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_test_str_len": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_test_string_len": {
+      "vc_len": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_test_string_len": { "prover": "alt-ergo", "time": 0.025 }
+    }
+  }
+}

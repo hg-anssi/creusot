@@ -1,0 +1,13 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_inc_max_3": {
+      "vc_inc_max_3": { "prover": "alt-ergo", "time": 0.161 },
+      "vc_swap": { "prover": "alt-ergo", "time": 0.008 }
+    },
+    "M_test_inc_max_3": {
+      "vc_inc_max_3": { "prover": "alt-ergo", "time": 0.013 },
+      "vc_test_inc_max_3": { "prover": "alt-ergo", "time": 0.02 }
+    }
+  }
+}

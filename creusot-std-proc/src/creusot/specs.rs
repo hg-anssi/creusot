@@ -170,6 +170,100 @@ pub fn ensures(attr: TS1, tokens: TS1) -> TS1 {
     }
 }
 
+/// The `#[may_panic(cond)]` clause: the function is allowed to panic, and only in
+/// (initial) states where `cond` holds. `cond` is a predicate over the function
+/// inputs — `result` is not in scope (it does not exist in the panic outcome).
+///
+/// This is parsed exactly like `requires` (no `result`), but tagged with a
+/// distinct clause attribute so the compiler routes it to the panic condition
+/// of the contract instead of the precondition.
+pub fn may_panic(attr: TS1, tokens: TS1) -> TS1 {
+    const MAY_PANIC_LEN: usize = "#[may_panic(".len();
+    let documentation =
+        document_spec("may_panic", doc::LogicBody::term(MAY_PANIC_LEN, attr.clone()));
+
+    let mut item = parse_macro_input!(tokens as ContractSubject);
+    let pan_body = pretyping::encode_term(&parse_macro_input!(attr as Term));
+    item.mark_unused();
+
+    let pan_name = crate::creusot::generate_unique_ident(&item.name(), Span::call_site());
+    let name_tag = pan_name.to_string();
+    let panics_tokens = fn_spec_item(pan_name.clone(), FnSpecResultKind::NoResult, pan_body);
+    match item {
+        ContractSubject::FnOrMethod(mut fn_or_meth) => {
+            let ty_result = match fn_or_meth.sig.output {
+                ReturnType::Default => parse_quote! { () },
+                ReturnType::Type(_, ref ty) => (**ty).clone(),
+            };
+            let attrs = std::mem::take(&mut fn_or_meth.attrs);
+
+            let mut companion = TokenStream::new();
+            if let Some(b) = fn_or_meth.body.as_mut() {
+                b.stmts.insert(0, Stmt::Item(Item::Verbatim(panics_tokens)));
+            } else {
+                assert!(fn_or_meth.is_trait_signature());
+                let mut sig = fn_or_meth.sig.clone();
+                sig.ident = pan_name.clone();
+                // Make sure the spec method has a prototype which is very similar to the original one,
+                // To guarantee that they have the same ParamEnv
+                // (in particular, they have the same early/late bound variables)
+                sig.output = parse_quote! { -> ::core::marker::PhantomData<#ty_result> };
+
+                companion = quote! {
+                    #[creusot::no_translate]
+                    #[doc(hidden)]
+                    #sig {
+                        #panics_tokens
+                        ::core::marker::PhantomData
+                    }
+                };
+            }
+
+            TS1::from(quote! {
+                #companion
+
+                #[creusot::clause::may_panic=#name_tag]
+                #(#attrs)*
+                #documentation
+                #fn_or_meth
+            })
+        }
+        ContractSubject::Closure(mut clos) => {
+            // The panic condition is a predicate over the closure's inputs (env +
+            // args), not its result — so it is attached like `requires`, with the
+            // spec item spliced into the closure body for name resolution.
+            let body = &clos.body;
+            *clos.body = parse_quote!({let res = #body; #panics_tokens res});
+            TS1::from(quote! {
+              #[creusot::clause::may_panic=#name_tag]
+              #clos
+            })
+        }
+    }
+}
+
+/// The `#[panics(cond)]` clause: the function panics *exactly* when `cond` holds
+/// (a bi-conditional over the inputs). It is sugar for `#[may_panic(cond)]` (panic
+/// `⟹` cond) together with `#[ensures(!cond)]` (normal return `⟹` !cond, i.e.
+/// cond `⟹` panic), which combine to `panic ⟺ cond`.
+///
+/// Contrast with `#[may_panic(cond)]`, which only *bounds* panics (panic `⟹` cond)
+/// without forcing a panic when `cond` holds. `cond` is a predicate over the
+/// function inputs — `result` is not in scope (rejected by the `may_panic` half).
+pub fn panics(attr: TS1, tokens: TS1) -> TS1 {
+    let attr: TokenStream = attr.into();
+    let body: TokenStream = tokens.into();
+    // Desugar to the `may_panic`/`ensures` pair (same pattern as `maintains`).
+    // `may_panic(cond)` gives `panic ⟹ cond`; `ensures(!cond)` gives its converse
+    // `cond ⟹ panic`; together `panic ⟺ cond`.
+    quote! {
+        #[::creusot_std::macros::may_panic(#attr)]
+        #[::creusot_std::macros::ensures(!(#attr))]
+        #body
+    }
+    .into()
+}
+
 pub fn maintains(attr: TS1, body: TS1) -> TS1 {
     let tokens = maintains_impl(attr, body);
 

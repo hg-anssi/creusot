@@ -97,6 +97,7 @@ pub fn parallel_add(n: i32) {
             0 <= j && j < produced.len() && handles@[j].valid_result(f) ==>
             f@ == Some((fraction(1, n@), 1)) && f.id() == inv.public().1
         )]
+        #[invariant(forall<j> 0 <= j && j < produced.len() ==> !handles@[j].may_panic_on_join())]
         for _ in 0..n {
             let f1 = snapshot! { Some((fraction(1, n@), 0)) };
             let f2 = snapshot! { Some((fraction(n@+1-produced.len(), n@), 0)) };

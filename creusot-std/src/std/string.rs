@@ -67,7 +67,7 @@ extern_spec! {
         fn len(&self) -> usize;
 
         #[check(ghost)]
-        #[requires(exists<i0> 0 <= i0 && i0 <= self@.len() && self@.subsequence(0, i0).to_bytes().len() == ix@)]
+        #[panics(!(exists<i0> 0 <= i0 && i0 <= self@.len() && self@.subsequence(0, i0).to_bytes().len() == ix@))]
         #[ensures(result.0@.concat(result.1@) == self@)]
         #[ensures(result.0@.to_bytes().len() == ix@)]
         fn split_at(&self, ix: usize) -> (&str, &str);

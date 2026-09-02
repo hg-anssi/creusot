@@ -42,6 +42,7 @@ impl<I: core::marker::Tuple, F: FnOnce<I>> FnOnce<I> for FnGhostWrapper<F> {
     #[trusted]
     #[trusted(ghost)]
     #[requires(self.precondition(args))]
+    #[may_panic(self.panic_condition(args))]
     #[ensures(self.postcondition_once(args, result))]
     extern "rust-call" fn call_once(self, args: I) -> Self::Output {
         self.0.call_once(args)
@@ -52,6 +53,7 @@ impl<I: core::marker::Tuple, F: FnMut<I>> FnMut<I> for FnGhostWrapper<F> {
     #[trusted]
     #[trusted(ghost)]
     #[requires((*self).precondition(args))]
+    #[may_panic((*self).panic_condition(args))]
     #[ensures((*self).postcondition_mut(args, ^self, result))]
     extern "rust-call" fn call_mut(&mut self, args: I) -> Self::Output {
         self.0.call_mut(args)
@@ -62,6 +64,7 @@ impl<I: core::marker::Tuple, F: Fn<I>> Fn<I> for FnGhostWrapper<F> {
     #[trusted]
     #[trusted(ghost)]
     #[requires((*self).precondition(args))]
+    #[may_panic((*self).panic_condition(args))]
     #[ensures((*self).postcondition(args, result))]
     extern "rust-call" fn call(&self, args: I) -> Self::Output {
         self.0.call(args)

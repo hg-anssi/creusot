@@ -36,6 +36,8 @@ pub fn private_invariant<B, I: Iterator, F: FnMut(I::Item) -> Option<B>>(
 ) -> bool {
     // trivial precondition: simplification for sake of proof complexity
     no_precondition(f.func()) &&
+    // never panics: simplification for sake of proof complexity
+    no_panic(f.func()) &&
     // immutable state: simplification for sake of proof complexity
     immutable(f.func()) &&
     // precision of postcondition
@@ -47,6 +49,13 @@ pub fn private_invariant<B, I: Iterator, F: FnMut(I::Item) -> Option<B>>(
 #[logic(open, prophetic)]
 pub fn no_precondition<A, B, F: FnMut(A) -> Option<B>>(f: F) -> bool {
     pearlite! { forall<i: A> inv(i) ==> f.precondition((i,)) }
+}
+
+/// Asserts that `f` never panics: any input value can be mapped without panicking
+/// In a future release this restriction may be lifted or weakened
+#[logic(open, prophetic)]
+pub fn no_panic<A, B, F: FnMut(A) -> Option<B>>(f: F) -> bool {
+    pearlite! { forall<i: A> inv(i) ==> !f.panic_condition((i,)) }
 }
 
 /// Asserts that the captures of `f` are used immutably

@@ -1,0 +1,26 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_caller": {
+      "vc_caller": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_fn_once_user_closure0": { "prover": "alt-ergo", "time": 0.016 }
+    },
+    "M_fn_once_user": {
+      "vc_call_once_F": { "prover": "alt-ergo", "time": 0.026 },
+      "vc_fn_once_user_F": { "tactic": "compute_specified", "children": [] }
+    },
+    "M_weaken_2_std": {
+      "vc_weaken_2_std_A": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_weaken_3_std_A": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_weaken_3_std": {
+      "vc_call_once_F": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_weaken_3_std_A": { "tactic": "compute_specified", "children": [] }
+    },
+    "M_weaken_std": {
+      "vc_weaken_2_std_A": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_weaken_std_A": { "prover": "alt-ergo", "time": 0.017 }
+    }
+  }
+}

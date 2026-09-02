@@ -218,9 +218,13 @@ module M_check_iter
         end}
       (! return {result}) ]
   
-  let unwrap_ref_i32 (self_: t_Option_ref_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_
-    <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_ref_i32 (self_: t_Option_ref_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_ref_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let next_Iter_i32 (self_: MutBorrow.t t_Iter_i32) (return (x: t_Option_ref_i32)) =
   {[@stop_split] [@expl:next 'self_' type invariant] inv_refmut_Iter_i32 self_}
@@ -694,9 +698,11 @@ module M_check_iter_mut
       (! return {result}) ]
   
   let unwrap_refmut_i32 (self_: t_Option_refmut_i32) (return (x: MutBorrow.t Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
     any
-    [ return (result: MutBorrow.t Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_}
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:unwrap_refmut_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_i32 [@inline:trivial] (_1: MutBorrow.t Int32.t) = _1.final = _1.current
@@ -896,9 +902,11 @@ module M_check_iter_mut_as_slice
       (! return {result}) ]
   
   let unwrap_refmut_i32 (self_: t_Option_refmut_i32) (return (x: MutBorrow.t Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
     any
-    [ return (result: MutBorrow.t Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_}
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:unwrap_refmut_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_i32 [@inline:trivial] (_1: MutBorrow.t Int32.t) = _1.final = _1.current

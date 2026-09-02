@@ -148,6 +148,7 @@ pub(crate) fn lower_logical_defn<'tcx>(
             || matches!(
                 ctx.intrinsic(def_id),
                 Intrinsic::Precondition
+                    | Intrinsic::PanicCondition
                     | Intrinsic::Postcondition
                     | Intrinsic::PostconditionMut
                     | Intrinsic::PostconditionOnce

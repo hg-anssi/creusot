@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.15.3" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC5" version="1.3.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="coma" proved="true">
+<path name=".."/><path name="heapsort_generic.with_panics.coma"/>
+<theory name="M_heap_frag_max" proved="true">
+ <goal name="vc_heap_frag_max_T" proved="true">
+ <proof prover="1"><result status="valid" time="0.017604" steps="179"/></proof>
+ </goal>
+</theory>
+<theory name="M_heap_sort" proved="true">
+ <goal name="vc_heap_sort_T" proved="true">
+ <transf name="compute_specified" proved="true" >
+  <goal name="vc_heap_sort_T.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="vc_heap_sort_T.0.0" expl="len &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.023681" steps="4"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.1" expl="division by zero" proved="true">
+   <proof prover="1"><result status="valid" time="0.025674" steps="6"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.2" expl="inferred invariant: type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.027135" steps="8"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.3" expl="loop invariant #0" proved="true">
+   <proof prover="1"><result status="valid" time="0.023230" steps="41"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.4" expl="loop invariant #1" proved="true">
+   <proof prover="1"><result status="valid" time="0.056385" steps="215"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.5" expl="loop invariant #2" proved="true">
+   <proof prover="1"><result status="valid" time="0.037193" steps="12"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.6" expl="Sub overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.027544" steps="80"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.7" expl="len &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.028076" steps="26"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.8" expl="sift_down_T requires" proved="true">
+   <proof prover="1"><result status="valid" time="0.061488" steps="253"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.9" expl="inferred invariant: type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.027935" steps="34"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.10" expl="inferred invariant: unchanged value" proved="true">
+   <proof prover="1"><result status="valid" time="0.028798" steps="34"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.11" expl="loop invariant #0" proved="true">
+   <proof prover="1"><result status="valid" time="0.079216" steps="332"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.12" expl="loop invariant #1" proved="true">
+   <proof prover="1"><result status="valid" time="0.044245" steps="168"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.13" expl="loop invariant #2" proved="true">
+   <proof prover="1"><result status="valid" time="0.053019" steps="200"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.14" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.019625" steps="28"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.15" expl="len &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.018878" steps="30"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.16" expl="inferred invariant: type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.026015" steps="32"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.17" expl="loop invariant #0" proved="true">
+   <proof prover="1"><result status="valid" time="0.017036" steps="32"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.18" expl="loop invariant #1" proved="true">
+   <proof prover="1"><result status="valid" time="0.017364" steps="33"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.19" expl="loop invariant #2" proved="true">
+   <proof prover="1"><result status="valid" time="0.016381" steps="63"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.20" expl="loop invariant #3" proved="true">
+   <proof prover="1"><result status="valid" time="0.026280" steps="95"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.21" expl="loop invariant #4" proved="true">
+   <proof prover="1"><result status="valid" time="0.026911" steps="44"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.22" expl="Sub overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.020422" steps="129"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.23" expl="deref_mut &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.024515" steps="54"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.24" expl="swap &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.019613" steps="66"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.25" expl="assertion" proved="true">
+   <proof prover="0"><result status="valid" time="0.845544" steps="113167"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.26" expl="sift_down_T requires" proved="true">
+   <proof prover="0" timelimit="0.2"><result status="valid" time="0.147846" steps="48782"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.27" expl="inferred invariant: type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.016407" steps="79"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.28" expl="inferred invariant: unchanged value" proved="true">
+   <proof prover="1"><result status="valid" time="0.029317" steps="79"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.29" expl="loop invariant #0" proved="true">
+   <proof prover="1"><result status="valid" time="0.062802" steps="335"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.30" expl="loop invariant #1" proved="true">
+   <proof prover="1"><result status="valid" time="0.096351" steps="590"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.31" expl="loop invariant #2" proved="true">
+   <proof prover="1"><result status="valid" time="0.028371" steps="83"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.32" expl="loop invariant #3" proved="true">
+   <proof prover="2"><result status="valid" time="0.432796" steps="1415839"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.33" expl="loop invariant #4" proved="true">
+   <proof prover="3"><result status="valid" time="0.465362" steps="62614"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.34" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.014393" steps="73"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.35" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.026425" steps="71"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.36" expl="the callee cannot panic here" proved="true">
+   <proof prover="1"><result status="valid" time="0.041125" steps="267"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.37" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.022617" steps="64"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.38" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.024954" steps="52"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.39" expl="heap_sort_T ensures" proved="true">
+   <proof prover="1"><result status="valid" time="0.063438" steps="501"/></proof>
+   </goal>
+   <goal name="vc_heap_sort_T.0.40" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.018026" steps="52"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_sift_down" proved="true">
+ <goal name="vc_sift_down_T" proved="true">
+ <transf name="compute_specified" proved="true" >
+  <goal name="vc_sift_down_T.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="vc_sift_down_T.0.0" expl="inferred invariant: type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.017755" steps="10"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.1" expl="loop invariant #0" proved="true">
+   <proof prover="1"><result status="valid" time="0.021668" steps="35"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.2" expl="loop invariant #1" proved="true">
+   <proof prover="1"><result status="valid" time="0.013018" steps="12"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.3" expl="loop invariant #4" proved="true">
+   <proof prover="1"><result status="valid" time="0.020611" steps="48"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.4" expl="loop invariant #5" proved="true">
+   <proof prover="1"><result status="valid" time="0.024431" steps="149"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.5" expl="loop invariant #6" proved="true">
+   <proof prover="1"><result status="valid" time="0.061733" steps="343"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.6" expl="division by zero" proved="true">
+   <proof prover="1"><result status="valid" time="0.013382" steps="22"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.7" expl="Mul overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.039428" steps="152"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.8" expl="Add overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.036306" steps="271"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.9" expl="Add overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.042245" steps="325"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.10" expl="index &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.027713" steps="38"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.11" expl="Add overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.014041" steps="44"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.12" expl="index &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.012158" steps="44"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.13" expl="lt requires" proved="true">
+   <proof prover="1"><result status="valid" time="0.035920" steps="224"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.14" expl="Add overflow" proved="true">
+   <proof prover="1"><result status="valid" time="0.029207" steps="52"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.15" expl="index may_panic (the callee cannot panic here)" proved="true">
+   <proof prover="1"><result status="valid" time="0.043431" steps="244"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.16" expl="index may_panic (the callee cannot panic here)" proved="true">
+   <proof prover="1"><result status="valid" time="0.042231" steps="238"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.17" expl="index &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.025216" steps="36"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.18" expl="index &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.016379" steps="42"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.19" expl="le requires" proved="true">
+   <proof prover="1"><result status="valid" time="0.036383" steps="261"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.20" expl="deref_mut &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.026132" steps="52"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.21" expl="swap &#39;self_&#39; type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.025466" steps="64"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.22" expl="inferred invariant: type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.026867" steps="70"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.23" expl="inferred invariant: unchanged value" proved="true">
+   <proof prover="1"><result status="valid" time="0.015249" steps="70"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.24" expl="loop invariant #0" proved="true">
+   <proof prover="1"><result status="valid" time="0.063915" steps="360"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.25" expl="loop invariant #1" proved="true">
+   <proof prover="1"><result status="valid" time="0.195100" steps="1292"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.26" expl="loop invariant #2" proved="true">
+   <proof prover="2"><result status="valid" time="0.069165" steps="307535"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.27" expl="loop invariant #3" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_sift_down_T.0.27.0" expl="loop invariant #3" proved="true">
+    <transf name="split_vc" proved="true" >
+     <goal name="vc_sift_down_T.0.27.0.0" expl="loop invariant #3" proved="true">
+     <proof prover="0"><result status="valid" time="0.824039" steps="205074"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_sift_down_T.0.27.1" expl="loop invariant #3" proved="true">
+    <transf name="split_vc" proved="true" >
+     <goal name="vc_sift_down_T.0.27.1.0" expl="loop invariant #3" proved="true">
+     <proof prover="0" timelimit="2" memlimit="4000"><result status="valid" time="1.604723" steps="138329"/></proof>
+     </goal>
+     <goal name="vc_sift_down_T.0.27.1.1" expl="loop invariant #3" proved="true">
+     <proof prover="0"><result status="valid" time="0.630350" steps="178572"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="vc_sift_down_T.0.28" expl="loop invariant #4" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_sift_down_T.0.28.0" expl="loop invariant #4" proved="true">
+    <transf name="split_vc" proved="true" >
+     <goal name="vc_sift_down_T.0.28.0.0" expl="loop invariant #4" proved="true">
+     <proof prover="0" timelimit="30"><result status="valid" time="6.677384" steps="490418"/></proof>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_sift_down_T.0.28.1" expl="loop invariant #4" proved="true">
+    <transf name="split_vc" proved="true" >
+     <goal name="vc_sift_down_T.0.28.1.0" expl="loop invariant #4" proved="true">
+     <proof prover="0" timelimit="30"><result status="valid" time="10.936320" steps="725046"/></proof>
+     </goal>
+     <goal name="vc_sift_down_T.0.28.1.1" expl="loop invariant #4" proved="true">
+     <proof prover="0" timelimit="30"><result status="valid" time="17.375931" steps="1307123"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="vc_sift_down_T.0.29" expl="loop invariant #5" proved="true">
+   <proof prover="0"><result status="valid" time="0.423914" steps="115079"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.30" expl="loop invariant #6" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_sift_down_T.0.30.0" expl="loop invariant #6" proved="true">
+    <proof prover="1" timelimit="1"><result status="valid" time="0.075848" steps="545"/></proof>
+    </goal>
+    <goal name="vc_sift_down_T.0.30.1" expl="loop invariant #6" proved="true">
+    <proof prover="0"><result status="valid" time="0.781354" steps="203546"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="vc_sift_down_T.0.31" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.032001" steps="68"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.32" expl="the callee cannot panic here" proved="true">
+   <proof prover="1"><result status="valid" time="0.056840" steps="64"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.33" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.058450" steps="62"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.34" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.036344" steps="50"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.35" expl="index may_panic (the callee cannot panic here)" proved="true">
+   <proof prover="1"><result status="valid" time="0.068032" steps="277"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.36" expl="index may_panic (the callee cannot panic here)" proved="true">
+   <proof prover="1"><result status="valid" time="0.057851" steps="339"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.37" expl="sift_down_T ensures" proved="true">
+   <proof prover="1"><result status="valid" time="0.064866" steps="642"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.38" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.017298" steps="34"/></proof>
+   </goal>
+   <goal name="vc_sift_down_T.0.39" expl="sift_down_T ensures" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_sift_down_T.0.39.0" expl="sift_down ensures #0 (sift_down_T ensures)" proved="true">
+    <transf name="split_vc" proved="true" >
+     <goal name="vc_sift_down_T.0.39.0.0" expl="sift_down ensures #0 (sift_down_T ensures)" proved="true">
+     <proof prover="1" timelimit="1"><result status="valid" time="0.239558" steps="1343"/></proof>
+     </goal>
+     <goal name="vc_sift_down_T.0.39.0.1" expl="sift_down ensures #0 (sift_down_T ensures)" proved="true">
+     <transf name="split_vc" proved="true" >
+      <goal name="vc_sift_down_T.0.39.0.1.0" expl="sift_down ensures #0 (sift_down_T ensures)" proved="true">
+      <proof prover="1" timelimit="1"><result status="valid" time="0.962680" steps="6307"/></proof>
+      </goal>
+      <goal name="vc_sift_down_T.0.39.0.1.1" expl="sift_down ensures #0 (sift_down_T ensures)" proved="true">
+      <proof prover="1" timelimit="1"><result status="valid" time="0.676281" steps="4491"/></proof>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_sift_down_T.0.39.1" expl="sift_down ensures #1 (sift_down_T ensures)" proved="true">
+    <proof prover="1"><result status="valid" time="0.029909" steps="58"/></proof>
+    </goal>
+    <goal name="vc_sift_down_T.0.39.2" expl="sift_down ensures #2 (sift_down_T ensures)" proved="true">
+    <proof prover="1"><result status="valid" time="0.104462" steps="386"/></proof>
+    </goal>
+    <goal name="vc_sift_down_T.0.39.3" expl="sift_down ensures #3 (sift_down_T ensures)" proved="true">
+    <proof prover="2"><result status="valid" time="0.047056" steps="203816"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="vc_sift_down_T.0.40" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.024977" steps="56"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

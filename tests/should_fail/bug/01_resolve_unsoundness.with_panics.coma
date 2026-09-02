@@ -1,0 +1,106 @@
+module M_make_vec_of_size
+  use seq.Seq
+  use creusot.int.UInt64
+  use creusot.prelude.MutBorrow
+  use creusot.prelude.Any
+  use int.Int
+  
+  type t_Vec_bool_Global
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  function view_Vec_bool_Global (self: t_Vec_bool_Global) : Seq.seq bool
+  
+  axiom view_Vec_bool_Global_spec:
+    forall self: t_Vec_bool_Global [view_Vec_bool_Global self]. Seq.length (view_Vec_bool_Global self)
+      <= UInt64.t'int const_MAX
+  
+  let new_bool (return (x: t_Vec_bool_Global)) = any
+    [ return (result: t_Vec_bool_Global) -> {[@stop_split] [@expl:new ensures] Seq.length (view_Vec_bool_Global result)
+      = 0}
+      (! return {result}) ]
+  
+  type t_Ordering = Less | Equal | Greater
+  
+  function cmp_log_usize (self: UInt64.t) (o: UInt64.t) : t_Ordering = if UInt64.lt self o then
+      Less
+    else
+      if self = o then Equal else Greater
+  
+  
+  function eq_cmp_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom eq_cmp_usize_spec: forall x: UInt64.t, y: UInt64.t. (x = y) = (cmp_log_usize x y = Equal)
+  
+  function antisym2_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym2_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Greater -> cmp_log_usize y x = Less
+  
+  function antisym1_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym1_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Less -> cmp_log_usize y x = Greater
+  
+  function trans_usize (x: UInt64.t) (y: UInt64.t) (z: UInt64.t) (o: t_Ordering) : ()
+  
+  axiom trans_usize_spec: forall x: UInt64.t, y: UInt64.t, z: UInt64.t, o: t_Ordering. cmp_log_usize x y = o
+      -> cmp_log_usize y z = o -> cmp_log_usize x z = o
+  
+  function refl_usize (x: UInt64.t) : ()
+  
+  axiom refl_usize_spec: forall x: UInt64.t. cmp_log_usize x x = Equal
+  
+  function cmp_gt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_gt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.gt x y = (cmp_log_usize x y = Greater)
+  
+  function cmp_ge_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_ge_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.ge x y = (cmp_log_usize x y <> Less)
+  
+  function cmp_lt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_lt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.lt x y = (cmp_log_usize x y = Less)
+  
+  function cmp_le_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_le_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.le x y = (cmp_log_usize x y <> Greater)
+  
+  let push_bool (self_: MutBorrow.t t_Vec_bool_Global) (v: bool) (return (x: ())) = any
+    [ return (result: ()) -> {[@stop_split] [@expl:push ensures] view_Vec_bool_Global self_.final
+      = Seq.snoc (view_Vec_bool_Global self_.current) v}
+      (! return {result}) ]
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let make_vec_of_size (n: UInt64.t) (return (x: t_Vec_bool_Global)) = (! bb0
+    [ bb0 = s0
+      [ s0 = new_bool (fun (_x: t_Vec_bool_Global) -> [ &out <- _x ] s1) | s1 = [ &i <- (0: UInt64.t) ] s2 | s2 = bb2 ]
+    | bb2 = bb2
+      [ bb2 = {[@expl:loop invariant] UInt64.le (0: UInt64.t) i /\ UInt64.le i n}
+        (! s0)
+        [ s0 = [ &_13 <- UInt64.le i n ] s1 | s1 = any [ br0 -> {_13 = false} (! bb7) | br1 -> {_13} (! bb4) ] ]
+        [ bb4 = s0
+          [ s0 = MutBorrow.borrow_mut <t_Vec_bool_Global> {out}
+              (fun (_bor: MutBorrow.t t_Vec_bool_Global) -> [ &_17 <- _bor ] [ &out <- _bor.final ] s1)
+          | s1 = push_bool {_17} {false} (fun (_x: ()) -> [ &_16 <- _x ] s2)
+          | s2 = [ &_18 <- let (_fst, _snd) = UInt64.add_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s3
+          | s3 = {[@expl:Add overflow] not _18.f1} s4
+          | s4 = [ &i <- _18.f0 ] s5
+          | s5 = bb2 ] ] ]
+    | bb7 = s0 [ s0 = [ &_ret <- out ] s1 | s1 = return {_ret} ] ]
+    [ & _ret: t_Vec_bool_Global = Any.any_l ()
+    | & n: UInt64.t = n
+    | & out: t_Vec_bool_Global = Any.any_l ()
+    | & i: UInt64.t = Any.any_l ()
+    | & _13: bool = Any.any_l ()
+    | & _16: () = Any.any_l ()
+    | & _17: MutBorrow.t t_Vec_bool_Global = Any.any_l ()
+    | & _18: tup2_usize_bool = Any.any_l () ])
+    [ return (result: t_Vec_bool_Global) ->
+    {[@stop_split] [@expl:make_vec_of_size ensures] Seq.length (view_Vec_bool_Global result) = UInt64.t'int n}
+      (! return {result}) ]
+end

@@ -1,0 +1,86 @@
+module M_mc91
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
+  type t_Ordering = Less | Equal | Greater
+  
+  function cmp_log_u32 (self: UInt32.t) (o: UInt32.t) : t_Ordering = if UInt32.lt self o then
+      Less
+    else
+      if self = o then Equal else Greater
+  
+  
+  function eq_cmp_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom eq_cmp_u32_spec: forall x: UInt32.t, y: UInt32.t. (x = y) = (cmp_log_u32 x y = Equal)
+  
+  function antisym2_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom antisym2_u32_spec: forall x: UInt32.t, y: UInt32.t. cmp_log_u32 x y = Greater -> cmp_log_u32 y x = Less
+  
+  function antisym1_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom antisym1_u32_spec: forall x: UInt32.t, y: UInt32.t. cmp_log_u32 x y = Less -> cmp_log_u32 y x = Greater
+  
+  function trans_u32 (x: UInt32.t) (y: UInt32.t) (z: UInt32.t) (o: t_Ordering) : ()
+  
+  axiom trans_u32_spec: forall x: UInt32.t, y: UInt32.t, z: UInt32.t, o: t_Ordering. cmp_log_u32 x y = o
+      -> cmp_log_u32 y z = o -> cmp_log_u32 x z = o
+  
+  function refl_u32 (x: UInt32.t) : ()
+  
+  axiom refl_u32_spec: forall x: UInt32.t. cmp_log_u32 x x = Equal
+  
+  function cmp_gt_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_gt_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.gt x y = (cmp_log_u32 x y = Greater)
+  
+  function cmp_ge_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_ge_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.ge x y = (cmp_log_u32 x y <> Less)
+  
+  function cmp_lt_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_lt_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.lt x y = (cmp_log_u32 x y = Less)
+  
+  function cmp_le_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_le_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.le x y = (cmp_log_u32 x y <> Greater)
+  
+  let mc91 (x: UInt32.t) (return (x'0: UInt32.t)) = any
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:mc91 ensures] UInt32.le x (100: UInt32.t)
+      -> UInt32.t'int result = 91 /\ UInt32.gt x (100: UInt32.t) -> UInt32.t'int result = UInt32.t'int x - 10}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let mc91'0 (x: UInt32.t) (return (x'0: UInt32.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_4 <- UInt32.gt x (100: UInt32.t) ] s1
+      | s1 = any [ br0 -> {_4 = false} (! bb3) | br1 -> {_4} (! bb1) ] ]
+    | bb1 = s0
+      [ s0 = [ &_7 <- let (_fst, _snd) = UInt32.sub_with_overflow x (10: UInt32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Sub overflow] not _7.f1} s2
+      | s2 = [ &_ret <- _7.f0 ] s3
+      | s3 = return {_ret} ]
+    | bb3 = s0
+      [ s0 = [ &_11 <- let (_fst, _snd) = UInt32.add_with_overflow x (11: UInt32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _11.f1} s2
+      | s2 = mc91 {_11.f0} (fun (_x: UInt32.t) -> [ &_8 <- _x ] s3)
+      | s3 = mc91 {_8} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & x: UInt32.t = x
+    | & _4: bool = Any.any_l ()
+    | & _7: tup2_u32_bool = Any.any_l ()
+    | & _8: UInt32.t = Any.any_l ()
+    | & _11: tup2_u32_bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:mc91 ensures] UInt32.le x (100: UInt32.t)
+      -> UInt32.t'int result = 91 /\ UInt32.gt x (100: UInt32.t) -> UInt32.t'int result = UInt32.t'int x - 10}
+      (! return {result}) ]
+end

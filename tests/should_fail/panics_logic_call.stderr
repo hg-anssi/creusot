@@ -1,0 +1,8 @@
+error: called program function `may_panic_fn` in logic context
+  --> panics_logic_call.rs:14:5
+   |
+14 |     may_panic_fn()
+   |     ^^^^^^^^^^^^
+
+error: aborting due to 1 previous error
+

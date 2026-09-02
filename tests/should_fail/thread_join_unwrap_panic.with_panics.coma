@@ -1,0 +1,86 @@
+module M_join_unwrap_unhandled_panic
+  type namespace_other
+  
+  type t_Namespace = Other namespace_other
+  
+  use creusot.prelude.Any
+  use creusot.int.UInt32
+  use set.Set
+  
+  type t_Arguments
+  
+  predicate inv_Arguments (_1: t_Arguments)
+  
+  let from_str (s: string) (return (x: t_Arguments)) = any
+    [ return (result: t_Arguments) -> {[@stop_split] [@expl:from_str result type invariant] inv_Arguments result}
+      (! return {result}) ]
+  
+  type t_Tokens
+  
+  let closure0 (self: ()) (_tokens: t_Tokens) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = from_str {"boom"} (fun (_x: t_Arguments) -> [ &_6 <- _x ] s1) | s1 = panic ] ]
+    [ & _6: t_Arguments = Any.any_l () ]) [ return (result: UInt32.t) -> (! return {result}) | panic -> (! panic) ]
+  
+  type t_JoinHandle_u32
+  
+  predicate contains_Namespace [@inline:trivial] (self: Set.set t_Namespace) (e: t_Namespace) = Set.mem e self
+  
+  meta "rewrite_def" predicate contains_Namespace
+  
+  function namespaces (self: t_Tokens) : Set.set t_Namespace
+  
+  predicate contains (self: t_Tokens) (namespace: t_Namespace) = contains_Namespace (namespaces self) namespace
+  
+  predicate precondition_closure0 (self: ()) (args: t_Tokens) = let _tokens = args in true
+  
+  meta "rewrite_def" predicate precondition_closure0
+  
+  predicate inv_JoinHandle_u32 (_1: t_JoinHandle_u32)
+  
+  predicate valid_result_JoinHandle_u32 (self: t_JoinHandle_u32) (_x: UInt32.t)
+  
+  predicate postcondition_once_closure0 (self: ()) (args: t_Tokens) (result: UInt32.t) = let _tokens = args in true
+  
+  meta "rewrite_def" predicate postcondition_once_closure0
+  
+  predicate may_panic_on_join_JoinHandle_u32 (self: t_JoinHandle_u32)
+  
+  predicate panic_condition_closure0 (self: ()) (args: t_Tokens) = let _tokens = args in true
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
+  let spawn_closure0 (f: ()) (return (x: t_JoinHandle_u32)) =
+  {[@stop_split] [@expl:spawn requires] forall t: t_Tokens. (forall ns: t_Namespace. contains t ns)
+      -> precondition_closure0 f t}
+    any
+    [ return (result: t_JoinHandle_u32) ->
+    {[@stop_split] [@expl:spawn_closure0 ensures] ([@stop_split] [@expl:spawn result type invariant] inv_JoinHandle_u32 result)
+      /\ ([@stop_split] [@expl:spawn ensures] exists t: t_Tokens. (forall ns: t_Namespace. contains t ns)
+        /\ (forall r: UInt32.t. valid_result_JoinHandle_u32 result r -> postcondition_once_closure0 f t r)
+        /\ (may_panic_on_join_JoinHandle_u32 result -> panic_condition_closure0 f t))}
+      (! return {result}) ]
+  
+  let join_unwrap_JoinHandle_u32 (self: t_JoinHandle_u32) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:join_unwrap 'self' type invariant] inv_JoinHandle_u32 self}
+    any
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:join_unwrap ensures] valid_result_JoinHandle_u32 self result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:join_unwrap may_panic] may_panic_on_join_JoinHandle_u32 self} (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let join_unwrap_unhandled_panic (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &f <- () ] s1
+      | s1 = spawn_closure0 {f} (fun (_x: t_JoinHandle_u32) -> [ &j <- _x ] s2)
+      | s2 = join_unwrap_JoinHandle_u32 {j}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_4 <- _x ] s3)
+      | s3 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & f: () = Any.any_l ()
+    | & j: t_JoinHandle_u32 = Any.any_l ()
+    | & _4: UInt32.t = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end

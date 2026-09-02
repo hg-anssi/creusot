@@ -1,0 +1,10 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_add_some": { "vc_add_some": { "prover": "alt-ergo", "time": 0.026 } },
+    "M_foo": {
+      "vc_add_some": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_foo": { "prover": "alt-ergo", "time": 0.023 }
+    }
+  }
+}

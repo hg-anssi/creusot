@@ -1402,9 +1402,12 @@ module M_implementation__impl_PersistentArray_T__get (* implementation::Persiste
       (! return {result}) ]
   
   let unwrap_ref_Perm_PermCell_Inner_T (self_: t_Option_ref_Perm_PermCell_Inner_T)
-    (return (x: t_Perm_PermCell_Inner_T)) = {[@stop_split] [@expl:unwrap requires] self_ <> None'3}
+    (return (x: t_Perm_PermCell_Inner_T)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'3}
     any
-    [ return (result: t_Perm_PermCell_Inner_T) -> {[@stop_split] [@expl:unwrap ensures] Some'3 result = self_}
+    [ return (result: t_Perm_PermCell_Inner_T) ->
+    {[@stop_split] [@expl:unwrap_ref_Perm_PermCell_Inner_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'3)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'3 result = self_)}
       (! return {result}) ]
   
   let new_ref_Perm_PermCell_Inner_T (x: t_Perm_PermCell_Inner_T) (return (x'0: t_Perm_PermCell_Inner_T)) = any
@@ -2885,9 +2888,12 @@ module M_implementation__impl_PersistentArray_T__get_inner_immut (* implementati
       (! return {result}) ]
   
   let unwrap_ref_Perm_PermCell_Inner_T (self_: t_Option_ref_Perm_PermCell_Inner_T)
-    (return (x: t_Perm_PermCell_Inner_T)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
+    (return (x: t_Perm_PermCell_Inner_T)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
     any
-    [ return (result: t_Perm_PermCell_Inner_T) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_}
+    [ return (result: t_Perm_PermCell_Inner_T) ->
+    {[@stop_split] [@expl:unwrap_ref_Perm_PermCell_Inner_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   let new_ref_Perm_PermCell_Inner_T (x: t_Perm_PermCell_Inner_T) (return (x'0: t_Perm_PermCell_Inner_T)) = any
@@ -3117,11 +3123,12 @@ module M_implementation__impl_PersistentArray_T__get_inner_immut (* implementati
   
   let index_Vec_T_Global (self_: t_Vec_T_Global) (ix: UInt64.t) (return (x: t_T)) =
   {[@stop_split] [@expl:index_Vec_T_Global requires] ([@stop_split] [@expl:index 'self_' type invariant] inv_ref_Vec_T_Global self_)
-    /\ ([@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_T_Global self_))}
+    /\ ([@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_T_Global self_))}
     any
     [ return (result: t_T) ->
     {[@stop_split] [@expl:index_Vec_T_Global ensures] ([@stop_split] [@expl:index result type invariant] inv_ref_T result)
-      /\ ([@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_T_Global self_) result)}
+      /\ ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_T_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_T_Global self_) result)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000
@@ -4274,9 +4281,12 @@ module M_implementation__impl_PersistentArray_T__reroot (* implementation::Persi
   meta "rewrite_def" predicate resolve_refmut_refmut_PA_T
   
   let unwrap_Perm_PermCell_Inner_T (self_: t_Option_Perm_PermCell_Inner_T) (return (x: t_Perm_PermCell_Inner_T)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
     any
-    [ return (result: t_Perm_PermCell_Inner_T) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_}
+    [ return (result: t_Perm_PermCell_Inner_T) ->
+    {[@stop_split] [@expl:unwrap_Perm_PermCell_Inner_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   let new_Perm_PermCell_Inner_T (x: t_Perm_PermCell_Inner_T) (return (x'0: t_Perm_PermCell_Inner_T)) = any
@@ -4646,10 +4656,13 @@ module M_implementation__impl_PersistentArray_T__reroot (* implementation::Persi
       (! return {result}) ]
   
   let unwrap_refmut_Perm_PermCell_Inner_T (self_: t_Option_refmut_Perm_PermCell_Inner_T)
-    (return (x: MutBorrow.t t_Perm_PermCell_Inner_T)) = {[@stop_split] [@expl:unwrap requires] self_ <> None'1}
+    (return (x: MutBorrow.t t_Perm_PermCell_Inner_T)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None'1}
     any
-    [ return (result: MutBorrow.t t_Perm_PermCell_Inner_T) -> {[@stop_split] [@expl:unwrap ensures] Some'1 result
-      = self_}
+    [ return (result: MutBorrow.t t_Perm_PermCell_Inner_T) ->
+    {[@stop_split] [@expl:unwrap_refmut_Perm_PermCell_Inner_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   predicate resolve_Rc_PermCell_Inner_T_Global (_1: t_Rc_PermCell_Inner_T_Global)
@@ -4704,14 +4717,15 @@ module M_implementation__impl_PersistentArray_T__reroot (* implementation::Persi
   
   let index_mut_Vec_T_Global (self_: MutBorrow.t t_Vec_T_Global) (ix: UInt64.t) (return (x: MutBorrow.t t_T)) =
   {[@stop_split] [@expl:index_mut_Vec_T_Global requires] ([@stop_split] [@expl:index_mut 'self_' type invariant] inv_refmut_Vec_T_Global self_)
-    /\ ([@stop_split] [@expl:index_mut requires] in_bounds_usize ix (view_Vec_T_Global self_.current))}
+    /\ ([@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_usize ix (view_Vec_T_Global self_.current))}
     any
     [ return (result: MutBorrow.t t_T) ->
     {[@stop_split] [@expl:index_mut_Vec_T_Global ensures] ([@stop_split] [@expl:index_mut result type invariant] inv_refmut_T result)
-      /\ ([@stop_split] [@expl:index_mut ensures #0] has_value_usize ix (view_Vec_T_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_T_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_usize ix (view_Vec_T_Global self_.current) (view_Vec_T_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_T_Global self_.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize ix (view_Vec_T_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_T_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize ix (view_Vec_T_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize ix (view_Vec_T_Global self_.current) (view_Vec_T_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_T_Global self_.final)
       = Seq.length (view_Vec_T_Global self_.current))}
       (! return {result}) ]
   

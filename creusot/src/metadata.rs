@@ -93,7 +93,12 @@ impl<'tcx> Metadata<'tcx> {
         self.get(cnum).is_none_or(|meta| meta.is_external_crate)
     }
 
-    pub(crate) fn load(&mut self, tcx: TyCtxt<'tcx>, overrides: &HashMap<String, PathBuf>) {
+    pub(crate) fn load(
+        &mut self,
+        tcx: TyCtxt<'tcx>,
+        overrides: &HashMap<String, PathBuf>,
+        enable_panics: bool,
+    ) {
         for &cnum in tcx.crates(()) {
             if cnum == LOCAL_CRATE {
                 continue;
@@ -103,6 +108,18 @@ impl<'tcx> Metadata<'tcx> {
             else {
                 continue;
             };
+            // Cross-crate soundness guard: a dependency proven without `--enable-panics` folded its
+            // `#[may_panic(P)]` into `requires(!P)`, so its proof excludes the panicking case and
+            // cannot be soundly consumed by a crate translated with `--enable-panics`. Non-verified
+            // crates carry no Creusot proof and are exempt.
+            if enable_panics && !cmeta.is_external_crate && !cmeta.enable_panics {
+                tcx.dcx().fatal(format!(
+                    "the verified dependency `{}` was proven without `--enable-panics`, so it \
+                     cannot be used with `--enable-panics` (its proof is incompatible with \
+                     first-class panics). Rebuild `{0}` with `--enable-panics`.",
+                    tcx.crate_name(cnum)
+                ));
+            }
             self.crates.insert(cnum, cmeta);
             for (id, spec) in ext_specs.into_iter() {
                 if self.extern_specs.insert(id, spec).is_some() {
@@ -134,6 +151,11 @@ pub struct CrateMetadata<'tcx> {
     intrinsics: HashMap<Symbol, DefId>,
     params_open_inv: HashMap<DefId, DenseBitSet<usize>>,
     is_external_crate: bool,
+    /// Whether this crate was translated (and proven) with `--enable-panics`. Used as a cross-crate
+    /// soundness guard: a dependency proven without `--enable-panics` folds its `#[may_panic(P)]`
+    /// into `requires(!P)`, so its proof excludes the panicking case and must not be consumed by a
+    /// crate translated with `--enable-panics` (see `Metadata::load`).
+    enable_panics: bool,
 }
 
 impl<'tcx> CrateMetadata<'tcx> {
@@ -184,6 +206,7 @@ impl<'tcx> CrateMetadata<'tcx> {
             intrinsics: metadata.intrinsics,
             params_open_inv: metadata.params_open_inv,
             is_external_crate: metadata.is_external_crate,
+            enable_panics: metadata.enable_panics,
         };
 
         Some((
@@ -212,6 +235,8 @@ pub(crate) struct BinaryMetadata<'tcx> {
     erased_thir: Vec<(DefId, AnfBlock<'tcx>)>,
     erased_defid: Vec<(DefId, Option<Erasure<'tcx>>)>,
     is_external_crate: bool,
+    /// See [`CrateMetadata::enable_panics`].
+    enable_panics: bool,
 }
 
 impl<'tcx> BinaryMetadata<'tcx> {
@@ -225,6 +250,7 @@ impl<'tcx> BinaryMetadata<'tcx> {
         params_open_inv: HashMap<DefId, DenseBitSet<usize>>,
         erased_thir: Vec<(DefId, AnfBlock<'tcx>)>,
         erased_local_defid: HashMap<LocalDefId, Option<Erasure<'tcx>>>,
+        enable_panics: bool,
     ) -> Self {
         let terms = terms
             .iter_mut()
@@ -249,6 +275,7 @@ impl<'tcx> BinaryMetadata<'tcx> {
             erased_thir,
             erased_defid,
             is_external_crate: false,
+            enable_panics,
         }
     }
 
@@ -264,6 +291,9 @@ impl<'tcx> BinaryMetadata<'tcx> {
             erased_thir,
             erased_defid: Vec::new(),
             is_external_crate: true,
+            // Non-verified crates carry no Creusot proof; the value is never inspected by the guard
+            // (short-circuited by `is_external_crate`).
+            enable_panics: true,
         }
     }
 }

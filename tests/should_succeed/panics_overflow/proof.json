@@ -1,0 +1,24 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_add": {
+      "vc_add": {
+        "tactic": "split_vc",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.014 },
+              { "prover": "alt-ergo", "time": 0.014 }
+            ]
+          }
+        ]
+      },
+      "vc_add_u64": { "prover": "alt-ergo", "time": 0.008 }
+    },
+    "M_div": { "vc_div": { "prover": "alt-ergo", "time": 0.005 } },
+    "M_increment": {
+      "vc_increment": { "prover": "alt-ergo", "time": 0.016 }
+    }
+  }
+}

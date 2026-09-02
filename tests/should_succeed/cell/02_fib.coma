@@ -58,10 +58,11 @@ module M_fib_memo
   
   let index_Vec_PredCell_Option_usize_Global (self_: t_Vec_PredCell_Option_usize_Global) (ix: UInt64.t)
     (return (x: t_PredCell_Option_usize)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_PredCell_Option_usize_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_PredCell_Option_usize_Global self_)}
     any
     [ return (result: t_PredCell_Option_usize) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_PredCell_Option_usize_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_PredCell_Option_usize_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_PredCell_Option_usize_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_PredCell_Option_usize_Global self_) result)}
       (! return {result}) ]
   
   type t_Option_usize = None | Some UInt64.t

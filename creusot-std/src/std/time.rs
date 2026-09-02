@@ -69,7 +69,7 @@ impl DeepModel for Instant {
 extern_spec! {
     impl Duration {
         #[check(ghost)]
-        #[requires(secs@ + nanos_to_secs(nanos@) <= u64::MAX@)]
+        #[panics(secs@ + nanos_to_secs(nanos@) > u64::MAX@)]
         #[ensures(result@ == secs_to_nanos(secs@) + nanos@ )]
         fn new(secs: u64, nanos: u32) -> Duration;
 
@@ -187,14 +187,14 @@ extern_spec! {
 extern_spec! {
     impl Add<Duration> for Duration {
         #[check(ghost)]
-        #[requires(self@ + rhs@ <= secs_to_nanos(u64::MAX@) + 999_999_999)]
+        #[panics(self@ + rhs@ > secs_to_nanos(u64::MAX@) + 999_999_999)]
         #[ensures(self@ + rhs@ == result@)]
         fn add(self, rhs: Duration) -> Duration;
     }
 
     impl Sub<Duration> for Duration {
         #[check(ghost)]
-        #[requires(self@ - rhs@ >= 0)]
+        #[panics(self@ - rhs@ < 0)]
         #[ensures(self@ - rhs@ == result@)]
         fn sub(self, rhs: Duration) -> Duration;
     }

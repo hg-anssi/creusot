@@ -1,0 +1,13 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_inc_max_repeat": {
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.026 },
+      "vc_inc_max_repeat": { "prover": "z3", "time": 0.035 },
+      "vc_into_iter_Range_u32": { "prover": "alt-ergo", "time": 0.025 },
+      "vc_next_Range_u32": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_take_max": { "prover": "alt-ergo", "time": 0.032 }
+    },
+    "M_take_max": { "vc_take_max": { "prover": "alt-ergo", "time": 0.022 } }
+  }
+}

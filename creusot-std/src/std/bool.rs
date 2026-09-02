@@ -16,6 +16,7 @@ extern_spec! {
                 Some(t) => f.postcondition_once((), t)
             }
         )]
+        #[may_panic(self && f.panic_condition(()))]
         fn then<T, F: FnOnce() -> T>(self, f: F) -> Option<T> {
             if self { Some(f()) } else { None }
         }

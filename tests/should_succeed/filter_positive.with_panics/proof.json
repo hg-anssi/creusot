@@ -1,0 +1,27 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_lemma_num_of_pos_increasing": {
+      "vc_lemma_num_of_pos_increasing": {
+        "prover": "alt-ergo",
+        "time": 0.029
+      }
+    },
+    "M_lemma_num_of_pos_strictly_increasing": {
+      "vc_lemma_num_of_pos_strictly_increasing": {
+        "prover": "alt-ergo",
+        "time": 0.025
+      }
+    },
+    "M_m": {
+      "vc_from_elem_i32": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_index_Vec_i32_Global": { "prover": "alt-ergo", "time": 0.019 },
+      "vc_index_mut_Vec_i32_Global": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_len_i32": { "prover": "alt-ergo", "time": 0.011 },
+      "vc_m": { "prover": "z3", "time": 0.009 }
+    },
+    "M_num_of_pos": {
+      "vc_num_of_pos": { "prover": "alt-ergo", "time": 0.021 }
+    }
+  }
+}

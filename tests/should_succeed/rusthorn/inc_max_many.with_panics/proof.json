@@ -1,0 +1,10 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_inc_max_many": {
+      "vc_inc_max_many": { "prover": "alt-ergo", "time": 0.045 },
+      "vc_take_max": { "prover": "alt-ergo", "time": 0.013 }
+    },
+    "M_take_max": { "vc_take_max": { "prover": "alt-ergo", "time": 0.022 } }
+  }
+}

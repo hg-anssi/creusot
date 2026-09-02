@@ -1,0 +1,33 @@
+module M_f
+  use creusot.int.Int32
+  use creusot.prelude.MutBorrow
+  use creusot.prelude.Any
+  
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
+  predicate resolve_refmut_i32 [@inline:trivial] (_1: MutBorrow.t Int32.t) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_i32
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let f (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &x <- (12: Int32.t) ] s1
+      | s1 = MutBorrow.borrow_mut <Int32.t> {x}
+          (fun (_bor: MutBorrow.t Int32.t) -> [ &_3 <- _bor ] [ &x <- _bor.final ] s2)
+      | s2 = [ &b <- _3 ] s3
+      | s3 = [ &_4 <- let (_fst, _snd) = Int32.add_with_overflow b.current (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s4
+      | s4 = {[@expl:Add overflow] not _4.f1} s5
+      | s5 = [ &b <- { b with current = _4.f0 } ] s6
+      | s6 = -{resolve_refmut_i32 b}- s7
+      | s7 = {[@expl:assertion] Int32.to_int x = 13} s8
+      | s8 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & x: Int32.t = Any.any_l ()
+    | & b: MutBorrow.t Int32.t = Any.any_l ()
+    | & _3: MutBorrow.t Int32.t = Any.any_l ()
+    | & _4: tup2_i32_bool = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end

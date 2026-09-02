@@ -1,0 +1,302 @@
+module M_lemma_num_of_pos_increasing
+  use creusot.int.Int32
+  use seq.Seq
+  use int.Int
+  
+  function num_of_pos (i: int) (j: int) (t: Seq.seq Int32.t) : int
+  
+  axiom num_of_pos_def: forall i: int, j: int, t: Seq.seq Int32.t [num_of_pos i j t]. num_of_pos i j t
+      = (if i >= j then
+        0
+      else
+        if Int32.to_int (Seq.get t (j - 1)) > 0 then num_of_pos i (j - 1) t + 1 else num_of_pos i (j - 1) t
+      )
+  
+  predicate well_founded_relation_Int [@inline:trivial] (self: int) (other: int) = self >= 0 /\ self > other
+  
+  meta "rewrite_def" predicate well_founded_relation_Int
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  constant i : int
+  
+  constant j : int
+  
+  constant k : int
+  
+  constant t : Seq.seq Int32.t
+  
+  function lemma_num_of_pos_increasing (i: int) (j: int) (k: int) (t: Seq.seq Int32.t) : ()
+  
+  goal vc_lemma_num_of_pos_increasing: j <= k
+    -> (if j < k then
+      (([@stop_split] [@expl:lemma_num_of_pos_increasing requires] j + 1 <= k)
+        /\ ([@expl:variant decreases] well_founded_relation_Int (k - j) (k - (j + 1))))
+      /\ (([@stop_split] [@expl:lemma_num_of_pos_increasing ensures] num_of_pos i (j + 1) t <= num_of_pos i k t)
+      -> ([@stop_split] [@expl:lemma_num_of_pos_increasing ensures] num_of_pos i j t <= num_of_pos i k t))
+    else
+      [@stop_split] [@expl:lemma_num_of_pos_increasing ensures] num_of_pos i j t <= num_of_pos i k t
+    )
+end
+module M_lemma_num_of_pos_strictly_increasing
+  use creusot.int.Int32
+  use seq.Seq
+  use int.Int
+  
+  function num_of_pos (i: int) (j: int) (t: Seq.seq Int32.t) : int
+  
+  axiom num_of_pos_def: forall i: int, j: int, t: Seq.seq Int32.t [num_of_pos i j t]. num_of_pos i j t
+      = (if i >= j then
+        0
+      else
+        if Int32.to_int (Seq.get t (j - 1)) > 0 then num_of_pos i (j - 1) t + 1 else num_of_pos i (j - 1) t
+      )
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  constant i : int
+  
+  constant t : Seq.seq Int32.t
+  
+  function lemma_num_of_pos_strictly_increasing (i: int) (t: Seq.seq Int32.t) : ()
+  
+  goal vc_lemma_num_of_pos_strictly_increasing: 0 <= i /\ i < Seq.length t
+    -> Int32.to_int (Seq.get t i) > 0
+    -> ([@stop_split] [@expl:lemma_num_of_pos_strictly_increasing ensures] num_of_pos 0 i t < num_of_pos 0 (i + 1) t)
+end
+module M_m
+  use creusot.int.UInt64
+  use seq.Seq
+  use creusot.int.Int32
+  use creusot.prelude.MutBorrow
+  use creusot.prelude.Any
+  use int.Int
+  
+  type t_Vec_i32_Global
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  function view_Vec_i32_Global (self: t_Vec_i32_Global) : Seq.seq Int32.t
+  
+  axiom view_Vec_i32_Global_spec:
+    forall self: t_Vec_i32_Global [view_Vec_i32_Global self]. Seq.length (view_Vec_i32_Global self)
+      <= UInt64.t'int const_MAX
+  
+  let len_i32 (self_: t_Vec_i32_Global) (return (x: UInt64.t)) = any
+    [ return (result: UInt64.t) -> {[@stop_split] [@expl:len ensures] UInt64.t'int result
+      = Seq.length (view_Vec_i32_Global self_)}
+      (! return {result}) ]
+  
+  function num_of_pos (i: int) (j: int) (t: Seq.seq Int32.t) : int
+  
+  axiom num_of_pos_def: forall i: int, j: int, t: Seq.seq Int32.t [num_of_pos i j t]. num_of_pos i j t
+      = (if i >= j then
+        0
+      else
+        if Int32.to_int (Seq.get t (j - 1)) > 0 then num_of_pos i (j - 1) t + 1 else num_of_pos i (j - 1) t
+      )
+  
+  predicate in_bounds_usize [@inline:trivial] (self: UInt64.t) (seq: Seq.seq Int32.t) =
+    UInt64.t'int self < Seq.length seq
+  
+  meta "rewrite_def" predicate in_bounds_usize
+  
+  predicate has_value_usize [@inline:trivial] (self: UInt64.t) (seq: Seq.seq Int32.t) (out: Int32.t) =
+    Seq.get seq (UInt64.t'int self) = out
+  
+  meta "rewrite_def" predicate has_value_usize
+  
+  let index_Vec_i32_Global (self_: t_Vec_i32_Global) (ix: UInt64.t) (panic) (return (x: Int32.t)) = any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_i32_Global self_) result)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:index may_panic] not in_bounds_usize ix (view_Vec_i32_Global self_)} (! panic) ]
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  function index_Vec_i32_Global'0 [@inline:trivial] (self: t_Vec_i32_Global) (ix: int) : Int32.t =
+    Seq.get (view_Vec_i32_Global self) ix
+  
+  meta "rewrite_def" function index_Vec_i32_Global'0
+  
+  let from_elem_i32 (elem: Int32.t) (n: UInt64.t) (return (x: t_Vec_i32_Global)) = any
+    [ return (result: t_Vec_i32_Global) ->
+    {[@stop_split] [@expl:from_elem_i32 ensures] ([@stop_split] [@expl:from_elem ensures #0] Seq.length (view_Vec_i32_Global result)
+        = UInt64.t'int n)
+      /\ ([@stop_split] [@expl:from_elem ensures #1] forall i: int. 0 <= i /\ i < UInt64.t'int n
+        -> index_Vec_i32_Global'0 result i = elem)}
+      (! return {result}) ]
+  
+  function lemma_num_of_pos_strictly_increasing (i: int) (t: Seq.seq Int32.t) : () = ()
+  
+  axiom lemma_num_of_pos_strictly_increasing_spec: forall i: int, t: Seq.seq Int32.t. 0 <= i /\ i < Seq.length t
+      -> Int32.to_int (Seq.get t i) > 0 -> num_of_pos 0 i t < num_of_pos 0 (i + 1) t
+  
+  function lemma_num_of_pos_increasing (i: int) (j: int) (k: int) (t: Seq.seq Int32.t) : ()
+  
+  axiom lemma_num_of_pos_increasing_def:
+    forall i: int, j: int, k: int, t: Seq.seq Int32.t [lemma_num_of_pos_increasing i j k t]. j <= k
+      -> lemma_num_of_pos_increasing i j k t = (if j < k then lemma_num_of_pos_increasing i (j + 1) k t else ())
+  
+  axiom lemma_num_of_pos_increasing_spec: forall i: int, j: int, k: int, t: Seq.seq Int32.t. j <= k
+      -> num_of_pos i j t <= num_of_pos i k t
+  
+  predicate resolve_elswhere_usize [@inline:trivial] (self: UInt64.t) (old': Seq.seq Int32.t) (fin: Seq.seq Int32.t) =
+    forall i: int. 0 <= i /\ i <> UInt64.t'int self /\ i < Seq.length old' -> Seq.get old' i = Seq.get fin i
+  
+  meta "rewrite_def" predicate resolve_elswhere_usize
+  
+  let index_mut_Vec_i32_Global (self_: MutBorrow.t t_Vec_i32_Global) (ix: UInt64.t) (panic)
+    (return (x: MutBorrow.t Int32.t)) = any
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize ix (view_Vec_i32_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_i32_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize ix (view_Vec_i32_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_i32_Global self_.final)
+      = Seq.length (view_Vec_i32_Global self_.current))}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:index_mut may_panic] not in_bounds_usize ix (view_Vec_i32_Global self_.current)}
+      (! panic) ]
+  
+  predicate resolve_refmut_i32 [@inline:trivial] (_1: MutBorrow.t Int32.t) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_i32
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let m (t: t_Vec_i32_Global) (return (x: t_Vec_i32_Global)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &count <- (0: UInt64.t) ] s1 | s1 = [ &i <- (0: UInt64.t) ] s2 | s2 = bb1 ]
+    | bb1 = bb1
+      [ bb1 = {[@expl:loop invariant #0] UInt64.t'int i <= Seq.length (view_Vec_i32_Global t)}
+        {[@expl:loop invariant #1] UInt64.t'int count <= UInt64.t'int i}
+        {[@expl:loop invariant #2] UInt64.t'int count = num_of_pos 0 (UInt64.t'int i) (view_Vec_i32_Global t)}
+        (! s0)
+        [ s0 = len_i32 {t} (fun (_x: UInt64.t) -> [ &_20 <- _x ] s1)
+        | s1 = [ &_18 <- UInt64.lt i _20 ] s2
+        | s2 = any [ br0 -> {_18 = false} (! bb11) | br1 -> {_18} (! bb4) ] ]
+        [ bb4 = s0
+          [ s0 = index_Vec_i32_Global {t} {i}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: Int32.t) -> [ &_25 <- _x ] s1)
+          | s1 = [ &_23 <- Int32.gt _25 (0: Int32.t) ] s2
+          | s2 = any [ br0 -> {_23 = false} (! bb9) | br1 -> {_23} (! bb6) ] ]
+        | bb6 = s0
+          [ s0 = [ &_28 <- let (_fst, _snd) = UInt64.add_with_overflow count (1: UInt64.t) in { f0 = _fst; f1 = _snd } ]
+            s1
+          | s1 = {[@expl:Add overflow] not _28.f1} s2
+          | s2 = [ &count <- _28.f0 ] s3
+          | s3 = bb9 ]
+        | bb9 = s0
+          [ s0 = [ &_29 <- let (_fst, _snd) = UInt64.add_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s1
+          | s1 = {[@expl:Add overflow] not _29.f1} s2
+          | s2 = [ &i <- _29.f0 ] s3
+          | s3 = bb1 ] ] ]
+    | bb11 = s0
+      [ s0 = from_elem_i32 {(0: Int32.t)} {count} (fun (_x: t_Vec_i32_Global) -> [ &u <- _x ] s1)
+      | s1 = [ &count <- (0: UInt64.t) ] s2
+      | s2 = [ &i <- (0: UInt64.t) ] s3
+      | s3 = bb13 ]
+    | bb13 = bb13
+      [ bb13 = {[@expl:loop invariant #0] UInt64.t'int count = num_of_pos 0 (UInt64.t'int i) (view_Vec_i32_Global t)}
+        {[@expl:loop invariant #1] Seq.length (view_Vec_i32_Global u)
+        = num_of_pos 0 (Seq.length (view_Vec_i32_Global t)) (view_Vec_i32_Global t)}
+        (! s0)
+        [ s0 = len_i32 {t} (fun (_x: UInt64.t) -> [ &_44 <- _x ] s1)
+        | s1 = [ &_42 <- UInt64.lt i _44 ] s2
+        | s2 = any [ br0 -> {_42 = false} (! bb25) | br1 -> {_42} (! bb16) ] ]
+        [ bb16 = s0
+          [ s0 = index_Vec_i32_Global {t} {i}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: Int32.t) -> [ &_49 <- _x ] s1)
+          | s1 = [ &_47 <- Int32.gt _49 (0: Int32.t) ] s2
+          | s2 = any [ br0 -> {_47 = false} (! bb23) | br1 -> {_47} (! bb18) ] ]
+        | bb18 = s0
+          [ s0 =
+            {[@expl:assertion] let _ = lemma_num_of_pos_strictly_increasing (UInt64.t'int i) (view_Vec_i32_Global u) in num_of_pos 0 (UInt64.t'int i) (view_Vec_i32_Global t)
+            < num_of_pos 0 (UInt64.t'int i + 1) (view_Vec_i32_Global t)}
+            s1
+          | s1 = {[@expl:assertion] let _ = lemma_num_of_pos_increasing 0 (UInt64.t'int i
+            + 1) (Seq.length (view_Vec_i32_Global t)) (view_Vec_i32_Global t) in UInt64.t'int count
+            < Seq.length (view_Vec_i32_Global u)}
+            s2
+          | s2 = index_Vec_i32_Global {t} {i}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: Int32.t) -> [ &_64 <- _x ] s3)
+          | s3 = MutBorrow.borrow_mut <t_Vec_i32_Global> {u}
+              (fun (_bor: MutBorrow.t t_Vec_i32_Global) -> [ &_68 <- _bor ] [ &u <- _bor.final ] s4)
+          | s4 = index_mut_Vec_i32_Global {_68} {count}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: MutBorrow.t Int32.t) -> [ &_67 <- _x ] s5)
+          | s5 = [ &_67 <- { _67 with current = _64 } ] s6
+          | s6 = -{resolve_refmut_i32 _67}- s7
+          | s7 = [ &_70 <- let (_fst, _snd) = UInt64.add_with_overflow count (1: UInt64.t) in { f0 = _fst; f1 = _snd } ]
+            s8
+          | s8 = {[@expl:Add overflow] not _70.f1} s9
+          | s9 = [ &count <- _70.f0 ] s10
+          | s10 = bb23 ]
+        | bb23 = s0
+          [ s0 = [ &_71 <- let (_fst, _snd) = UInt64.add_with_overflow i (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s1
+          | s1 = {[@expl:Add overflow] not _71.f1} s2
+          | s2 = [ &i <- _71.f0 ] s3
+          | s3 = bb13 ] ] ]
+    | bb25 = s0 [ s0 = [ &_ret <- u ] s1 | s1 = return {_ret} ] ]
+    [ & _ret: t_Vec_i32_Global = Any.any_l ()
+    | & t: t_Vec_i32_Global = t
+    | & count: UInt64.t = Any.any_l ()
+    | & i: UInt64.t = Any.any_l ()
+    | & _18: bool = Any.any_l ()
+    | & _20: UInt64.t = Any.any_l ()
+    | & _23: bool = Any.any_l ()
+    | & _25: Int32.t = Any.any_l ()
+    | & _28: tup2_usize_bool = Any.any_l ()
+    | & _29: tup2_usize_bool = Any.any_l ()
+    | & u: t_Vec_i32_Global = Any.any_l ()
+    | & _42: bool = Any.any_l ()
+    | & _44: UInt64.t = Any.any_l ()
+    | & _47: bool = Any.any_l ()
+    | & _49: Int32.t = Any.any_l ()
+    | & _64: Int32.t = Any.any_l ()
+    | & _67: MutBorrow.t Int32.t = Any.any_l ()
+    | & _68: MutBorrow.t t_Vec_i32_Global = Any.any_l ()
+    | & _70: tup2_usize_bool = Any.any_l ()
+    | & _71: tup2_usize_bool = Any.any_l () ]) [ return (result: t_Vec_i32_Global) -> (! return {result}) ]
+end
+module M_num_of_pos
+  use creusot.int.Int32
+  use seq.Seq
+  use int.Int
+  
+  predicate well_founded_relation_Int [@inline:trivial] (self: int) (other: int) = self >= 0 /\ self > other
+  
+  meta "rewrite_def" predicate well_founded_relation_Int
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  constant i : int
+  
+  constant j : int
+  
+  constant t : Seq.seq Int32.t
+  
+  function num_of_pos (i: int) (j: int) (t: Seq.seq Int32.t) : int
+  
+  goal vc_num_of_pos: if i >= j then
+      true
+    else
+      if Int32.to_int (Seq.get t (j - 1)) > 0 then
+        [@expl:variant decreases] well_founded_relation_Int (j - i) (j - 1 - i)
+      else
+        [@expl:variant decreases] well_founded_relation_Int (j - i) (j - 1 - i)
+    
+
+end

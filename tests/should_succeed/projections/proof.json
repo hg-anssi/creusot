@@ -7,7 +7,7 @@
   ],
   "proofs": {
     "M_copy_out_of_ref": {
-      "vc_copy_out_of_ref": { "prover": "cvc5", "time": 0.01 }
+      "vc_copy_out_of_ref": { "prover": "cvc5", "time": 0.02 }
     },
     "M_copy_out_of_sum": {
       "vc_copy_out_of_sum": { "prover": "cvc5", "time": 0.01 },

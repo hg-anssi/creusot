@@ -244,11 +244,12 @@ module Int$bits_count$BW
   use export bv.BV$bits_count$
   use bv.BV256 as BV256
   use bv.BVConverter_$bits_count$_256
+  use int.EuclideanDivision as ED
   use mach.int.Int
 
-  constant min_sint_as_BV256 : BV256.t = $min_signed_value$
+  constant min_sint_as_BV256 : BV256.t = BV256.neg ($min_signed_value$ : BV256.t)
   constant max_sint_as_BV256 : BV256.t = $max_signed_value$
-  predicate in_bounds [@inline:trivial] (n:int) = - $min_signed_value$ <= n <= $max_unsigned_value$
+  predicate in_bounds [@inline:trivial] (n:int) = - $min_signed_value$ <= n <= $max_signed_value$
 
   function to_BV256 (x: t) : BV256.t = stoBig x
   function of_BV256 (x: BV256.t) : t = toSmall x
@@ -263,9 +264,24 @@ module Int$bits_count$BW
   function shr (a:t) (b:t) : t = asr_bv a b
   function shl (a:t) (b:t) : t = lsl_bv a b
 
-  function add_with_overflow (a:t) (b:t) : (t, bool) = (add a b, not in_bounds(t'int a + t'int b))
-  function sub_with_overflow (a:t) (b:t) : (t, bool) = (sub a b, not in_bounds(t'int a - t'int b))
-  function mul_with_overflow (a:t) (b:t) : (t, bool) = (mul a b, not in_bounds(t'int a * t'int b))
+  function add_with_overflow (a:t) (b:t) : (t, bool) = (add a b, not in_bounds(to_int a + to_int b))
+  function sub_with_overflow (a:t) (b:t) : (t, bool) = (sub a b, not in_bounds(to_int a - to_int b))
+  function mul_with_overflow (a:t) (b:t) : (t, bool) = (mul a b, not in_bounds(to_int a * to_int b))
+
+  predicate mul_in_bounds (a b : t) = in_bounds ((to_int a) * (to_int b))
+ 
+  lemma is_signed_positive_positive : forall x : t. t'int x <= $max_signed_value$ -> is_signed_positive x
+  lemma is_signed_positive_negative : forall x : t. t'int x > $max_signed_value$ -> not is_signed_positive x
+  
+  lemma to_int_sem : forall x : t. ED.mod (to_int x) two_power_size = ED.mod (t'int x) two_power_size
+  lemma mul_sem : forall a, b : t. ED.mod (to_int (mul a b)) two_power_size = ED.mod ((t'int a) * (t'int b)) two_power_size
+  
+  lemma G_pp : forall a, b : t. mul_in_bounds a b -> is_signed_positive a -> is_signed_positive b -> to_int (mul a b) = to_int a * to_int b
+  lemma G_pn : forall a, b : t. mul_in_bounds a b -> is_signed_positive a -> not is_signed_positive b -> to_int (mul a b) = to_int a * to_int b
+  lemma G_np : forall a, b : t. mul_in_bounds a b -> not is_signed_positive a -> is_signed_positive b -> to_int (mul a b) = to_int a * to_int b
+  lemma G_nn : forall a, b : t. mul_in_bounds a b -> not is_signed_positive a -> not is_signed_positive b -> to_int (mul a b) = to_int a * to_int b
+
+  lemma G : forall a, b : t. mul_in_bounds a b -> to_int (mul a b) = to_int a * to_int b
 
   let neg (a:t)
     { [@expl:arithmetic overflow] a <> min_sint }

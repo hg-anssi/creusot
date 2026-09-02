@@ -1,0 +1,105 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_call_fn": {
+      "vc_call_F": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_call_fn_F": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.015 },
+              { "prover": "alt-ergo", "time": 0.017 }
+            ]
+          }
+        ]
+      }
+    },
+    "M_call_fnmut": {
+      "vc_call_fnmut_F": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.008 },
+              { "prover": "alt-ergo", "time": 0.018 },
+              { "prover": "alt-ergo", "time": 0.022 },
+              { "prover": "alt-ergo", "time": 0.022 }
+            ]
+          }
+        ]
+      },
+      "vc_call_mut_F": { "prover": "alt-ergo", "time": 0.017 }
+    },
+    "M_call_fnonce": {
+      "vc_call_fnonce_F": { "tactic": "compute_specified", "children": [] },
+      "vc_call_once_F": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_test1": {
+      "vc_call_fn_ref_F": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_test1_F": { "prover": "alt-ergo", "time": 0.025 }
+    },
+    "M_test10": {
+      "vc_call_fnmut_refmut_F": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_test10_F": { "prover": "alt-ergo", "time": 0.027 }
+    },
+    "M_test11": {
+      "vc_call_fnonce_Box_F_Global": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_test11_F": { "prover": "alt-ergo", "time": 0.021 }
+    },
+    "M_test12": {
+      "vc_call_fnonce_refmut_F": { "prover": "alt-ergo", "time": 0.031 },
+      "vc_test12_F": { "prover": "alt-ergo", "time": 0.026 }
+    },
+    "M_test13": {
+      "vc_call_fnonce_Box_F_Global": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_test13_F": { "prover": "alt-ergo", "time": 0.008 }
+    },
+    "M_test14": {
+      "vc_call_fnmut_F": { "prover": "alt-ergo", "time": 0.025 },
+      "vc_test14_F": { "prover": "alt-ergo", "time": 0.027 }
+    },
+    "M_test15": {
+      "vc_call_fnonce_F": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_test15_F": { "prover": "alt-ergo", "time": 0.026 }
+    },
+    "M_test16": {
+      "vc_call_fnonce_F": { "prover": "alt-ergo", "time": 0.025 },
+      "vc_test16_F": { "prover": "alt-ergo", "time": 0.026 }
+    },
+    "M_test2": {
+      "vc_call_fn_Box_F_Global": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_test2_F": { "prover": "alt-ergo", "time": 0.026 }
+    },
+    "M_test3": {
+      "vc_call_fnmut_ref_F": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_test3_F": { "prover": "alt-ergo", "time": 0.027 }
+    },
+    "M_test4": {
+      "vc_call_fnmut_Box_F_Global": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_test4_F": { "prover": "alt-ergo", "time": 0.022 }
+    },
+    "M_test5": {
+      "vc_call_fnmut_refmut_F": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_test5_F": { "prover": "alt-ergo", "time": 0.026 }
+    },
+    "M_test6": {
+      "vc_call_fnonce_ref_F": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_test6_F": { "prover": "alt-ergo", "time": 0.021 }
+    },
+    "M_test7": {
+      "vc_call_fnonce_Box_F_Global": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_test7_F": { "prover": "alt-ergo", "time": 0.017 }
+    },
+    "M_test8": {
+      "vc_call_fnonce_refmut_F": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_test8_F": { "prover": "alt-ergo", "time": 0.016 }
+    },
+    "M_test9": {
+      "vc_call_fnmut_Box_F_Global": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_test9_F": { "prover": "alt-ergo", "time": 0.021 }
+    }
+  }
+}

@@ -70,6 +70,16 @@ impl Callbacks for ToWhy {
     fn config(&mut self, config: &mut Config) {
         self.set_output_dir(config);
 
+        // With `--enable-panics`, arithmetic overflow becomes a first-class panic. Enabling
+        // overflow checks makes rustc emit `Assert(Overflow)` terminators for `+`/`-`/`*` (and
+        // the `MIN / -1` signed division); `translate_terminator` then routes them to the
+        // function's panic exit when it may panic, exactly like the always-on `BoundsCheck` and
+        // `DivisionByZero` asserts. Without the flag, overflow stays a hard proof obligation
+        // (classic Creusot), so OFF-mode output is unchanged.
+        if self.opts.enable_panics {
+            config.opts.cg.overflow_checks = Some(true);
+        }
+
         config.override_queries = Some(|_sess, providers| {
             // Remove MIR of Pearlite code (logic functions, contracts, assertions, snapshots)
             // One might wonder why not override `mir_promoted` instead: that would be too late because

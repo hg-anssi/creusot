@@ -2,7 +2,7 @@ use crate::{
     backend::{
         self, Why3Generator,
         clone_map::{CloneNames, DepGraphBuilder, Dependency, Kind, Namer},
-        closures::{closure_hist_inv, closure_post, closure_pre},
+        closures::{closure_hist_inv, closure_panics, closure_post, closure_pre},
         logic::{lower_logical_defn, spec_axioms},
         program,
         resolve::{ResolveDef, elaborate_resolve_def, structural_resolve},
@@ -229,7 +229,16 @@ impl<'a, 'ctx, 'tcx> Expander<'a, 'ctx, 'tcx> {
             Some(_) if sig.why_sig.args.is_empty() => DeclKind::Constant,
             _ => DeclKind::Function,
         };
-        let mut decls = if !opaque && let Some(term) = term(ctx, &names, &bound, def_id, subst) {
+        // Without `--enable-panics`, `panic_condition` is defined as `false` everywhere. Off-mode
+        // assumes no closure panics (the historical Creusot assumption); a concrete closure's real
+        // "may only be called where !P" constraint rides its `precondition` (via the driver fold of
+        // `may_panic` into `requires`) instead. Defining it `false` even for an opaque generic `F`
+        // makes the folded `requires(!panic_condition)` on `Fn::call`/HOFs trivial, preserving
+        // backward compatibility.
+        let force_false = !ctx.opts.enable_panics && Intrinsic::PanicCondition.is(ctx, def_id);
+        let mut decls = if force_false {
+            lower_logical_defn(ctx, &names, sig, kind, Term::false_(ctx.tcx), def_id)
+        } else if !opaque && let Some(term) = term(ctx, &names, &bound, def_id, subst) {
             lower_logical_defn(ctx, &names, sig, kind, term, def_id)
         } else {
             let mut decls = val(sig, kind);
@@ -237,6 +246,7 @@ impl<'a, 'ctx, 'tcx> Expander<'a, 'ctx, 'tcx> {
             if matches!(
                 ctx.intrinsic(def_id),
                 Intrinsic::Precondition
+                    | Intrinsic::PanicCondition
                     | Intrinsic::Postcondition
                     | Intrinsic::PostconditionMut
                     | Intrinsic::PostconditionOnce
@@ -256,7 +266,7 @@ impl<'a, 'ctx, 'tcx> Expander<'a, 'ctx, 'tcx> {
 
                 let mut args = vec![Term::unit(ctx.tcx).coerce(subst.type_at(1)), args_tup.clone()];
                 match ctx.intrinsic(def_id) {
-                    Intrinsic::Precondition => (),
+                    Intrinsic::Precondition | Intrinsic::PanicCondition => (),
                     Intrinsic::Postcondition | Intrinsic::PostconditionOnce => {
                         args.push(res.clone())
                     }
@@ -275,6 +285,16 @@ impl<'a, 'ctx, 'tcx> Expander<'a, 'ctx, 'tcx> {
                             pre.implies(call).forall_trig((args_id, subst.type_at(0)), trig);
                         decls.push(Decl::Axiom(Axiom {
                             name: Ident::fresh(ctx.crate_name(), "precondition_fndef"),
+                            rewrite: false,
+                            axiom: lower_pure(ctx, &names, &axiom),
+                        }))
+                    }
+                } else if Intrinsic::PanicCondition.is(ctx, def_id) {
+                    if let Some(pan) = panics_fndef(ctx, &names, did_f, subst_f, args_tup) {
+                        let axiom =
+                            pan.implies(call).forall_trig((args_id, subst.type_at(0)), trig);
+                        decls.push(Decl::Axiom(Axiom {
+                            name: Ident::fresh(ctx.crate_name(), "panic_condition_fndef"),
                             rewrite: false,
                             axiom: lower_pure(ctx, &names, &axiom),
                         }))
@@ -382,6 +402,7 @@ impl<'a, 'ctx, 'tcx> Expander<'a, 'ctx, 'tcx> {
                 Some(subst),
                 &[],
                 name::return_(),
+                None,
                 &mut Default::default(),
             );
 
@@ -991,6 +1012,92 @@ fn pre_fndef<'tcx>(
     Some(Term::let_(pattern, args, pre).span(ctx.def_span(did)))
 }
 
+/// Generate the body of `panic_condition` (twin of [`precondition_term`]): the
+/// panic condition of a closure / `Fn`-implementor, dispatched on the self type.
+fn panic_condition_term<'tcx>(
+    ctx: &Why3Generator<'tcx>,
+    names: &impl Namer<'tcx>,
+    subst: GenericArgsRef<'tcx>,
+    bound: &[Ident],
+) -> Option<Term<'tcx>> {
+    let typing_env = names.typing_env();
+    let &[self_, args] = bound else {
+        panic!("panic_condition must have 2 arguments. Found: {bound:?}")
+    };
+    let ty_self = subst.type_at(1);
+    let self_ = Term::var(self_, ty_self);
+    let args = Term::var(args, subst.type_at(0));
+
+    match ty_self.kind() {
+        TyKind::Closure(did, _) => Some(closure_panics(ctx, did.expect_local(), self_, args)),
+        &TyKind::Ref(_, cl, m) => {
+            let mut subst_pan = subst.to_vec();
+            subst_pan[1] = GenericArg::from(cl);
+            let subst_pan = ctx.mk_args(&subst_pan);
+            let self_ = if m == Mutability::Mut { self_.clone().cur() } else { self_.coerce(cl) };
+            let pan_fn = Intrinsic::PanicCondition.get(ctx);
+            Some(Term::call(ctx.tcx, typing_env, pan_fn, subst_pan, [self_, args]))
+        }
+        TyKind::Adt(def, bsubst) if def.is_box() => {
+            let mut subst_pan = subst.to_vec();
+            subst_pan[1] = bsubst[0];
+            let subst_pan = ctx.mk_args(&subst_pan);
+            let pan_fn = Intrinsic::PanicCondition.get(ctx);
+            let pan_args = [self_.coerce(bsubst.type_at(0)), args];
+            Some(Term::call(ctx.tcx, typing_env, pan_fn, subst_pan, pan_args))
+        }
+        &TyKind::FnDef(mut did, mut subst) => {
+            match TraitResolved::resolve_item(ctx.tcx, typing_env, did, subst) {
+                TraitResolved::NotATraitItem => (),
+                TraitResolved::Instance { def, .. } => (did, subst) = def,
+                TraitResolved::UnknownFound => return None,
+                TraitResolved::NoInstance(..) => unreachable!(),
+            }
+            panics_fndef(ctx, names, did, subst, args)
+        }
+        // Handle `FnGhostWrapper`: it is a transparent forwarder, so its panic condition
+        // is the wrapped closure's (just like its `precondition`/`postcondition` delegate).
+        // A `#[check(ghost)]` closure may carry `#[may_panic(P)]`, and `FnGhostWrapper::call`
+        // propagates it via `#[may_panic(self.panic_condition(args))]`. There is thus no
+        // `FnGhost ⟹ panic_condition ≡ false` law: a ghost closure is dual-use exactly like a
+        // named ghost function — its panic propagates in a `may_panic` program context and folds
+        // to `requires(!P)` in a total (or ghost) context, through the standard `may_panic`
+        // machinery. A non-panicking closure still yields `panic_condition ≡ false` by delegation.
+        TyKind::Adt(def, subst_inner) if Intrinsic::FnGhostWrapper.is(ctx, def.did()) => {
+            let mut subst_pan = subst.to_vec();
+            let closure_ty = def.all_fields().next().unwrap().ty(ctx.tcx, subst_inner);
+            subst_pan[1] = GenericArg::from(closure_ty);
+            let subst_pan = ctx.mk_args(&subst_pan);
+            let pan_fn = Intrinsic::PanicCondition.get(ctx);
+            let pan_args = [self_.proj(0usize.into(), closure_ty), args];
+            Some(Term::call(ctx.tcx, typing_env, pan_fn, subst_pan, pan_args))
+        }
+        _ => None,
+    }
+}
+
+/// The panic condition of a named function (used as an `Fn`-implementor): its own
+/// `panics_disj`. Twin of [`pre_fndef`].
+fn panics_fndef<'tcx>(
+    ctx: &Why3Generator<'tcx>,
+    names: &impl Namer<'tcx>,
+    did: DefId,
+    subst: GenericArgsRef<'tcx>,
+    args: Term<'tcx>,
+) -> Option<Term<'tcx>> {
+    if is_logic(ctx.tcx, did) {
+        return None;
+    }
+    let mut sig = ctx.sig(did).clone().instantiate_and_normalize(ctx, subst, names.typing_env());
+    sig_add_type_invariant_spec(ctx, names.typing_env(), names.source_id(), &mut sig, did);
+    let panics = sig.contract.panics_disj(ctx.tcx);
+    let pattern = Pattern::tuple(
+        sig.inputs.iter().map(|&(nm, span, ty)| Pattern::binder_sp(nm, span, ty)),
+        args.ty,
+    );
+    Some(Term::let_(pattern, args, panics).span(ctx.def_span(did)))
+}
+
 fn fn_mut_hist_inv_term<'tcx>(
     ctx: &Why3Generator<'tcx>,
     typing_env: TypingEnv<'tcx>,
@@ -1214,6 +1321,7 @@ fn term<'tcx>(
         Intrinsic::PostconditionMut => postcondition_mut_term(ctx, names, subst, bound),
         Intrinsic::Postcondition => postcondition_term(ctx, names, subst, bound),
         Intrinsic::Precondition => precondition_term(ctx, names, subst, bound),
+        Intrinsic::PanicCondition => panic_condition_term(ctx, names, subst, bound),
         Intrinsic::HistInv => fn_mut_hist_inv_term(ctx, typing_env, subst, bound),
         Intrinsic::SizeOfLogic => size_of_logic_term(ctx, typing_env, def_id, subst.type_at(0)),
         Intrinsic::SizeOfValLogic => size_of_val_logic_term(ctx, names, subst, bound),

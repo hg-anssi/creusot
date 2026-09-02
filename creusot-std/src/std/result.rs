@@ -47,21 +47,21 @@ extern_spec! {
         fn as_mut(&mut self) -> Result<&mut T, &mut E>;
 
         #[check(ghost)]
-        #[requires(exists<t: T> self == Ok(t))]
+        #[panics(exists<e: E> self == Err(e))]
         #[ensures(Ok(result) == self)]
         fn unwrap(self) -> T
         where
             E: Debug;
 
         #[check(ghost)]
-        #[requires(exists<t: T> self == Ok(t))]
+        #[panics(exists<e: E> self == Err(e))]
         #[ensures(Ok(result) == self)]
         fn expect(self, msg: &str) -> T
         where
             E: Debug;
 
         #[check(ghost)]
-        #[requires(exists<e: E> self == Err(e))]
+        #[panics(exists<t: T> self == Ok(t))]
         #[ensures(Err(result) == self)]
         fn unwrap_err(self) -> E
         where

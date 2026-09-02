@@ -66,13 +66,14 @@ module M_slice_range_inclusive
   let index_mut_slice_u32 (self_: MutBorrow.t (Slice64.slice UInt32.t)) (ix: t_RangeInclusive_usize)
     (return (x: MutBorrow.t (Slice64.slice UInt32.t))) =
   {[@stop_split] [@expl:index_mut_slice_u32 requires] ([@stop_split] [@expl:index_mut 'ix' type invariant] inv_RangeInclusive_usize ix)
-    /\ ([@stop_split] [@expl:index_mut requires] in_bounds_RangeInclusive_usize ix (Slice64.view self_.current))}
+    /\ ([@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_RangeInclusive_usize ix (Slice64.view self_.current))}
     any
     [ return (result: MutBorrow.t (Slice64.slice UInt32.t)) ->
-    {[@stop_split] [@expl:index_mut_slice_u32 ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_RangeInclusive_usize ix (Slice64.view self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeInclusive_usize ix (Slice64.view self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_RangeInclusive_usize ix (Slice64.view self_.current) (Slice64.view self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (Slice64.view self_.final)
+    {[@stop_split] [@expl:index_mut_slice_u32 ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_RangeInclusive_usize ix (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeInclusive_usize ix (Slice64.view self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_RangeInclusive_usize ix (Slice64.view self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_RangeInclusive_usize ix (Slice64.view self_.current) (Slice64.view self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (Slice64.view self_.final)
       = Seq.length (Slice64.view self_.current))}
       (! return {result}) ]
   

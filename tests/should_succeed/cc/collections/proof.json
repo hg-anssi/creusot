@@ -18,7 +18,7 @@
       "vc_difference_T": { "prover": "cvc5", "time": 0.013 },
       "vc_from_iter_HashSet_T_RandomState_Global": {
         "prover": "alt-ergo",
-        "time": 0.036
+        "time": 0.004
       },
       "vc_hashset_difference_T": { "prover": "alt-ergo", "time": 0.177 },
       "vc_into_iter_Copied_Difference_T_RandomState_Global": {
@@ -50,7 +50,7 @@
       "vc_collect_IntoIter_K_V_Global": { "prover": "cvc5", "time": 0.016 },
       "vc_from_iter_HashMap_K_V_RandomState_Global": {
         "prover": "alt-ergo",
-        "time": 0.043
+        "time": 0.021
       },
       "vc_into_iter_HashMap_K_V_RandomState_Global": {
         "prover": "cvc5",
@@ -66,8 +66,8 @@
           {
             "tactic": "split_vc",
             "children": [
-              { "prover": "alt-ergo", "time": 0.024 },
-              { "prover": "alt-ergo", "time": 0.035 },
+              { "prover": "alt-ergo", "time": 0.025 },
+              { "prover": "alt-ergo", "time": 0.012 },
               { "prover": "z3", "time": 0.019 },
               { "prover": "z3", "time": 0.014 },
               { "prover": "z3", "time": 0.019 },
@@ -85,7 +85,7 @@
         "time": 0.04
       },
       "vc_into_iter_Iter_K_V": { "prover": "alt-ergo", "time": 0.021 },
-      "vc_iter_K": { "prover": "cvc5", "time": 0.009 },
+      "vc_iter_K": { "prover": "cvc5", "time": 0.03 },
       "vc_roundtrip_hashmap_iter_K": {
         "tactic": "compute_specified",
         "children": [ { "prover": "z3", "time": 0.038 } ]
@@ -95,7 +95,7 @@
       "vc_collect_IterMut_K_V": { "prover": "cvc5", "time": 0.018 },
       "vc_from_iter_HashMap_ref_K_refmut_V_RandomState_Global": {
         "prover": "alt-ergo",
-        "time": 0.042
+        "time": 0.019
       },
       "vc_into_iter_IterMut_K_V": { "prover": "alt-ergo", "time": 0.013 },
       "vc_iter_mut_K": { "prover": "cvc5", "time": 0.013 },
@@ -108,7 +108,7 @@
       "vc_collect_IntoIter_T_Global": { "prover": "cvc5", "time": 0.016 },
       "vc_from_iter_HashSet_T_RandomState_Global": {
         "prover": "alt-ergo",
-        "time": 0.022
+        "time": 0.01
       },
       "vc_into_iter_HashSet_T_RandomState_Global": {
         "prover": "cvc5",
@@ -124,7 +124,7 @@
       "vc_collect_Iter_T": { "prover": "cvc5", "time": 0.014 },
       "vc_from_iter_HashSet_ref_T_RandomState_Global": {
         "prover": "alt-ergo",
-        "time": 0.034
+        "time": 0.014
       },
       "vc_into_iter_Iter_T": { "prover": "alt-ergo", "time": 0.018 },
       "vc_iter_T": { "prover": "cvc5", "time": 0.014 },

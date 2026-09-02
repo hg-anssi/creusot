@@ -119,10 +119,11 @@ module M_test_range
     Seq.([..]) seq (UInt64.t'int self.start) (UInt64.t'int self.end') = Slice64.view out
   
   let index_Vec_i32_Global'0 (self_: t_Vec_i32_Global) (ix: t_Range_usize) (return (x: Slice64.slice Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_Range_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_Range_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Slice64.slice Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_Range_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_Range_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_Range_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   let len_i32 (self_: Slice64.slice Int32.t) (return (x: UInt64.t)) = any
@@ -153,13 +154,14 @@ module M_test_range
   
   let index_mut_Vec_i32_Global (self_: MutBorrow.t t_Vec_i32_Global) (ix: t_Range_usize)
     (return (x: MutBorrow.t (Slice64.slice Int32.t))) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_Range_usize ix (view_Vec_i32_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_Range_usize ix (view_Vec_i32_Global self_.current)}
     any
     [ return (result: MutBorrow.t (Slice64.slice Int32.t)) ->
-    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_Range_usize ix (view_Vec_i32_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_Range_usize ix (view_Vec_i32_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_Range_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_i32_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_Range_usize ix (view_Vec_i32_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_Range_usize ix (view_Vec_i32_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_Range_usize ix (view_Vec_i32_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_Range_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_i32_Global self_.final)
       = Seq.length (view_Vec_i32_Global self_.current))}
       (! return {result}) ]
   
@@ -183,10 +185,11 @@ module M_test_range
   meta "rewrite_def" predicate has_value_usize
   
   let index_Vec_i32_Global'1 (self_: t_Vec_i32_Global) (ix: UInt64.t) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000
@@ -497,10 +500,11 @@ module M_test_range_from
     Seq.([..]) seq (UInt64.t'int self.start) (Seq.length seq) = Slice64.view out
   
   let index_Vec_i32_Global'0 (self_: t_Vec_i32_Global) (ix: t_RangeFrom_usize) (return (x: Slice64.slice Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_RangeFrom_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_RangeFrom_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Slice64.slice Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_RangeFrom_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_RangeFrom_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_RangeFrom_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   let len_i32 (self_: Slice64.slice Int32.t) (return (x: UInt64.t)) = any
@@ -530,13 +534,14 @@ module M_test_range_from
   
   let index_mut_Vec_i32_Global (self_: MutBorrow.t t_Vec_i32_Global) (ix: t_RangeFrom_usize)
     (return (x: MutBorrow.t (Slice64.slice Int32.t))) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_RangeFrom_usize ix (view_Vec_i32_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_RangeFrom_usize ix (view_Vec_i32_Global self_.current)}
     any
     [ return (result: MutBorrow.t (Slice64.slice Int32.t)) ->
-    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_RangeFrom_usize ix (view_Vec_i32_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeFrom_usize ix (view_Vec_i32_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_RangeFrom_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_i32_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_RangeFrom_usize ix (view_Vec_i32_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeFrom_usize ix (view_Vec_i32_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_RangeFrom_usize ix (view_Vec_i32_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_RangeFrom_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_i32_Global self_.final)
       = Seq.length (view_Vec_i32_Global self_.current))}
       (! return {result}) ]
   
@@ -560,10 +565,11 @@ module M_test_range_from
   meta "rewrite_def" predicate has_value_usize
   
   let index_Vec_i32_Global'1 (self_: t_Vec_i32_Global) (ix: UInt64.t) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000
@@ -798,10 +804,11 @@ module M_test_range_full
   predicate has_value_RangeFull (self: ()) (seq: Seq.seq Int32.t) (out: Slice64.slice Int32.t) = seq = Slice64.view out
   
   let index_Vec_i32_Global'0 (self_: t_Vec_i32_Global) (ix: ()) (return (x: Slice64.slice Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_RangeFull ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_RangeFull ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Slice64.slice Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_RangeFull ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_RangeFull ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_RangeFull ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   let len_i32 (self_: Slice64.slice Int32.t) (return (x: UInt64.t)) = any
@@ -813,13 +820,14 @@ module M_test_range_full
   
   let index_mut_Vec_i32_Global (self_: MutBorrow.t t_Vec_i32_Global) (ix: ())
     (return (x: MutBorrow.t (Slice64.slice Int32.t))) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_RangeFull ix (view_Vec_i32_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_RangeFull ix (view_Vec_i32_Global self_.current)}
     any
     [ return (result: MutBorrow.t (Slice64.slice Int32.t)) ->
-    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_RangeFull ix (view_Vec_i32_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeFull ix (view_Vec_i32_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_RangeFull ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_i32_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_RangeFull ix (view_Vec_i32_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeFull ix (view_Vec_i32_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_RangeFull ix (view_Vec_i32_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_RangeFull ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_i32_Global self_.final)
       = Seq.length (view_Vec_i32_Global self_.current))}
       (! return {result}) ]
   
@@ -843,10 +851,11 @@ module M_test_range_full
   meta "rewrite_def" predicate has_value_usize
   
   let index_Vec_i32_Global'1 (self_: t_Vec_i32_Global) (ix: UInt64.t) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000
@@ -1072,10 +1081,11 @@ module M_test_range_to
     Seq.([..]) seq 0 (UInt64.t'int self.end') = Slice64.view out
   
   let index_Vec_i32_Global'0 (self_: t_Vec_i32_Global) (ix: t_RangeTo_usize) (return (x: Slice64.slice Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_RangeTo_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_RangeTo_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Slice64.slice Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_RangeTo_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_RangeTo_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_RangeTo_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   let len_i32 (self_: Slice64.slice Int32.t) (return (x: UInt64.t)) = any
@@ -1105,13 +1115,14 @@ module M_test_range_to
   
   let index_mut_Vec_i32_Global (self_: MutBorrow.t t_Vec_i32_Global) (ix: t_RangeTo_usize)
     (return (x: MutBorrow.t (Slice64.slice Int32.t))) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_RangeTo_usize ix (view_Vec_i32_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_RangeTo_usize ix (view_Vec_i32_Global self_.current)}
     any
     [ return (result: MutBorrow.t (Slice64.slice Int32.t)) ->
-    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_RangeTo_usize ix (view_Vec_i32_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeTo_usize ix (view_Vec_i32_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_RangeTo_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_i32_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_RangeTo_usize ix (view_Vec_i32_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeTo_usize ix (view_Vec_i32_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_RangeTo_usize ix (view_Vec_i32_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_RangeTo_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_i32_Global self_.final)
       = Seq.length (view_Vec_i32_Global self_.current))}
       (! return {result}) ]
   
@@ -1135,10 +1146,11 @@ module M_test_range_to
   meta "rewrite_def" predicate has_value_usize
   
   let index_Vec_i32_Global'1 (self_: t_Vec_i32_Global) (ix: UInt64.t) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000
@@ -1367,10 +1379,11 @@ module M_test_range_to_inclusive
   
   let index_Vec_i32_Global'0 (self_: t_Vec_i32_Global) (ix: t_RangeToInclusive_usize)
     (return (x: Slice64.slice Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_RangeToInclusive_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_RangeToInclusive_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Slice64.slice Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_RangeToInclusive_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_RangeToInclusive_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_RangeToInclusive_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   let len_i32 (self_: Slice64.slice Int32.t) (return (x: UInt64.t)) = any
@@ -1402,13 +1415,14 @@ module M_test_range_to_inclusive
   
   let index_mut_Vec_i32_Global (self_: MutBorrow.t t_Vec_i32_Global) (ix: t_RangeToInclusive_usize)
     (return (x: MutBorrow.t (Slice64.slice Int32.t))) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_RangeToInclusive_usize ix (view_Vec_i32_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_RangeToInclusive_usize ix (view_Vec_i32_Global self_.current)}
     any
     [ return (result: MutBorrow.t (Slice64.slice Int32.t)) ->
-    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_RangeToInclusive_usize ix (view_Vec_i32_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeToInclusive_usize ix (view_Vec_i32_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_RangeToInclusive_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_i32_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_i32_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_RangeToInclusive_usize ix (view_Vec_i32_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_RangeToInclusive_usize ix (view_Vec_i32_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_RangeToInclusive_usize ix (view_Vec_i32_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_RangeToInclusive_usize ix (view_Vec_i32_Global self_.current) (view_Vec_i32_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_i32_Global self_.final)
       = Seq.length (view_Vec_i32_Global self_.current))}
       (! return {result}) ]
   
@@ -1432,10 +1446,11 @@ module M_test_range_to_inclusive
   meta "rewrite_def" predicate has_value_usize
   
   let index_Vec_i32_Global'1 (self_: t_Vec_i32_Global) (ix: UInt64.t) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_i32_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_i32_Global self_)}
     any
     [ return (result: Int32.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_i32_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_i32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_i32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_i32_Global self_) result)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000

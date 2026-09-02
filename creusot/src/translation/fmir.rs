@@ -98,7 +98,11 @@ pub enum StatementKind<'tcx> {
         check: bool,  // Whether we generate a VC for this assertion
         assume: bool, // Whether this assertion stays in context
     },
-    Call(Place<'tcx>, DefId, GenericArgsRef<'tcx>, Box<[Operand<'tcx>]>, Span),
+    /// The trailing `bool` is `true` when the call originates from a `ghost!`
+    /// block: ghost code is erased and cannot panic operationally, so a `may_panic`
+    /// callee's panic must be discharged as `!P` at this site rather than routed to
+    /// the enclosing function's panic exit (even when that function may panic).
+    Call(Place<'tcx>, DefId, GenericArgsRef<'tcx>, Box<[Operand<'tcx>]>, Span, bool),
 }
 
 #[derive(Clone, Debug, TypeFoldable, TypeVisitable)]
@@ -165,6 +169,10 @@ pub enum Terminator<'tcx> {
     Switch(self::Operand<'tcx>, Span, Branches<'tcx>),
     Return,
     Abort(Span),
+    /// Exit through the "panic" outcome of the function: the panic condition
+    /// of the enclosing function must be proved, and the function does not
+    /// return. Only emitted in functions that are allowed to panic.
+    Panic(Span),
 }
 
 #[derive(Clone, Debug, TypeFoldable, TypeVisitable)]
@@ -209,6 +217,7 @@ impl Terminator<'_> {
             },
             Terminator::Return => Box::new(empty()),
             Terminator::Abort(_) => Box::new(empty()),
+            Terminator::Panic(_) => Box::new(empty()),
         }
     }
 
@@ -230,6 +239,7 @@ impl Terminator<'_> {
             },
             Terminator::Return => Box::new(empty()),
             Terminator::Abort(_) => Box::new(empty()),
+            Terminator::Panic(_) => Box::new(empty()),
         }
     }
 }
@@ -527,7 +537,7 @@ pub(crate) fn super_visit_stmt<'tcx, V: FmirVisitor<'tcx>>(
             visitor.visit_place(rhs);
         }
         StatementKind::Assertion { cond, .. } => visitor.visit_term(cond),
-        StatementKind::Call(place, _, _, operands, _) => {
+        StatementKind::Call(place, _, _, operands, _, _) => {
             visitor.visit_place(place);
             for operand in operands {
                 visitor.visit_operand(operand);
@@ -559,6 +569,7 @@ pub(crate) fn super_visit_terminator<'tcx, V: FmirVisitor<'tcx>>(
         Terminator::Switch(op, _, _) => visitor.visit_operand(op),
         Terminator::Return => (),
         Terminator::Abort(_) => (),
+        Terminator::Panic(_) => (),
     }
 }
 
@@ -660,7 +671,7 @@ pub(crate) fn super_visit_mut_stmt<'tcx, V: FmirVisitorMut<'tcx>>(
             visitor.visit_mut_place(rhs);
         }
         StatementKind::Assertion { cond, .. } => visitor.visit_mut_term(cond),
-        StatementKind::Call(place, _, _, operands, _) => {
+        StatementKind::Call(place, _, _, operands, _, _) => {
             visitor.visit_mut_place(place);
             for operand in operands {
                 visitor.visit_mut_operand(operand);
@@ -693,6 +704,7 @@ pub(crate) fn super_visit_mut_terminator<'tcx, V: FmirVisitorMut<'tcx>>(
         Terminator::Switch(op, _, _) => visitor.visit_mut_operand(op),
         Terminator::Return => (),
         Terminator::Abort(_) => (),
+        Terminator::Panic(_) => (),
     }
 }
 

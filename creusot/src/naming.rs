@@ -340,6 +340,9 @@ pub mod name {
     static_idents! {
         self_ => "self",
         result => "result",
+        // Name of the extra continuation parameter of Coma handlers translating
+        // functions that are allowed to panic.
+        panic_ => "panic",
         return_ => "return" // return is recognized as a keyword by the printer, but still allowed as a name for a
                             // continuation. We use this to make sure that this name never conflict with another name,
                             // and thus we can use the suffix 'post'return

@@ -1,0 +1,54 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_common__trait_ExactSizeIterator__is_empty": {
+      "vc_is_empty_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_common__trait_ExactSizeIterator__len": {
+      "vc_eq_Option_usize": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.021 }
+    },
+    "M_impl_ExactSizeIterator_for_Take_I__size_hint_exact": {
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_size_hint_Take_I": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_size_hint_exact_Take_I": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_impl_ExactSizeIterator_for_Take_I__size_hint_exact__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_size_hint_Take_I": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_impl_Iterator_for_Take_I__next": {
+      "vc_next_I": { "prover": "alt-ergo", "time": 0.013 },
+      "vc_next_Take_I": { "prover": "alt-ergo", "time": 0.049 }
+    },
+    "M_impl_Iterator_for_Take_I__next__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.03 }
+    },
+    "M_impl_Iterator_for_Take_I__produces_refl": {
+      "vc_produces_refl_Take_I": { "prover": "alt-ergo", "time": 0.039 }
+    },
+    "M_impl_Iterator_for_Take_I__produces_refl__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.027 }
+    },
+    "M_impl_Iterator_for_Take_I__produces_trans": {
+      "vc_produces_trans_Take_I": { "prover": "alt-ergo", "time": 0.029 }
+    },
+    "M_impl_Iterator_for_Take_I__produces_trans__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.03 }
+    },
+    "M_impl_Iterator_for_Take_I__size_hint": {
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_min_usize": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_size_hint_Take_I": { "prover": "alt-ergo", "time": 0.058 }
+    },
+    "M_impl_Iterator_for_Take_I__size_hint__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.045 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.022 }
+    }
+  }
+}

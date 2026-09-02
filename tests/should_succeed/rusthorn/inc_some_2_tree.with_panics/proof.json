@@ -1,0 +1,24 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_impl_Tree__lemma_sum_nonneg": {
+      "vc_lemma_sum_nonneg": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_impl_Tree__sum_x": {
+      "vc_elim_Node": { "prover": "alt-ergo", "time": 0.019 },
+      "vc_sum_x": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_sum_x'0": { "prover": "alt-ergo", "time": 0.093 }
+    },
+    "M_impl_Tree__take_some_rest": {
+      "vc_elim_Node": { "prover": "alt-ergo", "time": 0.028 },
+      "vc_random": { "prover": "alt-ergo", "time": 0.039 },
+      "vc_take_some_rest": { "prover": "alt-ergo", "time": 0.036 },
+      "vc_take_some_rest'0": { "prover": "alt-ergo", "time": 0.058 }
+    },
+    "M_inc_some_2_tree": {
+      "vc_inc_some_2_tree": { "prover": "z3", "time": 0.01 },
+      "vc_sum_x": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_take_some_rest": { "prover": "alt-ergo", "time": 0.024 }
+    }
+  }
+}

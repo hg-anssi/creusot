@@ -50,7 +50,7 @@ pub trait IteratorSpec: Iterator {
 
     #[check(ghost)]
     #[requires(forall<e, i2> self.produces(Seq::singleton(e), i2) && inv(e) ==>
-                    func.precondition((e, Snapshot::new(Seq::empty()))))]
+                    func.precondition((e, Snapshot::new(Seq::empty()))) && !func.panic_condition((e, Snapshot::new(Seq::empty()))) )]
     #[requires(MapInv::<Self, F>::reinitialize())]
     #[requires(MapInv::<Self, F>::preservation(self, func))]
     #[ensures(result == MapInv { iter: self, func, produced: Snapshot::new(Seq::empty())})]
@@ -148,6 +148,9 @@ extern_spec! {
                 #[check(ghost)]
                 #[requires(forall<e, i2> self.produces(Seq::singleton(e), i2) && inv(e) ==>
                                 f.precondition((e,)))]
+                // Panicing is not allowed for delayed computation. This constraint may be released in future released
+                #[requires(forall<e, i2> self.produces(Seq::singleton(e), i2) && inv(e) ==>
+                                !f.panic_condition((e,)))]
                 #[requires(map::reinitialize::<Self, B, F>())]
                 #[requires(map::preservation::<Self, B, F>(self, f))]
                 #[ensures(result.iter() == self && result.func() == f)]
@@ -157,6 +160,8 @@ extern_spec! {
                 #[check(ghost)]
                 #[requires(filter::immutable(f))]
                 #[requires(filter::no_precondition(f))]
+                // Panicing is not allowed for delayed computation. This constraint may be released in future released
+                #[requires(filter::no_panic(f))]
                 #[requires(filter::precise(f))]
                 #[ensures(result.iter() == self && result.func() == f)]
                 fn filter<P>(self, f: P) -> Filter<Self, P>
@@ -165,6 +170,8 @@ extern_spec! {
                 #[check(ghost)]
                 #[requires(filter_map::immutable(f))]
                 #[requires(filter_map::no_precondition(f))]
+                // Panicing is not allowed for delayed computation. This constraint may be released in future released
+                #[requires(filter_map::no_panic(f))]
                 #[requires(filter_map::precise(f))]
                 #[ensures(result.iter() == self && result.func() == f)]
                 fn filter_map<B, F>(self, f: F) -> FilterMap<Self, F>

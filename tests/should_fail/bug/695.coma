@@ -17,6 +17,10 @@ module M_inversed_if
   
   predicate precondition_C (self: t_C) (args: ())
   
+  predicate panic_condition_C (self: t_C) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_C
+  
   predicate postcondition_once_C (self: t_C) (args: ()) (result: bool)
   
   predicate postcondition_mut_C (self: t_C) (args: ()) (result_state: t_C) (result: bool)
@@ -66,7 +70,8 @@ module M_inversed_if
   
   let call_C (self_: t_C) (arg: ()) (return (x: bool)) =
   {[@stop_split] [@expl:call_C requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_C self_)
-    /\ ([@stop_split] [@expl:call requires] precondition_C self_ arg)}
+    /\ ([@stop_split] [@expl:call requires] precondition_C self_ arg)
+    /\ ([@stop_split] [@expl:call requires (no panic)] not panic_condition_C self_ arg)}
     any
     [ return (result: bool) -> {[@stop_split] [@expl:call ensures] postcondition_C self_ arg result}
       (! return {result}) ]
@@ -77,11 +82,16 @@ module M_inversed_if
   
   predicate precondition_B (self: t_B) (args: bool)
   
+  predicate panic_condition_B (self: t_B) (args: bool) = false
+  
+  meta "rewrite_def" predicate panic_condition_B
+  
   predicate postcondition_once_B (self: t_B) (args: bool) (result: ())
   
   let call_once_B (self_: t_B) (arg: bool) (return (x: ())) =
   {[@stop_split] [@expl:call_once_B requires] ([@stop_split] [@expl:call_once 'self_' type invariant] inv_B self_)
-    /\ ([@stop_split] [@expl:call_once requires] precondition_B self_ arg)}
+    /\ ([@stop_split] [@expl:call_once requires] precondition_B self_ arg)
+    /\ ([@stop_split] [@expl:call_once requires (no panic)] not panic_condition_B self_ arg)}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:call_once ensures] postcondition_once_B self_ arg result}
       (! return {result}) ]
@@ -93,28 +103,31 @@ module M_inversed_if
   let inversed_if_C (cond: t_C) (branch: t_B) (return (x: ())) =
   {[@stop_split] [@expl:inversed_if_C requires] ([@stop_split] [@expl:inversed_if 'cond' type invariant] inv_C cond)
     /\ ([@stop_split] [@expl:inversed_if 'branch' type invariant] inv_B branch)
-    /\ ([@stop_split] [@expl:inversed_if requires] precondition_C cond () /\ (forall b: bool. precondition_B branch b))}
+    /\ ([@stop_split] [@expl:inversed_if requires] precondition_C cond () /\ (forall b: bool. precondition_B branch b))
+    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #0] not panic_condition_C cond ())
+    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #1] not panic_condition_B branch true)
+    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #2] not panic_condition_B branch false)}
     (! bb0
     [ bb0 = s0
       [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_C cond} any) ]
       | s1 = -{resolve_C cond}- s2
-      | s2 = call_C {cond} {_11} (fun (_x: bool) -> [ &_9 <- _x ] s3)
-      | s3 = any [ br0 -> {_9 = false} (! bb3) | br1 -> {_9} (! bb2) ] ]
+      | s2 = call_C {cond} {_17} (fun (_x: bool) -> [ &_15 <- _x ] s3)
+      | s3 = any [ br0 -> {_15 = false} (! bb3) | br1 -> {_15} (! bb2) ] ]
     | bb2 = s0
-      [ s0 = [ &_15 <- false ] s1
-      | s1 = call_once_B {branch} {_15} (fun (_x: ()) -> [ &_ret <- _x ] s2)
+      [ s0 = [ &_21 <- false ] s1
+      | s1 = call_once_B {branch} {_21} (fun (_x: ()) -> [ &_ret <- _x ] s2)
       | s2 = return {_ret} ]
     | bb3 = s0
-      [ s0 = [ &_13 <- true ] s1
-      | s1 = call_once_B {branch} {_13} (fun (_x: ()) -> [ &_ret <- _x ] s2)
+      [ s0 = [ &_19 <- true ] s1
+      | s1 = call_once_B {branch} {_19} (fun (_x: ()) -> [ &_ret <- _x ] s2)
       | s2 = return {_ret} ] ]
     [ & _ret: () = Any.any_l ()
     | & cond: t_C = cond
     | & branch: t_B = branch
-    | & _9: bool = Any.any_l ()
-    | & _11: () = Any.any_l ()
-    | & _13: bool = Any.any_l ()
-    | & _15: bool = Any.any_l () ])
+    | & _15: bool = Any.any_l ()
+    | & _17: () = Any.any_l ()
+    | & _19: bool = Any.any_l ()
+    | & _21: bool = Any.any_l () ])
     [ return (result: ()) -> {[@stop_split] [@expl:inversed_if ensures] exists b: bool. postcondition_C cond () b
         /\ postcondition_once_B branch (not b) ()}
       (! return {result}) ]
@@ -250,6 +263,14 @@ module M_valid
   
   meta "rewrite_def" predicate precondition_closure2
   
+  predicate panic_condition_closure1 (self: closure1) (args: ()) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure1
+  
+  predicate panic_condition_closure2 (self: closure2) (args: bool) = false
+  
+  meta "rewrite_def" predicate panic_condition_closure2
+  
   predicate postcondition_once_closure1 (self: closure1) (args: ()) (result: bool) =
     result = UInt32.gt self.c0 (7: UInt32.t)
   
@@ -311,8 +332,11 @@ module M_valid
       = (postcondition_closure1 self args res /\ self = res_state)
   
   let inversed_if_closure1 (cond: closure1) (branch: closure2) (return (x: ())) =
-  {[@stop_split] [@expl:inversed_if requires] precondition_closure1 cond ()
-    /\ (forall b: bool. precondition_closure2 branch b)}
+  {[@stop_split] [@expl:inversed_if_closure1 requires] ([@stop_split] [@expl:inversed_if requires] precondition_closure1 cond ()
+      /\ (forall b: bool. precondition_closure2 branch b))
+    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #0] not panic_condition_closure1 cond ())
+    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #1] not panic_condition_closure2 branch true)
+    /\ ([@stop_split] [@expl:inversed_if requires (no panic) #2] not panic_condition_closure2 branch false)}
     any
     [ return (result: ()) -> {[@stop_split] [@expl:inversed_if ensures] exists b: bool. postcondition_closure1 cond () b
         /\ postcondition_once_closure2 branch (not b) ()}

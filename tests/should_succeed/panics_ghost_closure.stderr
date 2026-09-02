@@ -1,0 +1,10 @@
+warning: unused variable: `n`
+  --> panics_ghost_closure.rs:85:35
+   |
+85 | pub fn use_closure_in_ghost_value(n: u32) {
+   |                                   ^ help: if this is intentional, prefix it with an underscore: `_n`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: 1 warning emitted
+

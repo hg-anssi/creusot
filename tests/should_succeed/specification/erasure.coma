@@ -8,11 +8,16 @@ module M_apply
   
   predicate precondition_F (self: t_F) (args: Int32.t)
   
+  predicate panic_condition_F (self: t_F) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_F
+  
   predicate postcondition_once_F (self: t_F) (args: Int32.t) (result: Int32.t)
   
   let call_once_F (self_: t_F) (arg: Int32.t) (return (x: Int32.t)) =
   {[@stop_split] [@expl:call_once_F requires] ([@stop_split] [@expl:call_once 'self_' type invariant] inv_F self_)
-    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)}
+    /\ ([@stop_split] [@expl:call_once requires] precondition_F self_ arg)
+    /\ ([@stop_split] [@expl:call_once requires (no panic)] not panic_condition_F self_ arg)}
     any
     [ return (result: Int32.t) -> {[@stop_split] [@expl:call_once ensures] postcondition_once_F self_ arg result}
       (! return {result}) ]
@@ -23,7 +28,7 @@ module M_apply
   
   let apply_F (f: t_F) (return (x: Int32.t)) =
   {[@stop_split] [@expl:apply_F requires] ([@stop_split] [@expl:apply 'f' type invariant] inv_F f)
-    /\ ([@stop_split] [@expl:apply requires] precondition_F f (0: Int32.t))}
+    /\ ([@stop_split] [@expl:apply requires] precondition_F f (0: Int32.t) /\ not panic_condition_F f (0: Int32.t))}
     (! bb0
     [ bb0 = s0
       [ s0 = [ &_5 <- (0: Int32.t) ] s1
@@ -39,7 +44,12 @@ module M_apply_test
   
   meta "rewrite_def" predicate precondition_foo
   
-  let apply_foo (f: ()) (return (x: Int32.t)) = {[@stop_split] [@expl:apply requires] precondition_foo f (0: Int32.t)}
+  predicate panic_condition_foo (self: ()) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_foo
+  
+  let apply_foo (f: ()) (return (x: Int32.t)) = {[@stop_split] [@expl:apply requires] precondition_foo f (0: Int32.t)
+    /\ not panic_condition_foo f (0: Int32.t)}
     any [ return (result: Int32.t) -> (! return {result}) ]
   
   meta "compute_max_steps" 1000000
@@ -58,7 +68,12 @@ module M_apply_test2
   
   meta "rewrite_def" predicate precondition_foo3
   
-  let apply_foo3 (f: ()) (return (x: Int32.t)) = {[@stop_split] [@expl:apply requires] precondition_foo3 f (0: Int32.t)}
+  predicate panic_condition_foo3 (self: ()) (args: Int32.t) = false
+  
+  meta "rewrite_def" predicate panic_condition_foo3
+  
+  let apply_foo3 (f: ()) (return (x: Int32.t)) = {[@stop_split] [@expl:apply requires] precondition_foo3 f (0: Int32.t)
+    /\ not panic_condition_foo3 f (0: Int32.t)}
     any [ return (result: Int32.t) -> (! return {result}) ]
   
   meta "compute_max_steps" 1000000

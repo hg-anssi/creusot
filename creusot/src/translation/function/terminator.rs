@@ -31,7 +31,46 @@ use std::collections::{HashMap, HashSet};
 // rather than switching on discriminant since WhyML doesn't have integer
 // patterns in match expressions.
 
+/// Functions through which `panic!`-like macros enter the program. When the
+/// enclosing function is allowed to panic, calls to these are translated to
+/// [`Terminator::Panic`] instead of requiring the call site to be unreachable.
+fn is_panic_entry_point(
+    tcx: rustc_middle::ty::TyCtxt<'_>,
+    def_id: rustc_hir::def_id::DefId,
+) -> bool {
+    use rustc_hir::LangItem;
+    [
+        LangItem::Panic,
+        LangItem::PanicFmt,
+        LangItem::PanicDisplay,
+        LangItem::PanicNounwind,
+        LangItem::BeginPanic,
+    ]
+    .into_iter()
+    .any(|li| tcx.is_lang_item(def_id, li))
+}
+
 impl<'tcx> BodyTranslator<'_, 'tcx> {
+    /// Whether the function whose body is being translated is allowed to panic,
+    /// i.e. its contract has a panic condition. In that case, panicking program
+    /// points become jumps to the function's "panic" exit (which requires
+    /// proving the panic condition) instead of unreachable points.
+    fn may_panic(&self) -> bool {
+        self.body_id.promoted.is_none() && self.ctx.sig(self.body_id.def_id).contract.may_panic()
+    }
+
+    /// Whether the program point `loc` lies inside a `ghost!` block
+    /// (`#[creusot::ghost_block]`). Ghost code is erased and has no operational
+    /// panic outcome, so panic-producing points there must be discharged as proof
+    /// obligations ("prove this cannot panic") rather than routed to the enclosing
+    /// function's panic exit — *even when that function itself may panic*. In other
+    /// words, a ghost context is always a local "cannot panic" context, so
+    /// `may_panic(P)` behaves there exactly like `requires(!P)`.
+    fn in_ghost_block(&self, loc: Location) -> bool {
+        let span = self.body.source_info(loc).span;
+        self.ghost_spans.iter().any(|g| g.contains(span))
+    }
+
     pub fn translate_terminator(&mut self, terminator: &mir::Terminator<'tcx>, loc: Location) {
         let span = terminator.source_info.span;
         self.resolve_at(loc, span);
@@ -54,6 +93,7 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                 else {
                     self.fatal_error(fn_span, "unsupported function call type").emit()
                 };
+                let mut panic_exit = false;
                 if Intrinsic::SnapshotFromFn.is(self.ctx, fun_def_id) {
                     let GenericArgKind::Type(ty) = subst.get(1).unwrap().kind() else {
                         unreachable!()
@@ -102,7 +142,17 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                         let (fun_def_id, subst) =
                             tr_res.to_opt(fun_def_id, subst).expect("could not find instance");
                         let sig = self.ctx.sig(fun_def_id);
-                        if sig.contract.extern_no_spec
+                        if self.may_panic()
+                            && !self.in_ghost_block(loc)
+                            && is_panic_entry_point(self.tcx(), fun_def_id)
+                        {
+                            // In a function that is allowed to panic, an explicit
+                            // `panic!`-like call jumps to the panic exit (which
+                            // requires proving the panic condition) instead of
+                            // requiring the call site to be unreachable.
+                            panic_exit = true;
+                            target = None;
+                        } else if sig.contract.extern_no_spec
                             && let Some(lint_root) =
                                 self.body.source_info(loc).scope.lint_root(&self.body.source_scopes)
                         {
@@ -114,12 +164,13 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                                 Diagnostics::ContractlessExternalFunction { name, span },
                             );
                         }
-                        if sig.contract.is_requires_false()
-                            && !matches!(
-                                self.ctx.intrinsic(fun_def_id),
-                                Intrinsic::GhostDerefMut | Intrinsic::GhostDeref,
-                            )
-                            && known
+                        if panic_exit
+                            || (sig.contract.is_requires_false()
+                                && !matches!(
+                                    self.ctx.intrinsic(fun_def_id),
+                                    Intrinsic::GhostDerefMut | Intrinsic::GhostDeref,
+                                )
+                                && known)
                         {
                             target = None
                         } else {
@@ -131,6 +182,7 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                                     subst,
                                     func_args,
                                     span,
+                                    self.in_ghost_block(loc),
                                 ),
                                 span: span.source_callsite(),
                             });
@@ -141,39 +193,66 @@ impl<'tcx> BodyTranslator<'_, 'tcx> {
                 if let Some(bb) = target {
                     self.resolve_at(loc.successor_within_block(), span);
                     Terminator::Goto(bb)
+                } else if panic_exit {
+                    Terminator::Panic(terminator.source_info.span)
                 } else {
                     Terminator::Abort(terminator.source_info.span)
                 }
             }
             Assert { cond, expected, msg, target, unwind: _ } => {
-                let &(Operand::Copy(pl) | Operand::Move(pl)) = cond else {
-                    self.ctx.dcx().span_bug(span, "unexpected operand in assert")
-                };
-                let pl = self.translate_place(pl, span);
-                let mut cond = projections_term(
-                    self.ctx,
-                    self.typing_env(),
-                    Term::var(pl.local, self.vars[&pl.local].ty),
-                    &pl.projection,
-                    |e| e,
-                    None,
-                    |id| Term::var(*id, self.tcx().types.usize),
-                    span,
-                );
-                cond = cond.span(span);
-                if !expected {
-                    cond = Term {
-                        ty: cond.ty,
-                        span: cond.span,
-                        kind: TermKind::Unary { op: UnOp::Not, arg: Box::new(cond) },
+                if self.may_panic() && !self.in_ghost_block(loc) {
+                    // The function is allowed to panic: instead of requiring the
+                    // runtime check to always succeed, branch to the panic exit
+                    // (which requires proving the panic condition) when it fails.
+                    let panic_bb = self.fresh_block_id();
+                    self.retarget_blocks.push((
+                        panic_bb,
+                        fmir::Block {
+                            invariants: vec![],
+                            variant: None,
+                            stmts: vec![],
+                            terminator: Terminator::Panic(span),
+                        },
+                    ));
+                    let discr = self.translate_operand(cond, span);
+                    let (bb_false, bb_true) =
+                        if *expected { (panic_bb, *target) } else { (*target, panic_bb) };
+                    Terminator::Switch(discr, span, Branches::Bool(bb_false, bb_true))
+                } else {
+                    let &(Operand::Copy(pl) | Operand::Move(pl)) = cond else {
+                        self.ctx.dcx().span_bug(span, "unexpected operand in assert")
                     };
+                    let pl = self.translate_place(pl, span);
+                    let mut cond = projections_term(
+                        self.ctx,
+                        self.typing_env(),
+                        Term::var(pl.local, self.vars[&pl.local].ty),
+                        &pl.projection,
+                        |e| e,
+                        None,
+                        |id| Term::var(*id, self.tcx().types.usize),
+                        span,
+                    );
+                    cond = cond.span(span);
+                    if !expected {
+                        cond = Term {
+                            ty: cond.ty,
+                            span: cond.span,
+                            kind: TermKind::Unary { op: UnOp::Not, arg: Box::new(cond) },
+                        };
+                    }
+                    let msg = Some(self.get_explanation(msg));
+                    self.emit_statement(Statement {
+                        kind: fmir::StatementKind::Assertion {
+                            cond,
+                            msg,
+                            check: true,
+                            assume: true,
+                        },
+                        span,
+                    });
+                    Terminator::Goto(*target)
                 }
-                let msg = Some(self.get_explanation(msg));
-                self.emit_statement(Statement {
-                    kind: fmir::StatementKind::Assertion { cond, msg, check: true, assume: true },
-                    span,
-                });
-                Terminator::Goto(*target)
             }
             Drop { target, .. } => Terminator::Goto(*target),
 

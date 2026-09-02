@@ -73,11 +73,12 @@ module M_impl_List_T__foo (* List<T> *)
   
   let unwrap_Node_T (self_: t_Option_Node_T) (return (x: t_Node_T)) =
   {[@stop_split] [@expl:unwrap_Node_T requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_Node_T self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None)}
     any
     [ return (result: t_Node_T) ->
     {[@stop_split] [@expl:unwrap_Node_T ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_Node_T result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   predicate resolve_Rc_PermCell_List_T_Global (_1: t_Rc_PermCell_List_T_Global)

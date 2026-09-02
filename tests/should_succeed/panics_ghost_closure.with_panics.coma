@@ -1,0 +1,1097 @@
+module M_apply
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  type t_F
+  
+  predicate inv_F (_1: t_F)
+  
+  predicate resolve_F (_1: t_F)
+  
+  predicate invariant_ref_F [@inline:trivial] (self: t_F) = inv_F self
+  
+  meta "rewrite_def" predicate invariant_ref_F
+  
+  predicate inv_ref_F [@inline:trivial] (_1: t_F) = invariant_ref_F _1
+  
+  meta "rewrite_def" predicate inv_ref_F
+  
+  predicate precondition_F (self: t_F) (args: UInt32.t)
+  
+  predicate postcondition_once_F (self: t_F) (args: UInt32.t) (result: UInt32.t)
+  
+  predicate postcondition_mut_F (self: t_F) (args: UInt32.t) (result_state: t_F) (result: UInt32.t)
+  
+  function fn_mut_once_F (self: t_F) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_F_spec:
+    forall self: t_F, args: UInt32.t, res: UInt32.t [postcondition_once_F self args res]. postcondition_once_F self args res
+      = (exists res_state: t_F. postcondition_mut_F self args res_state res /\ resolve_F res_state)
+  
+  predicate hist_inv_F (self: t_F) (result_state: t_F)
+  
+  function hist_inv_trans_F (self: t_F) (b: t_F) (c: t_F) : ()
+  
+  axiom hist_inv_trans_F_spec:
+    forall self: t_F, b: t_F, c: t_F [hist_inv_F self b, hist_inv_F b c | hist_inv_F self b, hist_inv_F self c | hist_inv_F b c, hist_inv_F self c]. hist_inv_F self b
+      -> hist_inv_F b c -> hist_inv_F self c
+  
+  function hist_inv_refl_F (self: t_F) : ()
+  
+  axiom hist_inv_refl_F_spec: forall self: t_F [hist_inv_F self self]. hist_inv_F self self
+  
+  function postcondition_mut_hist_inv_F (self: t_F) (args: UInt32.t) (res_state: t_F) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_F_spec:
+    forall self: t_F, args: UInt32.t, res_state: t_F, res: UInt32.t [postcondition_mut_F self args res_state res | hist_inv_F self res_state]. postcondition_mut_F self args res_state res
+      -> hist_inv_F self res_state
+  
+  function fn_hist_inv_F (self: t_F) (res_state: t_F) : ()
+  
+  axiom fn_hist_inv_F_spec: forall self: t_F, res_state: t_F [hist_inv_F self res_state]. hist_inv_F self res_state
+      = (self = res_state)
+  
+  predicate postcondition_F (self: t_F) (args: UInt32.t) (result: UInt32.t)
+  
+  function fn_once_F (self: t_F) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_F_spec:
+    forall self: t_F, args: UInt32.t, res: UInt32.t [postcondition_once_F self args res]. postcondition_once_F self args res
+      = (postcondition_F self args res /\ resolve_F self)
+  
+  function fn_mut_F (self: t_F) (args: UInt32.t) (res_state: t_F) (res: UInt32.t) : ()
+  
+  axiom fn_mut_F_spec:
+    forall self: t_F, args: UInt32.t, res_state: t_F, res: UInt32.t [postcondition_mut_F self args res_state res]. postcondition_mut_F self args res_state res
+      = (postcondition_F self args res /\ self = res_state)
+  
+  predicate panic_condition_F (self: t_F) (args: UInt32.t)
+  
+  let call_F (self_: t_F) (arg: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:call_F requires] ([@stop_split] [@expl:call 'self_' type invariant] inv_ref_F self_)
+    /\ ([@stop_split] [@expl:call requires] precondition_F self_ arg)}
+    any
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:call ensures] postcondition_F self_ arg result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_F self_ arg} (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let apply_F (f: t_F) (n: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:apply_F requires] ([@stop_split] [@expl:apply 'f' type invariant] inv_F f)
+    /\ ([@stop_split] [@expl:apply requires] precondition_F f n)}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = s1 [ _ck -> (! {[@expl:type invariant] inv_F f} any) ]
+      | s1 = -{resolve_F f}- s2
+      | s2 = [ &_10 <- n ] s3
+      | s3 = call_F {f} {_10} (panic) (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l () | & f: t_F = f | & n: UInt32.t = n | & _10: UInt32.t = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:apply may_panic] panic_condition_F f n} (! panic) ]
+end
+module M_define_ghost_maypanic_in_empty
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let closure0 (self: ()) (y: UInt32.t) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_4 <- y = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb2) | br1 -> {_4} (! bb1) ] ]
+    | bb1 = panic
+    | bb2 = s0 [ s0 = [ &res <- y ] s1 | s1 = [ &_ret <- res ] s2 | s2 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & y: UInt32.t = y
+    | & res: UInt32.t = Any.any_l ()
+    | & _4: bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:closure may_panic] UInt32.t'int y = 0} (! panic) ]
+  
+  type t_FnGhostWrapper_closure0 = { f0: () }
+  
+  let __new_closure0 (f: ()) (return (x: t_FnGhostWrapper_closure0)) = any
+    [ return (result: t_FnGhostWrapper_closure0) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let define_ghost_maypanic_in_empty (_n: UInt32.t) (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_3 <- () ] s1
+      | s1 = __new_closure0 {_3} (fun (_x: t_FnGhostWrapper_closure0) -> [ &_2 <- _x ] s2)
+      | s2 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l () | & _2: t_FnGhostWrapper_closure0 = Any.any_l () | & _3: () = Any.any_l () ])
+    [ return (result: ()) -> (! return {result}) ]
+end
+module M_use_closure_in_ghost_requires
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let closure1 (self: ()) (y: UInt32.t) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_4 <- y = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb2) | br1 -> {_4} (! bb1) ] ]
+    | bb1 = panic
+    | bb2 = s0 [ s0 = [ &res <- y ] s1 | s1 = [ &_ret <- res ] s2 | s2 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & y: UInt32.t = y
+    | & res: UInt32.t = Any.any_l ()
+    | & _4: bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:closure may_panic] UInt32.t'int y = 0} (! panic) ]
+  
+  type t_FnGhostWrapper_closure1 = { f0: () }
+  
+  let __new_closure1 (f: ()) (return (x: t_FnGhostWrapper_closure1)) = any
+    [ return (result: t_FnGhostWrapper_closure1) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+      (! return {result}) ]
+  
+  predicate precondition_closure1 (self: ()) (args: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate precondition_closure1
+  
+  predicate precondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    precondition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate precondition_FnGhostWrapper_closure1
+  
+  predicate postcondition_once_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_once_closure1
+  
+  predicate postcondition_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_once_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_once_FnGhostWrapper_closure1
+  
+  predicate resolve_closure1 [@inline:trivial] (_1: ()) = true
+  
+  meta "rewrite_def" predicate resolve_closure1
+  
+  predicate hist_inv_closure1 (self: ()) (result_state: ()) = self = result_state
+  
+  predicate postcondition_mut_closure1 (self: ()) (args: UInt32.t) (result_state: ()) (result: UInt32.t) =
+    let y = args in hist_inv_closure1 self result_state
+  
+  meta "rewrite_def" predicate postcondition_mut_closure1
+  
+  function fn_mut_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (exists res_state: (). postcondition_mut_closure1 self args res_state res /\ resolve_closure1 res_state)
+  
+  function hist_inv_trans_closure1 (self: ()) (b: ()) (c: ()) : ()
+  
+  axiom hist_inv_trans_closure1_spec:
+    forall self: (), b: (), c: () [hist_inv_closure1 self b, hist_inv_closure1 b c | hist_inv_closure1 self b, hist_inv_closure1 self c | hist_inv_closure1 b c, hist_inv_closure1 self c]. hist_inv_closure1 self b
+      -> hist_inv_closure1 b c -> hist_inv_closure1 self c
+  
+  function hist_inv_refl_closure1 (self: ()) : ()
+  
+  axiom hist_inv_refl_closure1_spec: forall self: () [hist_inv_closure1 self self]. hist_inv_closure1 self self
+  
+  function postcondition_mut_hist_inv_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res | hist_inv_closure1 self res_state]. postcondition_mut_closure1 self args res_state res
+      -> hist_inv_closure1 self res_state
+  
+  predicate resolve_FnGhostWrapper_closure1 [@inline:trivial] (_1: t_FnGhostWrapper_closure1) = true
+  
+  meta "rewrite_def" predicate resolve_FnGhostWrapper_closure1
+  
+  predicate postcondition_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result_state: t_FnGhostWrapper_closure1) (result: UInt32.t) =
+    postcondition_mut_closure1 self.f0 args result_state.f0 result
+  
+  meta "rewrite_def" predicate postcondition_mut_FnGhostWrapper_closure1
+  
+  function fn_mut_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (exists res_state: t_FnGhostWrapper_closure1. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+        /\ resolve_FnGhostWrapper_closure1 res_state)
+  
+  predicate hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (result_state: t_FnGhostWrapper_closure1)
+  
+  function hist_inv_trans_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (b: t_FnGhostWrapper_closure1) (c: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_trans_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, b: t_FnGhostWrapper_closure1, c: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 b c | hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 self c | hist_inv_FnGhostWrapper_closure1 b c, hist_inv_FnGhostWrapper_closure1 self c]. hist_inv_FnGhostWrapper_closure1 self b
+      -> hist_inv_FnGhostWrapper_closure1 b c -> hist_inv_FnGhostWrapper_closure1 self c
+  
+  function hist_inv_refl_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_refl_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self self]. hist_inv_FnGhostWrapper_closure1 self self
+  
+  function postcondition_mut_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res | hist_inv_FnGhostWrapper_closure1 self res_state]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      -> hist_inv_FnGhostWrapper_closure1 self res_state
+  
+  function fn_hist_inv_closure1 (self: ()) (res_state: ()) : ()
+  
+  axiom fn_hist_inv_closure1_spec:
+    forall self: (), res_state: () [hist_inv_closure1 self res_state]. hist_inv_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_closure1
+  
+  function fn_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (postcondition_closure1 self args res /\ resolve_closure1 self)
+  
+  function fn_mut_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom fn_mut_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res]. postcondition_mut_closure1 self args res_state res
+      = (postcondition_closure1 self args res /\ self = res_state)
+  
+  function fn_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (res_state: t_FnGhostWrapper_closure1) : ()
+  
+  axiom fn_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, res_state: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self res_state]. hist_inv_FnGhostWrapper_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_FnGhostWrapper_closure1
+  
+  function fn_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ resolve_FnGhostWrapper_closure1 self)
+  
+  function fn_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom fn_mut_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ self = res_state)
+  
+  predicate panic_condition_closure1 (self: ()) (args: UInt32.t) = let y = args in UInt32.t'int y = 0
+  
+  meta "rewrite_def" predicate panic_condition_closure1
+  
+  predicate panic_condition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    panic_condition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_closure1
+  
+  let call_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:call requires] precondition_FnGhostWrapper_closure1 self args}
+    any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:call ensures] postcondition_FnGhostWrapper_closure1 self args result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_FnGhostWrapper_closure1 self args} (! panic) ]
+  
+  let new_unit (x: ()) (return (x'0: ())) = any
+    [ return (result: ()) -> {[@stop_split] [@expl:new ensures] result = x} (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let use_closure_in_ghost_requires (n: UInt32.t) (return (x: ())) =
+  {[@stop_split] [@expl:use_closure_in_ghost_requires requires] UInt32.t'int n <> 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_5 <- () ] s1
+      | s1 = __new_closure1 {_5} (fun (_x: t_FnGhostWrapper_closure1) -> [ &f <- _x ] s2)
+      | s2 = [ &_10 <- n ] s3
+      | s3 = call_FnGhostWrapper_closure1 {f} {_10}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_8 <- _x ] s4)
+      | s4 = new_unit {_7} (fun (_x: ()) -> [ &_6 <- _x ] s5)
+      | s5 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & n: UInt32.t = n
+    | & f: t_FnGhostWrapper_closure1 = Any.any_l ()
+    | & _5: () = Any.any_l ()
+    | & _6: () = Any.any_l ()
+    | & _7: () = Any.any_l ()
+    | & _8: UInt32.t = Any.any_l ()
+    | & _10: UInt32.t = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end
+module M_use_closure_in_ghost_value
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let closure0 (self: ()) (y: UInt32.t) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_4 <- y = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb2) | br1 -> {_4} (! bb1) ] ]
+    | bb1 = panic
+    | bb2 = s0 [ s0 = [ &res <- y ] s1 | s1 = [ &_ret <- res ] s2 | s2 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & y: UInt32.t = y
+    | & res: UInt32.t = Any.any_l ()
+    | & _4: bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:closure may_panic] UInt32.t'int y = 0} (! panic) ]
+  
+  type t_FnGhostWrapper_closure0 = { f0: () }
+  
+  let __new_closure0 (f: ()) (return (x: t_FnGhostWrapper_closure0)) = any
+    [ return (result: t_FnGhostWrapper_closure0) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+      (! return {result}) ]
+  
+  predicate precondition_closure0 (self: ()) (args: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate precondition_closure0
+  
+  predicate precondition_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) =
+    precondition_closure0 self.f0 args
+  
+  meta "rewrite_def" predicate precondition_FnGhostWrapper_closure0
+  
+  predicate postcondition_once_closure0 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_once_closure0
+  
+  predicate postcondition_once_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_once_closure0 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_once_FnGhostWrapper_closure0
+  
+  predicate resolve_closure0 [@inline:trivial] (_1: ()) = true
+  
+  meta "rewrite_def" predicate resolve_closure0
+  
+  predicate hist_inv_closure0 (self: ()) (result_state: ()) = self = result_state
+  
+  predicate postcondition_mut_closure0 (self: ()) (args: UInt32.t) (result_state: ()) (result: UInt32.t) =
+    let y = args in hist_inv_closure0 self result_state
+  
+  meta "rewrite_def" predicate postcondition_mut_closure0
+  
+  function fn_mut_once_closure0 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_closure0_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure0 self args res]. postcondition_once_closure0 self args res
+      = (exists res_state: (). postcondition_mut_closure0 self args res_state res /\ resolve_closure0 res_state)
+  
+  function hist_inv_trans_closure0 (self: ()) (b: ()) (c: ()) : ()
+  
+  axiom hist_inv_trans_closure0_spec:
+    forall self: (), b: (), c: () [hist_inv_closure0 self b, hist_inv_closure0 b c | hist_inv_closure0 self b, hist_inv_closure0 self c | hist_inv_closure0 b c, hist_inv_closure0 self c]. hist_inv_closure0 self b
+      -> hist_inv_closure0 b c -> hist_inv_closure0 self c
+  
+  function hist_inv_refl_closure0 (self: ()) : ()
+  
+  axiom hist_inv_refl_closure0_spec: forall self: () [hist_inv_closure0 self self]. hist_inv_closure0 self self
+  
+  function postcondition_mut_hist_inv_closure0 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_closure0_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure0 self args res_state res | hist_inv_closure0 self res_state]. postcondition_mut_closure0 self args res_state res
+      -> hist_inv_closure0 self res_state
+  
+  predicate resolve_FnGhostWrapper_closure0 [@inline:trivial] (_1: t_FnGhostWrapper_closure0) = true
+  
+  meta "rewrite_def" predicate resolve_FnGhostWrapper_closure0
+  
+  predicate postcondition_mut_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (result_state: t_FnGhostWrapper_closure0) (result: UInt32.t) =
+    postcondition_mut_closure0 self.f0 args result_state.f0 result
+  
+  meta "rewrite_def" predicate postcondition_mut_FnGhostWrapper_closure0
+  
+  function fn_mut_once_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_FnGhostWrapper_closure0_spec:
+    forall self: t_FnGhostWrapper_closure0, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure0 self args res]. postcondition_once_FnGhostWrapper_closure0 self args res
+      = (exists res_state: t_FnGhostWrapper_closure0. postcondition_mut_FnGhostWrapper_closure0 self args res_state res
+        /\ resolve_FnGhostWrapper_closure0 res_state)
+  
+  predicate hist_inv_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (result_state: t_FnGhostWrapper_closure0)
+  
+  function hist_inv_trans_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (b: t_FnGhostWrapper_closure0) (c: t_FnGhostWrapper_closure0) : ()
+  
+  axiom hist_inv_trans_FnGhostWrapper_closure0_spec:
+    forall self: t_FnGhostWrapper_closure0, b: t_FnGhostWrapper_closure0, c: t_FnGhostWrapper_closure0 [hist_inv_FnGhostWrapper_closure0 self b, hist_inv_FnGhostWrapper_closure0 b c | hist_inv_FnGhostWrapper_closure0 self b, hist_inv_FnGhostWrapper_closure0 self c | hist_inv_FnGhostWrapper_closure0 b c, hist_inv_FnGhostWrapper_closure0 self c]. hist_inv_FnGhostWrapper_closure0 self b
+      -> hist_inv_FnGhostWrapper_closure0 b c -> hist_inv_FnGhostWrapper_closure0 self c
+  
+  function hist_inv_refl_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) : ()
+  
+  axiom hist_inv_refl_FnGhostWrapper_closure0_spec:
+    forall self: t_FnGhostWrapper_closure0 [hist_inv_FnGhostWrapper_closure0 self self]. hist_inv_FnGhostWrapper_closure0 self self
+  
+  function postcondition_mut_hist_inv_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure0) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_FnGhostWrapper_closure0_spec:
+    forall self: t_FnGhostWrapper_closure0, args: UInt32.t, res_state: t_FnGhostWrapper_closure0, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure0 self args res_state res | hist_inv_FnGhostWrapper_closure0 self res_state]. postcondition_mut_FnGhostWrapper_closure0 self args res_state res
+      -> hist_inv_FnGhostWrapper_closure0 self res_state
+  
+  function fn_hist_inv_closure0 (self: ()) (res_state: ()) : ()
+  
+  axiom fn_hist_inv_closure0_spec:
+    forall self: (), res_state: () [hist_inv_closure0 self res_state]. hist_inv_closure0 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_closure0 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_closure0
+  
+  function fn_once_closure0 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_closure0_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure0 self args res]. postcondition_once_closure0 self args res
+      = (postcondition_closure0 self args res /\ resolve_closure0 self)
+  
+  function fn_mut_closure0 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom fn_mut_closure0_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure0 self args res_state res]. postcondition_mut_closure0 self args res_state res
+      = (postcondition_closure0 self args res /\ self = res_state)
+  
+  function fn_hist_inv_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (res_state: t_FnGhostWrapper_closure0) : ()
+  
+  axiom fn_hist_inv_FnGhostWrapper_closure0_spec:
+    forall self: t_FnGhostWrapper_closure0, res_state: t_FnGhostWrapper_closure0 [hist_inv_FnGhostWrapper_closure0 self res_state]. hist_inv_FnGhostWrapper_closure0 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_closure0 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_FnGhostWrapper_closure0
+  
+  function fn_once_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_FnGhostWrapper_closure0_spec:
+    forall self: t_FnGhostWrapper_closure0, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure0 self args res]. postcondition_once_FnGhostWrapper_closure0 self args res
+      = (postcondition_FnGhostWrapper_closure0 self args res /\ resolve_FnGhostWrapper_closure0 self)
+  
+  function fn_mut_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure0) (res: UInt32.t) : ()
+  
+  axiom fn_mut_FnGhostWrapper_closure0_spec:
+    forall self: t_FnGhostWrapper_closure0, args: UInt32.t, res_state: t_FnGhostWrapper_closure0, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure0 self args res_state res]. postcondition_mut_FnGhostWrapper_closure0 self args res_state res
+      = (postcondition_FnGhostWrapper_closure0 self args res /\ self = res_state)
+  
+  predicate panic_condition_closure0 (self: ()) (args: UInt32.t) = let y = args in UInt32.t'int y = 0
+  
+  meta "rewrite_def" predicate panic_condition_closure0
+  
+  predicate panic_condition_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) =
+    panic_condition_closure0 self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_closure0
+  
+  let call_FnGhostWrapper_closure0 (self: t_FnGhostWrapper_closure0) (args: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:call requires] precondition_FnGhostWrapper_closure0 self args}
+    any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:call ensures] postcondition_FnGhostWrapper_closure0 self args result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_FnGhostWrapper_closure0 self args} (! panic) ]
+  
+  let new_unit (x: ()) (return (x'0: ())) = any
+    [ return (result: ()) -> {[@stop_split] [@expl:new ensures] result = x} (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let use_closure_in_ghost_value (n: UInt32.t) (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_3 <- () ] s1
+      | s1 = __new_closure0 {_3} (fun (_x: t_FnGhostWrapper_closure0) -> [ &f <- _x ] s2)
+      | s2 = [ &_8 <- (54: UInt32.t) ] s3
+      | s3 = call_FnGhostWrapper_closure0 {f} {_8}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_6 <- _x ] s4)
+      | s4 = new_unit {_5} (fun (_x: ()) -> [ &_4 <- _x ] s5)
+      | s5 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & f: t_FnGhostWrapper_closure0 = Any.any_l ()
+    | & _3: () = Any.any_l ()
+    | & _4: () = Any.any_l ()
+    | & _5: () = Any.any_l ()
+    | & _6: UInt32.t = Any.any_l ()
+    | & _8: UInt32.t = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end
+module M_use_ghost_maypanic_in_maypanic
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let closure1 (self: ()) (y: UInt32.t) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_4 <- y = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb2) | br1 -> {_4} (! bb1) ] ]
+    | bb1 = panic
+    | bb2 = s0 [ s0 = [ &res <- y ] s1 | s1 = [ &_ret <- res ] s2 | s2 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & y: UInt32.t = y
+    | & res: UInt32.t = Any.any_l ()
+    | & _4: bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:closure may_panic] UInt32.t'int y = 0} (! panic) ]
+  
+  type t_FnGhostWrapper_closure1 = { f0: () }
+  
+  let __new_closure1 (f: ()) (return (x: t_FnGhostWrapper_closure1)) = any
+    [ return (result: t_FnGhostWrapper_closure1) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+      (! return {result}) ]
+  
+  predicate precondition_closure1 (self: ()) (args: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate precondition_closure1
+  
+  predicate precondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    precondition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate precondition_FnGhostWrapper_closure1
+  
+  predicate postcondition_once_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_once_closure1
+  
+  predicate postcondition_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_once_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_once_FnGhostWrapper_closure1
+  
+  predicate resolve_closure1 [@inline:trivial] (_1: ()) = true
+  
+  meta "rewrite_def" predicate resolve_closure1
+  
+  predicate hist_inv_closure1 (self: ()) (result_state: ()) = self = result_state
+  
+  predicate postcondition_mut_closure1 (self: ()) (args: UInt32.t) (result_state: ()) (result: UInt32.t) =
+    let y = args in hist_inv_closure1 self result_state
+  
+  meta "rewrite_def" predicate postcondition_mut_closure1
+  
+  function fn_mut_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (exists res_state: (). postcondition_mut_closure1 self args res_state res /\ resolve_closure1 res_state)
+  
+  function hist_inv_trans_closure1 (self: ()) (b: ()) (c: ()) : ()
+  
+  axiom hist_inv_trans_closure1_spec:
+    forall self: (), b: (), c: () [hist_inv_closure1 self b, hist_inv_closure1 b c | hist_inv_closure1 self b, hist_inv_closure1 self c | hist_inv_closure1 b c, hist_inv_closure1 self c]. hist_inv_closure1 self b
+      -> hist_inv_closure1 b c -> hist_inv_closure1 self c
+  
+  function hist_inv_refl_closure1 (self: ()) : ()
+  
+  axiom hist_inv_refl_closure1_spec: forall self: () [hist_inv_closure1 self self]. hist_inv_closure1 self self
+  
+  function postcondition_mut_hist_inv_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res | hist_inv_closure1 self res_state]. postcondition_mut_closure1 self args res_state res
+      -> hist_inv_closure1 self res_state
+  
+  predicate resolve_FnGhostWrapper_closure1 [@inline:trivial] (_1: t_FnGhostWrapper_closure1) = true
+  
+  meta "rewrite_def" predicate resolve_FnGhostWrapper_closure1
+  
+  predicate postcondition_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result_state: t_FnGhostWrapper_closure1) (result: UInt32.t) =
+    postcondition_mut_closure1 self.f0 args result_state.f0 result
+  
+  meta "rewrite_def" predicate postcondition_mut_FnGhostWrapper_closure1
+  
+  function fn_mut_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (exists res_state: t_FnGhostWrapper_closure1. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+        /\ resolve_FnGhostWrapper_closure1 res_state)
+  
+  predicate hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (result_state: t_FnGhostWrapper_closure1)
+  
+  function hist_inv_trans_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (b: t_FnGhostWrapper_closure1) (c: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_trans_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, b: t_FnGhostWrapper_closure1, c: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 b c | hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 self c | hist_inv_FnGhostWrapper_closure1 b c, hist_inv_FnGhostWrapper_closure1 self c]. hist_inv_FnGhostWrapper_closure1 self b
+      -> hist_inv_FnGhostWrapper_closure1 b c -> hist_inv_FnGhostWrapper_closure1 self c
+  
+  function hist_inv_refl_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_refl_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self self]. hist_inv_FnGhostWrapper_closure1 self self
+  
+  function postcondition_mut_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res | hist_inv_FnGhostWrapper_closure1 self res_state]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      -> hist_inv_FnGhostWrapper_closure1 self res_state
+  
+  function fn_hist_inv_closure1 (self: ()) (res_state: ()) : ()
+  
+  axiom fn_hist_inv_closure1_spec:
+    forall self: (), res_state: () [hist_inv_closure1 self res_state]. hist_inv_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_closure1
+  
+  function fn_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (postcondition_closure1 self args res /\ resolve_closure1 self)
+  
+  function fn_mut_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom fn_mut_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res]. postcondition_mut_closure1 self args res_state res
+      = (postcondition_closure1 self args res /\ self = res_state)
+  
+  function fn_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (res_state: t_FnGhostWrapper_closure1) : ()
+  
+  axiom fn_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, res_state: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self res_state]. hist_inv_FnGhostWrapper_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_FnGhostWrapper_closure1
+  
+  function fn_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ resolve_FnGhostWrapper_closure1 self)
+  
+  function fn_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom fn_mut_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ self = res_state)
+  
+  predicate panic_condition_closure1 (self: ()) (args: UInt32.t) = let y = args in UInt32.t'int y = 0
+  
+  meta "rewrite_def" predicate panic_condition_closure1
+  
+  predicate panic_condition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    panic_condition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_closure1
+  
+  let call_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:call requires] precondition_FnGhostWrapper_closure1 self args}
+    any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:call ensures] postcondition_FnGhostWrapper_closure1 self args result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_FnGhostWrapper_closure1 self args} (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let use_ghost_maypanic_in_maypanic (n: UInt32.t) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_5 <- () ] s1
+      | s1 = __new_closure1 {_5} (fun (_x: t_FnGhostWrapper_closure1) -> [ &f <- _x ] s2)
+      | s2 = [ &_7 <- n ] s3
+      | s3 = call_FnGhostWrapper_closure1 {f} {_7} (panic) (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & n: UInt32.t = n
+    | & f: t_FnGhostWrapper_closure1 = Any.any_l ()
+    | & _5: () = Any.any_l ()
+    | & _7: UInt32.t = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:use_ghost_maypanic_in_maypanic may_panic] UInt32.t'int n = 0} (! panic) ]
+end
+module M_use_ghost_maypanic_in_requires
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let closure1 (self: ()) (y: UInt32.t) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_4 <- y = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb2) | br1 -> {_4} (! bb1) ] ]
+    | bb1 = panic
+    | bb2 = s0 [ s0 = [ &res <- y ] s1 | s1 = [ &_ret <- res ] s2 | s2 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & y: UInt32.t = y
+    | & res: UInt32.t = Any.any_l ()
+    | & _4: bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:closure may_panic] UInt32.t'int y = 0} (! panic) ]
+  
+  type t_FnGhostWrapper_closure1 = { f0: () }
+  
+  let __new_closure1 (f: ()) (return (x: t_FnGhostWrapper_closure1)) = any
+    [ return (result: t_FnGhostWrapper_closure1) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+      (! return {result}) ]
+  
+  predicate precondition_closure1 (self: ()) (args: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate precondition_closure1
+  
+  predicate precondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    precondition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate precondition_FnGhostWrapper_closure1
+  
+  predicate postcondition_once_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_once_closure1
+  
+  predicate postcondition_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_once_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_once_FnGhostWrapper_closure1
+  
+  predicate resolve_closure1 [@inline:trivial] (_1: ()) = true
+  
+  meta "rewrite_def" predicate resolve_closure1
+  
+  predicate hist_inv_closure1 (self: ()) (result_state: ()) = self = result_state
+  
+  predicate postcondition_mut_closure1 (self: ()) (args: UInt32.t) (result_state: ()) (result: UInt32.t) =
+    let y = args in hist_inv_closure1 self result_state
+  
+  meta "rewrite_def" predicate postcondition_mut_closure1
+  
+  function fn_mut_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (exists res_state: (). postcondition_mut_closure1 self args res_state res /\ resolve_closure1 res_state)
+  
+  function hist_inv_trans_closure1 (self: ()) (b: ()) (c: ()) : ()
+  
+  axiom hist_inv_trans_closure1_spec:
+    forall self: (), b: (), c: () [hist_inv_closure1 self b, hist_inv_closure1 b c | hist_inv_closure1 self b, hist_inv_closure1 self c | hist_inv_closure1 b c, hist_inv_closure1 self c]. hist_inv_closure1 self b
+      -> hist_inv_closure1 b c -> hist_inv_closure1 self c
+  
+  function hist_inv_refl_closure1 (self: ()) : ()
+  
+  axiom hist_inv_refl_closure1_spec: forall self: () [hist_inv_closure1 self self]. hist_inv_closure1 self self
+  
+  function postcondition_mut_hist_inv_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res | hist_inv_closure1 self res_state]. postcondition_mut_closure1 self args res_state res
+      -> hist_inv_closure1 self res_state
+  
+  predicate resolve_FnGhostWrapper_closure1 [@inline:trivial] (_1: t_FnGhostWrapper_closure1) = true
+  
+  meta "rewrite_def" predicate resolve_FnGhostWrapper_closure1
+  
+  predicate postcondition_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result_state: t_FnGhostWrapper_closure1) (result: UInt32.t) =
+    postcondition_mut_closure1 self.f0 args result_state.f0 result
+  
+  meta "rewrite_def" predicate postcondition_mut_FnGhostWrapper_closure1
+  
+  function fn_mut_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (exists res_state: t_FnGhostWrapper_closure1. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+        /\ resolve_FnGhostWrapper_closure1 res_state)
+  
+  predicate hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (result_state: t_FnGhostWrapper_closure1)
+  
+  function hist_inv_trans_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (b: t_FnGhostWrapper_closure1) (c: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_trans_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, b: t_FnGhostWrapper_closure1, c: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 b c | hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 self c | hist_inv_FnGhostWrapper_closure1 b c, hist_inv_FnGhostWrapper_closure1 self c]. hist_inv_FnGhostWrapper_closure1 self b
+      -> hist_inv_FnGhostWrapper_closure1 b c -> hist_inv_FnGhostWrapper_closure1 self c
+  
+  function hist_inv_refl_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_refl_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self self]. hist_inv_FnGhostWrapper_closure1 self self
+  
+  function postcondition_mut_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res | hist_inv_FnGhostWrapper_closure1 self res_state]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      -> hist_inv_FnGhostWrapper_closure1 self res_state
+  
+  function fn_hist_inv_closure1 (self: ()) (res_state: ()) : ()
+  
+  axiom fn_hist_inv_closure1_spec:
+    forall self: (), res_state: () [hist_inv_closure1 self res_state]. hist_inv_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_closure1
+  
+  function fn_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (postcondition_closure1 self args res /\ resolve_closure1 self)
+  
+  function fn_mut_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom fn_mut_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res]. postcondition_mut_closure1 self args res_state res
+      = (postcondition_closure1 self args res /\ self = res_state)
+  
+  function fn_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (res_state: t_FnGhostWrapper_closure1) : ()
+  
+  axiom fn_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, res_state: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self res_state]. hist_inv_FnGhostWrapper_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_FnGhostWrapper_closure1
+  
+  function fn_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ resolve_FnGhostWrapper_closure1 self)
+  
+  function fn_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom fn_mut_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ self = res_state)
+  
+  predicate panic_condition_closure1 (self: ()) (args: UInt32.t) = let y = args in UInt32.t'int y = 0
+  
+  meta "rewrite_def" predicate panic_condition_closure1
+  
+  predicate panic_condition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    panic_condition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_closure1
+  
+  let call_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:call requires] precondition_FnGhostWrapper_closure1 self args}
+    any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:call ensures] postcondition_FnGhostWrapper_closure1 self args result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_FnGhostWrapper_closure1 self args} (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let use_ghost_maypanic_in_requires (n: UInt32.t) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:use_ghost_maypanic_in_requires requires] UInt32.t'int n <> 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_5 <- () ] s1
+      | s1 = __new_closure1 {_5} (fun (_x: t_FnGhostWrapper_closure1) -> [ &f <- _x ] s2)
+      | s2 = [ &_7 <- n ] s3
+      | s3 = call_FnGhostWrapper_closure1 {f} {_7}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & n: UInt32.t = n
+    | & f: t_FnGhostWrapper_closure1 = Any.any_l ()
+    | & _5: () = Any.any_l ()
+    | & _7: UInt32.t = Any.any_l () ]) [ return (result: UInt32.t) -> (! return {result}) ]
+end
+module M_use_requires
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  
+  let closure1 (self: ()) (y: UInt32.t) (panic) (return (x: UInt32.t)) = (! bb0
+    [ bb0 = s0 [ s0 = [ &_4 <- y = (0: UInt32.t) ] s1 | s1 = any [ br0 -> {_4 = false} (! bb2) | br1 -> {_4} (! bb1) ] ]
+    | bb1 = panic
+    | bb2 = s0 [ s0 = [ &res <- y ] s1 | s1 = [ &_ret <- res ] s2 | s2 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & y: UInt32.t = y
+    | & res: UInt32.t = Any.any_l ()
+    | & _4: bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:closure may_panic] UInt32.t'int y = 0} (! panic) ]
+  
+  type t_FnGhostWrapper_closure1 = { f0: () }
+  
+  let __new_closure1 (f: ()) (return (x: t_FnGhostWrapper_closure1)) = any
+    [ return (result: t_FnGhostWrapper_closure1) -> {[@stop_split] [@expl:__new ensures] result.f0 = f}
+      (! return {result}) ]
+  
+  predicate precondition_closure1 (self: ()) (args: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate precondition_closure1
+  
+  predicate precondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    precondition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate precondition_FnGhostWrapper_closure1
+  
+  predicate postcondition_once_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_once_closure1
+  
+  predicate postcondition_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_once_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_once_FnGhostWrapper_closure1
+  
+  predicate resolve_closure1 [@inline:trivial] (_1: ()) = true
+  
+  meta "rewrite_def" predicate resolve_closure1
+  
+  predicate hist_inv_closure1 (self: ()) (result_state: ()) = self = result_state
+  
+  predicate postcondition_mut_closure1 (self: ()) (args: UInt32.t) (result_state: ()) (result: UInt32.t) =
+    let y = args in hist_inv_closure1 self result_state
+  
+  meta "rewrite_def" predicate postcondition_mut_closure1
+  
+  function fn_mut_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (exists res_state: (). postcondition_mut_closure1 self args res_state res /\ resolve_closure1 res_state)
+  
+  function hist_inv_trans_closure1 (self: ()) (b: ()) (c: ()) : ()
+  
+  axiom hist_inv_trans_closure1_spec:
+    forall self: (), b: (), c: () [hist_inv_closure1 self b, hist_inv_closure1 b c | hist_inv_closure1 self b, hist_inv_closure1 self c | hist_inv_closure1 b c, hist_inv_closure1 self c]. hist_inv_closure1 self b
+      -> hist_inv_closure1 b c -> hist_inv_closure1 self c
+  
+  function hist_inv_refl_closure1 (self: ()) : ()
+  
+  axiom hist_inv_refl_closure1_spec: forall self: () [hist_inv_closure1 self self]. hist_inv_closure1 self self
+  
+  function postcondition_mut_hist_inv_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res | hist_inv_closure1 self res_state]. postcondition_mut_closure1 self args res_state res
+      -> hist_inv_closure1 self res_state
+  
+  predicate resolve_FnGhostWrapper_closure1 [@inline:trivial] (_1: t_FnGhostWrapper_closure1) = true
+  
+  meta "rewrite_def" predicate resolve_FnGhostWrapper_closure1
+  
+  predicate postcondition_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result_state: t_FnGhostWrapper_closure1) (result: UInt32.t) =
+    postcondition_mut_closure1 self.f0 args result_state.f0 result
+  
+  meta "rewrite_def" predicate postcondition_mut_FnGhostWrapper_closure1
+  
+  function fn_mut_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_mut_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (exists res_state: t_FnGhostWrapper_closure1. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+        /\ resolve_FnGhostWrapper_closure1 res_state)
+  
+  predicate hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (result_state: t_FnGhostWrapper_closure1)
+  
+  function hist_inv_trans_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (b: t_FnGhostWrapper_closure1) (c: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_trans_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, b: t_FnGhostWrapper_closure1, c: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 b c | hist_inv_FnGhostWrapper_closure1 self b, hist_inv_FnGhostWrapper_closure1 self c | hist_inv_FnGhostWrapper_closure1 b c, hist_inv_FnGhostWrapper_closure1 self c]. hist_inv_FnGhostWrapper_closure1 self b
+      -> hist_inv_FnGhostWrapper_closure1 b c -> hist_inv_FnGhostWrapper_closure1 self c
+  
+  function hist_inv_refl_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) : ()
+  
+  axiom hist_inv_refl_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self self]. hist_inv_FnGhostWrapper_closure1 self self
+  
+  function postcondition_mut_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom postcondition_mut_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res | hist_inv_FnGhostWrapper_closure1 self res_state]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      -> hist_inv_FnGhostWrapper_closure1 self res_state
+  
+  function fn_hist_inv_closure1 (self: ()) (res_state: ()) : ()
+  
+  axiom fn_hist_inv_closure1_spec:
+    forall self: (), res_state: () [hist_inv_closure1 self res_state]. hist_inv_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_closure1 (self: ()) (args: UInt32.t) (result: UInt32.t) = let y = args in true
+  
+  meta "rewrite_def" predicate postcondition_closure1
+  
+  function fn_once_closure1 (self: ()) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_closure1_spec:
+    forall self: (), args: UInt32.t, res: UInt32.t [postcondition_once_closure1 self args res]. postcondition_once_closure1 self args res
+      = (postcondition_closure1 self args res /\ resolve_closure1 self)
+  
+  function fn_mut_closure1 (self: ()) (args: UInt32.t) (res_state: ()) (res: UInt32.t) : ()
+  
+  axiom fn_mut_closure1_spec:
+    forall self: (), args: UInt32.t, res_state: (), res: UInt32.t [postcondition_mut_closure1 self args res_state res]. postcondition_mut_closure1 self args res_state res
+      = (postcondition_closure1 self args res /\ self = res_state)
+  
+  function fn_hist_inv_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (res_state: t_FnGhostWrapper_closure1) : ()
+  
+  axiom fn_hist_inv_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, res_state: t_FnGhostWrapper_closure1 [hist_inv_FnGhostWrapper_closure1 self res_state]. hist_inv_FnGhostWrapper_closure1 self res_state
+      = (self = res_state)
+  
+  predicate postcondition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (result: UInt32.t) =
+    postcondition_closure1 self.f0 args result
+  
+  meta "rewrite_def" predicate postcondition_FnGhostWrapper_closure1
+  
+  function fn_once_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res: UInt32.t) : ()
+  
+  axiom fn_once_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res: UInt32.t [postcondition_once_FnGhostWrapper_closure1 self args res]. postcondition_once_FnGhostWrapper_closure1 self args res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ resolve_FnGhostWrapper_closure1 self)
+  
+  function fn_mut_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (res_state: t_FnGhostWrapper_closure1) (res: UInt32.t) : ()
+  
+  axiom fn_mut_FnGhostWrapper_closure1_spec:
+    forall self: t_FnGhostWrapper_closure1, args: UInt32.t, res_state: t_FnGhostWrapper_closure1, res: UInt32.t [postcondition_mut_FnGhostWrapper_closure1 self args res_state res]. postcondition_mut_FnGhostWrapper_closure1 self args res_state res
+      = (postcondition_FnGhostWrapper_closure1 self args res /\ self = res_state)
+  
+  predicate panic_condition_closure1 (self: ()) (args: UInt32.t) = let y = args in UInt32.t'int y = 0
+  
+  meta "rewrite_def" predicate panic_condition_closure1
+  
+  predicate panic_condition_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) =
+    panic_condition_closure1 self.f0 args
+  
+  meta "rewrite_def" predicate panic_condition_FnGhostWrapper_closure1
+  
+  let call_FnGhostWrapper_closure1 (self: t_FnGhostWrapper_closure1) (args: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:call requires] precondition_FnGhostWrapper_closure1 self args}
+    any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:call ensures] postcondition_FnGhostWrapper_closure1 self args result}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:call may_panic] panic_condition_FnGhostWrapper_closure1 self args} (! panic) ]
+  
+  let apply_FnGhostWrapper_closure1 (f: t_FnGhostWrapper_closure1) (n: UInt32.t) (panic) (return (x: UInt32.t)) =
+  {[@stop_split] [@expl:apply requires] precondition_FnGhostWrapper_closure1 f n}
+    any
+    [ return (result: UInt32.t) -> (! return {result})
+    | panic -> {[@stop_split] [@expl:apply may_panic] panic_condition_FnGhostWrapper_closure1 f n} (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let use_requires (n: UInt32.t) (return (x: UInt32.t)) = {[@stop_split] [@expl:use_requires requires] UInt32.t'int n
+    <> 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_5 <- () ] s1
+      | s1 = __new_closure1 {_5} (fun (_x: t_FnGhostWrapper_closure1) -> [ &f <- _x ] s2)
+      | s2 = [ &_8 <- n ] s3
+      | s3 = call_FnGhostWrapper_closure1 {f} {_8}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_6 <- _x ] s4)
+      | s4 = apply_FnGhostWrapper_closure1 {f} {n}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_ret <- _x ] s5)
+      | s5 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & n: UInt32.t = n
+    | & f: t_FnGhostWrapper_closure1 = Any.any_l ()
+    | & _5: () = Any.any_l ()
+    | & _6: UInt32.t = Any.any_l ()
+    | & _8: UInt32.t = Any.any_l () ]) [ return (result: UInt32.t) -> (! return {result}) ]
+end

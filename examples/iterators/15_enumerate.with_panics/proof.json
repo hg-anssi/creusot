@@ -1,0 +1,84 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_common__trait_ExactSizeIterator__is_empty": {
+      "vc_is_empty_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_common__trait_ExactSizeIterator__len": {
+      "vc_eq_Option_usize": { "prover": "alt-ergo", "time": 0.018 },
+      "vc_len_Self": { "prover": "alt-ergo", "time": 0.023 },
+      "vc_size_hint_Self": { "prover": "alt-ergo", "time": 0.021 }
+    },
+    "M_enumerate": {
+      "vc_enumerate_I": { "prover": "alt-ergo", "time": 0.013 }
+    },
+    "M_impl_ExactSizeIterator_for_Enumerate_I__is_empty": {
+      "vc_is_empty_Enumerate_I": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_is_empty_I": { "prover": "alt-ergo", "time": 0.025 },
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.036 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_impl_ExactSizeIterator_for_Enumerate_I__is_empty__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.033 },
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.032 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.032 }
+    },
+    "M_impl_ExactSizeIterator_for_Enumerate_I__len": {
+      "vc_len_Enumerate_I": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_len_I": { "prover": "alt-ergo", "time": 0.046 },
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.033 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.031 }
+    },
+    "M_impl_ExactSizeIterator_for_Enumerate_I__len__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.032 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.032 }
+    },
+    "M_impl_ExactSizeIterator_for_Enumerate_I__size_hint_exact": {
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_size_hint_exact_Enumerate_I": {
+        "prover": "alt-ergo",
+        "time": 0.02
+      }
+    },
+    "M_impl_ExactSizeIterator_for_Enumerate_I__size_hint_exact__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.029 },
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_impl_Iterator_for_Enumerate_I__next": {
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_next_Enumerate_I": { "prover": "alt-ergo", "time": 0.078 },
+      "vc_next_I": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_impl_Iterator_for_Enumerate_I__next__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_impl_Iterator_for_Enumerate_I__produces_refl": {
+      "vc_produces_refl_Enumerate_I": { "prover": "alt-ergo", "time": 0.029 }
+    },
+    "M_impl_Iterator_for_Enumerate_I__produces_refl__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_impl_Iterator_for_Enumerate_I__produces_trans": {
+      "vc_produces_trans_Enumerate_I": {
+        "prover": "alt-ergo",
+        "time": 0.041
+      }
+    },
+    "M_impl_Iterator_for_Enumerate_I__produces_trans__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.015 }
+    },
+    "M_impl_Iterator_for_Enumerate_I__size_hint": {
+      "vc_size_hint_Enumerate_I": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.034 }
+    },
+    "M_impl_Iterator_for_Enumerate_I__size_hint__refines": {
+      "refines": { "prover": "alt-ergo", "time": 0.033 },
+      "vc_size_hint_I": { "prover": "alt-ergo", "time": 0.03 }
+    }
+  }
+}

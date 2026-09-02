@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.15.3" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC5" version="1.3.1" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<file format="coma" proved="true">
+<path name=".."/><path name="06_map_precond.with_panics.coma"/>
+<theory name="M_common__trait_ExactSizeIterator__is_empty" proved="true">
+ <goal name="vc_is_empty_Self" proved="true">
+ <proof prover="1"><result status="valid" time="0.008236" steps="22"/></proof>
+ </goal>
+</theory>
+<theory name="M_common__trait_ExactSizeIterator__len" proved="true">
+ <goal name="vc_len_Self" proved="true">
+ <proof prover="1"><result status="valid" time="0.017866" steps="101"/></proof>
+ </goal>
+</theory>
+<theory name="M_counter" proved="true">
+ <goal name="vc_counter_I" proved="true">
+ <proof prover="1"><result status="valid" time="0.072341" steps="924"/></proof>
+ </goal>
+</theory>
+<theory name="M_identity" proved="true">
+ <goal name="vc_identity_I" proved="true">
+ <proof prover="1"><result status="valid" time="0.039006" steps="527"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_ExactSizeIterator_for_Map_I_F__is_empty" proved="true">
+ <goal name="vc_is_empty_Map_I_F" proved="true">
+ <proof prover="1"><result status="valid" time="0.011909" steps="116"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_ExactSizeIterator_for_Map_I_F__is_empty__refines" proved="true">
+ <goal name="refines" proved="true">
+ <proof prover="1"><result status="valid" time="0.012904" steps="2"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_ExactSizeIterator_for_Map_I_F__len" proved="true">
+ <goal name="vc_len_Map_I_F" proved="true">
+ <proof prover="1"><result status="valid" time="0.013600" steps="30"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_ExactSizeIterator_for_Map_I_F__len__refines" proved="true">
+ <goal name="refines" proved="true">
+ <proof prover="1"><result status="valid" time="0.012418" steps="2"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_ExactSizeIterator_for_Map_I_F__size_hint_exact" proved="true">
+ <goal name="vc_size_hint_exact_Map_I_F" proved="true">
+ <proof prover="1"><result status="valid" time="0.018763" steps="8"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_ExactSizeIterator_for_Map_I_F__size_hint_exact__refines" proved="true">
+ <goal name="refines" proved="true">
+ <proof prover="1"><result status="valid" time="0.016890" steps="2"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__next" proved="true">
+ <goal name="vc_next_Map_I_F" proved="true">
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.222330" steps="29451"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__next__refines" proved="true">
+ <goal name="refines" proved="true">
+ <proof prover="1"><result status="valid" time="0.061286" steps="829"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__produces_refl" proved="true">
+ <goal name="vc_produces_refl_Map_I_F" proved="true">
+ <transf name="compute_specified" proved="true" >
+  <goal name="vc_produces_refl_Map_I_F.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="vc_produces_refl_Map_I_F.0.0" expl="produces_refl ensures" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_produces_refl_Map_I_F.0.0.0" proved="true">
+    <proof prover="1"><result status="valid" time="0.020381" steps="2"/></proof>
+    </goal>
+    <goal name="vc_produces_refl_Map_I_F.0.0.1" proved="true">
+    <proof prover="2"><result status="valid" time="0.021843" steps="70723"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__produces_refl__refines" proved="true">
+ <goal name="refines" proved="true">
+ <proof prover="1"><result status="valid" time="0.012064" steps="0"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__produces_trans" proved="true">
+ <goal name="vc_produces_trans_Map_I_F" proved="true">
+ <transf name="compute_specified" proved="true" >
+  <goal name="vc_produces_trans_Map_I_F.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="vc_produces_trans_Map_I_F.0.0" expl="produces_trans ensures" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_produces_trans_Map_I_F.0.0.0" expl="produces_trans ensures" proved="true">
+    <proof prover="1"><result status="valid" time="0.027912" steps="48"/></proof>
+    </goal>
+    <goal name="vc_produces_trans_Map_I_F.0.0.1" expl="produces_trans ensures" proved="true">
+    <transf name="exists" proved="true" arg1="(fs1++fs)">
+     <goal name="vc_produces_trans_Map_I_F.0.0.1.0" proved="true">
+     <transf name="compute_specified" proved="true" >
+      <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0" proved="true">
+      <transf name="split_vc" proved="true" >
+       <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.0" proved="true">
+       <proof prover="1"><result status="valid" time="0.013843" steps="41"/></proof>
+       </goal>
+       <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1" proved="true">
+       <transf name="exists" proved="true" arg1="(s1++s)">
+        <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0" proved="true">
+        <transf name="compute_specified" proved="true" >
+         <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0" proved="true">
+         <transf name="split_vc" proved="true" >
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.0" proved="true">
+          <proof prover="1"><result status="valid" time="0.003857" steps="41"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.1" proved="true">
+          <proof prover="1"><result status="valid" time="0.019132" steps="35"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.2" proved="true">
+          <proof prover="1"><result status="valid" time="0.064265" steps="582"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.3" proved="true">
+          <proof prover="1"><result status="valid" time="0.037627" steps="234"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.4" proved="true">
+          <proof prover="1"><result status="valid" time="0.012022" steps="60"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.5" proved="true">
+          <proof prover="1"><result status="valid" time="0.024984" steps="120"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.6" proved="true">
+          <proof prover="1"><result status="valid" time="0.025245" steps="116"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.7" proved="true">
+          <proof prover="1"><result status="valid" time="0.029098" steps="294"/></proof>
+          </goal>
+          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8" proved="true">
+          <transf name="instantiate" proved="true" arg1="H10" arg2="i">
+           <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8.0" proved="true">
+           <transf name="instantiate" proved="true" arg1="H2" arg2="(i-length ab)">
+            <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8.0.0" proved="true">
+            <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
+             <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8.0.0.0" proved="true">
+             <proof prover="1" timelimit="5"><result status="valid" time="0.418018" steps="3165"/></proof>
+             </goal>
+            </transf>
+            </goal>
+           </transf>
+           </goal>
+          </transf>
+          </goal>
+         </transf>
+         </goal>
+        </transf>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__produces_trans__refines" proved="true">
+ <goal name="refines" proved="true">
+ <proof prover="1"><result status="valid" time="0.058918" steps="199"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__size_hint" proved="true">
+ <goal name="vc_size_hint_Map_I_F" proved="true">
+ <proof prover="1"><result status="valid" time="0.035820" steps="30"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_Iterator_for_Map_I_F__size_hint__refines" proved="true">
+ <goal name="refines" proved="true">
+ <proof prover="1"><result status="valid" time="0.057396" steps="169"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_Map_I_F__preservation_inv" proved="true">
+ <goal name="vc_preservation_inv_I" proved="true">
+ <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
+  <goal name="vc_preservation_inv_I.0" proved="true">
+  <transf name="compute_specified" proved="true" >
+   <goal name="vc_preservation_inv_I.0.0" proved="true">
+   <proof prover="0"><result status="valid" time="1.317962" steps="148576"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_impl_Map_I_F__produces_one" proved="true">
+ <goal name="vc_produces_one_I" proved="true">
+ <transf name="compute_specified" proved="true" >
+  <goal name="vc_produces_one_I.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="vc_produces_one_I.0.0" expl="produces_one ensures" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_produces_one_I.0.0.0" proved="true">
+    <proof prover="1"><result status="valid" time="0.020290" steps="14"/></proof>
+    </goal>
+    <goal name="vc_produces_one_I.0.0.1" proved="true">
+    <transf name="exists" proved="true" arg1="(singleton f)">
+     <goal name="vc_produces_one_I.0.0.1.0" proved="true">
+     <transf name="compute_specified" proved="true" >
+      <goal name="vc_produces_one_I.0.0.1.0.0" proved="true">
+      <transf name="split_vc" proved="true" >
+       <goal name="vc_produces_one_I.0.0.1.0.0.0" proved="true">
+       <proof prover="1"><result status="valid" time="0.016296" steps="19"/></proof>
+       </goal>
+       <goal name="vc_produces_one_I.0.0.1.0.0.1" proved="true">
+       <transf name="exists" proved="true" arg1="(singleton e)">
+        <goal name="vc_produces_one_I.0.0.1.0.0.1.0" proved="true">
+        <transf name="compute_specified" proved="true" >
+         <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0" proved="true">
+         <transf name="split_vc" proved="true" >
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.0" proved="true">
+          <proof prover="1"><result status="valid" time="0.008876" steps="18"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.1" proved="true">
+          <proof prover="1"><result status="valid" time="0.011874" steps="10"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.2" proved="true">
+          <proof prover="1"><result status="valid" time="0.031893" steps="246"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.3" proved="true">
+          <proof prover="1"><result status="valid" time="0.012656" steps="19"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.4" proved="true">
+          <proof prover="1"><result status="valid" time="0.013959" steps="17"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.5" proved="true">
+          <proof prover="1"><result status="valid" time="0.012674" steps="17"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.6" proved="true">
+          <proof prover="1"><result status="valid" time="0.016420" steps="20"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.7" proved="true">
+          <proof prover="1"><result status="valid" time="0.012681" steps="29"/></proof>
+          </goal>
+          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.8" proved="true">
+          <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
+           <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.8.0" proved="true">
+           <proof prover="1"><result status="valid" time="0.021762" steps="345"/></proof>
+           </goal>
+          </transf>
+          </goal>
+         </transf>
+         </goal>
+        </transf>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_produces_one_I.0.0.2" proved="true">
+    <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
+     <goal name="vc_produces_one_I.0.0.2.0" proved="true">
+     <proof prover="2"><result status="valid" time="0.031076" steps="215875"/></proof>
+     </goal>
+    </transf>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_impl_Map_I_F__produces_one_invariant" proved="true">
+ <goal name="vc_produces_one_invariant_I" proved="true">
+ <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
+  <goal name="vc_produces_one_invariant_I.0" proved="true">
+  <transf name="split_vc" proved="true" >
+   <goal name="vc_produces_one_invariant_I.0.0" proved="true">
+   <proof prover="1"><result status="valid" time="0.182829" steps="1977"/></proof>
+   </goal>
+   <goal name="vc_produces_one_invariant_I.0.1" expl="produces_one_invariant_I ensures" proved="true">
+   <transf name="split_vc" proved="true" >
+    <goal name="vc_produces_one_invariant_I.0.1.0" expl="produces_one_invariant ensures #0 (produces_one_invariant_I ensures)" proved="true">
+    <proof prover="0"><result status="valid" time="1.801671" steps="181889"/></proof>
+    </goal>
+    <goal name="vc_produces_one_invariant_I.0.1.1" expl="produces_one_invariant ensures #1 (produces_one_invariant_I ensures)" proved="true">
+    <proof prover="3"><result status="valid" time="0.458490" steps="54535"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_increment" proved="true">
+ <goal name="vc_increment_U" proved="true">
+ <proof prover="0"><result status="valid" time="2.618910" steps="168181"/></proof>
+ </goal>
+</theory>
+<theory name="M_map" proved="true">
+ <goal name="vc_map_I" proved="true">
+ <proof prover="1"><result status="valid" time="0.013711" steps="57"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

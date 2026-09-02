@@ -18,6 +18,11 @@ pub trait FnOnceExt<Args: Tuple> {
     #[logic(prophetic)]
     fn precondition(self, a: Args) -> bool;
 
+    /// The states in which calling this closure is permitted to panic. `false` for
+    /// a closure that cannot panic (the default).
+    #[logic(prophetic)]
+    fn panic_condition(self, a: Args) -> bool;
+
     #[logic(prophetic)]
     fn postcondition_once(self, a: Args, res: Self::Output) -> bool;
 }
@@ -104,6 +109,13 @@ impl<Args: Tuple, F: ?Sized + FnOnce<Args>> FnOnceExt<Args> for F {
     #[allow(unused_variables)]
     #[intrinsic("precondition")]
     fn precondition(self, args: Args) -> bool {
+        dead
+    }
+
+    #[logic(open, prophetic)]
+    #[allow(unused_variables)]
+    #[intrinsic("panic_condition")]
+    fn panic_condition(self, args: Args) -> bool {
         dead
     }
 
@@ -196,18 +208,21 @@ extern_spec! {
         mod ops {
             trait FnOnce<Args> where Args: Tuple {
                 #[requires(self.precondition(arg))]
+                #[may_panic(self.panic_condition(arg))]
                 #[ensures(self.postcondition_once(arg, result))]
                 fn call_once(self, arg: Args) -> Self::Output;
             }
 
             trait FnMut<Args> where Args: Tuple {
                 #[requires((*self).precondition(arg))]
+                #[may_panic((*self).panic_condition(arg))]
                 #[ensures((*self).postcondition_mut(arg, ^self, result))]
                 fn call_mut(&mut self, arg: Args) -> Self::Output;
             }
 
             trait Fn<Args> where Args: Tuple {
                 #[requires((*self).precondition(arg))]
+                #[may_panic((*self).panic_condition(arg))]
                 #[ensures((*self).postcondition(arg, result))]
                 fn call(&self, arg: Args) -> Self::Output;
             }

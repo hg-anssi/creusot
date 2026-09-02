@@ -156,7 +156,9 @@ pub fn next_precondition<I: IteratorSpec, B, F: FnMut(I::Item) -> B>(iter: I, fu
         forall<e: I::Item, i: I>
             #[trigger(iter.produces(Seq::singleton(e), i))]
             inv(e) && iter.produces(Seq::singleton(e), i) ==>
-            func.precondition((e,))
+            func.precondition((e,)) &&
+            // Panicing is not allowed for delayed computation. This constraint may be released in future released
+            !func.panic_condition((e,))
     }
 }
 
@@ -169,7 +171,9 @@ pub fn preservation<I: IteratorSpec, B, F: FnMut(I::Item) -> B>(iter: I, func: F
             inv(s) && inv(e1) && inv(e2) && inv(f) ==>
             iter.produces(s.push_back(e1).push_back(e2), i) ==>
             (*f).postcondition_mut((e1,), ^f, b) ==>
-            (^f).precondition((e2, ))
+            (^f).precondition((e2, )) &&
+            // Panicing is not allowed for delayed computation. This constraint may be released in future released
+            !(^f).panic_condition((e2,))
     }
 }
 

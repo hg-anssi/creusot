@@ -14,6 +14,7 @@ use crate::{
         fmir::{self, LocalDecls, RValue, Variant},
         pearlite::{Ident, PIdent, Term, TermKind},
     },
+    validate::is_ghost_block,
 };
 use indexmap::IndexMap;
 use rustc_hir::def_id::DefId;
@@ -26,6 +27,31 @@ use rustc_span::{DUMMY_SP, Span};
 use std::{assert_matches, collections::HashMap, ops::FnOnce};
 
 pub(crate) use self::terminator::discriminator_for_switch;
+
+/// Collect the source spans of the `ghost!` blocks of `body_id` from its THIR.
+///
+/// A `ghost!` block expands to a `#[creusot::ghost_block]`-attributed block, which
+/// appears in THIR as an `ExprKind::Scope` whose `hir_id` carries the attribute.
+/// Its span covers all the (inlined) ghost statements, so span-containment against
+/// this set decides whether a MIR program point is ghost — a mapping the MIR
+/// source scopes cannot give (their `lint_root` follows *lint* scopes, above tool
+/// attributes).
+fn collect_ghost_spans<'tcx>(ctx: &TranslationCtx<'tcx>, body_id: BodyId) -> Box<[Span]> {
+    use rustc_middle::thir::ExprKind;
+    if body_id.promoted.is_some() {
+        return Box::new([]);
+    }
+    let Some(local) = body_id.def_id.as_local() else { return Box::new([]) };
+    let (thir, _) = ctx.thir_body(local);
+    let thir = thir.borrow();
+    thir.exprs
+        .iter()
+        .filter_map(|e| match e.kind {
+            ExprKind::Scope { hir_id, .. } if is_ghost_block(ctx.tcx, hir_id) => Some(e.span),
+            _ => None,
+        })
+        .collect()
+}
 
 /// Translate a function from rustc's MIR to fMIR.
 pub(crate) fn fmir<'tcx>(ctx: &TranslationCtx<'tcx>, body_id: BodyId) -> fmir::Body<'tcx> {
@@ -80,6 +106,13 @@ struct BodyTranslator<'a, 'tcx> {
     erased_locals: MixedBitSet<Local>,
 
     vars: LocalDecls<'tcx>,
+
+    /// Source spans of the `ghost!` blocks (`#[creusot::ghost_block]`) of this
+    /// body, collected from its THIR. A program point whose span is contained in
+    /// one of these is ghost code: it cannot panic operationally, so panic points
+    /// there are discharged as proof obligations rather than routed to the panic
+    /// exit (see [`BodyTranslator::in_ghost_block`]).
+    ghost_spans: Box<[Span]>,
 }
 
 pub struct Assertion<'tcx> {
@@ -178,6 +211,7 @@ impl<'body, 'tcx> BodyTranslator<'body, 'tcx> {
             invariant_assertions,
             assertions,
             snapshots,
+            ghost_spans: collect_ghost_spans(ctx, body_id),
         })
     }
 

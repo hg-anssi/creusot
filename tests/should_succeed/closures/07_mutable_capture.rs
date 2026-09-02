@@ -18,7 +18,9 @@ pub fn test_fnmut(mut x: u32) {
 }
 
 #[requires(f.precondition(()))]
+#[may_panic(f.panic_condition(()))]
 #[requires(forall<st1, r> f.postcondition_mut((), st1, r) ==> st1.precondition(()))]
+#[may_panic(exists<st1, r> f.postcondition_mut((), st1, r) && st1.panic_condition(()))]
 #[ensures(exists<st1, st2, r>
     f.postcondition_mut((), st1, r) &&
     st1.postcondition_mut((), st2, result) &&
@@ -29,6 +31,7 @@ fn call_fnmut<F: FnMut() -> i32>(mut f: F) -> i32 {
 }
 
 #[requires(f.precondition(()))]
+#[may_panic(f.panic_condition(()))]
 #[ensures(f.postcondition_once((), result))]
 fn call_fnonce<F: FnOnce() -> i32>(f: F) -> i32 {
     f()

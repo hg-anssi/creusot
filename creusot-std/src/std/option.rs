@@ -63,6 +63,7 @@ extern_spec! {
             None => result == false,
             Some(t) => f.postcondition_once((t,), result),
         })]
+        #[may_panic(match self { None => false, Some(t) => f.panic_condition((t,)) })]
         fn is_some_and(self, f: impl FnOnce(T) -> bool + Destruct) -> bool {
             match self {
                 None => false,
@@ -136,7 +137,7 @@ extern_spec! {
         }
 
         #[check(ghost)]
-        #[requires(self != None)]
+        #[panics(self == None)]
         #[ensures(Some(result) == self)]
         fn expect(self, msg: &str) -> T {
             match self {
@@ -146,7 +147,7 @@ extern_spec! {
         }
 
         #[check(ghost)]
-        #[requires(self != None)]
+        #[panics(self == None)]
         #[ensures(Some(result) == self)]
         fn unwrap(self) -> T {
             match self {
@@ -172,6 +173,7 @@ extern_spec! {
             None => f.postcondition_once((), result),
             Some(t) => result == t
         })]
+        #[may_panic(self == None && f.panic_condition(()))]
         fn unwrap_or_else<F>(self, f: F) -> T
         where
             F: FnOnce() -> T {
@@ -209,6 +211,7 @@ extern_spec! {
             None => result == None,
             Some(t) => exists<r> result == Some(r) && f.postcondition_once((t,), r),
         })]
+        #[may_panic(match self { None => false, Some(t) => f.panic_condition((t,)) })]
         fn map<U, F: FnOnce(T) -> U>(self, f: F) -> Option<U> {
             match self {
                 Some(t) => Some(f(t)),
@@ -222,6 +225,7 @@ extern_spec! {
             None => true,
             Some(t) => f.postcondition_once((&t,), ()),
         })]
+        #[may_panic(match self { None => false, Some(t) => f.panic_condition((&t,)) })]
         fn inspect<F: FnOnce(&T)>(self, f: F) -> Option<T> {
             match self {
                 None => None,
@@ -234,6 +238,7 @@ extern_spec! {
             None => result == default,
             Some(t) => f.postcondition_once((t,), result)
         })]
+        #[may_panic(match self { None => false, Some(t) => f.panic_condition((t,)) })]
         fn map_or<U, F: FnOnce(T) -> U>(self, default: U, f: F) -> U {
             match self {
                 None => default,
@@ -248,6 +253,10 @@ extern_spec! {
         #[ensures(match self {
             None => default.postcondition_once((), result),
             Some(t) => f.postcondition_once((t,), result),
+        })]
+        #[may_panic(match self {
+            None => default.panic_condition(()),
+            Some(t) => f.panic_condition((t,)),
         })]
         fn map_or_else<U, D: FnOnce() -> U, F: FnOnce(T) -> U>(self, default: D, f: F) -> U {
             match self {
@@ -273,6 +282,7 @@ extern_spec! {
             None => exists<r> result == Err(r) && err.postcondition_once((), r),
             Some(t) => result == Ok(t),
         })]
+        #[may_panic(self == None && err.panic_condition(()))]
         fn ok_or_else<E, F: FnOnce() -> E>(self, err: F) -> Result<T, E> {
             match self {
                 None => Err(err()),
@@ -301,6 +311,10 @@ extern_spec! {
         #[requires(match *self {
             None => true,
             Some(cur) => forall<bor: &mut T> *bor == cur ==> T::deref_mut.precondition((bor,)),
+        })]
+        #[may_panic(match *self {
+            None => false,
+            Some(cur) => exists<bor: &mut T> *bor == cur && T::deref_mut.panic_condition((bor,)),
         })]
         #[ensures(match (*self, ^self, result) {
             (None, None, None) => true,
@@ -349,6 +363,10 @@ extern_spec! {
             None => result == None,
             Some(t) => f.postcondition_once((t,), result),
         })]
+        #[may_panic(match self {
+            None => false,
+            Some(t) => f.panic_condition((t,)),
+        })]
         fn and_then<U, F: FnOnce(T) -> Option<U>>(self, f: F) -> Option<U> {
             match self {
                 None => None,
@@ -363,6 +381,10 @@ extern_spec! {
                 None => predicate.postcondition_once((&t,), false) && resolve(t),
                 Some(r) => predicate.postcondition_once((&t,), true) && r == t,
             },
+        })]
+        #[may_panic(match self {
+            None => false,
+            Some(t) => predicate.panic_condition((&t,)),
         })]
         fn filter<P: FnOnce(&T) -> bool>(self, predicate: P) -> Option<T> {
             match self {
@@ -386,6 +408,7 @@ extern_spec! {
             None => f.postcondition_once((), result),
             Some(t) => result == Some(t),
         })]
+        #[may_panic(self == None && f.panic_condition(()))]
         fn or_else<F: FnOnce() -> Option<T>>(self, f: F) -> Option<T> {
             match self {
                 None => f(),
@@ -438,6 +461,10 @@ extern_spec! {
             None => T::default.precondition(()),
             Some(_) => true,
         })]
+        #[may_panic(match self {
+            None => T::default.panic_condition(()),
+            Some(_) => false,
+        })]
         #[ensures(match *self {
             None => T::default.postcondition((), *result) && ^self == Some(^result),
             Some(_) => *self == Some(*result) && ^self == Some(^result),
@@ -453,6 +480,7 @@ extern_spec! {
             None => f.postcondition_once((), *result) && ^self == Some(^result),
             Some(_) => *self == Some(*result) && ^self == Some(^result),
         })]
+        #[may_panic(*self == None && f.panic_condition(()))]
         fn get_or_insert_with<F: FnOnce() -> T>(&mut self, f: F) -> &mut T {
             match self {
                 None => { *self = Some(f()); self.as_mut().unwrap() }
@@ -479,6 +507,10 @@ extern_spec! {
                     } else {
                         ^self == Some(^b) && result == None
                     }
+        })]
+        #[may_panic(match *self {
+            None => false,
+            Some(t) => exists<b:&mut T> inv(b) && *b == t && predicate.panic_condition((b,)),
         })]
         fn take_if<P: FnOnce(&mut T) -> bool>(&mut self, predicate: P) -> Option<T> {
             match self {

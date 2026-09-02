@@ -1,0 +1,235 @@
+module M_binary_search
+  use creusot.int.UInt64
+  use seq.Seq
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  use int.Int
+  
+  type t_Vec_u32_Global
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  function view_Vec_u32_Global (self: t_Vec_u32_Global) : Seq.seq UInt32.t
+  
+  axiom view_Vec_u32_Global_spec:
+    forall self: t_Vec_u32_Global [view_Vec_u32_Global self]. Seq.length (view_Vec_u32_Global self)
+      <= UInt64.t'int const_MAX
+  
+  let len_u32 (self_: t_Vec_u32_Global) (return (x: UInt64.t)) = any
+    [ return (result: UInt64.t) -> {[@stop_split] [@expl:len ensures] UInt64.t'int result
+      = Seq.length (view_Vec_u32_Global self_)}
+      (! return {result}) ]
+  
+  type t_Result_usize_usize = Ok UInt64.t | Err UInt64.t
+  
+  type t_Ordering = Less | Equal | Greater
+  
+  function cmp_log_u32 (self: UInt32.t) (o: UInt32.t) : t_Ordering = if UInt32.lt self o then
+      Less
+    else
+      if self = o then Equal else Greater
+  
+  
+  function eq_cmp_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom eq_cmp_u32_spec: forall x: UInt32.t, y: UInt32.t. (x = y) = (cmp_log_u32 x y = Equal)
+  
+  function antisym2_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom antisym2_u32_spec: forall x: UInt32.t, y: UInt32.t. cmp_log_u32 x y = Greater -> cmp_log_u32 y x = Less
+  
+  function antisym1_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom antisym1_u32_spec: forall x: UInt32.t, y: UInt32.t. cmp_log_u32 x y = Less -> cmp_log_u32 y x = Greater
+  
+  function trans_u32 (x: UInt32.t) (y: UInt32.t) (z: UInt32.t) (o: t_Ordering) : ()
+  
+  axiom trans_u32_spec: forall x: UInt32.t, y: UInt32.t, z: UInt32.t, o: t_Ordering. cmp_log_u32 x y = o
+      -> cmp_log_u32 y z = o -> cmp_log_u32 x z = o
+  
+  function refl_u32 (x: UInt32.t) : ()
+  
+  axiom refl_u32_spec: forall x: UInt32.t. cmp_log_u32 x x = Equal
+  
+  function cmp_gt_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_gt_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.gt x y = (cmp_log_u32 x y = Greater)
+  
+  function cmp_ge_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_ge_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.ge x y = (cmp_log_u32 x y <> Less)
+  
+  function cmp_lt_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_lt_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.lt x y = (cmp_log_u32 x y = Less)
+  
+  function cmp_le_log_u32 (x: UInt32.t) (y: UInt32.t) : ()
+  
+  axiom cmp_le_log_u32_spec: forall x: UInt32.t, y: UInt32.t. UInt32.le x y = (cmp_log_u32 x y <> Greater)
+  
+  function index_Vec_u32_Global [@inline:trivial] (self: t_Vec_u32_Global) (ix: int) : UInt32.t =
+    Seq.get (view_Vec_u32_Global self) ix
+  
+  meta "rewrite_def" function index_Vec_u32_Global
+  
+  function cmp_log_usize (self: UInt64.t) (o: UInt64.t) : t_Ordering = if UInt64.lt self o then
+      Less
+    else
+      if self = o then Equal else Greater
+  
+  
+  function eq_cmp_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom eq_cmp_usize_spec: forall x: UInt64.t, y: UInt64.t. (x = y) = (cmp_log_usize x y = Equal)
+  
+  function antisym2_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym2_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Greater -> cmp_log_usize y x = Less
+  
+  function antisym1_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym1_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Less -> cmp_log_usize y x = Greater
+  
+  function trans_usize (x: UInt64.t) (y: UInt64.t) (z: UInt64.t) (o: t_Ordering) : ()
+  
+  axiom trans_usize_spec: forall x: UInt64.t, y: UInt64.t, z: UInt64.t, o: t_Ordering. cmp_log_usize x y = o
+      -> cmp_log_usize y z = o -> cmp_log_usize x z = o
+  
+  function refl_usize (x: UInt64.t) : ()
+  
+  axiom refl_usize_spec: forall x: UInt64.t. cmp_log_usize x x = Equal
+  
+  function cmp_gt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_gt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.gt x y = (cmp_log_usize x y = Greater)
+  
+  function cmp_ge_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_ge_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.ge x y = (cmp_log_usize x y <> Less)
+  
+  function cmp_lt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_lt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.lt x y = (cmp_log_usize x y = Less)
+  
+  function cmp_le_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_le_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.le x y = (cmp_log_usize x y <> Greater)
+  
+  type tup2_usize_bool = { f0: UInt64.t; f1: bool }
+  
+  predicate in_bounds_usize [@inline:trivial] (self: UInt64.t) (seq: Seq.seq UInt32.t) =
+    UInt64.t'int self < Seq.length seq
+  
+  meta "rewrite_def" predicate in_bounds_usize
+  
+  predicate has_value_usize [@inline:trivial] (self: UInt64.t) (seq: Seq.seq UInt32.t) (out: UInt32.t) =
+    Seq.get seq (UInt64.t'int self) = out
+  
+  meta "rewrite_def" predicate has_value_usize
+  
+  let index_Vec_u32_Global'0 (self_: t_Vec_u32_Global) (ix: UInt64.t) (panic) (return (x: UInt32.t)) = any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:index_Vec_u32_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_u32_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_u32_Global self_) result)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:index may_panic] not in_bounds_usize ix (view_Vec_u32_Global self_)} (! panic) ]
+  
+  predicate sorted_range (s: Seq.seq UInt32.t) (l: int) (u: int) =
+    forall i: int, j: int. l <= i /\ i < j /\ j < u -> UInt32.le (Seq.get s i) (Seq.get s j)
+  
+  predicate sorted (s: Seq.seq UInt32.t) = sorted_range s 0 (Seq.length s)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let binary_search (arr: t_Vec_u32_Global) (elem: UInt32.t) (return (x: t_Result_usize_usize)) =
+  {[@stop_split] [@expl:binary_search requires] ([@stop_split] [@expl:binary_search requires #0] Seq.length (view_Vec_u32_Global arr)
+      <= UInt64.t'int const_MAX)
+    /\ ([@stop_split] [@expl:binary_search requires #1] sorted (view_Vec_u32_Global arr))}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = len_u32 {arr} (fun (_x: UInt64.t) -> [ &_18 <- _x ] s1)
+      | s1 = [ &_17 <- _18 = (0: UInt64.t) ] s2
+      | s2 = any [ br0 -> {_17 = false} (! bb3) | br1 -> {_17} (! bb2) ] ]
+    | bb2 = s0 [ s0 = [ &_ret <- Err (0: UInt64.t) ] s1 | s1 = return {_ret} ]
+    | bb3 = s0
+      [ s0 = len_u32 {arr} (fun (_x: UInt64.t) -> [ &size <- _x ] s1) | s1 = [ &base <- (0: UInt64.t) ] s2 | s2 = bb5 ]
+    | bb5 = bb5
+      [ bb5 = {[@expl:loop invariant #0] 0 < UInt64.t'int size
+        /\ UInt64.t'int size + UInt64.t'int base <= Seq.length (view_Vec_u32_Global arr)}
+        {[@expl:loop invariant #1] forall i: UInt64.t. UInt64.lt i base
+          -> UInt32.le (index_Vec_u32_Global arr (UInt64.t'int i)) elem}
+        {[@expl:loop invariant #2] forall i: UInt64.t. UInt64.t'int base + UInt64.t'int size < UInt64.t'int i
+            /\ UInt64.t'int i < Seq.length (view_Vec_u32_Global arr)
+          -> UInt32.lt elem (index_Vec_u32_Global arr (UInt64.t'int i))}
+        (! s0)
+        [ s0 = [ &_40 <- UInt64.gt size (1: UInt64.t) ] s1
+        | s1 = any [ br0 -> {_40 = false} (! bb15) | br1 -> {_40} (! bb7) ] ]
+        [ bb7 = s0
+          [ s0 = [ &_44 <- (2: UInt64.t) = (0: UInt64.t) ] s1
+          | s1 = {[@expl:division by zero] not _44} s2
+          | s2 = UInt64.div {size} {(2: UInt64.t)} (fun (_x: UInt64.t) -> [ &half <- _x ] s3)
+          | s3 = [ &_48 <- let (_fst, _snd) = UInt64.add_with_overflow base half in { f0 = _fst; f1 = _snd } ] s4
+          | s4 = {[@expl:Add overflow] not _48.f1} s5
+          | s5 = [ &mid <- _48.f0 ] s6
+          | s6 = index_Vec_u32_Global'0 {arr} {mid}
+              (-> {[@expl:the callee cannot panic here] false} any)
+              (fun (_x: UInt32.t) -> [ &_52 <- _x ] s7)
+          | s7 = [ &_50 <- UInt32.gt _52 elem ] s8
+          | s8 = any [ br0 -> {_50 = false} (! bb12) | br1 -> {_50} (! bb11) ] ]
+        | bb11 = s0 [ s0 = [ &_49 <- base ] s1 | s1 = bb13 ]
+        | bb12 = s0 [ s0 = [ &_49 <- mid ] s1 | s1 = bb13 ]
+        | bb13 = s0
+          [ s0 = [ &base <- _49 ] s1
+          | s1 = [ &_57 <- let (_fst, _snd) = UInt64.sub_with_overflow size half in { f0 = _fst; f1 = _snd } ] s2
+          | s2 = {[@expl:Sub overflow] not _57.f1} s3
+          | s3 = [ &size <- _57.f0 ] s4
+          | s4 = bb5 ] ] ]
+    | bb15 = s0
+      [ s0 = index_Vec_u32_Global'0 {arr} {base}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt32.t) -> [ &_60 <- _x ] s1)
+      | s1 = [ &cmp <- _60 ] s2
+      | s2 = [ &_63 <- cmp = elem ] s3
+      | s3 = any [ br0 -> {_63 = false} (! bb18) | br1 -> {_63} (! bb17) ] ]
+    | bb17 = s0 [ s0 = [ &_ret <- Ok base ] s1 | s1 = return {_ret} ]
+    | bb18 = s0
+      [ s0 = [ &_67 <- UInt32.lt cmp elem ] s1 | s1 = any [ br0 -> {_67 = false} (! bb21) | br1 -> {_67} (! bb19) ] ]
+    | bb19 = s0
+      [ s0 = [ &_72 <- let (_fst, _snd) = UInt64.add_with_overflow base (1: UInt64.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _72.f1} s2
+      | s2 = [ &_ret <- Err (_72.f0) ] s3
+      | s3 = return {_ret} ]
+    | bb21 = s0 [ s0 = [ &_ret <- Err base ] s1 | s1 = return {_ret} ] ]
+    [ & _ret: t_Result_usize_usize = Any.any_l ()
+    | & arr: t_Vec_u32_Global = arr
+    | & elem: UInt32.t = elem
+    | & _17: bool = Any.any_l ()
+    | & _18: UInt64.t = Any.any_l ()
+    | & size: UInt64.t = Any.any_l ()
+    | & base: UInt64.t = Any.any_l ()
+    | & _40: bool = Any.any_l ()
+    | & half: UInt64.t = Any.any_l ()
+    | & _44: bool = Any.any_l ()
+    | & mid: UInt64.t = Any.any_l ()
+    | & _48: tup2_usize_bool = Any.any_l ()
+    | & _49: UInt64.t = Any.any_l ()
+    | & _50: bool = Any.any_l ()
+    | & _52: UInt32.t = Any.any_l ()
+    | & _57: tup2_usize_bool = Any.any_l ()
+    | & cmp: UInt32.t = Any.any_l ()
+    | & _60: UInt32.t = Any.any_l ()
+    | & _63: bool = Any.any_l ()
+    | & _67: bool = Any.any_l ()
+    | & _72: tup2_usize_bool = Any.any_l () ])
+    [ return (result: t_Result_usize_usize) ->
+    {[@stop_split] [@expl:binary_search ensures] ([@stop_split] [@expl:binary_search ensures #0] forall x: UInt64.t. result
+            = Ok x -> index_Vec_u32_Global arr (UInt64.t'int x) = elem)
+      /\ ([@stop_split] [@expl:binary_search ensures #1] forall x: UInt64.t. result = Err x
+          -> (forall i: UInt64.t. UInt64.lt i x -> UInt32.le (index_Vec_u32_Global arr (UInt64.t'int i)) elem))
+      /\ ([@stop_split] [@expl:binary_search ensures #2] forall x: UInt64.t. result = Err x
+        -> (forall i: UInt64.t. UInt64.lt x i /\ UInt64.t'int i < Seq.length (view_Vec_u32_Global arr)
+          -> UInt32.lt elem (index_Vec_u32_Global arr (UInt64.t'int i))))}
+      (! return {result}) ]
+end

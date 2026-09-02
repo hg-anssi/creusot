@@ -1,0 +1,12 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_f": {
+      "vc_f": { "prover": "alt-ergo", "time": 0.027 },
+      "vc_proj_toggle_i32": { "prover": "alt-ergo", "time": 0.054 }
+    },
+    "M_proj_toggle": {
+      "vc_proj_toggle_T": { "prover": "alt-ergo", "time": 0.019 }
+    }
+  }
+}

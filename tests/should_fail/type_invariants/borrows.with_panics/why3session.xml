@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.15.3" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC5" version="1.3.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<file format="coma">
+<path name=".."/><path name="borrows.with_panics.coma"/>
+<theory name="M_dec" proved="true">
+ <goal name="vc_dec" proved="true">
+ <proof prover="1"><result status="valid" time="0.011883" steps="33"/></proof>
+ </goal>
+</theory>
+<theory name="M_destruct" proved="true">
+ <goal name="vc_destruct" proved="true">
+ <proof prover="1"><result status="valid" time="0.008829" steps="46"/></proof>
+ </goal>
+</theory>
+<theory name="M_frozen_dead">
+ <goal name="vc_frozen_dead">
+ <proof prover="0"><result status="unknown" time="0.024777" steps="7152"/></proof>
+ <proof prover="1" timelimit="1"><result status="unknown" time="0.035866" steps="281"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="52651461"/></proof>
+ <proof prover="3"><result status="unknown" time="0.045297" steps="14388"/></proof>
+ <transf name="compute_specified" >
+  <goal name="vc_frozen_dead.0">
+  <proof prover="0"><result status="unknown" time="0.015366" steps="6258"/></proof>
+  <proof prover="1" timelimit="1"><result status="unknown" time="0.017859" steps="170"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="54941390"/></proof>
+  <proof prover="3"><result status="unknown" time="0.029472" steps="13712"/></proof>
+  <transf name="split_vc" >
+   <goal name="vc_frozen_dead.0.0" expl="inc requires" proved="true">
+   <proof prover="1"><result status="valid" time="0.012363" steps="18"/></proof>
+   </goal>
+   <goal name="vc_frozen_dead.0.1" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.021924" steps="22"/></proof>
+   </goal>
+   <goal name="vc_frozen_dead.0.2" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.012186" steps="16"/></proof>
+   </goal>
+   <goal name="vc_frozen_dead.0.3" expl="type invariant">
+   <proof prover="0"><result status="unknown" time="0.010600" steps="5535"/></proof>
+   <proof prover="1" timelimit="1"><result status="unknown" time="0.019813" steps="119"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="23423459"/></proof>
+   <proof prover="3"><result status="unknown" time="0.039953" steps="13164"/></proof>
+   <transf name="split_vc" >
+    <goal name="vc_frozen_dead.0.3.0" expl="type invariant">
+    <proof prover="0"><result status="unknown" time="0.019506" steps="5511"/></proof>
+    <proof prover="1" timelimit="1"><result status="unknown" time="0.017211" steps="119"/></proof>
+    <proof prover="2"><result status="timeout" time="1.000000" steps="29110753"/></proof>
+    <proof prover="3"><result status="unknown" time="0.042845" steps="13155"/></proof>
+    <transf name="split_vc" >
+     <goal name="vc_frozen_dead.0.3.0.0" expl="type invariant">
+     <proof prover="0"><result status="unknown" time="0.029295" steps="5495"/></proof>
+     <proof prover="1" timelimit="1"><result status="unknown" time="0.015661" steps="119"/></proof>
+     <proof prover="2"><result status="timeout" time="1.000000" steps="27765327"/></proof>
+     <proof prover="3"><result status="unknown" time="0.046266" steps="13155"/></proof>
+     <transf name="inline_goal" >
+      <goal name="vc_frozen_dead.0.3.0.0.0" expl="type invariant">
+      <transf name="split_all_full" >
+       <goal name="vc_frozen_dead.0.3.0.0.0.0" expl="type invariant">
+       <proof prover="0"><result status="unknown" time="0.011440" steps="5599"/></proof>
+       <proof prover="1" timelimit="1"><result status="unknown" time="0.015687" steps="116"/></proof>
+       <proof prover="2"><result status="timeout" time="1.000000" steps="72742046"/></proof>
+       <proof prover="3"><result status="unknown" time="0.038202" steps="13168"/></proof>
+       <transf name="inline_goal" >
+        <goal name="vc_frozen_dead.0.3.0.0.0.0.0" expl="type invariant">
+        <proof prover="0" timelimit="30"><result status="unknown" time="0.024265" steps="5599"/></proof>
+        <proof prover="1" timelimit="30"><result status="unknown" time="0.012189" steps="116"/></proof>
+        <proof prover="2" timelimit="30"><result status="timeout" time="30.000000" steps="620802168"/></proof>
+        <proof prover="3" timelimit="30"><result status="unknown" time="0.051551" steps="13168"/></proof>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_frozen_dead.0.3.1" expl="type invariant" proved="true">
+    <proof prover="1"><result status="valid" time="0.016998" steps="14"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="vc_frozen_dead.0.4" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.016327" steps="12"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_hard" proved="true">
+ <goal name="vc_hard" proved="true">
+ <proof prover="1"><result status="valid" time="0.004189" steps="35"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_NonZero__inner_mut">
+ <goal name="vc_inner_mut">
+ <proof prover="0"><result status="unknown" time="0.013249" steps="4102"/></proof>
+ <proof prover="1" timelimit="1"><result status="unknown" time="0.032291" steps="147"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="34961430"/></proof>
+ <proof prover="3"><result status="unknown" time="0.028118" steps="9327"/></proof>
+ <transf name="compute_specified" >
+  <goal name="vc_inner_mut.0">
+  <proof prover="0"><result status="unknown" time="0.021317" steps="3808"/></proof>
+  <proof prover="1" timelimit="1"><result status="unknown" time="0.011818" steps="55"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="11741906"/></proof>
+  <proof prover="3"><result status="unknown" time="0.019225" steps="8904"/></proof>
+  <transf name="split_vc" >
+   <goal name="vc_inner_mut.0.0" expl="inner_mut ensures #1 (inner_mut ensures)" proved="true">
+   <proof prover="1"><result status="valid" time="0.008003" steps="10"/></proof>
+   </goal>
+   <goal name="vc_inner_mut.0.1" expl="type invariant">
+   <proof prover="0"><result status="unknown" time="0.016860" steps="3343"/></proof>
+   <proof prover="1" timelimit="1"><result status="unknown" time="0.018984" steps="40"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="30596428"/></proof>
+   <proof prover="3"><result status="unknown" time="0.018117" steps="8427"/></proof>
+   <transf name="split_vc" >
+    <goal name="vc_inner_mut.0.1.0" expl="type invariant">
+    <proof prover="0"><result status="unknown" time="0.011686" steps="3317"/></proof>
+    <proof prover="1" timelimit="1"><result status="unknown" time="0.012315" steps="41"/></proof>
+    <proof prover="2"><result status="timeout" time="1.000000" steps="31494940"/></proof>
+    <proof prover="3"><result status="unknown" time="0.027532" steps="8414"/></proof>
+    <transf name="inline_goal" >
+     <goal name="vc_inner_mut.0.1.0.0" expl="type invariant">
+     <transf name="split_all_full" >
+      <goal name="vc_inner_mut.0.1.0.0.0" expl="type invariant">
+      <proof prover="0"><result status="unknown" time="0.007187" steps="3408"/></proof>
+      <proof prover="1" timelimit="1"><result status="unknown" time="0.005187" steps="40"/></proof>
+      <proof prover="2"><result status="timeout" time="1.000000" steps="39512484"/></proof>
+      <proof prover="3"><result status="unknown" time="0.036679" steps="8458"/></proof>
+      <transf name="inline_goal" >
+       <goal name="vc_inner_mut.0.1.0.0.0.0" expl="type invariant">
+       <proof prover="0" timelimit="30"><result status="unknown" time="0.013479" steps="3408"/></proof>
+       <proof prover="1" timelimit="30"><result status="unknown" time="0.015871" steps="40"/></proof>
+       <proof prover="2" timelimit="30"><result status="timeout" time="30.000000" steps="357293174"/></proof>
+       <proof prover="3" timelimit="30"><result status="unknown" time="0.039292" steps="8458"/></proof>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_inner_mut.0.1.1" expl="type invariant" proved="true">
+    <proof prover="1"><result status="valid" time="0.021069" steps="8"/></proof>
+    </goal>
+   </transf>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_impl_NonZero__new" proved="true">
+ <goal name="vc_new" proved="true">
+ <proof prover="1"><result status="valid" time="0.008698" steps="12"/></proof>
+ </goal>
+</theory>
+<theory name="M_impl_SumTo10__foo" proved="true">
+ <goal name="vc_foo" proved="true">
+ <proof prover="1"><result status="valid" time="0.016814" steps="89"/></proof>
+ </goal>
+</theory>
+<theory name="M_inc" proved="true">
+ <goal name="vc_inc" proved="true">
+ <proof prover="1"><result status="valid" time="0.016488" steps="33"/></proof>
+ </goal>
+</theory>
+<theory name="M_partial_move" proved="true">
+ <goal name="vc_partial_move" proved="true">
+ <proof prover="1"><result status="valid" time="0.015700" steps="46"/></proof>
+ </goal>
+</theory>
+<theory name="M_simple" proved="true">
+ <goal name="vc_simple" proved="true">
+ <proof prover="1"><result status="valid" time="0.012515" steps="43"/></proof>
+ </goal>
+</theory>
+<theory name="M_tuple">
+ <goal name="vc_tuple">
+ <proof prover="0"><result status="unknown" time="0.016330" steps="5818"/></proof>
+ <proof prover="1" timelimit="1"><result status="unknown" time="0.021668" steps="276"/></proof>
+ <proof prover="2"><result status="timeout" time="1.000000" steps="68310152"/></proof>
+ <proof prover="3"><result status="unknown" time="0.039974" steps="11569"/></proof>
+ <transf name="compute_specified" >
+  <goal name="vc_tuple.0">
+  <proof prover="0"><result status="unknown" time="0.010555" steps="4694"/></proof>
+  <proof prover="1" timelimit="1"><result status="unknown" time="0.017080" steps="124"/></proof>
+  <proof prover="2"><result status="timeout" time="1.000000" steps="54165078"/></proof>
+  <proof prover="3"><result status="unknown" time="0.046087" steps="11078"/></proof>
+  <transf name="split_vc" >
+   <goal name="vc_tuple.0.0" expl="inc requires" proved="true">
+   <proof prover="1"><result status="valid" time="0.015735" steps="10"/></proof>
+   </goal>
+   <goal name="vc_tuple.0.1" expl="type invariant">
+   <proof prover="0"><result status="unknown" time="0.023446" steps="4386"/></proof>
+   <proof prover="1" timelimit="1"><result status="unknown" time="0.020678" steps="103"/></proof>
+   <proof prover="2"><result status="timeout" time="1.000000" steps="38349773"/></proof>
+   <proof prover="3"><result status="unknown" time="0.028618" steps="10778"/></proof>
+   <transf name="split_vc" >
+    <goal name="vc_tuple.0.1.0" expl="type invariant">
+    <proof prover="0"><result status="unknown" time="0.020652" steps="4171"/></proof>
+    <proof prover="1" timelimit="1"><result status="unknown" time="0.016336" steps="63"/></proof>
+    <proof prover="2"><result status="timeout" time="1.000000" steps="61959116"/></proof>
+    <proof prover="3"><result status="unknown" time="0.028571" steps="10750"/></proof>
+    <transf name="split_vc" >
+     <goal name="vc_tuple.0.1.0.0" expl="type invariant">
+     <proof prover="0"><result status="unknown" time="0.016358" steps="4163"/></proof>
+     <proof prover="1" timelimit="1"><result status="unknown" time="0.014889" steps="63"/></proof>
+     <proof prover="2"><result status="timeout" time="1.000000" steps="44666776"/></proof>
+     <proof prover="3"><result status="unknown" time="0.031821" steps="10750"/></proof>
+     <transf name="inline_goal" >
+      <goal name="vc_tuple.0.1.0.0.0" expl="type invariant">
+      <transf name="split_all_full" >
+       <goal name="vc_tuple.0.1.0.0.0.0" expl="type invariant">
+       <proof prover="0"><result status="unknown" time="0.022314" steps="4279"/></proof>
+       <proof prover="1" timelimit="1"><result status="unknown" time="0.012152" steps="62"/></proof>
+       <proof prover="2"><result status="timeout" time="1.000000" steps="47840473"/></proof>
+       <proof prover="3"><result status="unknown" time="0.045578" steps="10782"/></proof>
+       <transf name="inline_goal" >
+        <goal name="vc_tuple.0.1.0.0.0.0.0" expl="type invariant">
+        <proof prover="0" timelimit="30"><result status="unknown" time="0.019163" steps="4279"/></proof>
+        <proof prover="1" timelimit="30"><result status="unknown" time="0.017129" steps="62"/></proof>
+        <proof prover="2" timelimit="30"><result status="timeout" time="30.000000" steps="1225726172"/></proof>
+        <proof prover="3" timelimit="30"><result status="unknown" time="0.045252" steps="10782"/></proof>
+        </goal>
+       </transf>
+       </goal>
+      </transf>
+      </goal>
+     </transf>
+     </goal>
+    </transf>
+    </goal>
+    <goal name="vc_tuple.0.1.1" expl="type invariant" proved="true">
+    <proof prover="1"><result status="valid" time="0.017362" steps="24"/></proof>
+    </goal>
+    <goal name="vc_tuple.0.1.2" expl="type invariant" proved="true">
+    <proof prover="1"><result status="valid" time="0.017237" steps="14"/></proof>
+    </goal>
+   </transf>
+   </goal>
+   <goal name="vc_tuple.0.2" expl="type invariant" proved="true">
+   <proof prover="1"><result status="valid" time="0.012081" steps="10"/></proof>
+   </goal>
+  </transf>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+</file>
+</why3session>

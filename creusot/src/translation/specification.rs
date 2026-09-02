@@ -78,6 +78,13 @@ pub struct PreContract<'tcx> {
     pub(crate) variant: Option<Term<'tcx>>,
     pub(crate) requires: Vec<Condition<'tcx>>,
     pub(crate) ensures: Vec<(Box<[Trigger<'tcx>]>, Condition<'tcx>)>,
+    /// Panic conditions, gathered from the `#[may_panic(...)]` clauses: each is a
+    /// predicate over the function inputs (`result` is not in scope) describing a
+    /// case in which the function is permitted to panic. The function may panic
+    /// only in (initial) states satisfying their *disjunction* (see
+    /// [`PreContract::panics_disj`]) — each clause *adds* an allowed-panic case.
+    /// An empty list means the function cannot panic (the neutral, `false`).
+    pub(crate) panics: Vec<Condition<'tcx>>,
     /// Ignored for logic functions
     pub(crate) purity: ProgramPurity,
     pub(crate) extern_no_spec: bool,
@@ -98,6 +105,7 @@ impl<'tcx> PreContract<'tcx> {
             .chain(self.ensures.iter_mut().flat_map(|(triggers, cond)| {
                 std::iter::once(&mut cond.term).chain(triggers.iter_mut().flat_map(|t| &mut t.0))
             }))
+            .chain(self.panics.iter_mut().map(|cond| &mut cond.term))
             .chain(self.variant.iter_mut())
         {
             *term =
@@ -111,7 +119,43 @@ impl<'tcx> PreContract<'tcx> {
     }
 
     pub(crate) fn is_empty(&self) -> bool {
-        self.requires.is_empty() && self.ensures.is_empty() && self.variant.is_none()
+        self.requires.is_empty()
+            && self.ensures.is_empty()
+            && self.panics.is_empty()
+            && self.variant.is_none()
+    }
+
+    /// Whether the function is allowed to panic (in states satisfying [`Self::panics_disj`]).
+    ///
+    /// This is deliberately *syntactic* (any `#[may_panic(...)]` clause present), not
+    /// "the panic condition is satisfiable": `#[may_panic(false)]` still marks the
+    /// function as faillible (its Coma handler gets a `panic` continuation) even
+    /// though its condition is unsatisfiable.
+    pub(crate) fn may_panic(&self) -> bool {
+        !self.panics.is_empty()
+    }
+
+    /// The panic condition of the function: it may panic only in (initial) states
+    /// satisfying this term. It is the *disjunction* of the `#[may_panic(...)]` clauses
+    /// — each clause adds a case in which panicking is permitted — so the empty
+    /// case is `false` (the neutral of disjunction), i.e. cannot panic.
+    pub(crate) fn panics_disj(&self, tcx: TyCtxt<'tcx>) -> Term<'tcx> {
+        self.panics.iter().fold(Term::false_(tcx), |acc, cond| {
+            Term::disj(acc, cond.term.clone().spanned_nontrivial())
+        })
+    }
+
+    /// Reinterpret every `#[may_panic(P)]` clause as `#[requires(!P)]` (used when the
+    /// `--enable-panics` flag is absent). Panicking then becomes a caller obligation rather than
+    /// a first-class effect: each panic case `P` is negated and pushed as a precondition, and the
+    /// `panics` list is cleared so `may_panic()` becomes `false` and no `panic` continuation is
+    /// threaded downstream — the function is seen exactly like classic (panic-free) Creusot.
+    pub(crate) fn fold_panics_into_requires(mut self, tcx: TyCtxt<'tcx>) -> Self {
+        for cond in std::mem::take(&mut self.panics) {
+            let expl = cond.expl.replacen("may_panic", "requires (no panic)", 1);
+            self.requires.push(Condition { term: cond.term.not(tcx), expl });
+        }
+        self
     }
 
     pub(crate) fn ensures_conj(&self, tcx: TyCtxt<'tcx>) -> Term<'tcx> {
@@ -151,6 +195,8 @@ pub struct ContractClauses {
     variant: Option<DefId>,
     requires: Vec<DefId>,
     ensures: Vec<DefId>,
+    /// `#[may_panic(...)]` clauses: predicates over the inputs gating the panic outcome.
+    panics: Vec<DefId>,
     pub(crate) purity: ProgramPurity,
 }
 
@@ -160,6 +206,7 @@ impl ContractClauses {
             variant: None,
             requires: Vec::new(),
             ensures: Vec::new(),
+            panics: Vec::new(),
             purity: ProgramPurity::Impure,
         }
     }
@@ -173,8 +220,10 @@ impl ContractClauses {
         let bound_with_result =
             &bound.into_iter().chain(std::iter::once(name::result())).collect::<Box<_>>();
         let bound = bound_with_result.split_last().unwrap().1;
-        let has_user_contract =
-            !self.requires.is_empty() || !self.ensures.is_empty() || self.variant.is_some();
+        let has_user_contract = !self.requires.is_empty()
+            || !self.ensures.is_empty()
+            || !self.panics.is_empty()
+            || self.variant.is_some();
         let n_requires = self.requires.len();
         let requires = self
             .requires
@@ -207,6 +256,24 @@ impl ContractClauses {
             })
             .collect();
 
+        // `#[may_panic(...)]` clauses are predicates over the inputs (no `result`),
+        // gathered exactly like `requires`. Their mere presence marks the function
+        // as allowed to panic (see `PreContract::may_panic`).
+        let n_panics = self.panics.len();
+        let panics = self
+            .panics
+            .into_iter()
+            .enumerate()
+            .map(|(i, pan_id)| {
+                log::trace!("may_panic clause {:?}", pan_id);
+                let mut expl = format!("expl:{fn_name} may_panic");
+                if n_panics > 1 {
+                    expl.push_str(&format!(" #{i}"))
+                }
+                Condition { term: ctx.term(pan_id).unwrap().rename(bound), expl }
+            })
+            .collect();
+
         let variant = self.variant.map(|var_id| {
             log::trace!("variant clause {:?}", var_id);
             ctx.term(var_id).unwrap().rename(bound)
@@ -216,6 +283,7 @@ impl ContractClauses {
             variant,
             requires,
             ensures,
+            panics,
             purity: self.purity,
             extern_no_spec: false,
             has_user_contract,
@@ -251,6 +319,9 @@ pub(crate) fn contract_clauses_of(
     let ensures = creusot_clause_attrs(ctx.tcx, def_id, "ensures")
         .map(get_creusot_item)
         .collect::<Result<Vec<_>, _>>()?;
+    let panics = creusot_clause_attrs(ctx.tcx, def_id, "may_panic")
+        .map(get_creusot_item)
+        .collect::<Result<Vec<_>, _>>()?;
     let mut it_variant = creusot_clause_attrs(ctx.tcx, def_id, "variant").map(get_creusot_item);
     let variant = it_variant.next().transpose()?;
     if it_variant.next().transpose()?.is_some() {
@@ -264,7 +335,7 @@ pub(crate) fn contract_clauses_of(
         ProgramPurity::Impure
     };
 
-    Ok(ContractClauses { requires, ensures, variant, purity })
+    Ok(ContractClauses { requires, ensures, panics, variant, purity })
 }
 
 pub(crate) fn inherited_extern_spec<'tcx>(
@@ -311,7 +382,7 @@ pub(crate) fn contract_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pr
         .instantiate(ctx.tcx, subst)
         .skip_normalization();
 
-    if let Some(spec) = ctx.extern_spec(def_id).cloned() {
+    let pre_sig = if let Some(spec) = ctx.extern_spec(def_id).cloned() {
         // We do NOT normalize the contract here. See below.
         let bound = spec.inputs.iter().map(|(ident, _, _)| ident.0);
         let contract = spec
@@ -366,6 +437,41 @@ pub(crate) fn contract_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pr
         }
         let contract = contract.normalize(ctx, ctx.typing_env(def_id));
         PreSignature { inputs, output, contract }
+    };
+    check_panics_allowed(ctx, def_id, &pre_sig);
+    pre_sig
+}
+
+/// `#[may_panic(...)]` clauses are only meaningful on items with an operational
+/// panic outcome. Only **logic functions** are rejected: they are erased and
+/// purely mathematical, so a panic outcome is meaningless.
+///
+/// Ghost items (`ProgramPurity::Ghost`) *are* allowed to carry a panic clause,
+/// but its meaning is context-sensitive — a ghost context is a local "panics
+/// OFF" context, so `may_panic(P)` behaves there exactly like `requires(!P)`.
+/// Both kinds of ghost item keep their `may_panic` clause faithfully; the fold
+/// happens at the point of *use*, differently for each:
+///  - A **named** ghost function folds per call site. A ghost caller has no
+///    `panic` continuation (`panic_ident == None`), so calling it already threads
+///    the `assert false` ("the callee cannot panic here") obligation in
+///    `func_call_to_why3`, i.e. discharges `!P` at the call site. In program
+///    contexts the panic propagates.
+///  - A **ghost closure** — the sole implementor of `FnGhost`, whose law fixes
+///    `panic_condition ≡ false` — is consumed *generically* (via the `FnGhost`
+///    bound), where the call context is invisible. Its `FnGhostWrapper`
+///    precondition is therefore strengthened with `!P` in `precondition_term`,
+///    which makes the `FnGhost` law a theorem (paid for by that precondition)
+///    rather than an assertion protected by a syntactic ban.
+fn check_panics_allowed<'tcx>(
+    ctx: &TranslationCtx<'tcx>,
+    def_id: DefId,
+    pre_sig: &PreSignature<'tcx>,
+) {
+    if !pre_sig.contract.may_panic() {
+        return;
+    }
+    if matches!(ctx.item_type(def_id), ItemType::Logic { .. }) {
+        ctx.error(ctx.def_span(def_id), "logic functions cannot be specified to panic").emit();
     }
 }
 
@@ -408,6 +514,7 @@ pub(crate) fn pre_sig_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pre
             variant: None,
             requires: vec![],
             ensures: vec![],
+            panics: vec![],
             purity: ProgramPurity::Ghost,
             extern_no_spec: false,
             has_user_contract: false,
@@ -434,6 +541,11 @@ pub(crate) fn pre_sig_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pre
         let pre_subst = ClosSubst::pre_or_cur(ctx.tcx, def_id.expect_local(), self_pre);
         for pre in &mut presig.contract.requires {
             pre_subst.subst(ctx.tcx, &mut pre.term);
+        }
+        // The panic condition, like `requires`, is a predicate over the closure's
+        // pre-state (env + args), so it uses the same substitution.
+        for pan in &mut presig.contract.panics {
+            pre_subst.subst(ctx.tcx, &mut pan.term);
         }
 
         let post_subst = match kind {
@@ -475,6 +587,15 @@ pub(crate) fn pre_sig_of<'tcx>(ctx: &TranslationCtx<'tcx>, def_id: DefId) -> Pre
         };
 
         assert!(presig.contract.variant.is_none());
+    }
+
+    // Without `--enable-panics`, `#[may_panic(P)]` is reinterpreted as `#[requires(!P)]`: panicking
+    // becomes a caller obligation and the function is seen as classic (panic-free) Creusot. Done
+    // here, the single point feeding both the backend threading (`func_call_to_why3` tests
+    // `contract.may_panic()`) and the backend signature, after closure env substitution so the
+    // negation commutes with it.
+    if !ctx.opts.enable_panics {
+        presig.contract = presig.contract.fold_panics_into_requires(ctx.tcx);
     }
 
     if !presig.contract.extern_no_spec {

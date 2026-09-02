@@ -108,8 +108,13 @@ module M_binary_search
       (! return {result}) ]
   
   let unwrap_usize (self_: t_Result_usize_usize) (return (x: UInt64.t)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: UInt64.t. self_ = Ok t}
-    any [ return (result: UInt64.t) -> {[@stop_split] [@expl:unwrap ensures] Ok result = self_} (! return {result}) ]
+  {[@stop_split] [@expl:unwrap requires (no panic)] not (exists e: UInt64.t. self_ = Err e)}
+    any
+    [ return (result: UInt64.t) ->
+    {[@stop_split] [@expl:unwrap_usize ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: UInt64.t. self_
+          = Err e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok result = self_)}
+      (! return {result}) ]
   
   meta "compute_max_steps" 1000000
   

@@ -1,0 +1,27 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_f": { "vc_f_T": { "prover": "alt-ergo", "time": 0.054 } },
+    "M_nested_borrows": {
+      "vc_nested_borrows": { "prover": "alt-ergo", "time": 0.069 },
+      "vc_replace_refmut_i32": { "prover": "alt-ergo", "time": 0.048 }
+    },
+    "M_nested_loops": {
+      "vc_nested_loops": { "prover": "alt-ergo", "time": 0.063 }
+    },
+    "M_simple": {
+      "vc_f_T": { "prover": "alt-ergo", "time": 0.058 },
+      "vc_simple_T": { "prover": "alt-ergo", "time": 0.058 }
+    },
+    "M_swapper": { "vc_swapper_T": { "prover": "alt-ergo", "time": 0.058 } },
+    "M_temp_move": {
+      "vc_temp_move_T": { "prover": "alt-ergo", "time": 0.046 }
+    },
+    "M_tuple": { "vc_tuple_T": { "prover": "alt-ergo", "time": 0.049 } },
+    "M_y": {
+      "vc_index_mut_Vec_i32_Global": { "prover": "alt-ergo", "time": 0.032 },
+      "vc_len_i32": { "prover": "alt-ergo", "time": 0.037 },
+      "vc_y": { "prover": "alt-ergo", "time": 0.028 }
+    }
+  }
+}

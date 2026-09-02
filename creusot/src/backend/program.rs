@@ -99,11 +99,22 @@ pub(crate) fn val(sig: Prototype, contract: Contract, return_ty: why3::ty::Type)
     body = Expr::assert(contract.ensures_conj(&name), body.black_box());
 
     let params = [Param::Term(name::result(), return_ty)].into();
+    let mut defns =
+        vec![Defn { prototype: Prototype { name: name::return_(), attrs: vec![], params }, body }];
+    if contract.may_panic() {
+        // The "panic" outcome: the caller's `panic` continuation may be invoked
+        // in states satisfying the panic condition.
+        let panic_body =
+            Expr::assert(contract.panics_disj(&name), Expr::var(name::panic_()).black_box());
+        defns.push(Defn {
+            prototype: Prototype { name: name::panic_(), attrs: vec![], params: [].into() },
+            body: panic_body,
+        });
+    }
     let body = Expr::Defn(
         Expr::assert(contract.requires_conj(&name), Expr::Any).boxed(),
         false,
-        [Defn { prototype: Prototype { name: name::return_(), attrs: vec![], params }, body }]
-            .into(),
+        defns.into(),
     );
     Decl::Coma(Defn { prototype: Prototype { attrs: Vec::new(), ..sig }, body })
 }
@@ -145,11 +156,20 @@ pub(crate) fn to_why_body<'tcx>(
     //   ... return result ...
     //   [ return x -> {postcondition} (! return x ) ]
     let sig = ctx.sig(def_id);
+    let may_panic = sig.contract.may_panic();
     let args = sig.inputs.iter().map(|(name, _, _)| name.0).collect::<Box<[_]>>();
     let body_id = BodyId::local(def_id.expect_local());
     let mut recursive_calls = RecursiveCalls::new();
-    let mut body =
-        why_body(ctx, names, body_id, None, &args, name::return_(), &mut recursive_calls);
+    let mut body = why_body(
+        ctx,
+        names,
+        body_id,
+        None,
+        &args,
+        name::return_(),
+        may_panic.then(name::panic_),
+        &mut recursive_calls,
+    );
     let (mut sig, variant) = {
         let mut sig = sig.clone();
         // normalize any RPITs away
@@ -197,6 +217,12 @@ pub(crate) fn to_why_body<'tcx>(
                 .into_iter()
                 .zip(&sig.prototype.params)
                 .map(|(ty, param)| Param::Term(param.as_term().0, ty))
+                .chain(
+                    // Recursive calls to a function that may panic also forward
+                    // the panic continuation.
+                    may_panic
+                        .then(|| Param::Cont(Ident::fresh_local("_pan"), [].into(), [].into())),
+                )
                 .chain(std::iter::once(Param::Cont(
                     Ident::fresh_local("_k"),
                     [].into(),
@@ -249,6 +275,7 @@ fn to_why_defn<'tcx>(
     mut sig: ProgramSignature,
 ) -> Defn {
     let mut ret = Expr::var(name::return_()).app([Arg::Term(Exp::var(name::result()))]);
+    let mut pan = Expr::var(name::panic_());
 
     // We remove the barrier around the definition of closures without contracts
     // (automatic inferrence of specifications)
@@ -257,23 +284,29 @@ fn to_why_defn<'tcx>(
     } else {
         body = body.black_box();
         ret = ret.black_box();
+        pan = pan.black_box();
     }
 
     let name = sig.prototype.name.name().to_string();
     let postcond = Expr::assert(sig.contract.ensures_conj(&name), ret);
-    body = Expr::Defn(
-        body.boxed(),
-        false,
-        [Defn {
-            prototype: Prototype {
-                name: name::return_(),
-                attrs: vec![],
-                params: [Param::Term(name::result(), sig.return_ty)].into(),
-            },
-            body: postcond,
-        }]
-        .into(),
-    );
+    let mut defns = vec![Defn {
+        prototype: Prototype {
+            name: name::return_(),
+            attrs: vec![],
+            params: [Param::Term(name::result(), sig.return_ty)].into(),
+        },
+        body: postcond,
+    }];
+    if sig.contract.may_panic() {
+        // Panic exits of the body go through this handler: they must prove the
+        // panic condition, then invoke the caller's `panic` continuation.
+        let paniccond = Expr::assert(sig.contract.panics_disj(&name), pan);
+        defns.push(Defn {
+            prototype: Prototype { name: name::panic_(), attrs: vec![], params: [].into() },
+            body: paniccond,
+        });
+    }
+    body = Expr::Defn(body.boxed(), false, defns.into());
     body = Expr::assert(sig.contract.requires_conj(&name), body);
 
     Defn { prototype: sig.prototype, body }
@@ -289,6 +322,7 @@ pub fn why_body<'tcx>(
     subst: Option<GenericArgsRef<'tcx>>,
     params: &[Ident],
     inner_return: Ident,
+    inner_panic: Option<Ident>,
     recursive_calls: &mut RecursiveCalls,
 ) -> Expr {
     let mut body = ctx.fmir_body(body_id).clone();
@@ -332,6 +366,7 @@ pub fn why_body<'tcx>(
                 body_id.def_id,
                 &block_idents,
                 inner_return,
+                inner_panic,
                 c,
             )
         })
@@ -375,10 +410,18 @@ fn component_to_defn<'tcx>(
     def_id: DefId,
     block_idents: &IndexMap<BasicBlock, Ident>,
     return_ident: Ident,
+    panic_ident: Option<Ident>,
     c: Component<BasicBlock>,
 ) -> Defn {
-    let lower =
-        LoweringState { ctx, names, locals: &body.locals, def_id, block_idents, return_ident };
+    let lower = LoweringState {
+        ctx,
+        names,
+        locals: &body.locals,
+        def_id,
+        block_idents,
+        return_ident,
+        panic_ident,
+    };
     let (head, tl) = match c {
         Component::Simple(v) => {
             let block = body.blocks.swap_remove(&v).unwrap();
@@ -414,6 +457,7 @@ fn component_to_defn<'tcx>(
                 def_id,
                 block_idents,
                 return_ident,
+                panic_ident,
                 id,
             )
         })
@@ -470,6 +514,8 @@ struct LoweringState<'a, 'tcx, N: Namer<'tcx>> {
     def_id: DefId,
     block_idents: &'a IndexMap<BasicBlock, Ident>,
     return_ident: Ident,
+    /// Panic exit of the function being lowered, if it is allowed to panic.
+    panic_ident: Option<Ident>,
 }
 
 impl<'tcx, N: Namer<'tcx>> LoweringState<'_, 'tcx, N> {
@@ -541,6 +587,7 @@ impl<'tcx> Operand<'tcx> {
                     subst,
                     &[],
                     ret,
+                    None,
                     &mut RecursiveCalls::new(),
                 );
                 let ty = lower.ty(ty);
@@ -923,6 +970,23 @@ impl<'tcx> Terminator<'tcx> {
                 };
                 Expr::assert(exp, Expr::Any)
             }
+            Terminator::Panic(span) => match lower.panic_ident {
+                // Jump to the panic exit of the function, which asserts the
+                // panic condition of its contract.
+                Some(panic_ident) => match lower.names.span(span) {
+                    Some(sp) => Expr::Name(Name::local(panic_ident), Some(sp)),
+                    None => Expr::var(panic_ident),
+                },
+                // Defensive: a panic terminator in a context without a panic
+                // exit must be proved unreachable.
+                None => {
+                    let mut exp = Exp::mk_false();
+                    if let Some(attr) = lower.names.span_attr(span) {
+                        exp = exp.with_attr(attr);
+                    };
+                    Expr::assert(exp, Expr::Any)
+                }
+            },
         };
         (istmts, exp)
     }
@@ -1322,10 +1386,11 @@ impl<'tcx> Statement<'tcx> {
                     e.into_why(self.span, lower, lhs.ty(lower.ctx.tcx, lower.locals), &mut istmts);
                 lower.assignment(&lhs, rhs, &mut istmts, self.span);
             }
-            StatementKind::Call(dest, fun_id, subst, args, span) => {
+            StatementKind::Call(dest, fun_id, subst, args, span, ghost) => {
                 let params =
                     args.iter().map(|a| lower.ty(a.ty(lower.ctx.tcx, lower.locals))).collect();
-                let (fun_qname, args) = func_call_to_why3(lower, fun_id, subst, args, &mut istmts);
+                let (fun_qname, args) =
+                    func_call_to_why3(lower, fun_id, subst, args, span, ghost, &mut istmts);
                 let ty = dest.ty(lower.ctx.tcx, lower.locals);
                 let ty = lower.ty(ty);
                 if lower.ctx.should_check_variant_decreases(lower.def_id, fun_id) {
@@ -1366,8 +1431,36 @@ fn func_call_to_why3<'tcx>(
     id: DefId,
     subst: GenericArgsRef<'tcx>,
     args: Box<[Operand<'tcx>]>,
+    call_span: Span,
+    ghost: bool,
     istmts: &mut Vec<IntermediateStmt>,
 ) -> (Name, Box<[Arg]>) {
+    // If the callee is allowed to panic, its handler takes an extra `panic`
+    // continuation (before the `return` one, which is appended by
+    // [`assemble_intermediates`]).
+    let panic_cont = lower.ctx.sig(id).contract.may_panic().then(|| {
+        // A ghost call site has no operational panic outcome: even inside a
+        // `may_panic` function, a `ghost!` block cannot panic at runtime. So we
+        // ignore the caller's panic continuation and force the "cannot panic here"
+        // obligation — i.e. `may_panic(P)` behaves as `requires(!P)` in ghost code.
+        let panic_ident = if ghost { None } else { lower.panic_ident };
+        Arg::Cont(match panic_ident {
+            // Panics of the callee propagate to the panic exit of the caller.
+            Some(panic_ident) => Expr::var(panic_ident),
+            // The caller is not allowed to panic (or the call is in ghost code): it
+            // must prove that the panic condition of the callee does not hold for
+            // these arguments.
+            None => {
+                let mut exp = Exp::mk_false()
+                    .with_attr(Attribute::Attr("expl:the callee cannot panic here".to_string()));
+                if let Some(attr) = lower.names.span_attr(call_span) {
+                    exp = exp.with_attr(attr);
+                }
+                Expr::Lambda([].into(), Expr::assert(exp, Expr::Any).boxed())
+            }
+        })
+    });
+
     // TODO: Perform this simplification earlier
     // Eliminate "rust-call" ABI
     let span = lower.ctx.def_span(id);
@@ -1393,6 +1486,7 @@ fn func_call_to_why3<'tcx>(
         args.into_iter().map(|a| a.into_why(lower, istmts, span)).map(Arg::Term).collect()
     };
 
+    let args = args.into_iter().chain(panic_cont).collect();
     (lower.names.item(id, subst), args)
 }
 
