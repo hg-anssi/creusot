@@ -13,7 +13,7 @@
       "vc_index_Vec_bool_Global'0": { "prover": "cvc5", "time": 0.011 },
       "vc_index_mut_Vec_bool_Global": { "prover": "cvc5", "time": 0.014 },
       "vc_into_iter_Range_usize": { "prover": "cvc5", "time": 0.011 },
-      "vc_next_Range_usize": { "prover": "cvc5", "time": 0.007 }
+      "vc_next_Range_usize": { "prover": "cvc5", "time": 0.021 }
     }
   }
 }

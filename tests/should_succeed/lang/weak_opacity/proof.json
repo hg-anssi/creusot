@@ -6,7 +6,7 @@
     { "prover": "cvc4", "size": 40, "time": 0.506 }
   ],
   "proofs": {
-    "M_f": { "vc_f": { "prover": "cvc5", "time": 0.025 } },
-    "M_g": { "vc_g": { "prover": "cvc5", "time": 0.026 } }
+    "M_f": { "vc_f": { "prover": "cvc5", "time": 0.007 } },
+    "M_g": { "vc_g": { "prover": "cvc5", "time": 0.011 } }
   }
 }

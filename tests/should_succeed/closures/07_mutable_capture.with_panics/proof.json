@@ -34,17 +34,17 @@
       "vc_call_once_F": { "prover": "alt-ergo", "time": 0.017 }
     },
     "M_test_fnmut": {
-      "vc_closure1": { "prover": "alt-ergo", "time": 0.017 },
-      "vc_test_fnmut": { "prover": "alt-ergo", "time": 0.012 }
+      "vc_closure1": { "prover": "alt-ergo", "time": 0.037 },
+      "vc_test_fnmut": { "prover": "alt-ergo", "time": 0.033 }
     },
     "M_test_fnmut2": {
-      "vc_call_fnmut_closure1": { "prover": "alt-ergo", "time": 0.004 },
+      "vc_call_fnmut_closure1": { "prover": "alt-ergo", "time": 0.037 },
       "vc_call_fnmut_refmut_closure1": {
         "prover": "alt-ergo",
         "time": 0.012
       },
       "vc_closure1": { "prover": "alt-ergo", "time": 0.019 },
-      "vc_test_fnmut2": { "prover": "alt-ergo", "time": 0.024 }
+      "vc_test_fnmut2": { "prover": "alt-ergo", "time": 0.064 }
     },
     "M_test_fnmut2box": {
       "vc_call_fnmut_Box_Box_closure1_Global_Global": {
@@ -53,7 +53,7 @@
       },
       "vc_call_fnmut_Box_refmut_closure1_Global": {
         "prover": "alt-ergo",
-        "time": 0.016
+        "time": 0.037
       },
       "vc_closure1": { "prover": "alt-ergo", "time": 0.019 },
       "vc_test_fnmut2box": { "prover": "alt-ergo", "time": 0.069 }
@@ -62,7 +62,7 @@
       "vc_call_fnonce_closure0": { "prover": "alt-ergo", "time": 0.015 },
       "vc_call_fnonce_refmut_closure0": {
         "prover": "alt-ergo",
-        "time": 0.004
+        "time": 0.024
       },
       "vc_closure0": { "prover": "alt-ergo", "time": 0.016 },
       "vc_test_fnmut3": { "prover": "z3", "time": 0.008 }
@@ -76,8 +76,8 @@
         "prover": "alt-ergo",
         "time": 0.016
       },
-      "vc_closure0": { "prover": "alt-ergo", "time": 0.006 },
-      "vc_test_fnmut3box": { "prover": "z3", "time": 0.022 }
+      "vc_closure0": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_test_fnmut3box": { "prover": "z3", "time": 0.008 }
     }
   }
 }

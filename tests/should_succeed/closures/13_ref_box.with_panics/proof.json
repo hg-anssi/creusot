@@ -58,7 +58,7 @@
       "vc_test13_F": { "prover": "alt-ergo", "time": 0.008 }
     },
     "M_test14": {
-      "vc_call_fnmut_F": { "prover": "alt-ergo", "time": 0.008 },
+      "vc_call_fnmut_F": { "prover": "alt-ergo", "time": 0.025 },
       "vc_test14_F": { "prover": "alt-ergo", "time": 0.027 }
     },
     "M_test15": {
@@ -66,7 +66,7 @@
       "vc_test15_F": { "prover": "alt-ergo", "time": 0.026 }
     },
     "M_test16": {
-      "vc_call_fnonce_F": { "prover": "alt-ergo", "time": 0.01 },
+      "vc_call_fnonce_F": { "prover": "alt-ergo", "time": 0.025 },
       "vc_test16_F": { "prover": "alt-ergo", "time": 0.026 }
     },
     "M_test2": {
@@ -79,7 +79,7 @@
     },
     "M_test4": {
       "vc_call_fnmut_Box_F_Global": { "prover": "alt-ergo", "time": 0.018 },
-      "vc_test4_F": { "prover": "alt-ergo", "time": 0.011 }
+      "vc_test4_F": { "prover": "alt-ergo", "time": 0.022 }
     },
     "M_test5": {
       "vc_call_fnmut_refmut_F": { "prover": "alt-ergo", "time": 0.012 },
@@ -99,7 +99,7 @@
     },
     "M_test9": {
       "vc_call_fnmut_Box_F_Global": { "prover": "alt-ergo", "time": 0.018 },
-      "vc_test9_F": { "prover": "alt-ergo", "time": 0.008 }
+      "vc_test9_F": { "prover": "alt-ergo", "time": 0.021 }
     }
   }
 }

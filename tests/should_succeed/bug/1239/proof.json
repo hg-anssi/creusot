@@ -5,5 +5,5 @@
     { "prover": "alt-ergo", "size": 17, "time": 0.718 },
     { "prover": "cvc4", "size": 45, "time": 0.45 }
   ],
-  "proofs": { "M_f": { "vc_f": { "prover": "cvc5", "time": 0.025 } } }
+  "proofs": { "M_f": { "vc_f": { "prover": "cvc5", "time": 0.01 } } }
 }

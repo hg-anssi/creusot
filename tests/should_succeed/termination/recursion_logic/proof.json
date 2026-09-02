@@ -7,7 +7,7 @@
   ],
   "proofs": {
     "M_variant_int": {
-      "vc_variant_int": { "prover": "cvc5", "time": 0.028 }
+      "vc_variant_int": { "prover": "cvc5", "time": 0.014 }
     }
   }
 }

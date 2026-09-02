@@ -8,7 +8,7 @@
   "proofs": {
     "M_search": {
       "vc_elim_Some": { "prover": "cvc5", "time": 0.016 },
-      "vc_index_Vec_u8_Global'0": { "prover": "cvc5", "time": 0.01 },
+      "vc_index_Vec_u8_Global'0": { "prover": "cvc5", "time": 0.021 },
       "vc_into_iter_RangeInclusive_usize": {
         "prover": "cvc5",
         "time": 0.013

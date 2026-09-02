@@ -7,7 +7,7 @@
   ],
   "proofs": {
     "M_borrow_in_box": {
-      "vc_borrow_in_box_T": { "prover": "cvc5", "time": 0.009 }
+      "vc_borrow_in_box_T": { "prover": "cvc5", "time": 0.02 }
     },
     "M_borrow_in_box_tuple_1": {
       "vc_borrow_in_box_tuple_1": { "prover": "cvc5", "time": 0.016 }
@@ -33,13 +33,13 @@
       "vc_index_mut_array_T": { "prover": "cvc5", "time": 0.023 }
     },
     "M_index_mut_slice": {
-      "vc_index_mut_slice_T": { "prover": "cvc5", "time": 0.018 }
+      "vc_index_mut_slice_T": { "prover": "cvc5", "time": 0.036 }
     },
     "M_inspect_no_gen": {
       "vc_inspect_no_gen_T": { "prover": "cvc5", "time": 0.009 }
     },
     "M_nested_fields": {
-      "vc_nested_fields_T": { "prover": "cvc5", "time": 0.011 }
+      "vc_nested_fields_T": { "prover": "cvc5", "time": 0.022 }
     },
     "M_not_final_borrow_works": {
       "vc_not_final_borrow_works": { "prover": "cvc5", "time": 0.017 },
@@ -49,10 +49,10 @@
       "vc_place_mention_no_gen_T": { "prover": "cvc5", "time": 0.016 }
     },
     "M_really_nested_fields": {
-      "vc_really_nested_fields_T": { "prover": "cvc5", "time": 0.011 }
+      "vc_really_nested_fields_T": { "prover": "cvc5", "time": 0.025 }
     },
     "M_rebor_in_pair": {
-      "vc_rebor_in_pair": { "prover": "cvc5", "time": 0.008 }
+      "vc_rebor_in_pair": { "prover": "cvc5", "time": 0.027 }
     },
     "M_reborrow_field": {
       "vc_reborrow_field_T": { "prover": "cvc5", "time": 0.01 }
@@ -63,7 +63,7 @@
     "M_reborrow_in_box": {
       "vc_reborrow_in_box_T": { "prover": "cvc5", "time": 0.019 }
     },
-    "M_select": { "vc_select_T": { "prover": "cvc5", "time": 0.012 } },
+    "M_select": { "vc_select_T": { "prover": "cvc5", "time": 0.024 } },
     "M_select_field": {
       "vc_elim_Some": { "prover": "cvc5", "time": 0.017 },
       "vc_select_field_T": { "prover": "cvc5", "time": 0.019 }

@@ -3,12 +3,12 @@
   "proofs": {
     "M_test_filter": {
       "vc_closure0": { "prover": "alt-ergo", "time": 0.015 },
-      "vc_eq_Option_ref_bool": { "prover": "alt-ergo", "time": 0.011 },
+      "vc_eq_Option_ref_bool": { "prover": "alt-ergo", "time": 0.03 },
       "vc_filter_Iter_bool": { "prover": "alt-ergo", "time": 0.013 },
-      "vc_iter_bool": { "prover": "alt-ergo", "time": 0.003 },
+      "vc_iter_bool": { "prover": "alt-ergo", "time": 0.026 },
       "vc_next_Filter_Iter_bool_closure0": {
         "prover": "alt-ergo",
-        "time": 0.008
+        "time": 0.024
       },
       "vc_test_filter": {
         "tactic": "compute_specified",
@@ -22,16 +22,16 @@
               { "prover": "alt-ergo", "time": 0.021 },
               { "prover": "alt-ergo", "time": 0.025 },
               { "prover": "cvc4", "time": 0.328 },
-              { "prover": "alt-ergo", "time": 0.012 },
+              { "prover": "alt-ergo", "time": 0.03 },
               { "prover": "alt-ergo", "time": 0.016 },
               { "prover": "cvc4", "time": 0.529 },
               { "prover": "alt-ergo", "time": 0.018 },
               { "prover": "alt-ergo", "time": 0.022 },
-              { "prover": "alt-ergo", "time": 0.014 },
+              { "prover": "alt-ergo", "time": 0.029 },
               { "prover": "alt-ergo", "time": 0.023 },
-              { "prover": "alt-ergo", "time": 0.017 },
+              { "prover": "alt-ergo", "time": 0.034 },
               { "prover": "alt-ergo", "time": 0.021 },
-              { "prover": "alt-ergo", "time": 0.013 },
+              { "prover": "alt-ergo", "time": 0.029 },
               { "prover": "alt-ergo", "time": 0.018 },
               { "prover": "alt-ergo", "time": 0.019 },
               { "prover": "alt-ergo", "time": 0.015 }
@@ -43,8 +43,8 @@
     "M_test_filter_map": {
       "vc_closure0": { "prover": "alt-ergo", "time": 0.021 },
       "vc_eq_Option_bool": { "prover": "alt-ergo", "time": 0.017 },
-      "vc_filter_map_Iter_bool": { "prover": "alt-ergo", "time": 0.004 },
-      "vc_iter_bool": { "prover": "alt-ergo", "time": 0.003 },
+      "vc_filter_map_Iter_bool": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_iter_bool": { "prover": "alt-ergo", "time": 0.02 },
       "vc_next_FilterMap_Iter_bool_closure0": {
         "prover": "alt-ergo",
         "time": 0.014
@@ -56,9 +56,9 @@
             "tactic": "split_vc",
             "children": [
               { "prover": "z3", "time": 0.015 },
-              { "prover": "alt-ergo", "time": 0.016 },
+              { "prover": "alt-ergo", "time": 0.034 },
               { "prover": "cvc4", "time": 0.123 },
-              { "prover": "alt-ergo", "time": 0.016 },
+              { "prover": "alt-ergo", "time": 0.038 },
               { "prover": "alt-ergo", "time": 0.034 },
               { "prover": "cvc4", "time": 0.401 },
               { "prover": "alt-ergo", "time": 0.023 },
@@ -70,7 +70,7 @@
               { "prover": "alt-ergo", "time": 0.026 },
               { "prover": "alt-ergo", "time": 0.029 },
               { "prover": "alt-ergo", "time": 0.025 },
-              { "prover": "alt-ergo", "time": 0.011 },
+              { "prover": "alt-ergo", "time": 0.045 },
               { "prover": "alt-ergo", "time": 0.027 },
               { "prover": "alt-ergo", "time": 0.033 },
               { "prover": "alt-ergo", "time": 0.021 }

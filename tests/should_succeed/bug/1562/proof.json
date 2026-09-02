@@ -26,7 +26,7 @@
         "prover": "cvc5",
         "time": 0.015
       },
-      "vc_take_Node_T": { "prover": "cvc5", "time": 0.023 },
+      "vc_take_Node_T": { "prover": "cvc5", "time": 0.011 },
       "vc_unwrap_Node_T": { "prover": "cvc5", "time": 0.019 }
     }
   }

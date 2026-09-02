@@ -13,24 +13,24 @@
                 "tactic": "split_vc",
                 "children": [
                   { "prover": "alt-ergo", "time": 0.013 },
-                  { "prover": "alt-ergo", "time": 0.018 }
+                  { "prover": "alt-ergo", "time": 0.038 }
                 ]
               },
               {
                 "tactic": "split_vc",
                 "children": [
-                  { "prover": "alt-ergo", "time": 0.009 },
+                  { "prover": "alt-ergo", "time": 0.026 },
                   { "prover": "alt-ergo", "time": 0.021 }
                 ]
               },
-              { "prover": "alt-ergo", "time": 0.016 },
-              { "prover": "alt-ergo", "time": 0.011 },
+              { "prover": "alt-ergo", "time": 0.033 },
+              { "prover": "alt-ergo", "time": 0.028 },
               { "prover": "alt-ergo", "time": 0.027 }
             ]
           }
         ]
       },
-      "vc_new_unit": { "prover": "alt-ergo", "time": 0.009 }
+      "vc_new_unit": { "prover": "alt-ergo", "time": 0.028 }
     }
   }
 }

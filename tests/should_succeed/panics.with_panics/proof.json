@@ -30,7 +30,7 @@
       "vc_div_two_causes_iff": { "prover": "alt-ergo", "time": 0.036 },
       "vc_from_str": { "prover": "alt-ergo", "time": 0.024 }
     },
-    "M_first": { "vc_first": { "prover": "alt-ergo", "time": 0.02 } },
+    "M_first": { "vc_first": { "prover": "alt-ergo", "time": 0.041 } },
     "M_first_or_panic": {
       "vc_first_or_panic": { "prover": "alt-ergo", "time": 0.033 },
       "vc_get": { "prover": "alt-ergo", "time": 0.026 }
@@ -43,7 +43,7 @@
       "vc_get": { "prover": "alt-ergo", "time": 0.026 },
       "vc_get_first_safe": { "prover": "alt-ergo", "time": 0.034 }
     },
-    "M_get_iff": { "vc_get_iff": { "prover": "alt-ergo", "time": 0.017 } },
+    "M_get_iff": { "vc_get_iff": { "prover": "alt-ergo", "time": 0.04 } },
     "M_increment": {
       "vc_increment": {
         "tactic": "split_vc",

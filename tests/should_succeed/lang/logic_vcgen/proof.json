@@ -7,7 +7,7 @@
   ],
   "proofs": {
     "M_bool_of_int": {
-      "vc_bool_of_int": { "prover": "cvc5", "time": 0.02 }
+      "vc_bool_of_int": { "prover": "cvc5", "time": 0.008 }
     },
     "M_bor_1_2": { "vc_bor_1_2": { "prover": "cvc5", "time": 0.027 } },
     "M_f": { "vc_f": { "prover": "cvc5", "time": 0.015 } },

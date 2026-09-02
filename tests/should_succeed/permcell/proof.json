@@ -11,11 +11,11 @@
       "vc_borrow_mut_i32": { "prover": "cvc5", "time": 0.014 },
       "vc_deref_Ghost_Perm_PermCell_i32": {
         "prover": "alt-ergo",
-        "time": 0.033
+        "time": 0.015
       },
       "vc_deref_mut_Ghost_Perm_PermCell_i32": {
         "prover": "alt-ergo",
-        "time": 0.028
+        "time": 0.026
       },
       "vc_foo": { "prover": "cvc5", "time": 0.018 },
       "vc_into_inner_i32": { "prover": "cvc5", "time": 0.015 },

@@ -12,7 +12,7 @@
       "vc_len_u32'0": { "prover": "cvc5", "time": 0.011 }
     },
     "M_impl_List_T__index": {
-      "vc_elim_Cons": { "prover": "cvc5", "time": 0.011 },
+      "vc_elim_Cons": { "prover": "cvc5", "time": 0.024 },
       "vc_index_T": { "prover": "cvc5", "time": 0.021 }
     },
     "M_impl_List_T__len": {

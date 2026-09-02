@@ -7,16 +7,12 @@
   ],
   "proofs": {
     "M_impl_Symmetric_for_unit__reflexive": {
-      "vc_reflexive_unit": { "prover": "cvc5", "time": 0.027 }
+      "vc_reflexive_unit": { "prover": "cvc5", "time": 0.008 }
     },
     "M_impl_Symmetric_for_unit__reflexive__refines": {
-      "refines": { "prover": "cvc5", "time": 0.028 }
+      "refines": { "prover": "cvc5", "time": 0.013 }
     },
-    "M_impl_laws": {
-      "vc_impl_laws": { "prover": "cvc5", "time": 0.029 }
-    },
-    "M_uses_op": {
-      "vc_uses_op_T": { "prover": "cvc5", "time": 0.033 }
-    }
+    "M_impl_laws": { "vc_impl_laws": { "prover": "cvc5", "time": 0.014 } },
+    "M_uses_op": { "vc_uses_op_T": { "prover": "cvc5", "time": 0.011 } }
   }
 }

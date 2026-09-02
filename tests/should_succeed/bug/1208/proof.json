@@ -6,6 +6,6 @@
     { "prover": "cvc4", "size": 40, "time": 0.506 }
   ],
   "proofs": {
-    "M_impl_Q__mul": { "vc_mul": { "prover": "cvc5", "time": 0.02 } }
+    "M_impl_Q__mul": { "vc_mul": { "prover": "cvc5", "time": 0.007 } }
   }
 }

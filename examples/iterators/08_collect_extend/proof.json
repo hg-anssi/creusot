@@ -12,7 +12,7 @@
       "vc_into_iter_I": { "prover": "cvc5", "time": 0.009 },
       "vc_new_Item": { "prover": "cvc5", "time": 0.023 },
       "vc_next_I": { "prover": "cvc5", "time": 0.015 },
-      "vc_push_Item": { "prover": "cvc5", "time": 0.021 }
+      "vc_push_Item": { "prover": "cvc5", "time": 0.01 }
     },
     "M_collect_example": {
       "vc_collect_I": { "prover": "cvc5", "time": 0.011 },
@@ -22,13 +22,13 @@
       "vc_elim_Some": { "prover": "cvc5", "time": 0.021 },
       "vc_extend_T": { "prover": "alt-ergo", "time": 0.12 },
       "vc_into_iter_I": { "prover": "cvc5", "time": 0.015 },
-      "vc_next_I": { "prover": "cvc5", "time": 0.031 },
-      "vc_push_T": { "prover": "cvc5", "time": 0.021 }
+      "vc_next_I": { "prover": "cvc5", "time": 0.01 },
+      "vc_push_T": { "prover": "cvc5", "time": 0.01 }
     },
     "M_extend_index": {
       "vc_extend_index": { "prover": "cvc5", "time": 0.037 },
       "vc_extend_u32": { "prover": "cvc5", "time": 0.015 },
-      "vc_into_iter_Vec_u32_Global": { "prover": "cvc5", "time": 0.031 }
+      "vc_into_iter_Vec_u32_Global": { "prover": "cvc5", "time": 0.026 }
     }
   }
 }

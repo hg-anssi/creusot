@@ -22,7 +22,7 @@
         "prover": "cvc5",
         "time": 0.02
       },
-      "vc_read_T": { "prover": "cvc5", "time": 0.017 }
+      "vc_read_T": { "prover": "cvc5", "time": 0.039 }
     },
     "M_impl_CellInv_T__write": {
       "vc_borrow_mut_T": { "prover": "cvc5", "time": 0.014 },
