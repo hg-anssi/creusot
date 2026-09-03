@@ -176,12 +176,16 @@ module M_insertion_sort
   axiom cmp_le_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.le x y = (cmp_log_usize x y <> Greater)
   
   let swap_i32 (self_: MutBorrow.t (Slice64.slice Int32.t)) (i: UInt64.t) (j: UInt64.t) (return (x: ())) =
-  {[@stop_split] [@expl:swap_i32 requires] ([@stop_split] [@expl:swap requires #0] UInt64.t'int i
-      < Seq.length (Slice64.view self_.current))
-    /\ ([@stop_split] [@expl:swap requires #1] UInt64.t'int j < Seq.length (Slice64.view self_.current))}
+  {[@stop_split] [@expl:swap_i32 requires] ([@stop_split] [@expl:swap requires (no panic) #0] not UInt64.t'int i
+      >= Seq.length (Slice64.view self_.current))
+    /\ ([@stop_split] [@expl:swap requires (no panic) #1] not UInt64.t'int j
+    >= Seq.length (Slice64.view self_.current))}
     any
     [ return (result: ()) ->
-    {[@stop_split] [@expl:swap ensures] Permut.exchange (Slice64.view self_.final) (Slice64.view self_.current) (UInt64.t'int i) (UInt64.t'int j)}
+    {[@stop_split] [@expl:swap_i32 ensures] ([@stop_split] [@expl:swap ensures #0] not UInt64.t'int i
+        >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #1] not UInt64.t'int j >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #2] Permut.exchange (Slice64.view self_.final) (Slice64.view self_.current) (UInt64.t'int i) (UInt64.t'int j))}
       (! return {result}) ]
   
   predicate resolve_refmut_slice_i32 [@inline:trivial] (_1: MutBorrow.t (Slice64.slice Int32.t)) = _1.final = _1.current

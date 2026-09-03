@@ -150,9 +150,12 @@ module M_index_mut
       (! return {result}) ]
   
   let unwrap_refmut_Box_List_Global (self_: t_Option_refmut_Box_List_Global) (return (x: MutBorrow.t t_List)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'1}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'1}
     any
-    [ return (result: MutBorrow.t t_List) -> {[@stop_split] [@expl:unwrap ensures] Some'1 result = self_}
+    [ return (result: MutBorrow.t t_List) ->
+    {[@stop_split] [@expl:unwrap_refmut_Box_List_Global ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_List [@inline:trivial] (_1: MutBorrow.t t_List) = _1.final = _1.current

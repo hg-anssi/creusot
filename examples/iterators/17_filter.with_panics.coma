@@ -1983,7 +1983,12 @@ module M_less_than
   
   predicate resolve_Filter_IntoIter_u32_Global_closure2 (_1: t_Filter_IntoIter_u32_Global_closure2)
   
-  let from_iter_Vec_u32_Global (iter: t_Filter_IntoIter_u32_Global_closure2) (return (x: t_Vec_u32_Global)) =
+  predicate panic_condition_into_iter (self: ()) (args: t_Filter_IntoIter_u32_Global_closure2) =
+    let self_ = args in false
+  
+  meta "rewrite_def" predicate panic_condition_into_iter
+  
+  let from_iter_Vec_u32_Global (iter: t_Filter_IntoIter_u32_Global_closure2) (panic) (return (x: t_Vec_u32_Global)) =
   {[@stop_split] [@expl:from_iter_Vec_u32_Global requires] ([@stop_split] [@expl:from_iter 'iter' type invariant] inv_Filter_IntoIter_u32_Global_closure2 iter)
     /\ ([@stop_split] [@expl:from_iter requires] precondition_into_iter () iter)}
     any
@@ -1992,7 +1997,8 @@ module M_less_than
         /\ produces_Filter_IntoIter_u32_Global_closure2 into_iter (view_Vec_u32_Global result) done'.current
         /\ completed_Filter_IntoIter_u32_Global_closure2 done'
         /\ resolve_Filter_IntoIter_u32_Global_closure2 done'.final}
-      (! return {result}) ]
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:from_iter may_panic] panic_condition_into_iter () iter} (! panic) ]
   
   predicate postcondition_once_from_iter (self: ()) (args: t_Filter_IntoIter_u32_Global_closure2) (result: t_Vec_u32_Global) =
     let iter = args in exists into_iter: t_Filter_IntoIter_u32_Global_closure2, done': MutBorrow.t t_Filter_IntoIter_u32_Global_closure2. postcondition_into_iter () iter into_iter

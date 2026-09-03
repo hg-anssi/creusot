@@ -1,0 +1,145 @@
+module M_binary_search
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  use creusot.slice.Slice64
+  use creusot.int.UInt64
+  use seq.Seq
+  use int.Int
+  
+  type t_Result_usize_usize = Ok UInt64.t | Err UInt64.t
+  
+  predicate sorted_range_Int (self: Seq.seq int) (start: int) (end': int) =
+    forall i: int, j: int. start <= i /\ i <= j /\ j < end' -> Seq.get self i <= Seq.get self j
+  
+  predicate sorted_Int (self: Seq.seq int) = sorted_range_Int self 0 (Seq.length self)
+  
+  function deep_model_u32 [@inline:trivial] (self: UInt32.t) : int = UInt32.t'int self
+  
+  meta "rewrite_def" function deep_model_u32
+  
+  function index_slice_u32 [@inline:trivial] (self: Slice64.slice UInt32.t) (ix: int) : UInt32.t =
+    Seq.get (Slice64.view self) ix
+  
+  meta "rewrite_def" function index_slice_u32
+  
+  function deep_model_slice_u32 (self: Slice64.slice UInt32.t) : Seq.seq int
+  
+  axiom deep_model_slice_u32_spec:
+    forall self: Slice64.slice UInt32.t [deep_model_slice_u32 self]. Seq.length (Slice64.view self)
+      = Seq.length (deep_model_slice_u32 self)
+  
+  axiom deep_model_slice_u32_spec'0: forall self: Slice64.slice UInt32.t [deep_model_slice_u32 self]. forall i: int. 0
+            <= i
+          /\ i < Seq.length (deep_model_slice_u32 self)
+        -> Seq.get (deep_model_slice_u32 self) i = deep_model_u32 (index_slice_u32 self i)
+  
+  function deep_model_ref_slice_u32 [@inline:trivial] (self: Slice64.slice UInt32.t) : Seq.seq int =
+    deep_model_slice_u32 self
+  
+  meta "rewrite_def" function deep_model_ref_slice_u32
+  
+  function deep_model_ref_u32 [@inline:trivial] (self: UInt32.t) : int = deep_model_u32 self
+  
+  meta "rewrite_def" function deep_model_ref_u32
+  
+  type t_Ordering = Less | Equal | Greater
+  
+  function cmp_log_usize (self: UInt64.t) (o: UInt64.t) : t_Ordering = if UInt64.lt self o then
+      Less
+    else
+      if self = o then Equal else Greater
+  
+  
+  function eq_cmp_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom eq_cmp_usize_spec: forall x: UInt64.t, y: UInt64.t. (x = y) = (cmp_log_usize x y = Equal)
+  
+  function antisym2_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym2_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Greater -> cmp_log_usize y x = Less
+  
+  function antisym1_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom antisym1_usize_spec: forall x: UInt64.t, y: UInt64.t. cmp_log_usize x y = Less -> cmp_log_usize y x = Greater
+  
+  function trans_usize (x: UInt64.t) (y: UInt64.t) (z: UInt64.t) (o: t_Ordering) : ()
+  
+  axiom trans_usize_spec: forall x: UInt64.t, y: UInt64.t, z: UInt64.t, o: t_Ordering. cmp_log_usize x y = o
+      -> cmp_log_usize y z = o -> cmp_log_usize x z = o
+  
+  function refl_usize (x: UInt64.t) : ()
+  
+  axiom refl_usize_spec: forall x: UInt64.t. cmp_log_usize x x = Equal
+  
+  function cmp_gt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_gt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.gt x y = (cmp_log_usize x y = Greater)
+  
+  function cmp_ge_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_ge_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.ge x y = (cmp_log_usize x y <> Less)
+  
+  function cmp_lt_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_lt_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.lt x y = (cmp_log_usize x y = Less)
+  
+  function cmp_le_log_usize (x: UInt64.t) (y: UInt64.t) : ()
+  
+  axiom cmp_le_log_usize_spec: forall x: UInt64.t, y: UInt64.t. UInt64.le x y = (cmp_log_usize x y <> Greater)
+  
+  let binary_search_u32 (self_: Slice64.slice UInt32.t) (x: UInt32.t) (return (x'0: t_Result_usize_usize)) =
+  {[@stop_split] [@expl:binary_search requires] sorted_Int (deep_model_ref_slice_u32 self_)}
+    any
+    [ return (result: t_Result_usize_usize) ->
+    {[@stop_split] [@expl:binary_search_u32 ensures] ([@stop_split] [@expl:binary_search ensures #0] forall i: UInt64.t. result
+            = Ok i
+          -> UInt64.t'int i < Seq.length (Slice64.view self_)
+          /\ Seq.get (deep_model_slice_u32 self_) (UInt64.t'int i) = deep_model_ref_u32 x)
+      /\ ([@stop_split] [@expl:binary_search ensures #1] forall i: UInt64.t. result = Err i
+          -> UInt64.t'int i <= Seq.length (Slice64.view self_)
+          /\ (forall j: int. 0 <= j /\ j < Seq.length (Slice64.view self_)
+            -> Seq.get (deep_model_ref_slice_u32 self_) j <> deep_model_ref_u32 x))
+      /\ ([@stop_split] [@expl:binary_search ensures #2] forall i: UInt64.t. result = Err i
+          -> (forall j: UInt64.t. UInt64.lt j i
+            -> Seq.get (deep_model_ref_slice_u32 self_) (UInt64.t'int j) < deep_model_ref_u32 x))
+      /\ ([@stop_split] [@expl:binary_search ensures #3] forall i: UInt64.t. result = Err i
+        -> (forall j: UInt64.t. UInt64.le i j /\ UInt64.t'int j < Seq.length (Slice64.view self_)
+          -> deep_model_ref_u32 x < Seq.get (deep_model_ref_slice_u32 self_) (UInt64.t'int j)))}
+      (! return {result}) ]
+  
+  let unwrap_usize (self_: t_Result_usize_usize) (panic) (return (x: UInt64.t)) = any
+    [ return (result: UInt64.t) ->
+    {[@stop_split] [@expl:unwrap_usize ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: UInt64.t. self_
+          = Err e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] exists e: UInt64.t. self_ = Err e} (! panic) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let binary_search (s: Slice64.slice UInt32.t) (return (x: UInt64.t)) =
+  {[@stop_split] [@expl:binary_search requires] ([@stop_split] [@expl:binary_search requires #0] forall i: int. 0 <= i
+          /\ i < Seq.length (Slice64.view s) -> UInt32.t'int (index_slice_u32 s i) = i)
+    /\ ([@stop_split] [@expl:binary_search requires #1] Seq.length (Slice64.view s) = 5)}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = bb0'0
+        [ bb0'0 = s0'0 [ s0'0 = [ &_ret'0 <- (2: UInt32.t) ] s1'0 | s1'0 = _const_ret {_ret'0} ] ]
+        [ & _ret'0: UInt32.t = Any.any_l () ] [ _const_ret (_const: UInt32.t) -> [ &_15 <- _const ] s1 ]
+      | s1 = [ &_10 <- _15 ] s2
+      | s2 = binary_search_u32 {s} {_10} (fun (_x: t_Result_usize_usize) -> [ &_7 <- _x ] s3)
+      | s3 = unwrap_usize {_7}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: UInt64.t) -> [ &ix <- _x ] s4)
+      | s4 = {[@expl:assertion] UInt64.t'int ix < 5} s5
+      | s5 = [ &_ret <- ix ] s6
+      | s6 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l ()
+    | & s: Slice64.slice UInt32.t = s
+    | & ix: UInt64.t = Any.any_l ()
+    | & _7: t_Result_usize_usize = Any.any_l ()
+    | & _10: UInt32.t = Any.any_l ()
+    | & _15: UInt32.t = Any.any_l () ]) [ return (result: UInt64.t) -> (! return {result}) ]
+end

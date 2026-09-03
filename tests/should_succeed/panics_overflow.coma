@@ -1,0 +1,76 @@
+module M_add
+  use creusot.int.UInt64
+  use creusot.prelude.Any
+  use int.Int
+  
+  constant const_MIN: UInt64.t = (0: UInt64.t)
+  
+  constant const_MAX: UInt64.t = (18446744073709551615: UInt64.t)
+  
+  let add_u64 (self_: UInt64.t) (rhs: UInt64.t) (return (x: UInt64.t)) =
+  {[@stop_split] [@expl:add requires (no panic)] not (UInt64.t'int const_MIN > UInt64.t'int self_ + UInt64.t'int rhs
+    \/ UInt64.t'int self_ + UInt64.t'int rhs > UInt64.t'int const_MAX)}
+    any
+    [ return (result: UInt64.t) -> {[@stop_split] [@expl:add ensures] UInt64.t'int result
+      = UInt64.t'int self_ + UInt64.t'int rhs}
+      (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let add (x: UInt64.t) (y: UInt64.t) (return (x'0: UInt64.t)) =
+  {[@stop_split] [@expl:add requires (no panic)] not UInt64.t'int x + UInt64.t'int y > UInt64.t'int const_MAX}
+    (! bb0
+    [ bb0 = s0 [ s0 = add_u64 {x} {y} (fun (_x: UInt64.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: UInt64.t = Any.any_l () | & x: UInt64.t = x | & y: UInt64.t = y ])
+    [ return (result: UInt64.t) -> (! return {result}) ]
+end
+module M_div
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  use int.ComputerDivision
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let div (x: UInt32.t) (y: UInt32.t) (return (x'0: UInt32.t)) =
+  {[@stop_split] [@expl:div requires (no panic)] not UInt32.t'int y = 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_9 <- y ] s1
+      | s1 = [ &_10 <- _9 = (0: UInt32.t) ] s2
+      | s2 = {[@expl:division by zero] not _10} s3
+      | s3 = UInt32.div {x} {_9} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s4)
+      | s4 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l ()
+    | & x: UInt32.t = x
+    | & y: UInt32.t = y
+    | & _9: UInt32.t = Any.any_l ()
+    | & _10: bool = Any.any_l () ])
+    [ return (result: UInt32.t) -> {[@stop_split] [@expl:div ensures] UInt32.t'int result
+      = ComputerDivision.div (UInt32.t'int x) (UInt32.t'int y)}
+      (! return {result}) ]
+end
+module M_increment
+  use creusot.int.UInt32
+  use creusot.prelude.Any
+  use int.Int
+  
+  constant const_MAX: UInt32.t = (4294967295: UInt32.t)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let increment (x: UInt32.t) (return (x'0: UInt32.t)) = {[@stop_split] [@expl:increment requires (no panic)] not x
+    = const_MAX}
+    (! bb0
+    [ bb0 = s0 [ s0 = UInt32.add {x} {(1: UInt32.t)} (fun (_x: UInt32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: UInt32.t = Any.any_l () | & x: UInt32.t = x ])
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:increment ensures] ([@stop_split] [@expl:increment ensures #0] not x = const_MAX)
+      /\ ([@stop_split] [@expl:increment ensures #1] UInt32.t'int result = UInt32.t'int x + 1)}
+      (! return {result}) ]
+end

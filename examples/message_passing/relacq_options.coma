@@ -1040,11 +1040,12 @@ module M_message_passing
   let unwrap_AtView_Perm_PermCell_i32 (self_: t_Option_AtView_Perm_PermCell_i32)
     (return (x: t_AtView_Perm_PermCell_i32)) =
   {[@stop_split] [@expl:unwrap_AtView_Perm_PermCell_i32 requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_AtView_Perm_PermCell_i32 self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'1)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'1)}
     any
     [ return (result: t_AtView_Perm_PermCell_i32) ->
     {[@stop_split] [@expl:unwrap_AtView_Perm_PermCell_i32 ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_AtView_Perm_PermCell_i32 result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'1 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   let sync_Perm_PermCell_i32 (self: t_AtView_Perm_PermCell_i32) (sync_view: t_SyncView)
@@ -1420,9 +1421,12 @@ module M_message_passing
       (! return {result}) ]
   
   let unwrap_ref_Perm_PermCell_i32 (self_: t_Option_ref_Perm_PermCell_i32) (return (x: t_Perm_PermCell_i32)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'4}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'4}
     any
-    [ return (result: t_Perm_PermCell_i32) -> {[@stop_split] [@expl:unwrap ensures] Some'4 result = self_}
+    [ return (result: t_Perm_PermCell_i32) ->
+    {[@stop_split] [@expl:unwrap_ref_Perm_PermCell_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'4)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'4 result = self_)}
       (! return {result}) ]
   
   let new_ref_Perm_PermCell_i32 (x: t_Perm_PermCell_i32) (return (x'0: t_Perm_PermCell_i32)) = any

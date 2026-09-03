@@ -219,11 +219,12 @@ module M_test_instant
   
   let unwrap_Instant (self_: t_Option_Instant) (return (x: t_Instant)) =
   {[@stop_split] [@expl:unwrap_Instant requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_Instant self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None)}
     any
     [ return (result: t_Instant) ->
     {[@stop_split] [@expl:unwrap_Instant ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_Instant result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   function deep_model_ref_Instant [@inline:trivial] (self: t_Instant) : int = deep_model_Instant self

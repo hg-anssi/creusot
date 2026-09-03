@@ -1263,9 +1263,12 @@ module M_implementation__find_inner
       (! return {result}) ]
   
   let unwrap_ref_Perm_PermCell_Node_T (self_: t_Option_ref_Perm_PermCell_Node_T) (return (x: t_Perm_PermCell_Node_T)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'0}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0}
     any
-    [ return (result: t_Perm_PermCell_Node_T) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result = self_}
+    [ return (result: t_Perm_PermCell_Node_T) ->
+    {[@stop_split] [@expl:unwrap_ref_Perm_PermCell_Node_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   let new_ref_Perm_PermCell_Node_T (x: t_Perm_PermCell_Node_T) (return (x'0: t_Perm_PermCell_Node_T)) = any
@@ -1467,10 +1470,13 @@ module M_implementation__find_inner
       (! return {result}) ]
   
   let unwrap_refmut_Perm_PermCell_Node_T (self_: t_Option_refmut_Perm_PermCell_Node_T)
-    (return (x: MutBorrow.t t_Perm_PermCell_Node_T)) = {[@stop_split] [@expl:unwrap requires] self_ <> None'1}
+    (return (x: MutBorrow.t t_Perm_PermCell_Node_T)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None'1}
     any
-    [ return (result: MutBorrow.t t_Perm_PermCell_Node_T) -> {[@stop_split] [@expl:unwrap ensures] Some'1 result
-      = self_}
+    [ return (result: MutBorrow.t t_Perm_PermCell_Node_T) ->
+    {[@stop_split] [@expl:unwrap_refmut_Perm_PermCell_Node_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_refmut_UFInner_T [@inline:trivial] (_1: MutBorrow.t (MutBorrow.t t_UFInner_T)) =
@@ -1919,9 +1925,12 @@ module M_implementation__get
       (! return {result}) ]
   
   let unwrap_ref_Perm_PermCell_Node_T (self_: t_Option_ref_Perm_PermCell_Node_T) (return (x: t_Perm_PermCell_Node_T)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'0}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0}
     any
-    [ return (result: t_Perm_PermCell_Node_T) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result = self_}
+    [ return (result: t_Perm_PermCell_Node_T) ->
+    {[@stop_split] [@expl:unwrap_ref_Perm_PermCell_Node_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   let new_ref_Perm_PermCell_Node_T (x: t_Perm_PermCell_Node_T) (return (x'0: t_Perm_PermCell_Node_T)) = any
@@ -2818,10 +2827,13 @@ module M_implementation__link
       (! return {result}) ]
   
   let unwrap_refmut_Perm_PermCell_Node_T (self_: t_Option_refmut_Perm_PermCell_Node_T)
-    (return (x: MutBorrow.t t_Perm_PermCell_Node_T)) = {[@stop_split] [@expl:unwrap requires] self_ <> None'0}
+    (return (x: MutBorrow.t t_Perm_PermCell_Node_T)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None'0}
     any
-    [ return (result: MutBorrow.t t_Perm_PermCell_Node_T) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result
-      = self_}
+    [ return (result: MutBorrow.t t_Perm_PermCell_Node_T) ->
+    {[@stop_split] [@expl:unwrap_refmut_Perm_PermCell_Node_T ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_refmut_FMap_Snapshot_Element_T_Perm_PermCell_Node_T [@inline:trivial] (_1: MutBorrow.t (MutBorrow.t t_FMap_Snapshot_Element_T_Perm_PermCell_Node_T)) =

@@ -24,6 +24,7 @@ extern_spec! {
     {
         // FIXME: inherit terminates/ghost status
         #[requires(<U as From<T>>::from.precondition((self,)))]
+        // #[may_panic(<U as From<T>>::from.panic_condition((self,)))] cannot panic because From trait does not allow to
         #[ensures(<U as From<T>>::from.postcondition((self,), result))]
         fn into(self) -> U {
             U::from(self)

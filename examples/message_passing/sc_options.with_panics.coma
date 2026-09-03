@@ -1015,11 +1015,14 @@ module M_message_passing
       \/ (exists r: t_Perm_PermCell_i32. result = Some'2 r /\ self_ = Some'0 r))}
       (! return {result}) ]
   
-  let unwrap_ref_Perm_PermCell_i32 (self_: t_Option_ref_Perm_PermCell_i32) (return (x: t_Perm_PermCell_i32)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'2}
-    any
-    [ return (result: t_Perm_PermCell_i32) -> {[@stop_split] [@expl:unwrap ensures] Some'2 result = self_}
-      (! return {result}) ]
+  let unwrap_ref_Perm_PermCell_i32 (self_: t_Option_ref_Perm_PermCell_i32) (panic) (return (x: t_Perm_PermCell_i32)) =
+  any
+    [ return (result: t_Perm_PermCell_i32) ->
+    {[@stop_split] [@expl:unwrap_ref_Perm_PermCell_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'2)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'2 result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None'2} (! panic) ]
   
   let new_ref_Perm_PermCell_i32 (x: t_Perm_PermCell_i32) (return (x'0: t_Perm_PermCell_i32)) = any
     [ return (result: t_Perm_PermCell_i32) -> {[@stop_split] [@expl:new ensures] result = x} (! return {result}) ]
@@ -1068,7 +1071,9 @@ module M_message_passing
       | s1 = deref_Ghost_Option_Perm_PermCell_i32 {data_own'0}
           (fun (_x: t_Option_Perm_PermCell_i32) -> [ &_33 <- _x ] s2)
       | s2 = as_ref_Perm_PermCell_i32 {_33} (fun (_x: t_Option_ref_Perm_PermCell_i32) -> [ &_31 <- _x ] s3)
-      | s3 = unwrap_ref_Perm_PermCell_i32 {_31} (fun (_x: t_Perm_PermCell_i32) -> [ &_30 <- _x ] s4)
+      | s3 = unwrap_ref_Perm_PermCell_i32 {_31}
+          (-> {[@expl:the callee cannot panic here] false} any)
+          (fun (_x: t_Perm_PermCell_i32) -> [ &_30 <- _x ] s4)
       | s4 = new_ref_Perm_PermCell_i32 {_30} (fun (_x: t_Perm_PermCell_i32) -> [ &_28 <- _x ] s5)
       | s5 = get_i32 {self.c3'3} {_28} (fun (_x: Int32.t) -> [ &res <- _x ] s6)
       | s6 = {[@expl:assertion] res = (1: Int32.t)} s7

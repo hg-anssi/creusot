@@ -1,0 +1,109 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_impl_IndexMut_for_Memory__index_mut": {
+      "vc_index_mut_Memory": { "prover": "alt-ergo", "time": 0.032 },
+      "vc_index_mut_Vec_usize_Global": {
+        "prover": "alt-ergo",
+        "time": 0.025
+      }
+    },
+    "M_impl_Index_for_Memory__index": {
+      "vc_index_Memory'0": { "prover": "alt-ergo", "time": 0.026 },
+      "vc_index_Vec_usize_Global": { "prover": "alt-ergo", "time": 0.018 }
+    },
+    "M_impl_Memory_0__find_lasso": {
+      "vc_find_lasso": { "prover": "alt-ergo", "time": 0.03 }
+    },
+    "M_impl_Memory_0__find_lasso_aux": {
+      "vc_find_lasso_aux": {
+        "tactic": "split_vc",
+        "children": [
+          { "prover": "alt-ergo", "time": 0.022 },
+          { "prover": "alt-ergo", "time": 0.024 },
+          { "prover": "z3", "time": 0.009 },
+          { "prover": "alt-ergo", "time": 0.147 },
+          { "prover": "alt-ergo", "time": 0.016 },
+          { "prover": "alt-ergo", "time": 0.033 },
+          { "prover": "alt-ergo", "time": 0.034 },
+          { "prover": "z3", "time": 0.031 }
+        ]
+      }
+    },
+    "M_impl_Memory_0__find_ptr_in_seq": {
+      "vc_find_ptr_in_seq": { "prover": "alt-ergo", "time": 0.035 }
+    },
+    "M_impl_Memory_0__list_reversal_lasso": {
+      "vc_index_mut_Memory": { "prover": "alt-ergo", "time": 0.03 },
+      "vc_list_reversal_lasso": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.028 },
+              { "prover": "alt-ergo", "time": 0.036 },
+              { "prover": "alt-ergo", "time": 0.029 },
+              { "prover": "alt-ergo", "time": 0.036 },
+              { "prover": "alt-ergo", "time": 0.854 },
+              { "prover": "alt-ergo", "time": 0.099 },
+              { "prover": "alt-ergo", "time": 0.033 },
+              { "prover": "alt-ergo", "time": 0.045 },
+              { "prover": "alt-ergo", "time": 0.583 },
+              { "prover": "alt-ergo", "time": 0.686 },
+              {
+                "tactic": "split_vc",
+                "children": [
+                  { "prover": "alt-ergo", "time": 0.342 },
+                  { "prover": "alt-ergo", "time": 0.377 },
+                  { "prover": "alt-ergo", "time": 0.4 }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "vc_replace_usize": { "prover": "alt-ergo", "time": 0.03 }
+    },
+    "M_impl_Memory_0__list_reversal_list": {
+      "vc_index_mut_Memory": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_list_reversal_list": { "prover": "alt-ergo", "time": 0.638 },
+      "vc_replace_usize": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_impl_Memory_0__list_reversal_loop": {
+      "vc_index_mut_Memory": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_list_reversal_loop": {
+        "tactic": "compute_specified",
+        "children": [
+          {
+            "tactic": "split_vc",
+            "children": [
+              { "prover": "alt-ergo", "time": 0.024 },
+              { "prover": "alt-ergo", "time": 0.033 },
+              { "prover": "alt-ergo", "time": 0.036 },
+              { "prover": "alt-ergo", "time": 0.037 },
+              { "prover": "alt-ergo", "time": 0.099 },
+              { "prover": "alt-ergo", "time": 0.316 },
+              { "prover": "alt-ergo", "time": 0.039 },
+              { "prover": "alt-ergo", "time": 0.043 },
+              { "prover": "alt-ergo", "time": 0.032 },
+              { "prover": "alt-ergo", "time": 0.037 },
+              { "prover": "alt-ergo", "time": 0.18 },
+              { "prover": "z3", "time": 0.019 },
+              { "prover": "alt-ergo", "time": 0.324 }
+            ]
+          }
+        ]
+      },
+      "vc_replace_usize": { "prover": "alt-ergo", "time": 0.02 }
+    },
+    "M_impl_Memory_0__list_reversal_safe": {
+      "vc_index_Memory'0": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_index_mut_Memory": { "prover": "alt-ergo", "time": 0.044 },
+      "vc_list_reversal_safe": { "prover": "alt-ergo", "time": 0.06 }
+    },
+    "M_impl_Memory_0__pigeon": {
+      "vc_pigeon": { "prover": "z3", "time": 0.036 }
+    }
+  }
+}

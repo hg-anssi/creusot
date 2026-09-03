@@ -351,7 +351,7 @@
 </theory>
 <theory name="M_logic__fmap__impl_Index_for_FMap_K_V__index" proved="true">
  <goal name="vc_index_FMap_K_V&#39;0" proved="true">
- <proof prover="3" timelimit="1"><result status="valid" time="0.022337" steps="51"/></proof>
+ <proof prover="3"><result status="valid" time="0.022337" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__fmap__impl_IntoIterator_for_FMap_K_V__into_iter" proved="true">
@@ -548,7 +548,7 @@
    <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.935993" steps="13953"/></proof>
    </goal>
    <goal name="vc_cons_concat_T.0.4" proved="true">
-   <proof prover="3" timelimit="1"><result status="valid" time="1.264544" steps="9504"/></proof>
+   <proof prover="3" timelimit="1"><result status="valid" time="1.685388" steps="9504"/></proof>
    </goal>
    <goal name="vc_cons_concat_T.0.5" expl="cons_concat ensures" proved="true">
    <proof prover="3"><result status="valid" time="0.019514" steps="16"/></proof>
@@ -587,7 +587,7 @@
   <proof prover="3" timelimit="5"><result status="valid" time="0.025738" steps="4"/></proof>
   </goal>
   <goal name="vc_replicate_T.5" expl="replicate ensures" proved="true">
-  <proof prover="3" timelimit="5"><result status="valid" time="1.594742" steps="15173"/></proof>
+  <proof prover="3" timelimit="5"><result status="valid" time="1.304706" steps="15173"/></proof>
   </goal>
  </transf>
  </goal>
@@ -2799,7 +2799,7 @@
   <proof prover="2" timelimit="0.2"><result status="valid" time="0.148350" steps="10761"/></proof>
   </goal>
   <goal name="vc_associative_FMap_K_V.4" expl="associative ensures" proved="true">
-  <proof prover="0" timelimit="0.2"><result status="valid" time="0.745922" steps="2544720"/></proof>
+  <proof prover="0" timelimit="0.2"><result status="valid" time="0.546596" steps="2544720"/></proof>
   </goal>
   <goal name="vc_associative_FMap_K_V.5" expl="associative ensures" proved="true">
   <proof prover="2" timelimit="0.2"><result status="valid" time="0.170011" steps="8562"/></proof>
@@ -2825,7 +2825,7 @@
   <proof prover="3"><result status="valid" time="0.298308" steps="1267"/></proof>
   </goal>
   <goal name="vc_cancelable_FMap_K_V.3" expl="unwrap_logic requires" proved="true">
-  <proof prover="3"><result status="valid" time="0.347723" steps="1337"/></proof>
+  <proof prover="3"><result status="valid" time="0.206481" steps="1337"/></proof>
   </goal>
   <goal name="vc_cancelable_FMap_K_V.4" expl="unwrap_logic requires" proved="true">
   <proof prover="3"><result status="valid" time="0.232157" steps="1438"/></proof>
@@ -3582,7 +3582,7 @@
 </theory>
 <theory name="M_logic__ra__prod__impl_LocalUpdate_for_tup3_T1_T2_T3__frame_preserving" proved="true">
  <goal name="vc_frame_preserving_tup3_T1_T2_T3" proved="true">
- <proof prover="0" timelimit="0.2"><result status="valid" time="0.300077" steps="864123"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.432461" steps="864123"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__ra__prod__impl_LocalUpdate_for_tup3_T1_T2_T3__frame_preserving__refines" proved="true">
@@ -3810,7 +3810,7 @@
   <proof prover="3" timelimit="1"><result status="valid" time="1.744328" steps="6704"/></proof>
   </goal>
   <goal name="vc_cancelable_tup4_T1_T2_T3_T4.6" expl="cancelable ensures" proved="true">
-  <proof prover="3" timelimit="1"><result status="valid" time="0.570028" steps="2910"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="0.753062" steps="2910"/></proof>
   </goal>
   <goal name="vc_cancelable_tup4_T1_T2_T3_T4.7" expl="cancelable ensures" proved="true">
   <proof prover="3" timelimit="1"><result status="valid" time="0.582653" steps="2779"/></proof>
@@ -4065,7 +4065,7 @@
    <proof prover="0" timelimit="0.2"><result status="valid" time="0.015630" steps="14125"/></proof>
    </goal>
    <goal name="vc_cancelable_Sum_R1_R2.0.1" expl="cancelable ensures" proved="true">
-   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.480579" steps="7903"/></proof>
+   <proof prover="3" timelimit="2" memlimit="4000"><result status="valid" time="1.132254" steps="7903"/></proof>
    </goal>
   </transf>
   </goal>
@@ -4814,12 +4814,12 @@
 </theory>
 <theory name="M_logic__seq__impl_IndexMut_for_Seq_T__index_mut" proved="true">
  <goal name="vc_index_mut_Seq_T" proved="true">
- <proof prover="3" timelimit="1"><result status="valid" time="0.038840" steps="311"/></proof>
+ <proof prover="3"><result status="valid" time="0.038840" steps="314"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__seq__impl_Index_for_Seq_T__index" proved="true">
  <goal name="vc_index_Seq_T" proved="true">
- <proof prover="3" timelimit="1"><result status="valid" time="0.028474" steps="77"/></proof>
+ <proof prover="3"><result status="valid" time="0.028474" steps="78"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__seq__impl_IntoIterator_for_Seq_T__into_iter" proved="true">
@@ -5056,22 +5056,25 @@
   <goal name="vc_extract_T.2" expl="pop_front_ghost &#39;self&#39; type invariant" proved="true">
   <proof prover="0"><result status="valid" time="0.008912" steps="2754"/></proof>
   </goal>
-  <goal name="vc_extract_T.3" expl="unwrap_T requires" proved="true">
-  <proof prover="1"><result status="valid" time="0.022568" steps="6505"/></proof>
+  <goal name="vc_extract_T.3" expl="unwrap &#39;self_&#39; type invariant" proved="true">
+  <proof prover="3"><result status="valid" time="0.015350" steps="14"/></proof>
   </goal>
   <goal name="vc_extract_T.4" expl="extract_T ensures" proved="true">
-  <proof prover="3" timelimit="5"><result status="valid" time="1.193052" steps="23296"/></proof>
+  <proof prover="3" timelimit="1"><result status="valid" time="1.186588" steps="25342"/></proof>
   </goal>
-  <goal name="vc_extract_T.5" expl="type invariant" proved="true">
-  <proof prover="0"><result status="valid" time="0.012944" steps="1743"/></proof>
+  <goal name="vc_extract_T.5" expl="the callee cannot panic here" proved="true">
+  <proof prover="3"><result status="valid" time="0.015955" steps="23"/></proof>
   </goal>
   <goal name="vc_extract_T.6" expl="type invariant" proved="true">
-  <proof prover="2" timelimit="5"><result status="valid" time="0.017948" steps="2220"/></proof>
+  <proof prover="0"><result status="valid" time="0.012944" steps="1743"/></proof>
   </goal>
   <goal name="vc_extract_T.7" expl="type invariant" proved="true">
-  <proof prover="1"><result status="valid" time="0.013802" steps="5091"/></proof>
+  <proof prover="2" timelimit="5"><result status="valid" time="0.017948" steps="2220"/></proof>
   </goal>
   <goal name="vc_extract_T.8" expl="type invariant" proved="true">
+  <proof prover="1"><result status="valid" time="0.013802" steps="5091"/></proof>
+  </goal>
+  <goal name="vc_extract_T.9" expl="type invariant" proved="true">
   <proof prover="1"><result status="valid" time="0.015771" steps="4697"/></proof>
   </goal>
  </transf>
@@ -5089,7 +5092,7 @@
 </theory>
 <theory name="M_logic__seq__impl_Seq_T_0__remove" proved="true">
  <goal name="vc_remove_T" proved="true">
- <proof prover="3"><result status="valid" time="0.226454" steps="1033"/></proof>
+ <proof prover="3"><result status="valid" time="0.074314" steps="1036"/></proof>
  </goal>
 </theory>
 <theory name="M_logic__seq__impl_Seq_T_1__lexico_lt_log_irreflexive" proved="true">
@@ -7051,7 +7054,7 @@
    <proof prover="3"><result status="valid" time="0.083096" steps="680"/></proof>
    </goal>
    <goal name="vc_produces_trans_Map_I_F.0.8" expl="produces_trans ensures" proved="true">
-   <proof prover="1" timelimit="0.2"><result status="valid" time="0.302519" steps="71294"/></proof>
+   <proof prover="1" timelimit="0.2"><result status="valid" time="0.443912" steps="71294"/></proof>
    </goal>
    <goal name="vc_produces_trans_Map_I_F.0.9" proved="true">
    <proof prover="3"><result status="valid" time="0.044332" steps="187"/></proof>
@@ -7349,7 +7352,7 @@
     <goal name="vc_produces_one_invariant_I.0.1.0" expl="produces_one_invariant ensures #0 (produces_one_invariant_I ensures)" proved="true">
     <transf name="compute_specified" proved="true" >
      <goal name="vc_produces_one_invariant_I.0.1.0.0" expl="produces_one_invariant ensures #0 (produces_one_invariant_I ensures)" proved="true">
-     <proof prover="1" timelimit="2" memlimit="4000"><result status="valid" time="1.982070" steps="210088"/></proof>
+     <proof prover="1" timelimit="2" memlimit="4000"><result status="valid" time="1.626188" steps="210088"/></proof>
      </goal>
     </transf>
     </goal>
@@ -7864,127 +7867,127 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_i128_i128_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_i128_i128_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012453" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.012453" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_i16_i16_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_i16_i16_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019964" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.019964" steps="84"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_i32_i32_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_i32_i32_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015945" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.015945" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_i64_i64_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_i64_i64_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013312" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.013312" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_i8_i8_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_i8_i8_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017657" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.017657" steps="84"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_isize_isize_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_isize_isize_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014688" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.014688" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_i128_i128_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_i128_i128_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008636" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.008636" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_i16_i16_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_i16_i16_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015274" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.015274" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_i32_i32_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_i32_i32_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.009740" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.009740" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_i64_i64_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_i64_i64_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012361" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.012361" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_i8_i8_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_i8_i8_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008314" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.008314" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_isize_isize_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_isize_isize_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011365" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.011365" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_u128_u128_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_u128_u128_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.007689" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.007689" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_u16_u16_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_u16_u16_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012214" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.012214" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_u32_u32_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_u32_u32_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012577" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.012577" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_u64_u64_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_u64_u64_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017716" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.017716" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_u8_u8_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_u8_u8_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008837" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.008837" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_ref_usize_usize_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign__ref_usize_usize_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.009393" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.009393" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_u128_u128_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_u128_u128_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008594" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.008594" steps="40"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_u16_u16_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_u16_u16_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020297" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.020297" steps="85"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_u32_u32_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_u32_u32_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012162" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.012162" steps="40"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_u64_u64_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_u64_u64_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.007925" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.007925" steps="40"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_u8_u8_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_u8_u8_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011003" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.011003" steps="85"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_AddAssign_usize_usize_add_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_AddAssign_usize_usize_add_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014756" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.014756" steps="40"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i128_i128_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_i128_i128_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011854" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.011854" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i128_ref_i128_add_body" proved="true">
@@ -7994,7 +7997,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i16_i16_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_i16_i16_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.025172" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.025172" steps="63"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i16_ref_i16_add_body" proved="true">
@@ -8004,7 +8007,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i32_i32_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_i32_i32_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008383" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.008383" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i32_ref_i32_add_body" proved="true">
@@ -8014,7 +8017,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i64_i64_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_i64_i64_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016194" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.016194" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i64_ref_i64_add_body" proved="true">
@@ -8024,7 +8027,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i8_i8_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_i8_i8_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008022" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.008022" steps="63"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_i8_ref_i8_add_body" proved="true">
@@ -8034,7 +8037,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_isize_isize_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_isize_isize_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017703" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.017703" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_isize_ref_isize_add_body" proved="true">
@@ -8169,7 +8172,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u128_u128_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_u128_u128_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020727" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.020727" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u16_ref_u16_add_body" proved="true">
@@ -8179,7 +8182,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u16_u16_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_u16_u16_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015989" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.015989" steps="62"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u32_ref_u32_add_body" proved="true">
@@ -8189,7 +8192,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u32_u32_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_u32_u32_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011883" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.011883" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u64_ref_u64_add_body" proved="true">
@@ -8199,7 +8202,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u64_u64_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_u64_u64_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.022335" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.022335" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u8_ref_u8_add_body" proved="true">
@@ -8209,7 +8212,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_u8_u8_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_u8_u8_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013563" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.013563" steps="62"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_usize_ref_usize_add_body" proved="true">
@@ -8219,132 +8222,132 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Add_usize_usize_add_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Add_usize_usize_add_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011780" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.011780" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_i128_i128_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_i128_i128_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020510" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.020510" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_i16_i16_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_i16_i16_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012641" steps="49"/></proof>
+ <proof prover="3"><result status="valid" time="0.012641" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_i32_i32_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_i32_i32_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.018289" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.018289" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_i64_i64_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_i64_i64_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016265" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.016265" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_i8_i8_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_i8_i8_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020005" steps="49"/></proof>
+ <proof prover="3"><result status="valid" time="0.020005" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_isize_isize_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_isize_isize_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.003829" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.003829" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_i128_i128_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_i128_i128_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013442" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.013442" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_i16_i16_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_i16_i16_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015924" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.015924" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_i32_i32_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_i32_i32_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011928" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.011928" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_i64_i64_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_i64_i64_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013577" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.013577" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_i8_i8_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_i8_i8_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013257" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.013257" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_isize_isize_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_isize_isize_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.018024" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.018024" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_u128_u128_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_u128_u128_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.018755" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.018755" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_u16_u16_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_u16_u16_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012135" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.012135" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_u32_u32_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_u32_u32_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012452" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.012452" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_u64_u64_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_u64_u64_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.007885" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.007885" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_u8_u8_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_u8_u8_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008567" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.008567" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_ref_usize_usize_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign__ref_usize_usize_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011531" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.011531" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_u128_u128_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_u128_u128_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.010230" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.010230" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_u16_u16_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_u16_u16_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016648" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.016648" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_u32_u32_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_u32_u32_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.018924" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.018924" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_u64_u64_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_u64_u64_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013137" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.013137" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_u8_u8_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_u8_u8_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013031" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.013031" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_DivAssign_usize_usize_div_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_DivAssign_usize_usize_div_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012715" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.012715" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i128_i128_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_i128_i128_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012797" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.012797" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i128_ref_i128_div_body" proved="true">
@@ -8354,7 +8357,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i16_i16_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_i16_i16_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017102" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.017102" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i16_ref_i16_div_body" proved="true">
@@ -8364,7 +8367,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i32_i32_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_i32_i32_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016787" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.016787" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i32_ref_i32_div_body" proved="true">
@@ -8374,7 +8377,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i64_i64_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_i64_i64_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.003929" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.003929" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i64_ref_i64_div_body" proved="true">
@@ -8384,7 +8387,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i8_i8_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_i8_i8_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015890" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.015890" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_i8_ref_i8_div_body" proved="true">
@@ -8394,7 +8397,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_isize_isize_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_isize_isize_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.010187" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.010187" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_isize_ref_isize_div_body" proved="true">
@@ -8529,7 +8532,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u128_u128_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_u128_u128_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016157" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.016157" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u16_ref_u16_div_body" proved="true">
@@ -8539,7 +8542,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u16_u16_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_u16_u16_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019152" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.019152" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u32_ref_u32_div_body" proved="true">
@@ -8549,7 +8552,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u32_u32_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_u32_u32_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015951" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.015951" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u64_ref_u64_div_body" proved="true">
@@ -8559,7 +8562,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u64_u64_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_u64_u64_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016232" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.016232" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u8_ref_u8_div_body" proved="true">
@@ -8569,7 +8572,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_u8_u8_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_u8_u8_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012319" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.012319" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_usize_ref_usize_div_body" proved="true">
@@ -8579,132 +8582,132 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Div_usize_usize_div_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Div_usize_usize_div_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015369" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.015369" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_i128_i128_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_i128_i128_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012514" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.012514" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_i16_i16_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_i16_i16_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017036" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.017036" steps="127"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_i32_i32_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_i32_i32_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016256" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.016256" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_i64_i64_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_i64_i64_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020436" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.020436" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_i8_i8_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_i8_i8_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016282" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.016282" steps="127"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_isize_isize_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_isize_isize_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008261" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.008261" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_i128_i128_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_i128_i128_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012158" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.012158" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_i16_i16_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_i16_i16_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011974" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.011974" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_i32_i32_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_i32_i32_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014538" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.014538" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_i64_i64_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_i64_i64_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014359" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.014359" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_i8_i8_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_i8_i8_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013086" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.013086" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_isize_isize_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_isize_isize_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013102" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.013102" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_u128_u128_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_u128_u128_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013271" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.013271" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_u16_u16_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_u16_u16_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017535" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.017535" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_u32_u32_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_u32_u32_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014601" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.014601" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_u64_u64_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_u64_u64_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011977" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.011977" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_u8_u8_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_u8_u8_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.009262" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.009262" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_ref_usize_usize_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign__ref_usize_usize_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.004156" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.004156" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_u128_u128_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_u128_u128_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.004106" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.004106" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_u16_u16_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_u16_u16_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019770" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.019770" steps="124"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_u32_u32_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_u32_u32_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016229" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.016229" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_u64_u64_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_u64_u64_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016613" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.016613" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_u8_u8_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_u8_u8_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.024251" steps="27"/></proof>
+ <proof prover="3"><result status="valid" time="0.024251" steps="124"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_MulAssign_usize_usize_mul_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_MulAssign_usize_usize_mul_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.010612" steps="25"/></proof>
+ <proof prover="3"><result status="valid" time="0.010612" steps="80"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i128_i128_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_i128_i128_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016795" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.016795" steps="56"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i128_ref_i128_mul_body" proved="true">
@@ -8714,7 +8717,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i16_i16_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_i16_i16_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.029003" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.029003" steps="100"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i16_ref_i16_mul_body" proved="true">
@@ -8724,7 +8727,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i32_i32_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_i32_i32_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.022045" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.022045" steps="56"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i32_ref_i32_mul_body" proved="true">
@@ -8734,7 +8737,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i64_i64_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_i64_i64_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016373" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.016373" steps="56"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i64_ref_i64_mul_body" proved="true">
@@ -8744,7 +8747,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i8_i8_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_i8_i8_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.021308" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.021308" steps="100"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_i8_ref_i8_mul_body" proved="true">
@@ -8754,7 +8757,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_isize_isize_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_isize_isize_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.021568" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.021568" steps="56"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_isize_ref_isize_mul_body" proved="true">
@@ -8889,7 +8892,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u128_u128_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_u128_u128_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014682" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.014682" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u16_ref_u16_mul_body" proved="true">
@@ -8899,7 +8902,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u16_u16_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_u16_u16_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020967" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.020967" steps="90"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u32_ref_u32_mul_body" proved="true">
@@ -8909,7 +8912,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u32_u32_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_u32_u32_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.023517" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.023517" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u64_ref_u64_mul_body" proved="true">
@@ -8919,7 +8922,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u64_u64_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_u64_u64_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.022961" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.022961" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u8_ref_u8_mul_body" proved="true">
@@ -8929,7 +8932,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_u8_u8_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_u8_u8_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012387" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.012387" steps="90"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_usize_ref_usize_mul_body" proved="true">
@@ -8939,132 +8942,132 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Mul_usize_usize_mul_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Mul_usize_usize_mul_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016665" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.016665" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_i128_i128_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_i128_i128_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015221" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.015221" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_i16_i16_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_i16_i16_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.021260" steps="49"/></proof>
+ <proof prover="3"><result status="valid" time="0.021260" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_i32_i32_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_i32_i32_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008913" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.008913" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_i64_i64_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_i64_i64_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.025710" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.025710" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_i8_i8_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_i8_i8_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019283" steps="49"/></proof>
+ <proof prover="3"><result status="valid" time="0.019283" steps="54"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_isize_isize_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_isize_isize_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014328" steps="46"/></proof>
+ <proof prover="3"><result status="valid" time="0.014328" steps="52"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_i128_i128_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_i128_i128_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015673" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.015673" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_i16_i16_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_i16_i16_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012898" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.012898" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_i32_i32_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_i32_i32_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016676" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.016676" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_i64_i64_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_i64_i64_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.027663" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.027663" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_i8_i8_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_i8_i8_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012509" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.012509" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_isize_isize_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_isize_isize_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014964" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.014964" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_u128_u128_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_u128_u128_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.018423" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.018423" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_u16_u16_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_u16_u16_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011976" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.011976" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_u32_u32_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_u32_u32_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.004629" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.004629" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_u64_u64_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_u64_u64_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013310" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.013310" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_u8_u8_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_u8_u8_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015043" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.015043" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_ref_usize_usize_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign__ref_usize_usize_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016939" steps="11"/></proof>
+ <proof prover="3"><result status="valid" time="0.016939" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_u128_u128_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_u128_u128_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.022146" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.022146" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_u16_u16_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_u16_u16_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.021496" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.021496" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_u32_u32_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_u32_u32_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016224" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.016224" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_u64_u64_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_u64_u64_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016882" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.016882" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_u8_u8_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_u8_u8_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020796" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.020796" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_RemAssign_usize_usize_rem_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_RemAssign_usize_usize_rem_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019097" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.019097" steps="18"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i128_i128_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_i128_i128_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011861" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.011861" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i128_ref_i128_rem_body" proved="true">
@@ -9074,7 +9077,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i16_i16_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_i16_i16_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.018869" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.018869" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i16_ref_i16_rem_body" proved="true">
@@ -9084,7 +9087,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i32_i32_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_i32_i32_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019500" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.019500" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i32_ref_i32_rem_body" proved="true">
@@ -9094,7 +9097,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i64_i64_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_i64_i64_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015455" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.015455" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i64_ref_i64_rem_body" proved="true">
@@ -9104,7 +9107,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i8_i8_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_i8_i8_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016739" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.016739" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_i8_ref_i8_rem_body" proved="true">
@@ -9114,7 +9117,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_isize_isize_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_isize_isize_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017475" steps="15"/></proof>
+ <proof prover="3"><result status="valid" time="0.017475" steps="47"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_isize_ref_isize_rem_body" proved="true">
@@ -9249,7 +9252,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u128_u128_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_u128_u128_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012413" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.012413" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u16_ref_u16_rem_body" proved="true">
@@ -9259,7 +9262,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u16_u16_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_u16_u16_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.007169" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.007169" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u32_ref_u32_rem_body" proved="true">
@@ -9269,7 +9272,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u32_u32_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_u32_u32_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017860" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.017860" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u64_ref_u64_rem_body" proved="true">
@@ -9279,7 +9282,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u64_u64_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_u64_u64_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.012969" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.012969" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u8_ref_u8_rem_body" proved="true">
@@ -9289,7 +9292,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_u8_u8_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_u8_u8_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.022641" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.022641" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_usize_ref_usize_rem_body" proved="true">
@@ -9299,132 +9302,132 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Rem_usize_usize_rem_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Rem_usize_usize_rem_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016551" steps="6"/></proof>
+ <proof prover="3"><result status="valid" time="0.016551" steps="10"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_i128_i128_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_i128_i128_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013120" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.013120" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_i16_i16_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_i16_i16_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016529" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.016529" steps="97"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_i32_i32_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_i32_i32_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017200" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.017200" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_i64_i64_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_i64_i64_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020662" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.020662" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_i8_i8_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_i8_i8_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.013843" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.013843" steps="97"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_isize_isize_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_isize_isize_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019834" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.019834" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_i128_i128_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_i128_i128_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008893" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.008893" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_i16_i16_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_i16_i16_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.007671" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.007671" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_i32_i32_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_i32_i32_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.010653" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.010653" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_i64_i64_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_i64_i64_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015758" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.015758" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_i8_i8_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_i8_i8_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.014554" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.014554" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_isize_isize_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_isize_isize_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011796" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.011796" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_u128_u128_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_u128_u128_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015366" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.015366" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_u16_u16_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_u16_u16_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.007888" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.007888" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_u32_u32_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_u32_u32_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015602" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.015602" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_u64_u64_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_u64_u64_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011604" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.011604" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_u8_u8_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_u8_u8_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.009229" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.009229" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_ref_usize_usize_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign__ref_usize_usize_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.017387" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.017387" steps="5"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_u128_u128_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_u128_u128_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.022632" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.022632" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_u16_u16_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_u16_u16_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015239" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.015239" steps="90"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_u32_u32_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_u32_u32_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020118" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.020118" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_u64_u64_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_u64_u64_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.016584" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.016584" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_u8_u8_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_u8_u8_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.026369" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.026369" steps="90"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_SubAssign_usize_usize_sub_assign_body" proved="true">
  <goal name="vc_extern_spec_core_ops_SubAssign_usize_usize_sub_assign_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020212" steps="9"/></proof>
+ <proof prover="3"><result status="valid" time="0.020212" steps="41"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i128_i128_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_i128_i128_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011042" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.011042" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i128_ref_i128_sub_body" proved="true">
@@ -9434,7 +9437,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i16_i16_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_i16_i16_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020428" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.020428" steps="61"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i16_ref_i16_sub_body" proved="true">
@@ -9444,7 +9447,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i32_i32_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_i32_i32_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008835" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.008835" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i32_ref_i32_sub_body" proved="true">
@@ -9454,7 +9457,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i64_i64_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_i64_i64_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.031676" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.031676" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i64_ref_i64_sub_body" proved="true">
@@ -9464,7 +9467,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i8_i8_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_i8_i8_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011336" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.011336" steps="63"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_i8_ref_i8_sub_body" proved="true">
@@ -9474,7 +9477,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_isize_isize_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_isize_isize_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.022291" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.022291" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_isize_ref_isize_sub_body" proved="true">
@@ -9609,7 +9612,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u128_u128_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_u128_u128_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.019050" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.019050" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u16_ref_u16_sub_body" proved="true">
@@ -9619,7 +9622,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u16_u16_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_u16_u16_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.015994" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.015994" steps="85"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u32_ref_u32_sub_body" proved="true">
@@ -9629,7 +9632,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u32_u32_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_u32_u32_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.021032" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.021032" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u64_ref_u64_sub_body" proved="true">
@@ -9639,7 +9642,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u64_u64_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_u64_u64_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.008848" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.008848" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u8_ref_u8_sub_body" proved="true">
@@ -9649,7 +9652,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_u8_u8_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_u8_u8_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.020279" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.020279" steps="88"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_usize_ref_usize_sub_body" proved="true">
@@ -9659,7 +9662,7 @@
 </theory>
 <theory name="M_std__num__extern_spec_core_ops_Sub_usize_usize_sub_body" proved="true">
  <goal name="vc_extern_spec_core_ops_Sub_usize_usize_sub_body" proved="true">
- <proof prover="3"><result status="valid" time="0.011361" steps="0"/></proof>
+ <proof prover="3"><result status="valid" time="0.011361" steps="36"/></proof>
  </goal>
 </theory>
 <theory name="M_std__num__impl_Plain_for_i128__into_ghost__refines" proved="true">
@@ -9840,7 +9843,6 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_as_deref_mut_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_as_deref_mut_body_T" proved="true">
- <proof prover="1"><result status="valid" time="0.051877" steps="12624"/></proof>
  <proof prover="3"><result status="valid" time="0.040160" steps="785"/></proof>
  </goal>
 </theory>
@@ -9866,7 +9868,7 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_expect_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_expect_body_T" proved="true">
- <proof prover="3"><result status="valid" time="0.018889" steps="28"/></proof>
+ <proof prover="3"><result status="valid" time="0.018889" steps="19"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_filter_body" proved="true">
@@ -9881,13 +9883,12 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_get_or_insert_default_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_get_or_insert_default_body_T" proved="true">
- <proof prover="2" timelimit="5"><result status="valid" time="0.026055" steps="2827"/></proof>
  <proof prover="3"><result status="valid" time="0.019816" steps="189"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_get_or_insert_with_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_get_or_insert_with_body_T" proved="true">
- <proof prover="0" timelimit="0.2"><result status="valid" time="0.009563" steps="17197"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.009563" steps="17909"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_insert_body" proved="true">
@@ -9972,7 +9973,7 @@
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_unwrap_body" proved="true">
  <goal name="vc_extern_spec_T_Option_T_unwrap_body_T" proved="true">
- <proof prover="3"><result status="valid" time="0.012039" steps="28"/></proof>
+ <proof prover="3"><result status="valid" time="0.012039" steps="19"/></proof>
  </goal>
 </theory>
 <theory name="M_std__option__extern_spec_T_Option_T_unwrap_or_body" proved="true">
@@ -10237,12 +10238,12 @@
 </theory>
 <theory name="M_std__ptr__extern_spec_T_ptrconst_T_is_aligned_body" proved="true">
  <goal name="vc_extern_spec_T__ptrconst_T_is_aligned_body_T" proved="true">
- <proof prover="3"><result status="valid" time="0.015739" steps="12"/></proof>
+ <proof prover="3"><result status="valid" time="0.015739" steps="16"/></proof>
  </goal>
 </theory>
 <theory name="M_std__ptr__extern_spec_T_ptrconst_T_is_aligned_to_body" proved="true">
  <goal name="vc_extern_spec_T__ptrconst_T_is_aligned_to_body_T" proved="true">
- <proof prover="3"><result status="valid" time="0.098335" steps="1320"/></proof>
+ <proof prover="3"><result status="valid" time="0.098335" steps="1389"/></proof>
  </goal>
 </theory>
 <theory name="M_std__ptr__extern_spec_T_ptrmut_T_is_aligned_body" proved="true">
@@ -10252,7 +10253,7 @@
 </theory>
 <theory name="M_std__ptr__extern_spec_T_ptrmut_T_is_aligned_to_body" proved="true">
  <goal name="vc_extern_spec_T__ptrmut_T_is_aligned_to_body_T" proved="true">
- <proof prover="3"><result status="valid" time="0.099875" steps="1320"/></proof>
+ <proof prover="3"><result status="valid" time="0.099875" steps="1389"/></proof>
  </goal>
 </theory>
 <theory name="M_std__ptr__impl_Clone_for_PtrLive_T__clone__refines" proved="true">
@@ -10272,7 +10273,7 @@
 </theory>
 <theory name="M_std__ptr__impl_Perm_ptr_slice_T__index" proved="true">
  <goal name="vc_index_T" proved="true">
- <proof prover="3"><result status="valid" time="0.116873" steps="507"/></proof>
+ <proof prover="3"><result status="valid" time="0.116873" steps="509"/></proof>
  </goal>
 </theory>
 <theory name="M_std__ptr__impl_Perm_ptr_slice_T__index_mut" proved="true">
@@ -10292,43 +10293,46 @@
    <goal name="vc_index_mut_T.0.3" expl="pop_front_ghost &#39;self&#39; type invariant" proved="true">
    <proof prover="3"><result status="valid" time="0.070429" steps="171"/></proof>
    </goal>
-   <goal name="vc_index_mut_T.0.4" expl="unwrap_refmut_Perm_ptr_T requires" proved="true">
-   <proof prover="3"><result status="valid" time="0.042117" steps="115"/></proof>
+   <goal name="vc_index_mut_T.0.4" expl="unwrap &#39;self_&#39; type invariant" proved="true">
+   <proof prover="3"><result status="valid" time="0.042117" steps="34"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.5" expl="assertion" proved="true">
-   <proof prover="3"><result status="valid" time="0.070157" steps="102"/></proof>
+   <proof prover="3"><result status="valid" time="0.070157" steps="103"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.6" expl="index_mut_T ensures" proved="true">
-   <proof prover="0" timelimit="0.2"><result status="valid" time="0.042681" steps="83906"/></proof>
+   <proof prover="0" timelimit="0.2"><result status="valid" time="0.042681" steps="83957"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.7" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.048699" steps="40"/></proof>
+   <proof prover="3"><result status="valid" time="0.048699" steps="42"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.8" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.040985" steps="38"/></proof>
+   <proof prover="3"><result status="valid" time="0.040985" steps="40"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.9" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.057201" steps="36"/></proof>
+   <proof prover="3"><result status="valid" time="0.043161" steps="38"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.10" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.031895" steps="34"/></proof>
+   <proof prover="3"><result status="valid" time="0.031895" steps="36"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.11" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.043161" steps="32"/></proof>
+   <proof prover="3"><result status="valid" time="0.057201" steps="34"/></proof>
    </goal>
-   <goal name="vc_index_mut_T.0.12" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.056839" steps="72"/></proof>
+   <goal name="vc_index_mut_T.0.12" expl="the callee cannot panic here" proved="true">
+   <proof prover="3"><result status="valid" time="0.019869" steps="45"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.13" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.049651" steps="30"/></proof>
+   <proof prover="3"><result status="valid" time="0.056839" steps="72"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.14" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.059897" steps="66"/></proof>
+   <proof prover="3"><result status="valid" time="0.049651" steps="30"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.15" expl="type invariant" proved="true">
-   <proof prover="3"><result status="valid" time="0.057605" steps="25"/></proof>
+   <proof prover="3"><result status="valid" time="0.059897" steps="66"/></proof>
    </goal>
    <goal name="vc_index_mut_T.0.16" expl="type invariant" proved="true">
+   <proof prover="3"><result status="valid" time="0.057605" steps="25"/></proof>
+   </goal>
+   <goal name="vc_index_mut_T.0.17" expl="type invariant" proved="true">
    <proof prover="3"><result status="valid" time="0.045029" steps="14"/></proof>
    </goal>
   </transf>

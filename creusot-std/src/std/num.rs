@@ -162,7 +162,7 @@ macro_rules! spec_type {
                 #[allow(dead_code)]
                 #[check(ghost)]
                 // Panics if the divisor is zero
-                #[requires(rhs@ != 0)]
+                #[panics(rhs@ == 0)]
                 // Returns `self` if the division overflows
                 #[ensures((self@ == $type::MIN@ && rhs@ == -1) ==> result@ == self@)]
                 // Else, returns the result of the division
@@ -172,7 +172,7 @@ macro_rules! spec_type {
                 #[allow(dead_code)]
                 #[check(ghost)]
                 // Panics if the divisor is zero
-                #[requires(rhs@ != 0)]
+                #[panics(rhs@ == 0)]
                 // Returns `$type::MIN` if the division overflows
                 #[ensures((self@ == $type::MIN@ && rhs@ == -1) ==> result@ == $type::MIN@)]
                 // Else, returns the result of the division
@@ -182,7 +182,7 @@ macro_rules! spec_type {
                 #[allow(dead_code)]
                 #[check(ghost)]
                 // Panics if the divisor is zero
-                #[requires(rhs@ != 0)]
+                #[panics(rhs@ == 0)]
                 // Returns `self` if the division overflows
                 #[ensures((self@ == $type::MIN@ && rhs@ == -1) ==> result.0@ == self@)]
                 // Else, returns the result of the division
@@ -377,7 +377,7 @@ macro_rules! spec_impl_common {
     (@ $op_trait:ident, $op_method:ident, $op:tt, $type:ty, $lhs:ty, $rhs:ty) => {
         extern_spec! {
             impl core::ops::$op_trait<$rhs> for $lhs {
-                #[requires($type::MIN@ <= self@ $op rhs@ && self@ $op rhs@ <= $type::MAX@)]
+                #[may_panic($type::MIN@ > self@ $op rhs@ || self@ $op rhs@ > $type::MAX@)]
                 #[ensures(result@ == self@ $op rhs@)]
                 fn $op_method(self, rhs: $rhs) -> $type {
                     self $op rhs
@@ -388,7 +388,7 @@ macro_rules! spec_impl_common {
     (@assign $op_assign_trait:ident, $op_assign_method:ident, $op_assign:tt, $op:tt, $type:ty, $rhs:ty) => {
         extern_spec! {
             impl core::ops::$op_assign_trait<$rhs> for $type {
-                #[requires($type::MIN@ <= self@ $op rhs@ && self@ $op rhs@ <= $type::MAX@)]
+                #[may_panic($type::MIN@ > self@ $op rhs@ || self@ $op rhs@ > $type::MAX@)]
                 #[ensures((^self)@ == self@ $op rhs@)]
                 fn $op_assign_method(&mut self, rhs: $rhs) {
                     *self $op_assign rhs
@@ -414,8 +414,8 @@ macro_rules! spec_div_rem {
     (@ $divrem_trait:ident, $divrem_method:ident, $op:tt, $type:ty, $lhs:ty, $rhs:ty) => {
         extern_spec! {
             impl core::ops::$divrem_trait<$rhs> for $lhs {
-                #[requires(rhs@ != 0)]
-                #[requires(!(self@ == $type::MIN@ && rhs@ == -1))]
+                #[may_panic(rhs@ == 0)]
+                #[may_panic(self@ == $type::MIN@ && rhs@ == -1)]
                 #[ensures(result@ == self@ $op rhs@)]
                 fn $divrem_method(self, rhs: $rhs) -> $type {
                     self $op rhs
@@ -430,8 +430,8 @@ macro_rules! spec_div_rem {
     (@assign $divrem_assign_trait:ident, $divrem_assign_method:ident, $op_assign:tt, $op:tt, $type:ty, $rhs:ty) => {
         extern_spec! {
             impl core::ops::$divrem_assign_trait<$rhs> for $type {
-                #[requires(rhs@ != 0)]
-                #[requires(!(*self == $type::MIN && rhs@ == -1))]
+                #[may_panic(rhs@ == 0)]
+                #[may_panic(*self == $type::MIN && rhs@ == -1)]
                 #[ensures((^self)@ == self@ $op rhs@)]
                 fn $divrem_assign_method(&mut self, rhs: $rhs) {
                     *self $op_assign rhs

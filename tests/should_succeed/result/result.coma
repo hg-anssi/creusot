@@ -22,8 +22,13 @@ module M_test_result
       /\ ([@stop_split] [@expl:ok ensures #1] (exists e: Int32.t. self_ = Err e) -> result = None)}
       (! return {result}) ]
   
-  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) = {[@stop_split] [@expl:unwrap requires] self_ <> None}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Some result = self_} (! return {result}) ]
+  let unwrap_i32 (self_: t_Option_i32) (return (x: Int32.t)) =
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result}) ]
   
   let is_none_i32 (self_: t_Option_i32) (return (x: bool)) = any
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None)} (! return {result}) ]
@@ -45,13 +50,22 @@ module M_test_result
       (! return {result}) ]
   
   let unwrap_ref_i32 (self_: t_Result_ref_i32_ref_i32) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: Int32.t. self_ = Ok'0 t}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Ok'0 result = self_} (! return {result}) ]
+  {[@stop_split] [@expl:unwrap requires (no panic)] not (exists e: Int32.t. self_ = Err'0 e)}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_ref_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: Int32.t. self_
+          = Err'0 e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok'0 result = self_)}
+      (! return {result}) ]
   
   let unwrap_err_ref_i32 (self_: t_Result_ref_i32_ref_i32) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:unwrap_err requires] exists e: Int32.t. self_ = Err'0 e}
+  {[@stop_split] [@expl:unwrap_err requires (no panic)] not (exists t: Int32.t. self_ = Ok'0 t)}
     any
-    [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap_err ensures] Err'0 result = self_} (! return {result}) ]
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_err_ref_i32 ensures] ([@stop_split] [@expl:unwrap_err ensures #0] not (exists t: Int32.t. self_
+          = Ok'0 t))
+      /\ ([@stop_split] [@expl:unwrap_err ensures #1] Err'0 result = self_)}
+      (! return {result}) ]
   
   type t_Result_refmut_i32_refmut_i32 = Ok'1 (MutBorrow.t Int32.t) | Err'1 (MutBorrow.t Int32.t)
   
@@ -64,9 +78,12 @@ module M_test_result
       (! return {result}) ]
   
   let unwrap_refmut_i32 (self_: t_Result_refmut_i32_refmut_i32) (return (x: MutBorrow.t Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: MutBorrow.t Int32.t. self_ = Ok'1 t}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not (exists e: MutBorrow.t Int32.t. self_ = Err'1 e)}
     any
-    [ return (result: MutBorrow.t Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Ok'1 result = self_}
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:unwrap_refmut_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: MutBorrow.t Int32.t. self_
+          = Err'1 e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok'1 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_i32 [@inline:trivial] (_1: MutBorrow.t Int32.t) = _1.final = _1.current
@@ -74,19 +91,31 @@ module M_test_result
   meta "rewrite_def" predicate resolve_refmut_i32
   
   let unwrap_i32'0 (self_: t_Result_i32_i32) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: Int32.t. self_ = Ok t}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Ok result = self_} (! return {result}) ]
+  {[@stop_split] [@expl:unwrap requires (no panic)] not (exists e: Int32.t. self_ = Err e)}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: Int32.t. self_
+          = Err e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok result = self_)}
+      (! return {result}) ]
   
   let unwrap_err_refmut_i32 (self_: t_Result_refmut_i32_refmut_i32) (return (x: MutBorrow.t Int32.t)) =
-  {[@stop_split] [@expl:unwrap_err requires] exists e: MutBorrow.t Int32.t. self_ = Err'1 e}
+  {[@stop_split] [@expl:unwrap_err requires (no panic)] not (exists t: MutBorrow.t Int32.t. self_ = Ok'1 t)}
     any
-    [ return (result: MutBorrow.t Int32.t) -> {[@stop_split] [@expl:unwrap_err ensures] Err'1 result = self_}
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:unwrap_err_refmut_i32 ensures] ([@stop_split] [@expl:unwrap_err ensures #0] not (exists t: MutBorrow.t Int32.t. self_
+          = Ok'1 t))
+      /\ ([@stop_split] [@expl:unwrap_err ensures #1] Err'1 result = self_)}
       (! return {result}) ]
   
   let unwrap_err_i32 (self_: t_Result_i32_i32) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:unwrap_err requires] exists e: Int32.t. self_ = Err e}
+  {[@stop_split] [@expl:unwrap_err requires (no panic)] not (exists t: Int32.t. self_ = Ok t)}
     any
-    [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap_err ensures] Err result = self_} (! return {result}) ]
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_err_i32 ensures] ([@stop_split] [@expl:unwrap_err ensures #0] not (exists t: Int32.t. self_
+          = Ok t))
+      /\ ([@stop_split] [@expl:unwrap_err ensures #1] Err result = self_)}
+      (! return {result}) ]
   
   let unwrap_or_i32 (self_: t_Result_i32_i32) (default: Int32.t) (return (x: Int32.t)) = any
     [ return (result: Int32.t) ->
@@ -189,13 +218,22 @@ module M_test_result
       (! return {result}) ]
   
   let unwrap_i32'1 (self_: t_Result_i32_ref_i32) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: Int32.t. self_ = Ok'2 t}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Ok'2 result = self_} (! return {result}) ]
+  {[@stop_split] [@expl:unwrap requires (no panic)] not (exists e: Int32.t. self_ = Err'2 e)}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: Int32.t. self_
+          = Err'2 e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok'2 result = self_)}
+      (! return {result}) ]
   
   let unwrap_err_i32'0 (self_: t_Result_i32_ref_i32) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:unwrap_err requires] exists e: Int32.t. self_ = Err'2 e}
+  {[@stop_split] [@expl:unwrap_err requires (no panic)] not (exists t: Int32.t. self_ = Ok'2 t)}
     any
-    [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap_err ensures] Err'2 result = self_} (! return {result}) ]
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_err_i32 ensures] ([@stop_split] [@expl:unwrap_err ensures #0] not (exists t: Int32.t. self_
+          = Ok'2 t))
+      /\ ([@stop_split] [@expl:unwrap_err ensures #1] Err'2 result = self_)}
+      (! return {result}) ]
   
   type t_Result_i32_refmut_i32 = Ok'3 Int32.t | Err'3 (MutBorrow.t Int32.t)
   
@@ -207,13 +245,21 @@ module M_test_result
       (! return {result}) ]
   
   let unwrap_i32'2 (self_: t_Result_i32_refmut_i32) (return (x: Int32.t)) =
-  {[@stop_split] [@expl:unwrap requires] exists t: Int32.t. self_ = Ok'3 t}
-    any [ return (result: Int32.t) -> {[@stop_split] [@expl:unwrap ensures] Ok'3 result = self_} (! return {result}) ]
+  {[@stop_split] [@expl:unwrap requires (no panic)] not (exists e: MutBorrow.t Int32.t. self_ = Err'3 e)}
+    any
+    [ return (result: Int32.t) ->
+    {[@stop_split] [@expl:unwrap_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not (exists e: MutBorrow.t Int32.t. self_
+          = Err'3 e))
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Ok'3 result = self_)}
+      (! return {result}) ]
   
   let unwrap_err_i32'1 (self_: t_Result_i32_refmut_i32) (return (x: MutBorrow.t Int32.t)) =
-  {[@stop_split] [@expl:unwrap_err requires] exists e: MutBorrow.t Int32.t. self_ = Err'3 e}
+  {[@stop_split] [@expl:unwrap_err requires (no panic)] not (exists t: Int32.t. self_ = Ok'3 t)}
     any
-    [ return (result: MutBorrow.t Int32.t) -> {[@stop_split] [@expl:unwrap_err ensures] Err'3 result = self_}
+    [ return (result: MutBorrow.t Int32.t) ->
+    {[@stop_split] [@expl:unwrap_err_i32 ensures] ([@stop_split] [@expl:unwrap_err ensures #0] not (exists t: Int32.t. self_
+          = Ok'3 t))
+      /\ ([@stop_split] [@expl:unwrap_err ensures #1] Err'3 result = self_)}
       (! return {result}) ]
   
   let cloned_i32 (self_: t_Result_ref_i32_ref_i32) (return (x: t_Result_i32_ref_i32)) = any
@@ -246,9 +292,11 @@ module M_test_result
     [ return (result: bool) -> {[@stop_split] [@expl:is_none ensures] result = (self_ = None'0)} (! return {result}) ]
   
   let unwrap_Result_i32_i32 (self_: t_Option_Result_i32_i32) (return (x: t_Result_i32_i32)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'0}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0}
     any
-    [ return (result: t_Result_i32_i32) -> {[@stop_split] [@expl:unwrap ensures] Some'0 result = self_}
+    [ return (result: t_Result_i32_i32) ->
+    {[@stop_split] [@expl:unwrap_Result_i32_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   meta "compute_max_steps" 1000000

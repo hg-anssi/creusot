@@ -1,0 +1,328 @@
+module M_count16
+  use creusot.int.Int32BW
+  use creusot.int.UInt32BW
+  use creusot.int.UInt16BW
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_u16_bool = { f0: UInt16BW.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let count16 (n: UInt16BW.t) (return (x: UInt16BW.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &x <- n ] s1
+      | s1 = [ &_8 <- (1: Int32BW.t) ] s2
+      | s2 = [ &_9 <- UInt32BW.lt _8 (16: UInt32BW.t) ] s3
+      | s3 = {[@expl:Shr overflow] _9} s4
+      | s4 = UInt16BW.shr {x} {Int32BW.to_BV256 (1: Int32BW.t)} (fun (_x: UInt16BW.t) -> [ &_6 <- _x ] s5)
+      | s5 = [ &_5 <- UInt16BW.bw_and _6 (21845: UInt16BW.t) ] s6
+      | s6 = [ &_10 <- let (_fst, _snd) = UInt16BW.sub_with_overflow x _5 in { f0 = _fst; f1 = _snd } ] s7
+      | s7 = {[@expl:Sub overflow] not _10.f1} s8
+      | s8 = [ &x <- _10.f0 ] s9
+      | s9 = [ &_11 <- UInt16BW.bw_and x (13107: UInt16BW.t) ] s10
+      | s10 = [ &_16 <- (2: Int32BW.t) ] s11
+      | s11 = [ &_17 <- UInt32BW.lt _16 (16: UInt32BW.t) ] s12
+      | s12 = {[@expl:Shr overflow] _17} s13
+      | s13 = UInt16BW.shr {x} {Int32BW.to_BV256 (2: Int32BW.t)} (fun (_x: UInt16BW.t) -> [ &_14 <- _x ] s14)
+      | s14 = [ &_13 <- UInt16BW.bw_and _14 (13107: UInt16BW.t) ] s15
+      | s15 = [ &_18 <- let (_fst, _snd) = UInt16BW.add_with_overflow _11 _13 in { f0 = _fst; f1 = _snd } ] s16
+      | s16 = {[@expl:Add overflow] not _18.f1} s17
+      | s17 = [ &x <- _18.f0 ] s18
+      | s18 = [ &_23 <- (4: Int32BW.t) ] s19
+      | s19 = [ &_24 <- UInt32BW.lt _23 (16: UInt32BW.t) ] s20
+      | s20 = {[@expl:Shr overflow] _24} s21
+      | s21 = UInt16BW.shr {x} {Int32BW.to_BV256 (4: Int32BW.t)} (fun (_x: UInt16BW.t) -> [ &_21 <- _x ] s22)
+      | s22 = [ &_25 <- let (_fst, _snd) = UInt16BW.add_with_overflow x _21 in { f0 = _fst; f1 = _snd } ] s23
+      | s23 = {[@expl:Add overflow] not _25.f1} s24
+      | s24 = [ &x <- UInt16BW.bw_and _25.f0 (3855: UInt16BW.t) ] s25
+      | s25 = [ &_29 <- (8: Int32BW.t) ] s26
+      | s26 = [ &_30 <- UInt32BW.lt _29 (16: UInt32BW.t) ] s27
+      | s27 = {[@expl:Shr overflow] _30} s28
+      | s28 = UInt16BW.shr {x} {Int32BW.to_BV256 (8: Int32BW.t)} (fun (_x: UInt16BW.t) -> [ &_27 <- _x ] s29)
+      | s29 = [ &_31 <- let (_fst, _snd) = UInt16BW.add_with_overflow x _27 in { f0 = _fst; f1 = _snd } ] s30
+      | s30 = {[@expl:Add overflow] not _31.f1} s31
+      | s31 = [ &x <- _31.f0 ] s32
+      | s32 = [ &_ret <- UInt16BW.bw_and x (31: UInt16BW.t) ] s33
+      | s33 = return {_ret} ] ]
+    [ & _ret: UInt16BW.t = Any.any_l ()
+    | & n: UInt16BW.t = n
+    | & x: UInt16BW.t = Any.any_l ()
+    | & _5: UInt16BW.t = Any.any_l ()
+    | & _6: UInt16BW.t = Any.any_l ()
+    | & _8: UInt32BW.t = Any.any_l ()
+    | & _9: bool = Any.any_l ()
+    | & _10: tup2_u16_bool = Any.any_l ()
+    | & _11: UInt16BW.t = Any.any_l ()
+    | & _13: UInt16BW.t = Any.any_l ()
+    | & _14: UInt16BW.t = Any.any_l ()
+    | & _16: UInt32BW.t = Any.any_l ()
+    | & _17: bool = Any.any_l ()
+    | & _18: tup2_u16_bool = Any.any_l ()
+    | & _21: UInt16BW.t = Any.any_l ()
+    | & _23: UInt32BW.t = Any.any_l ()
+    | & _24: bool = Any.any_l ()
+    | & _25: tup2_u16_bool = Any.any_l ()
+    | & _27: UInt16BW.t = Any.any_l ()
+    | & _29: UInt32BW.t = Any.any_l ()
+    | & _30: bool = Any.any_l ()
+    | & _31: tup2_u16_bool = Any.any_l () ])
+    [ return (result: UInt16BW.t) -> {[@stop_split] [@expl:count16 ensures] UInt16BW.t'int result <= 16}
+      (! return {result}) ]
+end
+module M_count32
+  use creusot.int.Int32BW
+  use creusot.int.UInt32BW
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_u32_bool = { f0: UInt32BW.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let count32 (n: UInt32BW.t) (return (x: UInt32BW.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &x <- n ] s1
+      | s1 = [ &_8 <- (1: Int32BW.t) ] s2
+      | s2 = [ &_9 <- UInt32BW.lt _8 (32: UInt32BW.t) ] s3
+      | s3 = {[@expl:Shr overflow] _9} s4
+      | s4 = UInt32BW.shr {x} {Int32BW.to_BV256 (1: Int32BW.t)} (fun (_x: UInt32BW.t) -> [ &_6 <- _x ] s5)
+      | s5 = [ &_5 <- UInt32BW.bw_and _6 (1431655765: UInt32BW.t) ] s6
+      | s6 = [ &_10 <- let (_fst, _snd) = UInt32BW.sub_with_overflow x _5 in { f0 = _fst; f1 = _snd } ] s7
+      | s7 = {[@expl:Sub overflow] not _10.f1} s8
+      | s8 = [ &x <- _10.f0 ] s9
+      | s9 = [ &_11 <- UInt32BW.bw_and x (858993459: UInt32BW.t) ] s10
+      | s10 = [ &_16 <- (2: Int32BW.t) ] s11
+      | s11 = [ &_17 <- UInt32BW.lt _16 (32: UInt32BW.t) ] s12
+      | s12 = {[@expl:Shr overflow] _17} s13
+      | s13 = UInt32BW.shr {x} {Int32BW.to_BV256 (2: Int32BW.t)} (fun (_x: UInt32BW.t) -> [ &_14 <- _x ] s14)
+      | s14 = [ &_13 <- UInt32BW.bw_and _14 (858993459: UInt32BW.t) ] s15
+      | s15 = [ &_18 <- let (_fst, _snd) = UInt32BW.add_with_overflow _11 _13 in { f0 = _fst; f1 = _snd } ] s16
+      | s16 = {[@expl:Add overflow] not _18.f1} s17
+      | s17 = [ &x <- _18.f0 ] s18
+      | s18 = [ &_23 <- (4: Int32BW.t) ] s19
+      | s19 = [ &_24 <- UInt32BW.lt _23 (32: UInt32BW.t) ] s20
+      | s20 = {[@expl:Shr overflow] _24} s21
+      | s21 = UInt32BW.shr {x} {Int32BW.to_BV256 (4: Int32BW.t)} (fun (_x: UInt32BW.t) -> [ &_21 <- _x ] s22)
+      | s22 = [ &_25 <- let (_fst, _snd) = UInt32BW.add_with_overflow x _21 in { f0 = _fst; f1 = _snd } ] s23
+      | s23 = {[@expl:Add overflow] not _25.f1} s24
+      | s24 = [ &x <- UInt32BW.bw_and _25.f0 (252645135: UInt32BW.t) ] s25
+      | s25 = [ &_29 <- (8: Int32BW.t) ] s26
+      | s26 = [ &_30 <- UInt32BW.lt _29 (32: UInt32BW.t) ] s27
+      | s27 = {[@expl:Shr overflow] _30} s28
+      | s28 = UInt32BW.shr {x} {Int32BW.to_BV256 (8: Int32BW.t)} (fun (_x: UInt32BW.t) -> [ &_27 <- _x ] s29)
+      | s29 = [ &_31 <- let (_fst, _snd) = UInt32BW.add_with_overflow x _27 in { f0 = _fst; f1 = _snd } ] s30
+      | s30 = {[@expl:Add overflow] not _31.f1} s31
+      | s31 = [ &x <- _31.f0 ] s32
+      | s32 = [ &_35 <- (16: Int32BW.t) ] s33
+      | s33 = [ &_36 <- UInt32BW.lt _35 (32: UInt32BW.t) ] s34
+      | s34 = {[@expl:Shr overflow] _36} s35
+      | s35 = UInt32BW.shr {x} {Int32BW.to_BV256 (16: Int32BW.t)} (fun (_x: UInt32BW.t) -> [ &_33 <- _x ] s36)
+      | s36 = [ &_37 <- let (_fst, _snd) = UInt32BW.add_with_overflow x _33 in { f0 = _fst; f1 = _snd } ] s37
+      | s37 = {[@expl:Add overflow] not _37.f1} s38
+      | s38 = [ &x <- _37.f0 ] s39
+      | s39 = [ &_ret <- UInt32BW.bw_and x (63: UInt32BW.t) ] s40
+      | s40 = return {_ret} ] ]
+    [ & _ret: UInt32BW.t = Any.any_l ()
+    | & n: UInt32BW.t = n
+    | & x: UInt32BW.t = Any.any_l ()
+    | & _5: UInt32BW.t = Any.any_l ()
+    | & _6: UInt32BW.t = Any.any_l ()
+    | & _8: UInt32BW.t = Any.any_l ()
+    | & _9: bool = Any.any_l ()
+    | & _10: tup2_u32_bool = Any.any_l ()
+    | & _11: UInt32BW.t = Any.any_l ()
+    | & _13: UInt32BW.t = Any.any_l ()
+    | & _14: UInt32BW.t = Any.any_l ()
+    | & _16: UInt32BW.t = Any.any_l ()
+    | & _17: bool = Any.any_l ()
+    | & _18: tup2_u32_bool = Any.any_l ()
+    | & _21: UInt32BW.t = Any.any_l ()
+    | & _23: UInt32BW.t = Any.any_l ()
+    | & _24: bool = Any.any_l ()
+    | & _25: tup2_u32_bool = Any.any_l ()
+    | & _27: UInt32BW.t = Any.any_l ()
+    | & _29: UInt32BW.t = Any.any_l ()
+    | & _30: bool = Any.any_l ()
+    | & _31: tup2_u32_bool = Any.any_l ()
+    | & _33: UInt32BW.t = Any.any_l ()
+    | & _35: UInt32BW.t = Any.any_l ()
+    | & _36: bool = Any.any_l ()
+    | & _37: tup2_u32_bool = Any.any_l () ])
+    [ return (result: UInt32BW.t) -> {[@stop_split] [@expl:count32 ensures] UInt32BW.t'int result <= 32}
+      (! return {result}) ]
+end
+module M_count64
+  use creusot.int.Int32BW
+  use creusot.int.UInt32BW
+  use creusot.int.UInt64BW
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_u64_bool = { f0: UInt64BW.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let count64 (n: UInt64BW.t) (return (x: UInt64BW.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &x <- n ] s1
+      | s1 = [ &_8 <- (1: Int32BW.t) ] s2
+      | s2 = [ &_9 <- UInt32BW.lt _8 (64: UInt32BW.t) ] s3
+      | s3 = {[@expl:Shr overflow] _9} s4
+      | s4 = UInt64BW.shr {x} {Int32BW.to_BV256 (1: Int32BW.t)} (fun (_x: UInt64BW.t) -> [ &_6 <- _x ] s5)
+      | s5 = [ &_5 <- UInt64BW.bw_and _6 (6148914691236517205: UInt64BW.t) ] s6
+      | s6 = [ &_10 <- let (_fst, _snd) = UInt64BW.sub_with_overflow x _5 in { f0 = _fst; f1 = _snd } ] s7
+      | s7 = {[@expl:Sub overflow] not _10.f1} s8
+      | s8 = [ &x <- _10.f0 ] s9
+      | s9 = [ &_11 <- UInt64BW.bw_and x (3689348814741910323: UInt64BW.t) ] s10
+      | s10 = [ &_16 <- (2: Int32BW.t) ] s11
+      | s11 = [ &_17 <- UInt32BW.lt _16 (64: UInt32BW.t) ] s12
+      | s12 = {[@expl:Shr overflow] _17} s13
+      | s13 = UInt64BW.shr {x} {Int32BW.to_BV256 (2: Int32BW.t)} (fun (_x: UInt64BW.t) -> [ &_14 <- _x ] s14)
+      | s14 = [ &_13 <- UInt64BW.bw_and _14 (3689348814741910323: UInt64BW.t) ] s15
+      | s15 = [ &_18 <- let (_fst, _snd) = UInt64BW.add_with_overflow _11 _13 in { f0 = _fst; f1 = _snd } ] s16
+      | s16 = {[@expl:Add overflow] not _18.f1} s17
+      | s17 = [ &x <- _18.f0 ] s18
+      | s18 = [ &_23 <- (4: Int32BW.t) ] s19
+      | s19 = [ &_24 <- UInt32BW.lt _23 (64: UInt32BW.t) ] s20
+      | s20 = {[@expl:Shr overflow] _24} s21
+      | s21 = UInt64BW.shr {x} {Int32BW.to_BV256 (4: Int32BW.t)} (fun (_x: UInt64BW.t) -> [ &_21 <- _x ] s22)
+      | s22 = [ &_25 <- let (_fst, _snd) = UInt64BW.add_with_overflow x _21 in { f0 = _fst; f1 = _snd } ] s23
+      | s23 = {[@expl:Add overflow] not _25.f1} s24
+      | s24 = [ &x <- UInt64BW.bw_and _25.f0 (1085102592571150095: UInt64BW.t) ] s25
+      | s25 = [ &_29 <- (8: Int32BW.t) ] s26
+      | s26 = [ &_30 <- UInt32BW.lt _29 (64: UInt32BW.t) ] s27
+      | s27 = {[@expl:Shr overflow] _30} s28
+      | s28 = UInt64BW.shr {x} {Int32BW.to_BV256 (8: Int32BW.t)} (fun (_x: UInt64BW.t) -> [ &_27 <- _x ] s29)
+      | s29 = [ &_31 <- let (_fst, _snd) = UInt64BW.add_with_overflow x _27 in { f0 = _fst; f1 = _snd } ] s30
+      | s30 = {[@expl:Add overflow] not _31.f1} s31
+      | s31 = [ &x <- _31.f0 ] s32
+      | s32 = [ &_35 <- (16: Int32BW.t) ] s33
+      | s33 = [ &_36 <- UInt32BW.lt _35 (64: UInt32BW.t) ] s34
+      | s34 = {[@expl:Shr overflow] _36} s35
+      | s35 = UInt64BW.shr {x} {Int32BW.to_BV256 (16: Int32BW.t)} (fun (_x: UInt64BW.t) -> [ &_33 <- _x ] s36)
+      | s36 = [ &_37 <- let (_fst, _snd) = UInt64BW.add_with_overflow x _33 in { f0 = _fst; f1 = _snd } ] s37
+      | s37 = {[@expl:Add overflow] not _37.f1} s38
+      | s38 = [ &x <- _37.f0 ] s39
+      | s39 = [ &_41 <- (32: Int32BW.t) ] s40
+      | s40 = [ &_42 <- UInt32BW.lt _41 (64: UInt32BW.t) ] s41
+      | s41 = {[@expl:Shr overflow] _42} s42
+      | s42 = UInt64BW.shr {x} {Int32BW.to_BV256 (32: Int32BW.t)} (fun (_x: UInt64BW.t) -> [ &_39 <- _x ] s43)
+      | s43 = [ &_43 <- let (_fst, _snd) = UInt64BW.add_with_overflow x _39 in { f0 = _fst; f1 = _snd } ] s44
+      | s44 = {[@expl:Add overflow] not _43.f1} s45
+      | s45 = [ &x <- _43.f0 ] s46
+      | s46 = [ &_ret <- UInt64BW.bw_and x (127: UInt64BW.t) ] s47
+      | s47 = return {_ret} ] ]
+    [ & _ret: UInt64BW.t = Any.any_l ()
+    | & n: UInt64BW.t = n
+    | & x: UInt64BW.t = Any.any_l ()
+    | & _5: UInt64BW.t = Any.any_l ()
+    | & _6: UInt64BW.t = Any.any_l ()
+    | & _8: UInt32BW.t = Any.any_l ()
+    | & _9: bool = Any.any_l ()
+    | & _10: tup2_u64_bool = Any.any_l ()
+    | & _11: UInt64BW.t = Any.any_l ()
+    | & _13: UInt64BW.t = Any.any_l ()
+    | & _14: UInt64BW.t = Any.any_l ()
+    | & _16: UInt32BW.t = Any.any_l ()
+    | & _17: bool = Any.any_l ()
+    | & _18: tup2_u64_bool = Any.any_l ()
+    | & _21: UInt64BW.t = Any.any_l ()
+    | & _23: UInt32BW.t = Any.any_l ()
+    | & _24: bool = Any.any_l ()
+    | & _25: tup2_u64_bool = Any.any_l ()
+    | & _27: UInt64BW.t = Any.any_l ()
+    | & _29: UInt32BW.t = Any.any_l ()
+    | & _30: bool = Any.any_l ()
+    | & _31: tup2_u64_bool = Any.any_l ()
+    | & _33: UInt64BW.t = Any.any_l ()
+    | & _35: UInt32BW.t = Any.any_l ()
+    | & _36: bool = Any.any_l ()
+    | & _37: tup2_u64_bool = Any.any_l ()
+    | & _39: UInt64BW.t = Any.any_l ()
+    | & _41: UInt32BW.t = Any.any_l ()
+    | & _42: bool = Any.any_l ()
+    | & _43: tup2_u64_bool = Any.any_l () ])
+    [ return (result: UInt64BW.t) -> {[@stop_split] [@expl:count64 ensures] UInt64BW.t'int result <= 64}
+      (! return {result}) ]
+end
+module M_count8
+  use creusot.int.Int32BW
+  use creusot.int.UInt32BW
+  use creusot.int.UInt8BW
+  use creusot.prelude.Any
+  use int.Int
+  
+  type tup2_u8_bool = { f0: UInt8BW.t; f1: bool }
+  
+  function count8_log (n: UInt8BW.t) : int = (if UInt8BW.bw_and n (1: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+                + (if UInt8BW.bw_and n (2: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+              + (if UInt8BW.bw_and n (4: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+            + (if UInt8BW.bw_and n (8: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+          + (if UInt8BW.bw_and n (16: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+        + (if UInt8BW.bw_and n (32: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+      + (if UInt8BW.bw_and n (64: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+    + (if UInt8BW.bw_and n (128: UInt8BW.t) = (0: UInt8BW.t) then 0 else 1)
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let count8 (n: UInt8BW.t) (return (x: UInt8BW.t)) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &x <- n ] s1
+      | s1 = [ &_10 <- (1: Int32BW.t) ] s2
+      | s2 = [ &_11 <- UInt32BW.lt _10 (8: UInt32BW.t) ] s3
+      | s3 = {[@expl:Shr overflow] _11} s4
+      | s4 = UInt8BW.shr {x} {Int32BW.to_BV256 (1: Int32BW.t)} (fun (_x: UInt8BW.t) -> [ &_8 <- _x ] s5)
+      | s5 = [ &_7 <- UInt8BW.bw_and _8 (85: UInt8BW.t) ] s6
+      | s6 = [ &_12 <- let (_fst, _snd) = UInt8BW.sub_with_overflow x _7 in { f0 = _fst; f1 = _snd } ] s7
+      | s7 = {[@expl:Sub overflow] not _12.f1} s8
+      | s8 = [ &x <- _12.f0 ] s9
+      | s9 = [ &_13 <- UInt8BW.bw_and x (51: UInt8BW.t) ] s10
+      | s10 = [ &_18 <- (2: Int32BW.t) ] s11
+      | s11 = [ &_19 <- UInt32BW.lt _18 (8: UInt32BW.t) ] s12
+      | s12 = {[@expl:Shr overflow] _19} s13
+      | s13 = UInt8BW.shr {x} {Int32BW.to_BV256 (2: Int32BW.t)} (fun (_x: UInt8BW.t) -> [ &_16 <- _x ] s14)
+      | s14 = [ &_15 <- UInt8BW.bw_and _16 (51: UInt8BW.t) ] s15
+      | s15 = [ &_20 <- let (_fst, _snd) = UInt8BW.add_with_overflow _13 _15 in { f0 = _fst; f1 = _snd } ] s16
+      | s16 = {[@expl:Add overflow] not _20.f1} s17
+      | s17 = [ &x <- _20.f0 ] s18
+      | s18 = [ &_25 <- (4: Int32BW.t) ] s19
+      | s19 = [ &_26 <- UInt32BW.lt _25 (8: UInt32BW.t) ] s20
+      | s20 = {[@expl:Shr overflow] _26} s21
+      | s21 = UInt8BW.shr {x} {Int32BW.to_BV256 (4: Int32BW.t)} (fun (_x: UInt8BW.t) -> [ &_23 <- _x ] s22)
+      | s22 = [ &_27 <- let (_fst, _snd) = UInt8BW.add_with_overflow x _23 in { f0 = _fst; f1 = _snd } ] s23
+      | s23 = {[@expl:Add overflow] not _27.f1} s24
+      | s24 = [ &x <- UInt8BW.bw_and _27.f0 (15: UInt8BW.t) ] s25
+      | s25 = [ &_ret <- x ] s26
+      | s26 = return {_ret} ] ]
+    [ & _ret: UInt8BW.t = Any.any_l ()
+    | & n: UInt8BW.t = n
+    | & x: UInt8BW.t = Any.any_l ()
+    | & _7: UInt8BW.t = Any.any_l ()
+    | & _8: UInt8BW.t = Any.any_l ()
+    | & _10: UInt32BW.t = Any.any_l ()
+    | & _11: bool = Any.any_l ()
+    | & _12: tup2_u8_bool = Any.any_l ()
+    | & _13: UInt8BW.t = Any.any_l ()
+    | & _15: UInt8BW.t = Any.any_l ()
+    | & _16: UInt8BW.t = Any.any_l ()
+    | & _18: UInt32BW.t = Any.any_l ()
+    | & _19: bool = Any.any_l ()
+    | & _20: tup2_u8_bool = Any.any_l ()
+    | & _23: UInt8BW.t = Any.any_l ()
+    | & _25: UInt32BW.t = Any.any_l ()
+    | & _26: bool = Any.any_l ()
+    | & _27: tup2_u8_bool = Any.any_l () ])
+    [ return (result: UInt8BW.t) ->
+    {[@stop_split] [@expl:count8 ensures] ([@stop_split] [@expl:count8 ensures #0] UInt8BW.t'int result <= 8)
+      /\ ([@stop_split] [@expl:count8 ensures #1] UInt8BW.t'int result = count8_log n)}
+      (! return {result}) ]
+end

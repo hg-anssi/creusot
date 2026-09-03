@@ -198,14 +198,15 @@ module M_fetch_add
   
   meta "rewrite_def" predicate resolve_refmut_Option_F
   
-  let unwrap_F (self_: t_Option_F) (return (x: t_F)) =
-  {[@stop_split] [@expl:unwrap_F requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_F self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+  let unwrap_F (self_: t_Option_F) (panic) (return (x: t_F)) =
+  {[@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_F self_}
     any
     [ return (result: t_F) ->
     {[@stop_split] [@expl:unwrap_F ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_F result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
-      (! return {result}) ]
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
+      (! return {result})
+    | panic -> {[@stop_split] [@expl:unwrap may_panic] self_ = None} (! panic) ]
   
   predicate precondition_F (self: t_F) (args: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst)
   
@@ -265,7 +266,7 @@ module M_fetch_add
       | s6 = -{resolve_refmut_Option_F _8}- s7
       | s7 = s8 [ _ck -> (! {[@expl:type invariant] inv_refmut_closure6 self} any) ]
       | s8 = -{resolve_refmut_closure6 self}- s9
-      | s9 = unwrap_F {_6} (fun (_x: t_F) -> [ &_5 <- _x ] s10)
+      | s9 = unwrap_F {_6} (-> {[@expl:the callee cannot panic here] false} any) (fun (_x: t_F) -> [ &_5 <- _x ] s10)
       | s10 = MutBorrow.borrow_final <t_Committer_AtomicI32_i32_SeqCst_SeqCst> {c'0.current} {MutBorrow.get_id c'0}
           (fun (_bor: MutBorrow.t t_Committer_AtomicI32_i32_SeqCst_SeqCst) ->
             [ &_11 <- _bor ] [ &c'0 <- { c'0 with current = _bor.final } ] s11)

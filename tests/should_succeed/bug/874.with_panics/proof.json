@@ -1,0 +1,11 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_can_extend": {
+      "vc_can_extend": { "prover": "alt-ergo", "time": 0.03 },
+      "vc_extend_Vec_i32_Global": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_into_iter_Vec_i32_Global": { "prover": "alt-ergo", "time": 0.016 },
+      "vc_into_vec_i32": { "prover": "alt-ergo", "time": 0.019 }
+    }
+  }
+}

@@ -397,7 +397,8 @@ extern_spec! {
         #[check(ghost)]
         #[erasure]
         #[bitwise_proof]
-        #[requires(align != 0usize && align & (align - 1usize) == 0usize)]
+        #[panics(align == 0usize)]
+        #[panics(align & (align - 1usize) != 0usize)]
         #[ensures(result == self.is_aligned_to_logic(align))]
         fn is_aligned_to(self, align: usize) -> bool
         {
@@ -443,7 +444,8 @@ extern_spec! {
         #[check(ghost)]
         #[erasure]
         #[bitwise_proof]
-        #[requires(align != 0usize && align & (align - 1usize) == 0usize)]
+        #[panics(align == 0usize)]
+        #[panics(align & (align - 1usize) != 0usize)]
         #[ensures(result == self.is_aligned_to_logic(align))]
         fn is_aligned_to(self, align: usize) -> bool
         {

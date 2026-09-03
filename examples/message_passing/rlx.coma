@@ -1115,9 +1115,13 @@ module M_message_passing
       (! return {result}) ]
   
   let unwrap_refmut_Resource_Excl_unit (self_: t_Option_refmut_Resource_Excl_unit)
-    (return (x: MutBorrow.t t_Resource_Excl_unit)) = {[@stop_split] [@expl:unwrap requires] self_ <> None'4}
+    (return (x: MutBorrow.t t_Resource_Excl_unit)) = {[@stop_split] [@expl:unwrap requires (no panic)] not self_
+    = None'4}
     any
-    [ return (result: MutBorrow.t t_Resource_Excl_unit) -> {[@stop_split] [@expl:unwrap ensures] Some'4 result = self_}
+    [ return (result: MutBorrow.t t_Resource_Excl_unit) ->
+    {[@stop_split] [@expl:unwrap_refmut_Resource_Excl_unit ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'4)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'4 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_Option_Resource_Excl_unit [@inline:trivial] (_1: MutBorrow.t t_Option_Resource_Excl_unit) =
@@ -1209,9 +1213,12 @@ module M_message_passing
       (! return {result}) ]
   
   let unwrap_Resource_Excl_unit (self_: t_Option_Resource_Excl_unit) (return (x: t_Resource_Excl_unit)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'1}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'1}
     any
-    [ return (result: t_Resource_Excl_unit) -> {[@stop_split] [@expl:unwrap ensures] Some'1 result = self_}
+    [ return (result: t_Resource_Excl_unit) ->
+    {[@stop_split] [@expl:unwrap_Resource_Excl_unit ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   predicate resolve_Option_AtView_Perm_PermCell_i32 (_1: t_Option_AtView_Perm_PermCell_i32)
@@ -1729,9 +1736,11 @@ module M_message_passing
       (! return {result}) ]
   
   let unwrap_AcquireSyncView (self_: t_Option_AcquireSyncView) (return (x: t_AcquireSyncView)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'2}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'2}
     any
-    [ return (result: t_AcquireSyncView) -> {[@stop_split] [@expl:unwrap ensures] Some'2 result = self_}
+    [ return (result: t_AcquireSyncView) ->
+    {[@stop_split] [@expl:unwrap_AcquireSyncView ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'2)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'2 result = self_)}
       (! return {result}) ]
   
   let new_AcquireSyncView (x: t_AcquireSyncView) (return (x'0: t_AcquireSyncView)) = any
@@ -1754,11 +1763,12 @@ module M_message_passing
   let unwrap_AtView_Perm_PermCell_i32 (self_: t_Option_AtView_Perm_PermCell_i32)
     (return (x: t_AtView_Perm_PermCell_i32)) =
   {[@stop_split] [@expl:unwrap_AtView_Perm_PermCell_i32 requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_AtView_Perm_PermCell_i32 self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'3)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'3)}
     any
     [ return (result: t_AtView_Perm_PermCell_i32) ->
     {[@stop_split] [@expl:unwrap_AtView_Perm_PermCell_i32 ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_AtView_Perm_PermCell_i32 result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'3 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'3)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'3 result = self_)}
       (! return {result}) ]
   
   let sync_Perm_PermCell_i32 (self: t_AtView_Perm_PermCell_i32) (sync_view: t_SyncView)

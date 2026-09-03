@@ -442,11 +442,12 @@ module M_impl_Map_K_V__delete (* Map<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'1)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'1)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'1 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   function view_Map_K_V (self: t_Map_K_V) : Map.map t_DeepModelTy t_Option_V = view_Tree_K_V self.f0
@@ -922,11 +923,12 @@ module M_impl_Map_K_V__delete_max (* Map<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   type t_Option_V = None'3 | Some'3 t_V
@@ -1474,11 +1476,12 @@ module M_impl_Map_K_V__delete_min (* Map<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'1)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'1)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'1 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   function view_Map_K_V (self: t_Map_K_V) : Map.map t_DeepModelTy t_Option_V = view_Tree_K_V self.f0
@@ -2686,11 +2689,12 @@ module M_impl_Map_K_V__insert (* Map<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'1)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'1)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'1 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'1)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'1 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_Box_Node_K_V_Global [@inline:trivial] (_1: MutBorrow.t t_Node_K_V) = _1.final = _1.current
@@ -3309,11 +3313,12 @@ module M_impl_Node_K_V_4__balance (* Node<K, V> *)
   
   let unwrap_ref_Box_Node_K_V_Global (self_: t_Option_ref_Box_Node_K_V_Global) (return (x: t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_ref_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_ref_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_ref_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_ref_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   let rotate_right_K (self: MutBorrow.t t_Node_K_V) (return (x: ())) =
@@ -3589,11 +3594,12 @@ module M_impl_Node_K_V_4__flip_colors (* Node<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_Box_Node_K_V_Global [@inline:trivial] (_1: MutBorrow.t t_Node_K_V) = _1.final = _1.current
@@ -4081,11 +4087,12 @@ module M_impl_Node_K_V_4__move_red_left (* Node<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_Box_Node_K_V_Global [@inline:trivial] (_1: MutBorrow.t t_Node_K_V) = _1.final = _1.current
@@ -4552,11 +4559,12 @@ module M_impl_Node_K_V_4__move_red_right (* Node<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate resolve_refmut_Box_Node_K_V_Global [@inline:trivial] (_1: MutBorrow.t t_Node_K_V) = _1.final = _1.current
@@ -4872,11 +4880,12 @@ module M_impl_Node_K_V_4__rotate_left (* Node<K, V> *)
   
   let unwrap_Box_Node_K_V_Global (self_: t_Option_Box_Node_K_V_Global) (return (x: t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None)}
     any
     [ return (result: t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   predicate invariant_refmut_Tree_K_V [@inline:trivial] (self: MutBorrow.t t_Tree_K_V) =
@@ -5371,11 +5380,12 @@ module M_impl_Node_K_V_4__rotate_right (* Node<K, V> *)
   
   let unwrap_Box_Node_K_V_Global (self_: t_Option_Box_Node_K_V_Global) (return (x: t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None)}
     any
     [ return (result: t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   predicate invariant_refmut_Tree_K_V [@inline:trivial] (self: MutBorrow.t t_Tree_K_V) =
@@ -7210,11 +7220,12 @@ module M_impl_Tree_K_V_6__delete_max_rec (* Tree<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate invariant_refmut_Node_K_V [@inline:trivial] (self: MutBorrow.t t_Node_K_V) =
@@ -7501,11 +7512,12 @@ module M_impl_Tree_K_V_6__delete_max_rec (* Tree<K, V> *)
   
   let unwrap_Box_Node_K_V_Global (self_: t_Option_Box_Node_K_V_Global) (return (x: t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None)}
     any
     [ return (result: t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   predicate resolve_V (_1: t_V)
@@ -7902,11 +7914,12 @@ module M_impl_Tree_K_V_6__delete_min_rec (* Tree<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate invariant_refmut_Node_K_V [@inline:trivial] (self: MutBorrow.t t_Node_K_V) =
@@ -8051,11 +8064,12 @@ module M_impl_Tree_K_V_6__delete_min_rec (* Tree<K, V> *)
   
   let unwrap_Box_Node_K_V_Global (self_: t_Option_Box_Node_K_V_Global) (return (x: t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None)}
     any
     [ return (result: t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   type t_DeepModelTy
@@ -8561,11 +8575,12 @@ module M_impl_Tree_K_V_6__delete_rec (* Tree<K, V> *)
   let unwrap_refmut_Box_Node_K_V_Global (self_: t_Option_refmut_Box_Node_K_V_Global)
     (return (x: MutBorrow.t t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_refmut_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None'0)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'0)}
     any
     [ return (result: MutBorrow.t t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_refmut_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_refmut_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some'0 result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None'0)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'0 result = self_)}
       (! return {result}) ]
   
   predicate invariant_refmut_Node_K_V [@inline:trivial] (self: MutBorrow.t t_Node_K_V) =
@@ -9090,11 +9105,12 @@ module M_impl_Tree_K_V_6__delete_rec (* Tree<K, V> *)
   
   let unwrap_Box_Node_K_V_Global (self_: t_Option_Box_Node_K_V_Global) (return (x: t_Node_K_V)) =
   {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global requires] ([@stop_split] [@expl:unwrap 'self_' type invariant] inv_Option_Box_Node_K_V_Global self_)
-    /\ ([@stop_split] [@expl:unwrap requires] self_ <> None)}
+    /\ ([@stop_split] [@expl:unwrap requires (no panic)] not self_ = None)}
     any
     [ return (result: t_Node_K_V) ->
     {[@stop_split] [@expl:unwrap_Box_Node_K_V_Global ensures] ([@stop_split] [@expl:unwrap result type invariant] inv_Box_Node_K_V_Global result)
-      /\ ([@stop_split] [@expl:unwrap ensures] Some result = self_)}
+      /\ ([@stop_split] [@expl:unwrap ensures #0] not self_ = None)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some result = self_)}
       (! return {result}) ]
   
   predicate resolve_V (_1: t_V)

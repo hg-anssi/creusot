@@ -1,0 +1,10 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_adds_two": {
+      "vc_adds_two": { "prover": "alt-ergo", "time": 0.04 },
+      "vc_get_u32": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_set_u32": { "prover": "alt-ergo", "time": 0.021 }
+    }
+  }
+}

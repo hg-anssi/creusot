@@ -1,0 +1,50 @@
+module M_adds_two
+  use creusot.int.UInt32
+  use map.Map
+  use creusot.prelude.Any
+  use int.ComputerDivision
+  
+  type t_PredCell_u32
+  
+  predicate index_Mapping_u32_bool [@inline:trivial] (self: Map.map UInt32.t bool) (a: UInt32.t) = Map.get self a
+  
+  meta "rewrite_def" predicate index_Mapping_u32_bool
+  
+  function view_PredCell_u32 (self: t_PredCell_u32) : Map.map UInt32.t bool
+  
+  let get_u32 (self: t_PredCell_u32) (return (x: UInt32.t)) = any
+    [ return (result: UInt32.t) ->
+    {[@stop_split] [@expl:get ensures] index_Mapping_u32_bool (view_PredCell_u32 self) result}
+      (! return {result}) ]
+  
+  type tup2_u32_bool = { f0: UInt32.t; f1: bool }
+  
+  let set_u32 (self: t_PredCell_u32) (v: UInt32.t) (return (x: ())) =
+  {[@stop_split] [@expl:set requires] index_Mapping_u32_bool (view_PredCell_u32 self) v}
+    any [ return (result: ()) -> (! return {result}) ]
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let adds_two (c: t_PredCell_u32) (return (x: ())) = {[@stop_split] [@expl:adds_two requires] view_PredCell_u32 c
+    = fun (z: UInt32.t) -> ComputerDivision.mod (UInt32.t'int z) 2 = 0}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = get_u32 {c} (fun (_x: UInt32.t) -> [ &v <- _x ] s1)
+      | s1 = [ &_6 <- UInt32.lt v (100000: UInt32.t) ] s2
+      | s2 = any [ br0 -> {_6 = false} (! bb5) | br1 -> {_6} (! bb2) ] ]
+    | bb2 = s0
+      [ s0 = [ &_12 <- let (_fst, _snd) = UInt32.add_with_overflow v (2: UInt32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _12.f1} s2
+      | s2 = set_u32 {c} {_12.f0} (fun (_x: ()) -> [ &_8 <- _x ] s3)
+      | s3 = return {_ret} ]
+    | bb5 = s0 [ s0 = set_u32 {c} {(0: UInt32.t)} (fun (_x: ()) -> [ &_13 <- _x ] s1) | s1 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & c: t_PredCell_u32 = c
+    | & v: UInt32.t = Any.any_l ()
+    | & _6: bool = Any.any_l ()
+    | & _8: () = Any.any_l ()
+    | & _12: tup2_u32_bool = Any.any_l ()
+    | & _13: () = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end

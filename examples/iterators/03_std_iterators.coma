@@ -467,8 +467,13 @@ module M_counter
   
   meta "rewrite_def" predicate precondition_into_iter
   
+  predicate panic_condition_into_iter (self: ()) (args: t_MapInv_Iter_u32_closure0) = false
+  
+  meta "rewrite_def" predicate panic_condition_into_iter
+  
   predicate precondition_from_iter (self: ()) (args: t_MapInv_Iter_u32_closure0) =
-    let iter'0 = args in inv_MapInv_Iter_u32_closure0 iter'0 /\ precondition_into_iter () iter'0
+    let iter'0 = args in inv_MapInv_Iter_u32_closure0 iter'0
+    /\ precondition_into_iter () iter'0 /\ not panic_condition_into_iter () iter'0
   
   meta "rewrite_def" predicate precondition_from_iter
   
@@ -586,7 +591,8 @@ module M_counter
   
   let from_iter_Vec_u32_Global (iter'0: t_MapInv_Iter_u32_closure0) (return (x: t_Vec_u32_Global)) =
   {[@stop_split] [@expl:from_iter_Vec_u32_Global requires] ([@stop_split] [@expl:from_iter 'iter' type invariant] inv_MapInv_Iter_u32_closure0 iter'0)
-    /\ ([@stop_split] [@expl:from_iter requires] precondition_into_iter () iter'0)}
+    /\ ([@stop_split] [@expl:from_iter requires] precondition_into_iter () iter'0)
+    /\ ([@stop_split] [@expl:from_iter requires (no panic)] not panic_condition_into_iter () iter'0)}
     any
     [ return (result: t_Vec_u32_Global) ->
     {[@stop_split] [@expl:from_iter ensures] exists into_iter: t_MapInv_Iter_u32_closure0, done': MutBorrow.t t_MapInv_Iter_u32_closure0. postcondition_into_iter () iter'0 into_iter
@@ -1200,11 +1206,15 @@ module M_my_reverse
   
   let swap_T (self_: MutBorrow.t (Slice64.slice t_T)) (i: UInt64.t) (j: UInt64.t) (return (x: ())) =
   {[@stop_split] [@expl:swap_T requires] ([@stop_split] [@expl:swap 'self_' type invariant] inv_refmut_slice_T self_)
-    /\ ([@stop_split] [@expl:swap requires #0] UInt64.t'int i < Seq.length (Slice64.view self_.current))
-    /\ ([@stop_split] [@expl:swap requires #1] UInt64.t'int j < Seq.length (Slice64.view self_.current))}
+    /\ ([@stop_split] [@expl:swap requires (no panic) #0] not UInt64.t'int i >= Seq.length (Slice64.view self_.current))
+    /\ ([@stop_split] [@expl:swap requires (no panic) #1] not UInt64.t'int j
+    >= Seq.length (Slice64.view self_.current))}
     any
     [ return (result: ()) ->
-    {[@stop_split] [@expl:swap ensures] Permut.exchange (Slice64.view self_.final) (Slice64.view self_.current) (UInt64.t'int i) (UInt64.t'int j)}
+    {[@stop_split] [@expl:swap_T ensures] ([@stop_split] [@expl:swap ensures #0] not UInt64.t'int i
+        >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #1] not UInt64.t'int j >= Seq.length (Slice64.view self_.current))
+      /\ ([@stop_split] [@expl:swap ensures #2] Permut.exchange (Slice64.view self_.final) (Slice64.view self_.current) (UInt64.t'int i) (UInt64.t'int j))}
       (! return {result}) ]
   
   predicate resolve_Zip_Range_usize_Range_usize (_1: t_Zip_Range_usize_Range_usize)

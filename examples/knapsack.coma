@@ -143,11 +143,12 @@ module M_knapsack01_dyn
   
   let index_Vec_Item_Name_Global (self_: t_Vec_Item_Name_Global) (ix: UInt64.t) (return (x: t_Item_Name)) =
   {[@stop_split] [@expl:index_Vec_Item_Name_Global requires] ([@stop_split] [@expl:index 'self_' type invariant] inv_ref_Vec_Item_Name_Global self_)
-    /\ ([@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_Item_Name_Global self_))}
+    /\ ([@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_Item_Name_Global self_))}
     any
     [ return (result: t_Item_Name) ->
     {[@stop_split] [@expl:index_Vec_Item_Name_Global ensures] ([@stop_split] [@expl:index result type invariant] inv_ref_Item_Name result)
-      /\ ([@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_Item_Name_Global self_) result)}
+      /\ ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_Item_Name_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_Item_Name_Global self_) result)}
       (! return {result}) ]
   
   predicate in_bounds_usize'0 [@inline:trivial] (self: UInt64.t) (seq: Seq.seq t_Vec_usize_Global) =
@@ -162,10 +163,11 @@ module M_knapsack01_dyn
   
   let index_Vec_Vec_usize_Global_Global'0 (self_: t_Vec_Vec_usize_Global_Global) (ix: UInt64.t)
     (return (x: t_Vec_usize_Global)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize'0 ix (view_Vec_Vec_usize_Global_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize'0 ix (view_Vec_Vec_usize_Global_Global self_)}
     any
     [ return (result: t_Vec_usize_Global) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize'0 ix (view_Vec_Vec_usize_Global_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_Vec_usize_Global_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize'0 ix (view_Vec_Vec_usize_Global_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize'0 ix (view_Vec_Vec_usize_Global_Global self_) result)}
       (! return {result}) ]
   
   predicate in_bounds_usize'1 [@inline:trivial] (self: UInt64.t) (seq: Seq.seq UInt64.t) =
@@ -179,10 +181,11 @@ module M_knapsack01_dyn
   meta "rewrite_def" predicate has_value_usize'1
   
   let index_Vec_usize_Global'0 (self_: t_Vec_usize_Global) (ix: UInt64.t) (return (x: UInt64.t)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize'1 ix (view_Vec_usize_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize'1 ix (view_Vec_usize_Global self_)}
     any
     [ return (result: UInt64.t) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize'1 ix (view_Vec_usize_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_usize_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize'1 ix (view_Vec_usize_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize'1 ix (view_Vec_usize_Global self_) result)}
       (! return {result}) ]
   
   let max (a: UInt64.t) (b: UInt64.t) (return (x: UInt64.t)) = any
@@ -197,13 +200,14 @@ module M_knapsack01_dyn
   
   let index_mut_Vec_Vec_usize_Global_Global (self_: MutBorrow.t t_Vec_Vec_usize_Global_Global) (ix: UInt64.t)
     (return (x: MutBorrow.t t_Vec_usize_Global)) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_usize'0 ix (view_Vec_Vec_usize_Global_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_usize'0 ix (view_Vec_Vec_usize_Global_Global self_.current)}
     any
     [ return (result: MutBorrow.t t_Vec_usize_Global) ->
-    {[@stop_split] [@expl:index_mut_Vec_Vec_usize_Global_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_usize'0 ix (view_Vec_Vec_usize_Global_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize'0 ix (view_Vec_Vec_usize_Global_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_usize ix (view_Vec_Vec_usize_Global_Global self_.current) (view_Vec_Vec_usize_Global_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_Vec_usize_Global_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_Vec_usize_Global_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize'0 ix (view_Vec_Vec_usize_Global_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize'0 ix (view_Vec_Vec_usize_Global_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize'0 ix (view_Vec_Vec_usize_Global_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize ix (view_Vec_Vec_usize_Global_Global self_.current) (view_Vec_Vec_usize_Global_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_Vec_usize_Global_Global self_.final)
       = Seq.length (view_Vec_Vec_usize_Global_Global self_.current))}
       (! return {result}) ]
   
@@ -214,13 +218,14 @@ module M_knapsack01_dyn
   
   let index_mut_Vec_usize_Global (self_: MutBorrow.t t_Vec_usize_Global) (ix: UInt64.t)
     (return (x: MutBorrow.t UInt64.t)) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_usize'1 ix (view_Vec_usize_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_usize'1 ix (view_Vec_usize_Global self_.current)}
     any
     [ return (result: MutBorrow.t UInt64.t) ->
-    {[@stop_split] [@expl:index_mut_Vec_usize_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_usize'1 ix (view_Vec_usize_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize'1 ix (view_Vec_usize_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_usize'0 ix (view_Vec_usize_Global self_.current) (view_Vec_usize_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_usize_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_usize_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize'1 ix (view_Vec_usize_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize'1 ix (view_Vec_usize_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize'1 ix (view_Vec_usize_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize'0 ix (view_Vec_usize_Global self_.current) (view_Vec_usize_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_usize_Global self_.final)
       = Seq.length (view_Vec_usize_Global self_.current))}
       (! return {result}) ]
   

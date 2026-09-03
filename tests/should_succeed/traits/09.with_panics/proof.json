@@ -1,0 +1,7 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_test": { "vc_test_T": { "prover": "alt-ergo", "time": 0.021 } },
+    "M_test2": { "vc_test2_T": { "prover": "alt-ergo", "time": 0.013 } }
+  }
+}

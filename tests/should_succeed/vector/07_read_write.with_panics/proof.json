@@ -1,0 +1,11 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_read_write": {
+      "vc_eq_T": { "prover": "alt-ergo", "time": 0.021 },
+      "vc_index_Vec_T_Global": { "prover": "alt-ergo", "time": 0.017 },
+      "vc_index_mut_Vec_T_Global": { "prover": "alt-ergo", "time": 0.02 },
+      "vc_read_write_T": { "prover": "alt-ergo", "time": 0.024 }
+    }
+  }
+}

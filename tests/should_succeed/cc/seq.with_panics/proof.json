@@ -1,0 +1,29 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_f": {
+      "vc_deref_Ghost_Int": { "prover": "alt-ergo", "time": 0.028 },
+      "vc_f": { "prover": "alt-ergo", "time": 0.049 },
+      "vc_get_mut_ghost_refmut_usize": {
+        "prover": "alt-ergo",
+        "time": 0.035
+      },
+      "vc_into_inner_Seq_refmut_usize": {
+        "prover": "alt-ergo",
+        "time": 0.025
+      },
+      "vc_new": { "prover": "alt-ergo", "time": 0.041 },
+      "vc_new_refmut_usize": { "prover": "alt-ergo", "time": 0.022 },
+      "vc_new_usize": { "prover": "alt-ergo", "time": 0.024 },
+      "vc_push_front_ghost_refmut_usize": {
+        "prover": "alt-ergo",
+        "time": 0.04
+      },
+      "vc_unwrap_refmut_refmut_usize": {
+        "prover": "alt-ergo",
+        "time": 0.029
+      }
+    },
+    "M_g": { "vc_g": { "prover": "alt-ergo", "time": 0.032 } }
+  }
+}

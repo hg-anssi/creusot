@@ -1,0 +1,282 @@
+module M_move_closure
+  use creusot.int.Int32
+  use creusot.prelude.MutBorrow
+  use creusot.prelude.Any
+  
+  type closure0 = { c0: MutBorrow.t Int32.t }
+  
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
+  predicate resolve_refmut_closure0 [@inline:trivial] (_1: MutBorrow.t closure0) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_closure0
+  
+  predicate resolve_refmut_i32 [@inline:trivial] (_1: MutBorrow.t Int32.t) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_i32
+  
+  predicate resolve_closure0 [@inline:trivial] (_1: closure0) = resolve_refmut_i32 _1.c0
+  
+  meta "rewrite_def" predicate resolve_closure0
+  
+  predicate hist_inv_closure0 (self: closure0) (result_state: closure0) = true
+  
+  let closure0 [@coma:extspec] (self: MutBorrow.t closure0) (return (x: ())) = bb0
+    [ bb0 = s0
+      [ s0 = [ &_2 <- let (_fst, _snd) = Int32.add_with_overflow self.current.c0.current (1: Int32.t) in { f0 = _fst;
+                                                                                                           f1 = _snd } ]
+        s1
+      | s1 = {[@expl:Add overflow] not _2.f1} s2
+      | s2 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _2.f0 } } } ] s3
+      | s3 = -{resolve_refmut_closure0 self}- s4
+      | s4 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l () | & self: MutBorrow.t closure0 = self | & _2: tup2_i32_bool = Any.any_l () ]
+    [ return (result: ()) -> {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
+      return {result} ]
+  
+  meta "rewrite_def" predicate closure0'pre
+  
+  meta "rewrite_def" predicate closure0'post'return
+  
+  predicate postcondition_once_closure0 (self: closure0) (args: ()) (result: ()) =
+    exists e: closure0. (exists bor_self: MutBorrow.t closure0. bor_self.current = self
+          /\ bor_self.final = e /\ closure0'post'return bor_self result /\ hist_inv_closure0 self e)
+      /\ resolve_closure0 e
+  
+  meta "rewrite_def" predicate postcondition_once_closure0
+  
+  predicate postcondition_mut_closure0 (self: closure0) (args: ()) (result_state: closure0) (result: ()) =
+    exists bor_self: MutBorrow.t closure0. bor_self.current = self
+      /\ bor_self.final = result_state /\ closure0'post'return bor_self result /\ hist_inv_closure0 self result_state
+  
+  meta "rewrite_def" predicate postcondition_mut_closure0
+  
+  function fn_mut_once_closure0 (self: closure0) (args: ()) (res: ()) : ()
+  
+  axiom fn_mut_once_closure0_spec:
+    forall self: closure0, args: (), res: () [postcondition_once_closure0 self args res]. postcondition_once_closure0 self args res
+      = (exists res_state: closure0. postcondition_mut_closure0 self args res_state res /\ resolve_closure0 res_state)
+  
+  function hist_inv_trans_closure0 (self: closure0) (b: closure0) (c: closure0) : ()
+  
+  axiom hist_inv_trans_closure0_spec:
+    forall self: closure0, b: closure0, c: closure0 [hist_inv_closure0 self b, hist_inv_closure0 b c | hist_inv_closure0 self b, hist_inv_closure0 self c | hist_inv_closure0 b c, hist_inv_closure0 self c]. hist_inv_closure0 self b
+      -> hist_inv_closure0 b c -> hist_inv_closure0 self c
+  
+  function hist_inv_refl_closure0 (self: closure0) : ()
+  
+  axiom hist_inv_refl_closure0_spec: forall self: closure0 [hist_inv_closure0 self self]. hist_inv_closure0 self self
+  
+  function postcondition_mut_hist_inv_closure0 (self: closure0) (args: ()) (res_state: closure0) (res: ()) : ()
+  
+  axiom postcondition_mut_hist_inv_closure0_spec:
+    forall self: closure0, args: (), res_state: closure0, res: () [postcondition_mut_closure0 self args res_state res | hist_inv_closure0 self res_state]. postcondition_mut_closure0 self args res_state res
+      -> hist_inv_closure0 self res_state
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let move_closure (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_2 <- (0: Int32.t) ] s1
+      | s1 = MutBorrow.borrow_mut <Int32.t> {_2}
+          (fun (_bor: MutBorrow.t Int32.t) -> [ &a <- _bor ] [ &_2 <- _bor.final ] s2)
+      | s2 = [ &x <- { c0 = a } ] s3
+      | s3 = MutBorrow.borrow_mut <closure0> {x}
+          (fun (_bor: MutBorrow.t closure0) -> [ &_5 <- _bor ] [ &x <- _bor.final ] s4)
+      | s4 = closure0 {_5} (fun (_x: ()) -> [ &_4 <- _x ] s5)
+      | s5 = MutBorrow.borrow_mut <closure0> {x}
+          (fun (_bor: MutBorrow.t closure0) -> [ &_8 <- _bor ] [ &x <- _bor.final ] s6)
+      | s6 = closure0 {_8} (fun (_x: ()) -> [ &_7 <- _x ] s7)
+      | s7 = -{resolve_closure0 x}- s8
+      | s8 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & a: MutBorrow.t Int32.t = Any.any_l ()
+    | & _2: Int32.t = Any.any_l ()
+    | & x: closure0 = Any.any_l ()
+    | & _4: () = Any.any_l ()
+    | & _5: MutBorrow.t closure0 = Any.any_l ()
+    | & _6: () = Any.any_l ()
+    | & _7: () = Any.any_l ()
+    | & _8: MutBorrow.t closure0 = Any.any_l ()
+    | & _9: () = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end
+module M_move_mut
+  use creusot.int.UInt32
+  use creusot.prelude.MutBorrow
+  use creusot.prelude.Any
+  
+  let new_ref_u32 (return (x: MutBorrow.t UInt32.t)) = any
+    [ return (result: MutBorrow.t UInt32.t) -> (! return {result}) ]
+  
+  type closure0 = { c0: MutBorrow.t UInt32.t }
+  
+  predicate resolve_refmut_u32 [@inline:trivial] (_1: MutBorrow.t UInt32.t) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_u32
+  
+  predicate resolve_refmut_closure0 [@inline:trivial] (_1: MutBorrow.t closure0) = _1.final = _1.current
+  
+  meta "rewrite_def" predicate resolve_refmut_closure0
+  
+  predicate resolve_closure0 [@inline:trivial] (_1: closure0) = resolve_refmut_u32 _1.c0
+  
+  meta "rewrite_def" predicate resolve_closure0
+  
+  predicate hist_inv_closure0 (self: closure0) (result_state: closure0) = true
+  
+  let closure0 [@coma:extspec] (self: MutBorrow.t closure0) (return (x: ())) = bb0
+    [ bb0 = s0
+      [ s0 = new_ref_u32 (fun (_x: MutBorrow.t UInt32.t) -> [ &_3 <- _x ] s1)
+      | s1 = MutBorrow.borrow_final <UInt32.t> {_3.current} {MutBorrow.get_id _3}
+          (fun (_bor: MutBorrow.t UInt32.t) -> [ &_2 <- _bor ] [ &_3 <- { _3 with current = _bor.final } ] s2)
+      | s2 = -{match self with
+          | {current = {c0 = x}} -> resolve_refmut_u32 x
+          | _ -> true
+          end}-
+        s3
+      | s3 = [ &self <- { self with current = { c0 = _2 } } ] s4
+      | s4 = -{resolve_refmut_closure0 self}- s5
+      | s5 = -{resolve_refmut_u32 _3}- s6
+      | s6 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & self: MutBorrow.t closure0 = self
+    | & _2: MutBorrow.t UInt32.t = Any.any_l ()
+    | & _3: MutBorrow.t UInt32.t = Any.any_l () ]
+    [ return (result: ()) -> {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
+      return {result} ]
+  
+  meta "rewrite_def" predicate closure0'pre
+  
+  meta "rewrite_def" predicate closure0'post'return
+  
+  predicate postcondition_once_closure0 (self: closure0) (args: ()) (result: ()) =
+    exists e: closure0. (exists bor_self: MutBorrow.t closure0. bor_self.current = self
+          /\ bor_self.final = e /\ closure0'post'return bor_self result /\ hist_inv_closure0 self e)
+      /\ resolve_closure0 e
+  
+  meta "rewrite_def" predicate postcondition_once_closure0
+  
+  predicate postcondition_mut_closure0 (self: closure0) (args: ()) (result_state: closure0) (result: ()) =
+    exists bor_self: MutBorrow.t closure0. bor_self.current = self
+      /\ bor_self.final = result_state /\ closure0'post'return bor_self result /\ hist_inv_closure0 self result_state
+  
+  meta "rewrite_def" predicate postcondition_mut_closure0
+  
+  function fn_mut_once_closure0 (self: closure0) (args: ()) (res: ()) : ()
+  
+  axiom fn_mut_once_closure0_spec:
+    forall self: closure0, args: (), res: () [postcondition_once_closure0 self args res]. postcondition_once_closure0 self args res
+      = (exists res_state: closure0. postcondition_mut_closure0 self args res_state res /\ resolve_closure0 res_state)
+  
+  function hist_inv_trans_closure0 (self: closure0) (b: closure0) (c: closure0) : ()
+  
+  axiom hist_inv_trans_closure0_spec:
+    forall self: closure0, b: closure0, c: closure0 [hist_inv_closure0 self b, hist_inv_closure0 b c | hist_inv_closure0 self b, hist_inv_closure0 self c | hist_inv_closure0 b c, hist_inv_closure0 self c]. hist_inv_closure0 self b
+      -> hist_inv_closure0 b c -> hist_inv_closure0 self c
+  
+  function hist_inv_refl_closure0 (self: closure0) : ()
+  
+  axiom hist_inv_refl_closure0_spec: forall self: closure0 [hist_inv_closure0 self self]. hist_inv_closure0 self self
+  
+  function postcondition_mut_hist_inv_closure0 (self: closure0) (args: ()) (res_state: closure0) (res: ()) : ()
+  
+  axiom postcondition_mut_hist_inv_closure0_spec:
+    forall self: closure0, args: (), res_state: closure0, res: () [postcondition_mut_closure0 self args res_state res | hist_inv_closure0 self res_state]. postcondition_mut_closure0 self args res_state res
+      -> hist_inv_closure0 self res_state
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let move_mut (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_2 <- (0: UInt32.t) ] s1
+      | s1 = MutBorrow.borrow_mut <UInt32.t> {_2}
+          (fun (_bor: MutBorrow.t UInt32.t) -> [ &x <- _bor ] [ &_2 <- _bor.final ] s2)
+      | s2 = [ &a <- { c0 = x } ] s3
+      | s3 = MutBorrow.borrow_mut <closure0> {a}
+          (fun (_bor: MutBorrow.t closure0) -> [ &_5 <- _bor ] [ &a <- _bor.final ] s4)
+      | s4 = closure0 {_5} (fun (_x: ()) -> [ &_4 <- _x ] s5)
+      | s5 = MutBorrow.borrow_mut <closure0> {a}
+          (fun (_bor: MutBorrow.t closure0) -> [ &_8 <- _bor ] [ &a <- _bor.final ] s6)
+      | s6 = closure0 {_8} (fun (_x: ()) -> [ &_7 <- _x ] s7)
+      | s7 = -{resolve_closure0 a}- s8
+      | s8 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & x: MutBorrow.t UInt32.t = Any.any_l ()
+    | & _2: UInt32.t = Any.any_l ()
+    | & a: closure0 = Any.any_l ()
+    | & _4: () = Any.any_l ()
+    | & _5: MutBorrow.t closure0 = Any.any_l ()
+    | & _6: () = Any.any_l ()
+    | & _7: () = Any.any_l ()
+    | & _8: MutBorrow.t closure0 = Any.any_l ()
+    | & _9: () = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end
+module M_multi_arg
+  use creusot.int.Int32
+  use creusot.prelude.Any
+  
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
+  let closure0 [@coma:extspec] (self: ()) (a: Int32.t) (b: Int32.t) (return (x: Int32.t)) = bb0
+    [ bb0 = s0
+      [ s0 = [ &_6 <- let (_fst, _snd) = Int32.add_with_overflow a b in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _6.f1} s2
+      | s2 = [ &_ret <- _6.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & a: Int32.t = a | & b: Int32.t = b | & _6: tup2_i32_bool = Any.any_l () ]
+    [ return (result: Int32.t) -> return {result} ]
+  
+  meta "rewrite_def" predicate closure0'pre
+  
+  meta "rewrite_def" predicate closure0'post'return
+  
+  type tup2_i32_i32 = { f0'0: Int32.t; f1'0: Int32.t }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let multi_arg (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &x <- () ] s1
+      | s1 = [ &_4 <- { f0'0 = (0: Int32.t); f1'0 = (3: Int32.t) } ] s2
+      | s2 = closure0 {x} {_4.f0'0} {_4.f1'0} (fun (_x: Int32.t) -> [ &_a <- _x ] s3)
+      | s3 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & x: () = Any.any_l ()
+    | & _a: Int32.t = Any.any_l ()
+    | & _4: tup2_i32_i32 = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end
+module M_uses_closure
+  use creusot.prelude.Any
+  
+  type closure0 = { c0: bool }
+  
+  let closure0 [@coma:extspec] (self: closure0) (return (x: bool)) = bb0
+    [ bb0 = s0 [ s0 = [ &_ret <- self.c0 ] s1 | s1 = return {_ret} ] ]
+    [ & _ret: bool = Any.any_l () | & self: closure0 = self ] [ return (result: bool) -> return {result} ]
+  
+  meta "rewrite_def" predicate closure0'pre
+  
+  meta "rewrite_def" predicate closure0'post'return
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let uses_closure (return (x: ())) = (! bb0
+    [ bb0 = s0
+      [ s0 = [ &y <- true ] s1
+      | s1 = [ &_4 <- { c0 = y } ] s2
+      | s2 = closure0 {_4} (fun (_x'0: bool) -> [ &_x <- _x'0 ] s3)
+      | s3 = return {_ret} ] ]
+    [ & _ret: () = Any.any_l ()
+    | & y: bool = Any.any_l ()
+    | & _x: bool = Any.any_l ()
+    | & _4: closure0 = Any.any_l ()
+    | & _6: () = Any.any_l () ]) [ return (result: ()) -> (! return {result}) ]
+end

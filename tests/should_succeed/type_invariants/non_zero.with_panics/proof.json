@@ -1,0 +1,17 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_impl_NonZeroU32__add": {
+      "vc_add": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_impl_NonZeroU32__new": {
+      "vc_new": { "prover": "alt-ergo", "time": 0.024 }
+    },
+    "M_impl_NonZeroU32__sub": {
+      "vc_sub": { "prover": "alt-ergo", "time": 0.042 }
+    },
+    "M_impl_NonZeroU32__sub_pre_trans": {
+      "vc_sub_pre_trans": { "prover": "alt-ergo", "time": 0.016 }
+    }
+  }
+}

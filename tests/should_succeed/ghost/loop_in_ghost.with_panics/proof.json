@@ -1,0 +1,9 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_foo": {
+      "vc_foo": { "prover": "alt-ergo", "time": 0.028 },
+      "vc_new_u32": { "prover": "alt-ergo", "time": 0.014 }
+    }
+  }
+}

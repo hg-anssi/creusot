@@ -1016,9 +1016,12 @@ module M_message_passing
       (! return {result}) ]
   
   let unwrap_ref_Perm_PermCell_i32 (self_: t_Option_ref_Perm_PermCell_i32) (return (x: t_Perm_PermCell_i32)) =
-  {[@stop_split] [@expl:unwrap requires] self_ <> None'2}
+  {[@stop_split] [@expl:unwrap requires (no panic)] not self_ = None'2}
     any
-    [ return (result: t_Perm_PermCell_i32) -> {[@stop_split] [@expl:unwrap ensures] Some'2 result = self_}
+    [ return (result: t_Perm_PermCell_i32) ->
+    {[@stop_split] [@expl:unwrap_ref_Perm_PermCell_i32 ensures] ([@stop_split] [@expl:unwrap ensures #0] not self_
+        = None'2)
+      /\ ([@stop_split] [@expl:unwrap ensures #1] Some'2 result = self_)}
       (! return {result}) ]
   
   let new_ref_Perm_PermCell_i32 (x: t_Perm_PermCell_i32) (return (x'0: t_Perm_PermCell_i32)) = any

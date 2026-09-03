@@ -94,10 +94,11 @@ module M_f
   meta "rewrite_def" predicate has_value_usize
   
   let index_Vec_bool_Global'0 (self_: t_Vec_bool_Global) (ix: UInt64.t) (return (x: bool)) =
-  {[@stop_split] [@expl:index requires] in_bounds_usize ix (view_Vec_bool_Global self_)}
+  {[@stop_split] [@expl:index requires (no panic)] not not in_bounds_usize ix (view_Vec_bool_Global self_)}
     any
     [ return (result: bool) ->
-    {[@stop_split] [@expl:index ensures] has_value_usize ix (view_Vec_bool_Global self_) result}
+    {[@stop_split] [@expl:index_Vec_bool_Global ensures] ([@stop_split] [@expl:index ensures #0] not not in_bounds_usize ix (view_Vec_bool_Global self_))
+      /\ ([@stop_split] [@expl:index ensures #1] has_value_usize ix (view_Vec_bool_Global self_) result)}
       (! return {result}) ]
   
   predicate resolve_elswhere_usize [@inline:trivial] (self: UInt64.t) (old': Seq.seq bool) (fin: Seq.seq bool) =
@@ -106,13 +107,14 @@ module M_f
   meta "rewrite_def" predicate resolve_elswhere_usize
   
   let index_mut_Vec_bool_Global (self_: MutBorrow.t t_Vec_bool_Global) (ix: UInt64.t) (return (x: MutBorrow.t bool)) =
-  {[@stop_split] [@expl:index_mut requires] in_bounds_usize ix (view_Vec_bool_Global self_.current)}
+  {[@stop_split] [@expl:index_mut requires (no panic)] not not in_bounds_usize ix (view_Vec_bool_Global self_.current)}
     any
     [ return (result: MutBorrow.t bool) ->
-    {[@stop_split] [@expl:index_mut_Vec_bool_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] has_value_usize ix (view_Vec_bool_Global self_.current) result.current)
-      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_bool_Global self_.final) result.final)
-      /\ ([@stop_split] [@expl:index_mut ensures #2] resolve_elswhere_usize ix (view_Vec_bool_Global self_.current) (view_Vec_bool_Global self_.final))
-      /\ ([@stop_split] [@expl:index_mut ensures #3] Seq.length (view_Vec_bool_Global self_.final)
+    {[@stop_split] [@expl:index_mut_Vec_bool_Global ensures] ([@stop_split] [@expl:index_mut ensures #0] not not in_bounds_usize ix (view_Vec_bool_Global self_.current))
+      /\ ([@stop_split] [@expl:index_mut ensures #1] has_value_usize ix (view_Vec_bool_Global self_.current) result.current)
+      /\ ([@stop_split] [@expl:index_mut ensures #2] has_value_usize ix (view_Vec_bool_Global self_.final) result.final)
+      /\ ([@stop_split] [@expl:index_mut ensures #3] resolve_elswhere_usize ix (view_Vec_bool_Global self_.current) (view_Vec_bool_Global self_.final))
+      /\ ([@stop_split] [@expl:index_mut ensures #4] Seq.length (view_Vec_bool_Global self_.final)
       = Seq.length (view_Vec_bool_Global self_.current))}
       (! return {result}) ]
   

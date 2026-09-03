@@ -1,0 +1,9 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_disjoint_captures": {
+      "vc_closure2": { "prover": "alt-ergo", "time": 0.011 },
+      "vc_disjoint_captures": { "prover": "alt-ergo", "time": 0.021 }
+    }
+  }
+}

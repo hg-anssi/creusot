@@ -1,0 +1,21 @@
+{
+  "profile": [],
+  "proofs": {
+    "M_compute_sum_of_odd": {
+      "vc_compute_sum_of_odd": { "prover": "z3", "time": 0.028 },
+      "vc_elim_Some": { "prover": "alt-ergo", "time": 0.005 },
+      "vc_into_iter_Range_u32": { "prover": "alt-ergo", "time": 0.012 },
+      "vc_next_Range_u32": { "prover": "alt-ergo", "time": 0.012 }
+    },
+    "M_sum_of_odd": {
+      "vc_sum_of_odd": { "prover": "alt-ergo", "time": 0.028 }
+    },
+    "M_sum_of_odd_is_sqr": {
+      "vc_sum_of_odd_is_sqr": { "prover": "alt-ergo", "time": 0.025 }
+    },
+    "M_test": {
+      "vc_compute_sum_of_odd": { "prover": "alt-ergo", "time": 0.009 },
+      "vc_test": { "prover": "alt-ergo", "time": 0.013 }
+    }
+  }
+}

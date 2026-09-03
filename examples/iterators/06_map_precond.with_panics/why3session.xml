@@ -4,8 +4,8 @@
 <why3session shape_version="6">
 <prover id="0" name="CVC4" version="1.8" timelimit="1" steplimit="0" memlimit="1000"/>
 <prover id="1" name="Alt-Ergo" version="2.6.2" timelimit="0.2" steplimit="0" memlimit="1000"/>
-<prover id="2" name="Z3" version="4.15.3" timelimit="1" steplimit="0" memlimit="1000"/>
-<prover id="3" name="CVC5" version="1.3.1" timelimit="1" steplimit="0" memlimit="1000"/>
+<prover id="2" name="Z3" version="4.15.3" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="3" name="CVC5" version="1.3.1" timelimit="0.2" steplimit="0" memlimit="1000"/>
 <file format="coma" proved="true">
 <path name=".."/><path name="06_map_precond.with_panics.coma"/>
 <theory name="M_common__trait_ExactSizeIterator__is_empty" proved="true">
@@ -20,7 +20,7 @@
 </theory>
 <theory name="M_counter" proved="true">
  <goal name="vc_counter_I" proved="true">
- <proof prover="1"><result status="valid" time="0.072341" steps="837"/></proof>
+ <proof prover="1"><result status="valid" time="0.072341" steps="924"/></proof>
  </goal>
 </theory>
 <theory name="M_identity" proved="true">
@@ -60,38 +60,26 @@
 </theory>
 <theory name="M_impl_Iterator_for_Map_I_F__next" proved="true">
  <goal name="vc_next_Map_I_F" proved="true">
- <proof prover="0" timelimit="0.2"><result status="valid" time="0.080610" steps="29437"/></proof>
+ <proof prover="0" timelimit="0.2"><result status="valid" time="0.222330" steps="29451"/></proof>
  </goal>
 </theory>
 <theory name="M_impl_Iterator_for_Map_I_F__next__refines" proved="true">
  <goal name="refines" proved="true">
- <proof prover="1"><result status="valid" time="0.061286" steps="839"/></proof>
+ <proof prover="1"><result status="valid" time="0.061286" steps="829"/></proof>
  </goal>
 </theory>
 <theory name="M_impl_Iterator_for_Map_I_F__produces_refl" proved="true">
  <goal name="vc_produces_refl_Map_I_F" proved="true">
- <proof prover="0"><result status="unknown" time="0.064461" steps="12329"/></proof>
- <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="8632"/></proof>
- <proof prover="2"><result status="unknown" time="0.023526" steps="64073"/></proof>
- <proof prover="3"><result status="unknown" time="0.031591" steps="5767"/></proof>
  <transf name="compute_specified" proved="true" >
   <goal name="vc_produces_refl_Map_I_F.0" proved="true">
-  <proof prover="0"><result status="unknown" time="0.057439" steps="13193"/></proof>
-  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="8572"/></proof>
-  <proof prover="2"><result status="unknown" time="0.026195" steps="72603"/></proof>
-  <proof prover="3"><result status="unknown" time="0.032738" steps="6148"/></proof>
   <transf name="split_vc" proved="true" >
    <goal name="vc_produces_refl_Map_I_F.0.0" expl="produces_refl ensures" proved="true">
-   <proof prover="0"><result status="unknown" time="0.071494" steps="13193"/></proof>
-   <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="6202"/></proof>
-   <proof prover="2"><result status="unknown" time="0.011387" steps="72603"/></proof>
-   <proof prover="3"><result status="unknown" time="0.036824" steps="6148"/></proof>
    <transf name="split_vc" proved="true" >
     <goal name="vc_produces_refl_Map_I_F.0.0.0" proved="true">
     <proof prover="1"><result status="valid" time="0.020381" steps="2"/></proof>
     </goal>
     <goal name="vc_produces_refl_Map_I_F.0.0.1" proved="true">
-    <proof prover="2" timelimit="0.2"><result status="valid" time="0.021843" steps="70723"/></proof>
+    <proof prover="2"><result status="valid" time="0.021843" steps="70723"/></proof>
     </goal>
    </transf>
    </goal>
@@ -107,64 +95,28 @@
 </theory>
 <theory name="M_impl_Iterator_for_Map_I_F__produces_trans" proved="true">
  <goal name="vc_produces_trans_Map_I_F" proved="true">
- <proof prover="0"><result status="timeout" time="1.000000" steps="90732"/></proof>
- <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="13246"/></proof>
- <proof prover="2"><result status="timeout" time="1.000000" steps="1245949"/></proof>
- <proof prover="3"><result status="timeout" time="1.000000" steps="165810"/></proof>
  <transf name="compute_specified" proved="true" >
   <goal name="vc_produces_trans_Map_I_F.0" proved="true">
-  <proof prover="0"><result status="timeout" time="1.000000" steps="96481"/></proof>
-  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="9300"/></proof>
-  <proof prover="2"><result status="timeout" time="1.000000" steps="1361794"/></proof>
-  <proof prover="3"><result status="timeout" time="1.000000" steps="144616"/></proof>
   <transf name="split_vc" proved="true" >
    <goal name="vc_produces_trans_Map_I_F.0.0" expl="produces_trans ensures" proved="true">
-   <proof prover="0"><result status="timeout" time="1.000000" steps="97950"/></proof>
-   <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="6677"/></proof>
-   <proof prover="2"><result status="timeout" time="1.000000" steps="1738422"/></proof>
-   <proof prover="3"><result status="timeout" time="1.000000" steps="101768"/></proof>
    <transf name="split_vc" proved="true" >
     <goal name="vc_produces_trans_Map_I_F.0.0.0" expl="produces_trans ensures" proved="true">
     <proof prover="1"><result status="valid" time="0.027912" steps="48"/></proof>
     </goal>
     <goal name="vc_produces_trans_Map_I_F.0.0.1" expl="produces_trans ensures" proved="true">
-    <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="160636"/></proof>
-    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="19327"/></proof>
-    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="2916099"/></proof>
-    <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="157271"/></proof>
     <transf name="exists" proved="true" arg1="(fs1++fs)">
      <goal name="vc_produces_trans_Map_I_F.0.0.1.0" proved="true">
-     <proof prover="0"><result status="timeout" time="1.000000" steps="151622"/></proof>
-     <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="14700"/></proof>
-     <proof prover="2"><result status="timeout" time="1.000000" steps="2101610"/></proof>
-     <proof prover="3"><result status="timeout" time="1.000000" steps="194803"/></proof>
      <transf name="compute_specified" proved="true" >
       <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0" proved="true">
-      <proof prover="0"><result status="timeout" time="1.000000" steps="150229"/></proof>
-      <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="14906"/></proof>
-      <proof prover="2"><result status="timeout" time="1.000000" steps="2482831"/></proof>
-      <proof prover="3"><result status="timeout" time="1.000000" steps="168058"/></proof>
       <transf name="split_vc" proved="true" >
        <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.0" proved="true">
        <proof prover="1"><result status="valid" time="0.013843" steps="41"/></proof>
        </goal>
        <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1" proved="true">
-       <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="257741"/></proof>
-       <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="28847"/></proof>
-       <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="6604551"/></proof>
-       <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="372320"/></proof>
        <transf name="exists" proved="true" arg1="(s1++s)">
         <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0" proved="true">
-        <proof prover="0"><result status="timeout" time="1.000000" steps="175956"/></proof>
-        <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="19444"/></proof>
-        <proof prover="2"><result status="timeout" time="1.000000" steps="2744276"/></proof>
-        <proof prover="3"><result status="timeout" time="1.000000" steps="194555"/></proof>
         <transf name="compute_specified" proved="true" >
          <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0" proved="true">
-         <proof prover="0"><result status="timeout" time="1.000000" steps="157425"/></proof>
-         <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="15483"/></proof>
-         <proof prover="2"><result status="timeout" time="1.000000" steps="3479346"/></proof>
-         <proof prover="3"><result status="timeout" time="1.000000" steps="199567"/></proof>
          <transf name="split_vc" proved="true" >
           <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.0" proved="true">
           <proof prover="1"><result status="valid" time="0.003857" steps="41"/></proof>
@@ -173,7 +125,7 @@
           <proof prover="1"><result status="valid" time="0.019132" steps="35"/></proof>
           </goal>
           <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.2" proved="true">
-          <proof prover="1"><result status="valid" time="0.064265" steps="561"/></proof>
+          <proof prover="1"><result status="valid" time="0.064265" steps="582"/></proof>
           </goal>
           <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.3" proved="true">
           <proof prover="1"><result status="valid" time="0.037627" steps="234"/></proof>
@@ -188,28 +140,16 @@
           <proof prover="1"><result status="valid" time="0.025245" steps="116"/></proof>
           </goal>
           <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.7" proved="true">
-          <proof prover="1"><result status="valid" time="0.029098" steps="290"/></proof>
+          <proof prover="1"><result status="valid" time="0.029098" steps="294"/></proof>
           </goal>
           <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8" proved="true">
-          <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="291180"/></proof>
-          <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="24825"/></proof>
-          <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="8600004"/></proof>
-          <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="456046"/></proof>
           <transf name="instantiate" proved="true" arg1="H10" arg2="i">
            <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8.0" proved="true">
-           <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="291079"/></proof>
-           <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="34119"/></proof>
-           <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="2910987"/></proof>
-           <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="461371"/></proof>
            <transf name="instantiate" proved="true" arg1="H2" arg2="(i-length ab)">
             <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8.0.0" proved="true">
-            <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="286318"/></proof>
-            <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="25530"/></proof>
-            <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="3387128"/></proof>
-            <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="502150"/></proof>
             <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
              <goal name="vc_produces_trans_Map_I_F.0.0.1.0.0.1.0.0.8.0.0.0" proved="true">
-             <proof prover="1" timelimit="5"><result status="valid" time="0.190289" steps="3170"/></proof>
+             <proof prover="1" timelimit="5"><result status="valid" time="0.418018" steps="3165"/></proof>
              </goal>
             </transf>
             </goal>
@@ -253,55 +193,11 @@
 </theory>
 <theory name="M_impl_Map_I_F__preservation_inv" proved="true">
  <goal name="vc_preservation_inv_I" proved="true">
- <proof prover="0"><result status="unknown" time="0.050143" steps="12754"/></proof>
- <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="9964"/></proof>
- <proof prover="2"><result status="timeout" time="1.000000" steps="5576670"/></proof>
- <proof prover="3"><result status="timeout" time="1.000000" steps="153854"/></proof>
- <transf name="compute_specified" >
-  <goal name="vc_preservation_inv_I.0">
-  <proof prover="0"><result status="unknown" time="0.038869" steps="12754"/></proof>
-  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="16879"/></proof>
-  <proof prover="2"><result status="timeout" time="1.000000" steps="6680543"/></proof>
-  <proof prover="3"><result status="timeout" time="1.000000" steps="165374"/></proof>
-  <transf name="split_vc" >
-   <goal name="vc_preservation_inv_I.0.0" expl="preservation_inv ensures">
-   <proof prover="0"><result status="unknown" time="0.043414" steps="12740"/></proof>
-   <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="19451"/></proof>
-   <proof prover="2"><result status="timeout" time="1.000000" steps="7047676"/></proof>
-   <proof prover="3"><result status="timeout" time="1.000000" steps="154582"/></proof>
-   <transf name="split_vc" >
-    <goal name="vc_preservation_inv_I.0.0.0" expl="preservation_inv ensures">
-    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.063426" steps="9503"/></proof>
-    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="23099"/></proof>
-    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="4924869"/></proof>
-    <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="302030"/></proof>
-    </goal>
-    <goal name="vc_preservation_inv_I.0.0.1" expl="preservation_inv ensures">
-    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.043356" steps="10386"/></proof>
-    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="23184"/></proof>
-    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="4599477"/></proof>
-    <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="315248"/></proof>
-    </goal>
-    <goal name="vc_preservation_inv_I.0.0.2" expl="preservation_inv ensures">
-    <proof prover="0" timelimit="2" memlimit="4000"><result status="unknown" time="0.066052" steps="10387"/></proof>
-    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="29210"/></proof>
-    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="4637490"/></proof>
-    <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="339233"/></proof>
-    </goal>
-   </transf>
-   </goal>
-  </transf>
-  </goal>
- </transf>
  <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
   <goal name="vc_preservation_inv_I.0" proved="true">
-  <proof prover="0"><result status="timeout" time="1.000000" steps="120536"/></proof>
-  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="30414"/></proof>
-  <proof prover="2"><result status="timeout" time="1.000000" steps="2893525"/></proof>
-  <proof prover="3"><result status="timeout" time="1.000000" steps="120477"/></proof>
   <transf name="compute_specified" proved="true" >
    <goal name="vc_preservation_inv_I.0.0" proved="true">
-   <proof prover="0"><result status="valid" time="0.659209" steps="148000"/></proof>
+   <proof prover="0"><result status="valid" time="1.317962" steps="148576"/></proof>
    </goal>
   </transf>
   </goal>
@@ -310,64 +206,28 @@
 </theory>
 <theory name="M_impl_Map_I_F__produces_one" proved="true">
  <goal name="vc_produces_one_I" proved="true">
- <proof prover="0"><result status="timeout" time="1.000000" steps="94290"/></proof>
- <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="10394"/></proof>
- <proof prover="2"><result status="timeout" time="1.000000" steps="2761031"/></proof>
- <proof prover="3"><result status="timeout" time="1.000000" steps="118664"/></proof>
  <transf name="compute_specified" proved="true" >
   <goal name="vc_produces_one_I.0" proved="true">
-  <proof prover="0"><result status="timeout" time="1.000000" steps="122803"/></proof>
-  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="10521"/></proof>
-  <proof prover="2"><result status="timeout" time="1.000000" steps="2149548"/></proof>
-  <proof prover="3"><result status="timeout" time="1.000000" steps="124628"/></proof>
   <transf name="split_vc" proved="true" >
    <goal name="vc_produces_one_I.0.0" expl="produces_one ensures" proved="true">
-   <proof prover="0"><result status="timeout" time="1.000000" steps="125965"/></proof>
-   <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="10355"/></proof>
-   <proof prover="2"><result status="timeout" time="1.000000" steps="2874978"/></proof>
-   <proof prover="3"><result status="timeout" time="1.000000" steps="119347"/></proof>
    <transf name="split_vc" proved="true" >
     <goal name="vc_produces_one_I.0.0.0" proved="true">
     <proof prover="1"><result status="valid" time="0.020290" steps="14"/></proof>
     </goal>
     <goal name="vc_produces_one_I.0.0.1" proved="true">
-    <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="161996"/></proof>
-    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="21402"/></proof>
-    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="2553434"/></proof>
-    <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="218843"/></proof>
     <transf name="exists" proved="true" arg1="(singleton f)">
      <goal name="vc_produces_one_I.0.0.1.0" proved="true">
-     <proof prover="0"><result status="timeout" time="1.000000" steps="142296"/></proof>
-     <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="14053"/></proof>
-     <proof prover="2"><result status="timeout" time="1.000000" steps="3487913"/></proof>
-     <proof prover="3"><result status="timeout" time="1.000000" steps="234415"/></proof>
      <transf name="compute_specified" proved="true" >
       <goal name="vc_produces_one_I.0.0.1.0.0" proved="true">
-      <proof prover="0"><result status="timeout" time="1.000000" steps="187400"/></proof>
-      <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="14195"/></proof>
-      <proof prover="2"><result status="timeout" time="1.000000" steps="3507477"/></proof>
-      <proof prover="3"><result status="timeout" time="1.000000" steps="161946"/></proof>
       <transf name="split_vc" proved="true" >
        <goal name="vc_produces_one_I.0.0.1.0.0.0" proved="true">
        <proof prover="1"><result status="valid" time="0.016296" steps="19"/></proof>
        </goal>
        <goal name="vc_produces_one_I.0.0.1.0.0.1" proved="true">
-       <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="315891"/></proof>
-       <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="27376"/></proof>
-       <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="3221281"/></proof>
-       <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="216655"/></proof>
        <transf name="exists" proved="true" arg1="(singleton e)">
         <goal name="vc_produces_one_I.0.0.1.0.0.1.0" proved="true">
-        <proof prover="0"><result status="timeout" time="1.000000" steps="166713"/></proof>
-        <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="14448"/></proof>
-        <proof prover="2"><result status="timeout" time="1.000000" steps="3868249"/></proof>
-        <proof prover="3"><result status="timeout" time="1.000000" steps="178803"/></proof>
         <transf name="compute_specified" proved="true" >
          <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0" proved="true">
-         <proof prover="0"><result status="timeout" time="1.000000" steps="169852"/></proof>
-         <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="12309"/></proof>
-         <proof prover="2"><result status="timeout" time="1.000000" steps="4547026"/></proof>
-         <proof prover="3"><result status="timeout" time="1.000000" steps="178974"/></proof>
          <transf name="split_vc" proved="true" >
           <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.0" proved="true">
           <proof prover="1"><result status="valid" time="0.008876" steps="18"/></proof>
@@ -376,7 +236,7 @@
           <proof prover="1"><result status="valid" time="0.011874" steps="10"/></proof>
           </goal>
           <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.2" proved="true">
-          <proof prover="1"><result status="valid" time="0.031893" steps="247"/></proof>
+          <proof prover="1"><result status="valid" time="0.031893" steps="246"/></proof>
           </goal>
           <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.3" proved="true">
           <proof prover="1"><result status="valid" time="0.012656" steps="19"/></proof>
@@ -394,10 +254,6 @@
           <proof prover="1"><result status="valid" time="0.012681" steps="29"/></proof>
           </goal>
           <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.8" proved="true">
-          <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="243225"/></proof>
-          <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="30473"/></proof>
-          <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="4581765"/></proof>
-          <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="252500"/></proof>
           <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
            <goal name="vc_produces_one_I.0.0.1.0.0.1.0.0.8.0" proved="true">
            <proof prover="1"><result status="valid" time="0.021762" steps="345"/></proof>
@@ -417,13 +273,9 @@
     </transf>
     </goal>
     <goal name="vc_produces_one_I.0.0.2" proved="true">
-    <proof prover="0" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="197230"/></proof>
-    <proof prover="1" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="15528"/></proof>
-    <proof prover="2" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="2348282"/></proof>
-    <proof prover="3" timelimit="2" memlimit="4000"><result status="timeout" time="2.000000" steps="167464"/></proof>
     <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
      <goal name="vc_produces_one_I.0.0.2.0" proved="true">
-     <proof prover="2" timelimit="0.2"><result status="valid" time="0.031076" steps="215875"/></proof>
+     <proof prover="2"><result status="valid" time="0.031076" steps="215875"/></proof>
      </goal>
     </transf>
     </goal>
@@ -436,27 +288,19 @@
 </theory>
 <theory name="M_impl_Map_I_F__produces_one_invariant" proved="true">
  <goal name="vc_produces_one_invariant_I" proved="true">
- <proof prover="0"><result status="timeout" time="1.000000" steps="107507"/></proof>
- <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="3563"/></proof>
- <proof prover="2"><result status="timeout" time="1.000000" steps="3420184"/></proof>
- <proof prover="3"><result status="timeout" time="1.000000" steps="213811"/></proof>
  <transf name="use_th" proved="true" arg1="seq.FreeMonoid">
   <goal name="vc_produces_one_invariant_I.0" proved="true">
-  <proof prover="0"><result status="timeout" time="1.000000" steps="151638"/></proof>
-  <proof prover="1" timelimit="1"><result status="timeout" time="1.000000" steps="23491"/></proof>
-  <proof prover="2"><result status="timeout" time="1.000000" steps="3311370"/></proof>
-  <proof prover="3"><result status="timeout" time="1.000000" steps="232927"/></proof>
   <transf name="split_vc" proved="true" >
    <goal name="vc_produces_one_invariant_I.0.0" proved="true">
-   <proof prover="1"><result status="valid" time="0.060816" steps="1985"/></proof>
+   <proof prover="1"><result status="valid" time="0.182829" steps="1977"/></proof>
    </goal>
    <goal name="vc_produces_one_invariant_I.0.1" expl="produces_one_invariant_I ensures" proved="true">
    <transf name="split_vc" proved="true" >
     <goal name="vc_produces_one_invariant_I.0.1.0" expl="produces_one_invariant ensures #0 (produces_one_invariant_I ensures)" proved="true">
-    <proof prover="0"><result status="valid" time="0.953135" steps="181889"/></proof>
+    <proof prover="0"><result status="valid" time="1.801671" steps="181889"/></proof>
     </goal>
     <goal name="vc_produces_one_invariant_I.0.1.1" expl="produces_one_invariant ensures #1 (produces_one_invariant_I ensures)" proved="true">
-    <proof prover="3" timelimit="0.2"><result status="valid" time="0.123977" steps="54535"/></proof>
+    <proof prover="3"><result status="valid" time="0.458490" steps="54535"/></proof>
     </goal>
    </transf>
    </goal>
@@ -467,7 +311,7 @@
 </theory>
 <theory name="M_increment" proved="true">
  <goal name="vc_increment_U" proved="true">
- <proof prover="0"><result status="valid" time="0.658314" steps="72578"/></proof>
+ <proof prover="0"><result status="valid" time="2.618910" steps="168181"/></proof>
  </goal>
 </theory>
 <theory name="M_map" proved="true">

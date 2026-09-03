@@ -1,0 +1,20 @@
+module M_omg
+  use creusot.int.Int32
+  use creusot.prelude.Any
+  
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
+  meta "compute_max_steps" 1000000
+  
+  meta "select_lsinst" "all"
+  
+  let omg (x: Int32.t) (return (x'0: Int32.t)) = {[@stop_split] [@expl:omg requires] Int32.to_int x = 3}
+    (! bb0
+    [ bb0 = s0
+      [ s0 = [ &_5 <- let (_fst, _snd) = Int32.sub_with_overflow x (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Sub overflow] not _5.f1} s2
+      | s2 = [ &_ret <- _5.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x | & _5: tup2_i32_bool = Any.any_l () ])
+    [ return (result: Int32.t) -> (! return {result}) ]
+end

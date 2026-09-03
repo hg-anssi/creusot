@@ -234,9 +234,16 @@ module M_closure_fn
   use creusot.prelude.Any
   use creusot.prelude.MutBorrow
   
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
   let closure0 [@coma:extspec] (self: ()) (x: Int32.t) (return (x'0: Int32.t)) = bb0
-    [ bb0 = s0 [ s0 = Int32.add {x} {(1: Int32.t)} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x ] [ return (result: Int32.t) -> return {result} ]
+    [ bb0 = s0
+      [ s0 = [ &_4 <- let (_fst, _snd) = Int32.add_with_overflow x (1: Int32.t) in { f0 = _fst; f1 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &_ret <- _4.f0 ] s3
+      | s3 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l () | & x: Int32.t = x | & _4: tup2_i32_bool = Any.any_l () ]
+    [ return (result: Int32.t) -> return {result} ]
   
   meta "rewrite_def" predicate closure0'pre
   
@@ -383,6 +390,8 @@ module M_closure_fn_mut
   
   type closure0 = { c0: MutBorrow.t Int32.t }
   
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
   predicate resolve_refmut_closure0 [@inline:trivial] (_1: MutBorrow.t closure0) = _1.final = _1.current
   
   meta "rewrite_def" predicate resolve_refmut_closure0
@@ -399,12 +408,17 @@ module M_closure_fn_mut
   
   let closure0 [@coma:extspec] (self: MutBorrow.t closure0) (x: Int32.t) (return (x'0: Int32.t)) = bb0
     [ bb0 = s0
-      [ s0 = Int32.add {self.current.c0.current} {x}
-          (fun (_x: Int32.t) -> [ &self <- { self with current = { c0 = { self.current.c0 with current = _x } } } ] s1)
-      | s1 = -{resolve_refmut_closure0 self}- s2
-      | s2 = [ &_ret <- self.current.c0.current ] s3
-      | s3 = return {_ret} ] ]
-    [ & _ret: Int32.t = Any.any_l () | & self: MutBorrow.t closure0 = self | & x: Int32.t = x ]
+      [ s0 = [ &_4 <- let (_fst, _snd) = Int32.add_with_overflow self.current.c0.current x in { f0 = _fst; f1 = _snd } ]
+        s1
+      | s1 = {[@expl:Add overflow] not _4.f1} s2
+      | s2 = [ &self <- { self with current = { c0 = { self.current.c0 with current = _4.f0 } } } ] s3
+      | s3 = -{resolve_refmut_closure0 self}- s4
+      | s4 = [ &_ret <- self.current.c0.current ] s5
+      | s5 = return {_ret} ] ]
+    [ & _ret: Int32.t = Any.any_l ()
+    | & self: MutBorrow.t closure0 = self
+    | & x: Int32.t = x
+    | & _4: tup2_i32_bool = Any.any_l () ]
     [ return (result: Int32.t) ->
     {[@stop_split] [@expl:closure hist_inv post] hist_inv_closure0 self.current self.final}
       return {result} ]
@@ -519,18 +533,24 @@ module M_closure_fn_once
   
   type closure0 = { c0: Int32.t; c1: Int32.t }
   
+  type tup2_i32_bool = { f0: Int32.t; f1: bool }
+  
   let closure0 [@coma:extspec] (self: closure0) (x: Int32.t) (return (x'0: Int32.t)) = bb0
     [ bb0 = s0
       [ s0 = [ &move_y <- self.c0 ] s1
-      | s1 = Int32.add {move_y} {x} (fun (_x: Int32.t) -> [ &_4 <- _x ] s2)
-      | s2 = Int32.add {self.c1} {_4} (fun (_x: Int32.t) -> [ &self <- { self with c1 = _x } ] s3)
-      | s3 = [ &_ret <- self.c1 ] s4
-      | s4 = return {_ret} ] ]
+      | s1 = [ &_7 <- let (_fst, _snd) = Int32.add_with_overflow move_y x in { f0 = _fst; f1 = _snd } ] s2
+      | s2 = {[@expl:Add overflow] not _7.f1} s3
+      | s3 = [ &_8 <- let (_fst, _snd) = Int32.add_with_overflow self.c1 _7.f0 in { f0 = _fst; f1 = _snd } ] s4
+      | s4 = {[@expl:Add overflow] not _8.f1} s5
+      | s5 = [ &self <- { self with c1 = _8.f0 } ] s6
+      | s6 = [ &_ret <- self.c1 ] s7
+      | s7 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l ()
     | & self: closure0 = self
     | & x: Int32.t = x
     | & move_y: Int32.t = Any.any_l ()
-    | & _4: Int32.t = Any.any_l () ] [ return (result: Int32.t) -> return {result} ]
+    | & _7: tup2_i32_bool = Any.any_l ()
+    | & _8: tup2_i32_bool = Any.any_l () ] [ return (result: Int32.t) -> return {result} ]
   
   meta "rewrite_def" predicate closure0'pre
   

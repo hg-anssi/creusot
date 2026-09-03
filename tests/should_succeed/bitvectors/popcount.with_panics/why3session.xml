@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session PUBLIC "-//Why3//proof session v5//EN"
+"https://www.why3.org/why3session.dtd">
+<why3session shape_version="6">
+<prover id="0" name="Alt-Ergo" version="2.6.2" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<prover id="1" name="Z3" version="4.15.3" timelimit="0.2" steplimit="0" memlimit="1000"/>
+<file format="coma" proved="true">
+<path name=".."/><path name="popcount.with_panics.coma"/>
+<theory name="M_count16" proved="true">
+ <goal name="vc_count16" proved="true">
+ <proof prover="1"><result status="valid" time="0.121903" steps="596045"/></proof>
+ </goal>
+</theory>
+<theory name="M_count32" proved="true">
+ <goal name="vc_count32" proved="true">
+ <proof prover="1"><result status="valid" time="0.307443" steps="1985853"/></proof>
+ </goal>
+</theory>
+<theory name="M_count64" proved="true">
+ <goal name="vc_count64" proved="true">
+ <transf name="split_vc" proved="true" >
+  <goal name="vc_count64.0" expl="Shr overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.007646" steps="31"/></proof>
+  </goal>
+  <goal name="vc_count64.1" expl="out-of-bounds shifting" proved="true">
+  <proof prover="1"><result status="valid" time="0.003932" steps="2206"/></proof>
+  </goal>
+  <goal name="vc_count64.2" expl="Sub overflow" proved="true">
+  <proof prover="1"><result status="valid" time="0.770288" steps="1537239"/></proof>
+  </goal>
+  <goal name="vc_count64.3" expl="Shr overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.044706" steps="553"/></proof>
+  </goal>
+  <goal name="vc_count64.4" expl="out-of-bounds shifting" proved="true">
+  <proof prover="1"><result status="valid" time="0.003436" steps="2218"/></proof>
+  </goal>
+  <goal name="vc_count64.5" expl="Add overflow" proved="true">
+  <proof prover="1" timelimit="2" memlimit="4000"><result status="valid" time="1.156526" steps="18108565"/></proof>
+  </goal>
+  <goal name="vc_count64.6" expl="Shr overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.060656" steps="571"/></proof>
+  </goal>
+  <goal name="vc_count64.7" expl="out-of-bounds shifting" proved="true">
+  <proof prover="1"><result status="valid" time="0.004687" steps="3058"/></proof>
+  </goal>
+  <goal name="vc_count64.8" expl="Add overflow" proved="true">
+  <proof prover="1"><result status="valid" time="0.449114" steps="3083444"/></proof>
+  </goal>
+  <goal name="vc_count64.9" expl="Shr overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.040583" steps="583"/></proof>
+  </goal>
+  <goal name="vc_count64.10" expl="out-of-bounds shifting" proved="true">
+  <proof prover="1"><result status="valid" time="0.007609" steps="3131"/></proof>
+  </goal>
+  <goal name="vc_count64.11" expl="Add overflow" proved="true">
+  <proof prover="1"><result status="valid" time="0.461544" steps="3676100"/></proof>
+  </goal>
+  <goal name="vc_count64.12" expl="Shr overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.051709" steps="602"/></proof>
+  </goal>
+  <goal name="vc_count64.13" expl="out-of-bounds shifting" proved="true">
+  <proof prover="1"><result status="valid" time="0.003393" steps="3460"/></proof>
+  </goal>
+  <goal name="vc_count64.14" expl="Add overflow" proved="true">
+  <proof prover="1"><result status="valid" time="0.416279" steps="3660339"/></proof>
+  </goal>
+  <goal name="vc_count64.15" expl="Shr overflow" proved="true">
+  <proof prover="0"><result status="valid" time="0.089590" steps="616"/></proof>
+  </goal>
+  <goal name="vc_count64.16" expl="out-of-bounds shifting" proved="true">
+  <proof prover="1"><result status="valid" time="0.007122" steps="3553"/></proof>
+  </goal>
+  <goal name="vc_count64.17" expl="Add overflow" proved="true">
+  <proof prover="1" timelimit="30"><result status="valid" time="2.900990" steps="14975659"/></proof>
+  </goal>
+  <goal name="vc_count64.18" expl="count64 ensures" proved="true">
+  <proof prover="1"><result status="valid" time="0.487970" steps="3619946"/></proof>
+  </goal>
+ </transf>
+ </goal>
+</theory>
+<theory name="M_count8" proved="true">
+ <goal name="vc_count8" proved="true">
+ <proof prover="1"><result status="valid" time="0.061825" steps="381989"/></proof>
+ </goal>
+</theory>
+</file>
+</why3session>

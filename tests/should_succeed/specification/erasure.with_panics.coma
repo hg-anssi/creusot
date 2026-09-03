@@ -809,6 +809,8 @@ module M_test_foo
   
   type tup2_i32_i32 = { f0: Int32.t; f1: Int32.t }
   
+  type tup2_i32_bool = { f0'0: Int32.t; f1'0: bool }
+  
   let quux_i32 (self: Int32.t) (return (x: ())) = any [ return (result: ()) -> (! return {result}) ]
   
   meta "compute_max_steps" 1000000
@@ -822,32 +824,40 @@ module M_test_foo
       | s2 = baz (fun (_x: Int32.t) -> [ &c <- _x ] s3)
       | s3 = [ &p <- { f0 = (0: Int32.t); f1 = (1: Int32.t) } ] s4
       | s4 = [ &p <- { p with f1 = p.f0 } ] s5
-      | s5 = Int32.add {p.f0} {p.f1} (fun (_x: Int32.t) -> [ &p <- { p with f0 = _x } ] s6)
-      | s6 = quux_i32 {p.f0} (fun (_x: ()) -> [ &_10 <- _x ] s7)
-      | s7 = [ &_12 <- Int32.lt (-10: Int32.t) a ] s8
-      | s8 = any [ br0 -> {_12 = false} (! bb13) | br1 -> {_12} (! bb5) ] ]
-    | bb5 = s0
-      [ s0 = [ &_14 <- Int32.lt a (10: Int32.t) ] s1
-      | s1 = any [ br0 -> {_14 = false} (! bb13) | br1 -> {_14} (! bb6) ] ]
+      | s5 = [ &_10 <- let (_fst, _snd) = Int32.add_with_overflow p.f0 p.f1 in { f0'0 = _fst; f1'0 = _snd } ] s6
+      | s6 = {[@expl:Add overflow] not _10.f1'0} s7
+      | s7 = [ &p <- { p with f0 = _10.f0'0 } ] s8
+      | s8 = quux_i32 {p.f0} (fun (_x: ()) -> [ &_11 <- _x ] s9)
+      | s9 = [ &_13 <- Int32.lt (-10: Int32.t) a ] s10
+      | s10 = any [ br0 -> {_13 = false} (! bb15) | br1 -> {_13} (! bb6) ] ]
     | bb6 = s0
-      [ s0 = [ &_16 <- Int32.lt (-10: Int32.t) b ] s1
-      | s1 = any [ br0 -> {_16 = false} (! bb13) | br1 -> {_16} (! bb7) ] ]
+      [ s0 = [ &_15 <- Int32.lt a (10: Int32.t) ] s1
+      | s1 = any [ br0 -> {_15 = false} (! bb15) | br1 -> {_15} (! bb7) ] ]
     | bb7 = s0
-      [ s0 = [ &_18 <- Int32.lt b (10: Int32.t) ] s1
-      | s1 = any [ br0 -> {_18 = false} (! bb13) | br1 -> {_18} (! bb8) ] ]
-    | bb8 = s0 [ s0 = Int32.add {a} {b} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ]
-    | bb13 = s0 [ s0 = [ &_ret <- c ] s1 | s1 = return {_ret} ] ]
+      [ s0 = [ &_17 <- Int32.lt (-10: Int32.t) b ] s1
+      | s1 = any [ br0 -> {_17 = false} (! bb15) | br1 -> {_17} (! bb8) ] ]
+    | bb8 = s0
+      [ s0 = [ &_19 <- Int32.lt b (10: Int32.t) ] s1
+      | s1 = any [ br0 -> {_19 = false} (! bb15) | br1 -> {_19} (! bb9) ] ]
+    | bb9 = s0
+      [ s0 = [ &_23 <- let (_fst, _snd) = Int32.add_with_overflow a b in { f0'0 = _fst; f1'0 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _23.f1'0} s2
+      | s2 = [ &_ret <- _23.f0'0 ] s3
+      | s3 = return {_ret} ]
+    | bb15 = s0 [ s0 = [ &_ret <- c ] s1 | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l ()
     | & x: Int32.t = x
     | & a: Int32.t = Any.any_l ()
     | & b: Int32.t = Any.any_l ()
     | & c: Int32.t = Any.any_l ()
     | & p: tup2_i32_i32 = Any.any_l ()
-    | & _10: () = Any.any_l ()
-    | & _12: bool = Any.any_l ()
-    | & _14: bool = Any.any_l ()
-    | & _16: bool = Any.any_l ()
-    | & _18: bool = Any.any_l () ]) [ return (result: Int32.t) -> (! return {result}) ]
+    | & _10: tup2_i32_bool = Any.any_l ()
+    | & _11: () = Any.any_l ()
+    | & _13: bool = Any.any_l ()
+    | & _15: bool = Any.any_l ()
+    | & _17: bool = Any.any_l ()
+    | & _19: bool = Any.any_l ()
+    | & _23: tup2_i32_bool = Any.any_l () ]) [ return (result: Int32.t) -> (! return {result}) ]
 end
 module M_test_foo2
   use creusot.int.Int32
@@ -860,6 +870,8 @@ module M_test_foo2
   let baz (return (x: Int32.t)) = any [ return (result: Int32.t) -> (! return {result}) ]
   
   type tup2_i32_i32 = { f0: Int32.t; f1: Int32.t }
+  
+  type tup2_i32_bool = { f0'0: Int32.t; f1'0: bool }
   
   let quux2 (x: Int32.t) (y: int) (return (x'0: int)) = any [ return (result: int) -> (! return {result}) ]
   
@@ -874,22 +886,28 @@ module M_test_foo2
       | s2 = baz (fun (_x: Int32.t) -> [ &c <- _x ] s3)
       | s3 = [ &p <- { f0 = (0: Int32.t); f1 = (1: Int32.t) } ] s4
       | s4 = [ &p <- { p with f1 = p.f0 } ] s5
-      | s5 = Int32.add {p.f0} {p.f1} (fun (_x: Int32.t) -> [ &p <- { p with f0 = _x } ] s6)
-      | s6 = [ &_16 <- p.f0 ] s7
-      | s7 = quux2 {_16} {y} (fun (_x: int) -> [ &_14 <- _x ] s8)
-      | s8 = [ &_18 <- Int32.lt (-10: Int32.t) a ] s9
-      | s9 = any [ br0 -> {_18 = false} (! bb13) | br1 -> {_18} (! bb5) ] ]
-    | bb5 = s0
-      [ s0 = [ &_20 <- Int32.lt a (10: Int32.t) ] s1
-      | s1 = any [ br0 -> {_20 = false} (! bb13) | br1 -> {_20} (! bb6) ] ]
+      | s5 = [ &_14 <- let (_fst, _snd) = Int32.add_with_overflow p.f0 p.f1 in { f0'0 = _fst; f1'0 = _snd } ] s6
+      | s6 = {[@expl:Add overflow] not _14.f1'0} s7
+      | s7 = [ &p <- { p with f0 = _14.f0'0 } ] s8
+      | s8 = [ &_17 <- p.f0 ] s9
+      | s9 = quux2 {_17} {y} (fun (_x: int) -> [ &_15 <- _x ] s10)
+      | s10 = [ &_19 <- Int32.lt (-10: Int32.t) a ] s11
+      | s11 = any [ br0 -> {_19 = false} (! bb15) | br1 -> {_19} (! bb6) ] ]
     | bb6 = s0
-      [ s0 = [ &_22 <- Int32.lt (-10: Int32.t) b ] s1
-      | s1 = any [ br0 -> {_22 = false} (! bb13) | br1 -> {_22} (! bb7) ] ]
+      [ s0 = [ &_21 <- Int32.lt a (10: Int32.t) ] s1
+      | s1 = any [ br0 -> {_21 = false} (! bb15) | br1 -> {_21} (! bb7) ] ]
     | bb7 = s0
-      [ s0 = [ &_24 <- Int32.lt b (10: Int32.t) ] s1
-      | s1 = any [ br0 -> {_24 = false} (! bb13) | br1 -> {_24} (! bb8) ] ]
-    | bb8 = s0 [ s0 = Int32.add {a} {b} (fun (_x: Int32.t) -> [ &_ret <- _x ] s1) | s1 = return {_ret} ]
-    | bb13 = s0 [ s0 = [ &_ret <- c ] s1 | s1 = return {_ret} ] ]
+      [ s0 = [ &_23 <- Int32.lt (-10: Int32.t) b ] s1
+      | s1 = any [ br0 -> {_23 = false} (! bb15) | br1 -> {_23} (! bb8) ] ]
+    | bb8 = s0
+      [ s0 = [ &_25 <- Int32.lt b (10: Int32.t) ] s1
+      | s1 = any [ br0 -> {_25 = false} (! bb15) | br1 -> {_25} (! bb9) ] ]
+    | bb9 = s0
+      [ s0 = [ &_29 <- let (_fst, _snd) = Int32.add_with_overflow a b in { f0'0 = _fst; f1'0 = _snd } ] s1
+      | s1 = {[@expl:Add overflow] not _29.f1'0} s2
+      | s2 = [ &_ret <- _29.f0'0 ] s3
+      | s3 = return {_ret} ]
+    | bb15 = s0 [ s0 = [ &_ret <- c ] s1 | s1 = return {_ret} ] ]
     [ & _ret: Int32.t = Any.any_l ()
     | & x: Int32.t = x
     | & y: int = y
@@ -897,12 +915,14 @@ module M_test_foo2
     | & b: Int32.t = Any.any_l ()
     | & c: Int32.t = Any.any_l ()
     | & p: tup2_i32_i32 = Any.any_l ()
-    | & _14: int = Any.any_l ()
-    | & _16: Int32.t = Any.any_l ()
-    | & _18: bool = Any.any_l ()
-    | & _20: bool = Any.any_l ()
-    | & _22: bool = Any.any_l ()
-    | & _24: bool = Any.any_l () ]) [ return (result: Int32.t) -> (! return {result}) ]
+    | & _14: tup2_i32_bool = Any.any_l ()
+    | & _15: int = Any.any_l ()
+    | & _17: Int32.t = Any.any_l ()
+    | & _19: bool = Any.any_l ()
+    | & _21: bool = Any.any_l ()
+    | & _23: bool = Any.any_l ()
+    | & _25: bool = Any.any_l ()
+    | & _29: tup2_i32_bool = Any.any_l () ]) [ return (result: Int32.t) -> (! return {result}) ]
 end
 module M_test_ghost_fields
   use creusot.int.Int32
